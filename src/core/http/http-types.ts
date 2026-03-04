@@ -1,3 +1,5 @@
+import type { ShapeMismatch } from '../validation/response-shape.js';
+
 /**
  * HttpClient 설정 인터페이스.
  */
@@ -38,6 +40,27 @@ export interface HttpClientConfig {
    */
   readonly debug?: boolean;
   readonly logger?: Partial<HttpLogger>;
+
+  /**
+   * 런타임 응답 shape 검증 활성화.
+   *
+   * 활성화 시 응답의 top-level 키와 타입을 shape descriptor와 비교하여
+   * 불일치를 logger를 통해 경고합니다. throw하지 않습니다.
+   *
+   * 개발·모니터링 환경에서 넥슨 API의 응답 스키마 변경(drift)을 조기 감지하는 데 유용합니다.
+   *
+   * @default false
+   *
+   * @example
+   * ```ts
+   * const client = new NexonClient({
+   *   apiKey: 'key',
+   *   debug: true,
+   *   responseValidation: true,
+   * });
+   * ```
+   */
+  readonly responseValidation?: boolean;
 }
 
 /** 요청 전 호출되는 인터셉터. 반환값으로 요청 정보를 수정할 수 있다. */
@@ -74,4 +97,6 @@ export interface HttpLogger {
   onRequest: (info: HttpRequestInfo) => void;
   onResponse: (info: HttpResponseInfo) => void;
   onRetry: (info: HttpRetryInfo) => void;
+  /** 응답 shape가 예상과 다를 때 호출. `responseValidation: true` 시에만 동작. */
+  onResponseShapeMismatch?: ((mismatch: ShapeMismatch) => void) | undefined;
 }

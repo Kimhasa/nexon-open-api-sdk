@@ -1,6 +1,8 @@
 import { classifyError } from '../errors/classify-error.js';
 import type { NexonErrorPayload } from '../errors/NexonError.js';
 import { NexonError } from '../errors/NexonError.js';
+import { validateShape } from '../validation/response-shape.js';
+import type { ShapeDescriptor, ShapeMismatch } from '../validation/response-shape.js';
 import {
   computeRetryDelay,
   isRetryableStatus,
@@ -34,6 +36,7 @@ export class HttpClient {
   private readonly timeoutMs: number;
   private readonly maxRetries: number;
   private readonly retryBaseDelayMs: number;
+  private readonly responseValidation: boolean;
   private readonly logger: Partial<HttpLogger> | undefined;
 
   private readonly requestInterceptors: RequestInterceptor[] = [];
@@ -45,6 +48,7 @@ export class HttpClient {
     this.timeoutMs = config.timeoutMs ?? DEFAULT_TIMEOUT_MS;
     this.maxRetries = config.maxRetries ?? DEFAULT_MAX_RETRIES;
     this.retryBaseDelayMs = config.retryBaseDelayMs ?? DEFAULT_RETRY_BASE_DELAY_MS;
+    this.responseValidation = config.responseValidation ?? false;
 
     if (config.debug === true) {
       this.logger = defaultDebugLogger;
@@ -82,8 +86,13 @@ export class HttpClient {
    *
    * @param url - 완전한 URL 문자열
    * @param params - URL 쿼리 파라미터
+   * @param shape - 응답 shape descriptor (`responseValidation: true` 시에만 사용)
    */
-  async get<T>(url: string, params?: Record<string, string | number | boolean | undefined>): Promise<T> {
+  async get<T>(
+    url: string,
+    params?: Record<string, string | number | boolean | undefined>,
+    shape?: ShapeDescriptor,
+  ): Promise<T> {
     const cleanedParams = cleanParams(params);
     const fullUrl = buildUrl(url, cleanedParams);
 
@@ -104,11 +113,12 @@ export class HttpClient {
 
     this.logger?.onRequest?.(requestInfo);
 
-    return this.executeWithRetry<T>(requestInfo, 0);
+    return this.executeWithRetry<T>(requestInfo, shape, 0);
   }
 
   private async executeWithRetry<T>(
     requestInfo: HttpRequestInfo,
+    shape: ShapeDescriptor | undefined,
     attempt: number,
   ): Promise<T> {
     const startTime = Date.now();
@@ -150,7 +160,16 @@ export class HttpClient {
 
     // 성공 응답
     if (response.ok) {
-      return response.json() as Promise<T>;
+      const data: unknown = await response.json();
+
+      if (this.responseValidation && shape) {
+        const mismatch = validateShape(requestInfo.url, data, shape);
+        if (mismatch) {
+          this.logger?.onResponseShapeMismatch?.(mismatch);
+        }
+      }
+
+      return data as T;
     }
 
     // 에러 응답 파싱
@@ -183,7 +202,7 @@ export class HttpClient {
       this.logger?.onRetry?.(retryInfo);
 
       await sleep(waitMs);
-      return this.executeWithRetry<T>(requestInfo, attempt + 1);
+      return this.executeWithRetry<T>(requestInfo, shape, attempt + 1);
     }
 
     throw classifyError(response.status, payload, retryAfterMs);
@@ -212,7 +231,7 @@ function cleanParams(
 }
 
 /** `debug: true` 시 사용하는 기본 콘솔 로거 */
-const defaultDebugLogger: Required<Pick<HttpLogger, 'onRequest' | 'onResponse' | 'onRetry'>> = {
+const defaultDebugLogger: Partial<HttpLogger> = {
   onRequest: (info) => {
     console.debug(`[nexon-sdk] → ${info.method} ${info.url}`);
   },
@@ -222,6 +241,25 @@ const defaultDebugLogger: Required<Pick<HttpLogger, 'onRequest' | 'onResponse' |
   onRetry: (info) => {
     console.debug(
       `[nexon-sdk] ↩ retry #${info.attempt}/${info.maxRetries} after ${info.waitMs}ms (${info.reason})`,
+    );
+  },
+  onResponseShapeMismatch: (mismatch: ShapeMismatch) => {
+    const parts: string[] = [];
+    if (mismatch.missingKeys.length > 0) {
+      parts.push(`missing keys: [${mismatch.missingKeys.join(', ')}]`);
+    }
+    if (mismatch.unexpectedKeys.length > 0) {
+      parts.push(`unexpected keys: [${mismatch.unexpectedKeys.join(', ')}]`);
+    }
+    if (mismatch.typeMismatches.length > 0) {
+      parts.push(
+        `type mismatches: ${mismatch.typeMismatches
+          .map((m) => `${m.key}: expected ${m.expected}, got ${m.actual}`)
+          .join('; ')}`,
+      );
+    }
+    console.warn(
+      `[nexon-sdk] ⚠ Response shape mismatch for ${mismatch.url}\n  ${parts.join('\n  ')}`,
     );
   },
 };

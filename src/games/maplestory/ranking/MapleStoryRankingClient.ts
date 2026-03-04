@@ -1,4 +1,5 @@
 import type { HttpClient } from '../../../core/http/HttpClient.js';
+import { RANKING_SHAPE } from '../shapes.js';
 import type {
   AchievementRanking,
   DojangRanking,
@@ -60,6 +61,7 @@ export class MapleStoryRankingClient {
         ocid: params.ocid,
         page: params.page,
       },
+      RANKING_SHAPE,
     );
   }
 
@@ -89,6 +91,7 @@ export class MapleStoryRankingClient {
         ocid: params.ocid,
         page: params.page,
       },
+      RANKING_SHAPE,
     );
   }
 
@@ -121,6 +124,7 @@ export class MapleStoryRankingClient {
         ocid: params.ocid,
         page: params.page,
       },
+      RANKING_SHAPE,
     );
   }
 
@@ -154,6 +158,7 @@ export class MapleStoryRankingClient {
         ocid: params.ocid,
         page: params.page,
       },
+      RANKING_SHAPE,
     );
   }
 
@@ -183,6 +188,7 @@ export class MapleStoryRankingClient {
         ocid: params.ocid,
         page: params.page,
       },
+      RANKING_SHAPE,
     );
   }
 
@@ -210,6 +216,7 @@ export class MapleStoryRankingClient {
         ocid: params.ocid,
         page: params.page,
       },
+      RANKING_SHAPE,
     );
   }
 }

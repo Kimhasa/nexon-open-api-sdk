@@ -172,3 +172,17 @@ export type {
   RetryInterceptor,
   HttpLogger,
 } from './core/http/http-types.js';
+
+// Metadata
+export { API_METADATA, getApiMetadata } from './core/metadata/api-metadata.js';
+export type { GameApiMetadata } from './core/metadata/api-metadata.js';
+
+// Validation (advanced)
+export type {
+  ShapeDescriptor,
+  ShapeMismatch,
+  ExpectedType,
+} from './core/validation/response-shape.js';
+
+// Deprecation
+export { emitDeprecation } from './core/deprecation/deprecation.js';

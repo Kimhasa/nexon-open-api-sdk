@@ -1,5 +1,29 @@
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { OcidDateRequest } from '../../_base/maple-base-types.js';
+import {
+  CHARACTER_LIST_SHAPE,
+  CHARACTER_BASIC_SHAPE,
+  CHARACTER_POPULARITY_SHAPE,
+  CHARACTER_STAT_SHAPE,
+  CHARACTER_HYPER_STAT_SHAPE,
+  CHARACTER_PROPENSITY_SHAPE,
+  CHARACTER_ABILITY_SHAPE,
+  CHARACTER_ITEM_EQUIPMENT_SHAPE,
+  CHARACTER_CASHITEM_EQUIPMENT_SHAPE,
+  CHARACTER_SYMBOL_EQUIPMENT_SHAPE,
+  CHARACTER_SET_EFFECT_SHAPE,
+  CHARACTER_BEAUTY_EQUIPMENT_SHAPE,
+  CHARACTER_ANDROID_EQUIPMENT_SHAPE,
+  CHARACTER_PET_EQUIPMENT_SHAPE,
+  CHARACTER_SKILL_SHAPE,
+  CHARACTER_LINK_SKILL_SHAPE,
+  CHARACTER_VMATRIX_SHAPE,
+  CHARACTER_HEXAMATRIX_SHAPE,
+  CHARACTER_HEXAMATRIX_STAT_SHAPE,
+  CHARACTER_DOJANG_SHAPE,
+  CHARACTER_OTHER_STAT_SHAPE,
+  CHARACTER_RING_EXCHANGE_SKILL_EQUIPMENT_SHAPE,
+} from '../shapes.js';
 import type {
   CharacterAbility,
   CharacterAndroidEquipment,
@@ -56,7 +80,11 @@ export class MapleStoryCharacterClient {
    * ```
    */
   async getList(): Promise<CharacterList> {
-    return this.http.get<CharacterList>(`${MapleStoryCharacterClient.BASE}/character/list`);
+    return this.http.get<CharacterList>(
+      `${MapleStoryCharacterClient.BASE}/character/list`,
+      undefined,
+      CHARACTER_LIST_SHAPE,
+    );
   }
 
   /**
@@ -80,6 +108,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterBasic>(
       `${MapleStoryCharacterClient.BASE}/character/basic`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_BASIC_SHAPE,
     );
   }
 
@@ -101,6 +130,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterPopularity>(
       `${MapleStoryCharacterClient.BASE}/character/popularity`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_POPULARITY_SHAPE,
     );
   }
 
@@ -124,6 +154,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterStat>(
       `${MapleStoryCharacterClient.BASE}/character/stat`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_STAT_SHAPE,
     );
   }
 
@@ -148,6 +179,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterHyperStat>(
       `${MapleStoryCharacterClient.BASE}/character/hyper-stat`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_HYPER_STAT_SHAPE,
     );
   }
 
@@ -169,6 +201,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterPropensity>(
       `${MapleStoryCharacterClient.BASE}/character/propensity`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_PROPENSITY_SHAPE,
     );
   }
 
@@ -193,6 +226,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterAbility>(
       `${MapleStoryCharacterClient.BASE}/character/ability`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_ABILITY_SHAPE,
     );
   }
 
@@ -216,6 +250,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterItemEquipment>(
       `${MapleStoryCharacterClient.BASE}/character/item-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_ITEM_EQUIPMENT_SHAPE,
     );
   }
 
@@ -240,6 +275,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterCashItemEquipment>(
       `${MapleStoryCharacterClient.BASE}/character/cashitem-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_CASHITEM_EQUIPMENT_SHAPE,
     );
   }
 
@@ -264,6 +300,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterSymbolEquipment>(
       `${MapleStoryCharacterClient.BASE}/character/symbol-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_SYMBOL_EQUIPMENT_SHAPE,
     );
   }
 
@@ -288,6 +325,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterSetEffect>(
       `${MapleStoryCharacterClient.BASE}/character/set-effect`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_SET_EFFECT_SHAPE,
     );
   }
 
@@ -311,6 +349,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterBeautyEquipment>(
       `${MapleStoryCharacterClient.BASE}/character/beauty-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_BEAUTY_EQUIPMENT_SHAPE,
     );
   }
 
@@ -333,6 +372,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterAndroidEquipment>(
       `${MapleStoryCharacterClient.BASE}/character/android-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_ANDROID_EQUIPMENT_SHAPE,
     );
   }
   /**
@@ -354,6 +394,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterPetEquipment>(
       `${MapleStoryCharacterClient.BASE}/character/pet-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_PET_EQUIPMENT_SHAPE,
     );
   }
 
@@ -386,6 +427,7 @@ export class MapleStoryCharacterClient {
         date: params.date as string | undefined,
         character_skill_grade: params.character_skill_grade,
       },
+      CHARACTER_SKILL_SHAPE,
     );
   }
 
@@ -410,6 +452,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterLinkSkill>(
       `${MapleStoryCharacterClient.BASE}/character/link-skill`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_LINK_SKILL_SHAPE,
     );
   }
 
@@ -434,6 +477,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterVMatrix>(
       `${MapleStoryCharacterClient.BASE}/character/vmatrix`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_VMATRIX_SHAPE,
     );
   }
 
@@ -458,6 +502,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterHexaMatrix>(
       `${MapleStoryCharacterClient.BASE}/character/hexamatrix`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_HEXAMATRIX_SHAPE,
     );
   }
 
@@ -482,6 +527,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterHexaMatrixStat>(
       `${MapleStoryCharacterClient.BASE}/character/hexamatrix-stat`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_HEXAMATRIX_STAT_SHAPE,
     );
   }
 
@@ -504,6 +550,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterDojang>(
       `${MapleStoryCharacterClient.BASE}/character/dojang`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_DOJANG_SHAPE,
     );
   }
 
@@ -531,6 +578,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterOtherStat>(
       `${MapleStoryCharacterClient.BASE}/character/other-stat`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_OTHER_STAT_SHAPE,
     );
   }
 
@@ -555,6 +603,7 @@ export class MapleStoryCharacterClient {
     return this.http.get<CharacterRingExchangeSkillEquipment>(
       `${MapleStoryCharacterClient.BASE}/character/ring-exchange-skill-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_RING_EXCHANGE_SKILL_EQUIPMENT_SHAPE,
     );
   }
 }

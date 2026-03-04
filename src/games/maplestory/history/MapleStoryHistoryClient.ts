@@ -1,4 +1,9 @@
 import type { HttpClient } from '../../../core/http/HttpClient.js';
+import {
+  STARFORCE_HISTORY_SHAPE,
+  POTENTIAL_HISTORY_SHAPE,
+  CUBE_HISTORY_SHAPE,
+} from '../shapes.js';
 import type {
   CubeHistory,
   HistoryRequest,
@@ -52,6 +57,7 @@ export class MapleStoryHistoryClient {
         date: params.date as string | undefined,
         cursor: params.cursor,
       },
+      STARFORCE_HISTORY_SHAPE,
     );
   }
 
@@ -82,6 +88,7 @@ export class MapleStoryHistoryClient {
         date: params.date as string | undefined,
         cursor: params.cursor,
       },
+      POTENTIAL_HISTORY_SHAPE,
     );
   }
 
@@ -105,10 +112,14 @@ export class MapleStoryHistoryClient {
    *
    */
   async getCube(params: HistoryRequest): Promise<CubeHistory> {
-    return this.http.get<CubeHistory>(`${MapleStoryHistoryClient.BASE}/history/cube`, {
-      count: params.count,
-      date: params.date as string | undefined,
-      cursor: params.cursor,
-    });
+    return this.http.get<CubeHistory>(
+      `${MapleStoryHistoryClient.BASE}/history/cube`,
+      {
+        count: params.count,
+        date: params.date as string | undefined,
+        cursor: params.cursor,
+      },
+      CUBE_HISTORY_SHAPE,
+    );
   }
 }
