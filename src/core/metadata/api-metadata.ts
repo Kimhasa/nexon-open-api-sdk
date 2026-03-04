@@ -32,6 +32,14 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     endpointCount: 45,
     note: '43/43 E2E tests passed with real API key',
   },
+  maplestorym: {
+    game: 'MapleStory M',
+    pathPrefix: 'maplestorym',
+    lastVerifiedAt: '2026-03-04',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 37,
+    note: 'Types based on KMS patterns, API verification pending',
+  },
 };
 
 /**

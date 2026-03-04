@@ -2,6 +2,7 @@ import { HttpClient } from './core/http/HttpClient.js';
 import type { HttpClientConfig } from './core/http/http-types.js';
 import { MapleStoryClient } from './games/maplestory/MapleStoryClient.js';
 import { FcOnlineClient } from './games/fc-online/FcOnlineClient.js';
+import { MapleStoryMClient } from './games/maplestory-m/MapleStoryMClient.js';
 
 /**
  * NexonClient 생성 옵션.
@@ -27,6 +28,7 @@ export class NexonClient {
 
   private _maplestory: MapleStoryClient | undefined;
   private _fcOnline: FcOnlineClient | undefined;
+  private _maplestorym: MapleStoryMClient | undefined;
 
   constructor(options: NexonClientOptions) {
     if (!options.apiKey) {
@@ -58,5 +60,14 @@ export class NexonClient {
   get fcOnline(): FcOnlineClient {
     this._fcOnline ??= new FcOnlineClient(this.http);
     return this._fcOnline;
+  }
+
+  /**
+   * 메이플스토리M 클라이언트.
+   * Timezone: UTC+9 (KST)
+   */
+  get maplestorym(): MapleStoryMClient {
+    this._maplestorym ??= new MapleStoryMClient(this.http);
+    return this._maplestorym;
   }
 }

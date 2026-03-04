@@ -5,6 +5,7 @@ export default defineConfig({
     index: 'src/index.ts',
     maplestory: 'src/games/maplestory/index.ts',
     fconline: 'src/games/fc-online/index.ts',
+    'maplestory-m': 'src/games/maplestory-m/index.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,

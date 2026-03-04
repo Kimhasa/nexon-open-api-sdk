@@ -9,9 +9,9 @@
 import 'dotenv/config';
 import { NexonClient } from '../src/index.js';
 
-const apiKey = process.env['NEXON_API_KEY'];
+const apiKey = process.env['NEXON_MAPLESTORY_API_KEY'];
 if (!apiKey) {
-  console.error('❌ .env 파일에 NEXON_API_KEY 를 설정해주세요.');
+  console.error('❌ .env 파일에 NEXON_MAPLESTORY_API_KEY 를 설정해주세요.');
   console.error('   .env.example 파일을 참고하세요.');
   process.exit(1);
 }
