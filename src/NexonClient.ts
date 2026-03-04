@@ -1,6 +1,7 @@
 import { HttpClient } from './core/http/HttpClient.js';
 import type { HttpClientConfig } from './core/http/http-types.js';
 import { MapleStoryClient } from './games/maplestory/MapleStoryClient.js';
+import { FcOnlineClient } from './games/fc-online/FcOnlineClient.js';
 
 /**
  * NexonClient 생성 옵션.
@@ -25,6 +26,7 @@ export class NexonClient {
   private readonly http: HttpClient;
 
   private _maplestory: MapleStoryClient | undefined;
+  private _fcOnline: FcOnlineClient | undefined;
 
   constructor(options: NexonClientOptions) {
     if (!options.apiKey) {
@@ -42,5 +44,19 @@ export class NexonClient {
   get maplestory(): MapleStoryClient {
     this._maplestory ??= new MapleStoryClient(this.http);
     return this._maplestory;
+  }
+
+  /**
+   * EA SPORTS FC Online 클라이언트.
+   *
+   * @example
+   * ```ts
+   * const ouid = await client.fcOnline.getOuid('닉네임');
+   * const basic = await client.fcOnline.getBasic(ouid);
+   * ```
+   */
+  get fcOnline(): FcOnlineClient {
+    this._fcOnline ??= new FcOnlineClient(this.http);
+    return this._fcOnline;
   }
 }

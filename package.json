@@ -23,6 +23,11 @@
       "types": "./dist/maplestory.d.ts",
       "import": "./dist/maplestory.js",
       "require": "./dist/maplestory.cjs"
+    },
+    "./fconline": {
+      "types": "./dist/fconline.d.ts",
+      "import": "./dist/fconline.js",
+      "require": "./dist/fconline.cjs"
     }
   },
   "main": "./dist/index.cjs",
