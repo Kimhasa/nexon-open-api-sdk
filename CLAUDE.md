@@ -70,9 +70,10 @@ nexon-open-api/
 │   │       └── pagination.ts                    # CursorPage<T>, CursorPageRequest
 │   ├── games/
 │   │   ├── _base/                               # 공유 추상 기반
-│   │   │   ├── AbstractMapleStoryBaseClient.ts  # abstract: pathPrefix, timezoneOffset, buildUrl, formatDate
+│   │   │   ├── AbstractGameClient.ts            # 모든 게임의 최상위 기반 (pathPrefix, buildUrl)
+│   │   │   ├── AbstractMapleStoryBaseClient.ts  # 메이플 패밀리 기반 (timezoneOffset, formatDate)
 │   │   │   └── maple-base-types.ts              # 공유 요청 타입 (DateOptions 등)
-│   │   └── maplestory/                          # KMS — 메이플스토리
+│   │   ├── maplestory/                          # KMS — 메이플스토리 (구현 완료)
 │   │       ├── MapleStoryClient.ts
 │   │       ├── character/
 │   │       │   ├── MapleStoryCharacterClient.ts
@@ -93,6 +94,13 @@ nexon-open-api/
 │   │       │   ├── MapleStoryNoticeClient.ts
 │   │       │   └── types.ts
 │   │       └── index.ts                         # sub-path export 진입점
+│   │   ├── maplestory-m/                        # 메이플스토리M (예정)
+│   │   ├── maplestory-sea/                      # MapleStorySEA (예정)
+│   │   ├── maplestory-tw/                       # MapleStoryTW (예정)
+│   │   ├── fc-online/                           # EA SPORTS FC Online (예정)
+│   │   ├── dnf/                                 # 던전앤파이터 (예정)
+│   │   ├── mabinogi/                            # 마비노기 (예정)
+│   │   └── ...                                  # 기타 게임 (예정)
 │   ├── NexonClient.ts                           # 메인 진입점
 │   └── index.ts                                 # root public exports
 ├── tests/
@@ -116,19 +124,38 @@ nexon-open-api/
 
 ## 아키텍처 원칙
 
-### 클래스 계층 구조
+### 클래스 계층 구조 (멀티 게임)
 
 ```
 NexonClient
-└── .maplestory → MapleStoryClient (UTC+9, prefix: maplestory)
+├── .maplestory    → MapleStoryClient    (UTC+9, prefix: maplestory)
+├── .maplestoryM   → (예정) MapleStoryMClient
+├── .maplestorySEA → (예정) MapleStorySEAClient
+├── .maplestoryTW  → (예정) MapleStoryTWClient
+├── .fcOnline      → (예정) FcOnlineClient
+├── .dnf           → (예정) DnfClient
+├── .mabinogi      → (예정) MabinogiClient
+├── .mabinogiHeroes→ (예정) MabinogiHeroesClient
+├── .suddenAttack  → (예정) SuddenAttackClient
+├── .firstDescendant→(예정) FirstDescendantClient
+├── .kartrider     → (예정) KartriderClient
+├── .baram         → (예정) BaramClient
+├── .baramYeon     → (예정) BaramYeonClient
+├── .hit2          → (예정) Hit2Client
+├── .crazyArcade   → (예정) CrazyArcadeClient
+├── .v4            → (예정) V4Client
+└── .cyphers       → (예정) CyphersClient
 
-AbstractMapleStoryBaseClient  (abstract)
-├── abstract pathPrefix: string          // 'maplestory'
-├── abstract timezoneOffset: number      // 540 (KST)
-├── buildUrl(path, version?): string     // URL 조립
-└── formatDate(date): NexonDate          // 지역 타임존 기준 YYYY-MM-DD
+AbstractGameClient (abstract — 모든 게임의 최상위 기반)
+├── abstract pathPrefix: string           // 'maplestory', 'fconline', 'mabinogi' ...
+├── constructor(http: HttpClient)
+└── buildUrl(path, version?): string      // URL 조립
 
-MapleStoryClient extends AbstractMapleStoryBaseClient
+AbstractMapleBaseClient extends AbstractGameClient (메이플 패밀리 전용)
+├── abstract timezoneOffset: number       // 540 (KST) | 480 (SGT/TST)
+└── formatDate(date): NexonDate           // 지역 타임존 기준 YYYY-MM-DD
+
+MapleStoryClient extends AbstractMapleBaseClient
 ├── getOcid(characterName): Promise<OCID>
 ├── .character  → MapleStoryCharacterClient  (lazy getter)
 ├── .union      → MapleStoryUnionClient       (lazy getter)
@@ -136,6 +163,11 @@ MapleStoryClient extends AbstractMapleStoryBaseClient
 ├── .ranking    → MapleStoryRankingClient     (lazy getter)
 ├── .history    → MapleStoryHistoryClient     (lazy getter)
 └── .notice     → MapleStoryNoticeClient      (lazy getter)
+
+(비메이플 게임은 AbstractGameClient를 직접 상속)
+FcOnlineClient extends AbstractGameClient
+DnfClient extends AbstractGameClient
+...
 
 NexonError (base)
 ├── NexonRateLimitError    (429 / OPENAPI00007)
@@ -146,32 +178,39 @@ NexonError (base)
 └── NexonServerError       (5xx / OPENAPI00001, 00011)
 ```
 
-### AbstractMapleStoryBaseClient — 공통 기반
+### AbstractGameClient — 모든 게임의 최상위 기반
 
-`MapleStoryClient`는 `AbstractMapleStoryBaseClient`를 상속한다.
+```ts
+// src/games/_base/AbstractGameClient.ts
+export abstract class AbstractGameClient {
+  protected abstract readonly pathPrefix: string;
+  constructor(protected readonly http: HttpClient) {}
+  protected buildUrl(path: string, version: string = 'v1'): string {
+    return `https://open.api.nexon.com/${this.pathPrefix}/${version}/${path}`;
+  }
+}
+```
+
+- 메이플 패밀리 → `AbstractMapleBaseClient extends AbstractGameClient` (timezoneOffset + formatDate 추가)
+- 비메이플 게임 → `AbstractGameClient` 직접 상속
+
+### AbstractMapleBaseClient — 메이플 패밀리 기반
+
+`MapleStoryClient`는 `AbstractMapleBaseClient`를 상속한다.
 `pathPrefix` / `timezoneOffset`을 abstract로 선언하여 **설정 누락 시 컴파일 에러** 발생.
 
 ```ts
 // src/games/_base/AbstractMapleStoryBaseClient.ts
-export abstract class AbstractMapleStoryBaseClient {
-  /** URL path segment. e.g., 'maplestory' */
-  protected abstract readonly pathPrefix: string;
-  /** Minutes offset from UTC. KMS = 540 */
+export abstract class AbstractMapleBaseClient extends AbstractGameClient {
   protected abstract readonly timezoneOffset: number;
 
-  constructor(protected readonly http: HttpClient) {}
-
-  protected buildUrl(path: string, version: 'v1' = 'v1'): string {
-    return `https://open.api.nexon.com/${this.pathPrefix}/${version}/${path}`;
-  }
-
-  protected formatDate(date: Date | string): NexonDate {
-    // 지역 타임존 기준 YYYY-MM-DD 변환
+  protected formatDate(date: Date | NexonDate | 'today' | string): NexonDate {
+    return toNexonDate(date, this.timezoneOffset);
   }
 }
 
 // src/games/maplestory/MapleStoryClient.ts
-export class MapleStoryClient extends AbstractMapleStoryBaseClient {
+export class MapleStoryClient extends AbstractMapleBaseClient {
   protected readonly pathPrefix = 'maplestory';
   protected readonly timezoneOffset = 540;
 
@@ -182,6 +221,27 @@ export class MapleStoryClient extends AbstractMapleStoryBaseClient {
     this._character ??= new MapleStoryCharacterClient(this.http);
     return this._character;
   }
+}
+```
+
+### 새 게임 추가 가이드
+
+```ts
+// 1. 메이플 패밀리 (M, SEA, TW) — AbstractMapleBaseClient 상속
+export class MapleStoryMClient extends AbstractMapleBaseClient {
+  protected readonly pathPrefix = 'maplestorym';
+  protected readonly timezoneOffset = 540; // KST
+}
+
+// 2. 비메이플 게임 — AbstractGameClient 직접 상속
+export class FcOnlineClient extends AbstractGameClient {
+  protected readonly pathPrefix = 'fconline';
+}
+
+// 3. NexonClient에 lazy getter 추가
+get fcOnline(): FcOnlineClient {
+  this._fcOnline ??= new FcOnlineClient(this.http);
+  return this._fcOnline;
 }
 ```
 
@@ -548,11 +608,27 @@ export default defineConfig({
 
 ## 지원 게임
 
-현재 메이플스토리 KMS만 지원한다. Base URL: `https://open.api.nexon.com/`
+Base URL: `https://open.api.nexon.com/`
 
-| 게임 | Client 클래스 | Path Prefix | Timezone | 상태 |
-|------|--------------|-------------|----------|------|
-| 메이플스토리 (KMS) | `MapleStoryClient` | `maplestory` | UTC+9 (540) | 구현 완료 |
+| 게임 | Client 프로퍼티 | Client 클래스 | Path Prefix | Base Class | 상태 |
+|------|----------------|--------------|-------------|------------|------|
+| 메이플스토리 (KMS) | `client.maplestory` | `MapleStoryClient` | `maplestory` | `AbstractMapleBaseClient` | **구현 완료** |
+| 메이플스토리M | `client.maplestoryM` | `MapleStoryMClient` | `maplestorym` | `AbstractMapleBaseClient` | 예정 |
+| MapleStory SEA | `client.maplestorySEA` | `MapleStorySEAClient` | `maplestorysea` | `AbstractMapleBaseClient` | 예정 |
+| MapleStory Taiwan | `client.maplestoryTW` | `MapleStoryTWClient` | `maplestorytw` | `AbstractMapleBaseClient` | 예정 |
+| EA SPORTS FC 온라인 | `client.fcOnline` | `FcOnlineClient` | `fconline` | `AbstractGameClient` | 예정 |
+| 던전앤파이터 | `client.dnf` | `DnfClient` | `dnf` | `AbstractGameClient` | 예정 |
+| 마비노기 | `client.mabinogi` | `MabinogiClient` | `mabinogi` | `AbstractGameClient` | 예정 |
+| 마비노기 영웅전 | `client.mabinogiHeroes` | `MabinogiHeroesClient` | `mabinogiheroes` | `AbstractGameClient` | 예정 |
+| 서든어택 | `client.suddenAttack` | `SuddenAttackClient` | `suddenattack` | `AbstractGameClient` | 예정 |
+| 퍼스트 디센던트 | `client.firstDescendant` | `FirstDescendantClient` | `tfd` | `AbstractGameClient` | 예정 |
+| 카트라이더 러쉬플러스 | `client.kartrider` | `KartriderClient` | `kartrider` | `AbstractGameClient` | 예정 |
+| 바람의나라 | `client.baram` | `BaramClient` | `baramnara` | `AbstractGameClient` | 예정 |
+| 바람의나라: 연 | `client.baramYeon` | `BaramYeonClient` | `baramyeon` | `AbstractGameClient` | 예정 |
+| 히트2 | `client.hit2` | `Hit2Client` | `hit2` | `AbstractGameClient` | 예정 |
+| 크레이지 아케이드 | `client.crazyArcade` | `CrazyArcadeClient` | `crazyarcade` | `AbstractGameClient` | 예정 |
+| V4 | `client.v4` | `V4Client` | `v4` | `AbstractGameClient` | 예정 |
+| 사이퍼즈 | `client.cyphers` | `CyphersClient` | `cyphers` | `AbstractGameClient` | 예정 |
 
 ## 커밋 컨벤션
 
@@ -562,7 +638,7 @@ prefix(scope): 주요 메시지 (한글 OK, 50자 이내)
 * 상세 변경 내용 1
 * 상세 변경 내용 2
 
-Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 ```
 
 | prefix | 용도 |

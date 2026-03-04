@@ -1,4 +1,4 @@
-import { AbstractMapleStoryBaseClient } from '../_base/AbstractMapleStoryBaseClient.js';
+import { AbstractMapleBaseClient } from '../_base/AbstractMapleStoryBaseClient.js';
 import type { OCID } from '../../core/types/branded.js';
 import { MapleStoryCharacterClient } from './character/MapleStoryCharacterClient.js';
 import { MapleStoryUnionClient } from './union/MapleStoryUnionClient.js';
@@ -23,7 +23,7 @@ import type { Achievement } from './user-types.js';
  * const ranking = await client.maplestory.ranking.getOverall({ date });
  * ```
  */
-export class MapleStoryClient extends AbstractMapleStoryBaseClient {
+export class MapleStoryClient extends AbstractMapleBaseClient {
   protected readonly pathPrefix = 'maplestory';
   protected readonly timezoneOffset = 540; // UTC+9 (KST)
 
