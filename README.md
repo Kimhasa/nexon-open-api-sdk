@@ -209,6 +209,15 @@ import { MapleStoryClient } from 'nexon-open-api/maplestory';
 - Node.js 18+
 - TypeScript 5.0+ (타입 사용 시)
 
+## 면책 조항
+
+이 프로젝트는 넥슨(NEXON Korea Corporation)이 제휴, 승인, 후원하지 않는 **비공식** 서드파티 라이브러리입니다.
+
+- 메이플스토리, NEXON, Nexon Open API 및 관련 상표의 모든 권리는 넥슨에 있습니다 ([이용약관 제6조 ①](https://openapi.nexon.com/ko/support/terms/)).
+- 이 SDK는 [NEXON Open API](https://openapi.nexon.com/)를 통해 데이터를 제공받습니다 ([이용약관 제6조 ④](https://openapi.nexon.com/ko/support/terms/)).
+- API 사용 시 [Nexon Open API 이용약관](https://openapi.nexon.com/ko/support/terms/)을 준수하세요.
+
 ## 라이선스
 
-[MIT](LICENSE)
+이 SDK의 소스 코드는 [MIT](LICENSE) 라이선스를 따릅니다.
+단, API를 통해 제공되는 데이터의 저작권은 넥슨에 있으며, 데이터의 무단 복제/재배포/영리적 이용은 이용약관에 의해 제한됩니다.
