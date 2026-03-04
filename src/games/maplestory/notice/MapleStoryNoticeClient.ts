@@ -1,4 +1,13 @@
 import type { HttpClient } from '../../../core/http/HttpClient.js';
+import {
+  NOTICE_LIST_SHAPE,
+  NOTICE_DETAIL_SHAPE,
+  UPDATE_NOTICE_LIST_SHAPE,
+  EVENT_NOTICE_LIST_SHAPE,
+  EVENT_NOTICE_DETAIL_SHAPE,
+  CASHSHOP_NOTICE_LIST_SHAPE,
+  CASHSHOP_NOTICE_DETAIL_SHAPE,
+} from '../shapes.js';
 import type {
   CashshopNoticeDetail,
   CashshopNoticeList,
@@ -38,7 +47,11 @@ export class MapleStoryNoticeClient {
    *
    */
   async getList(): Promise<NoticeList> {
-    return this.http.get<NoticeList>(`${MapleStoryNoticeClient.BASE}/notice`);
+    return this.http.get<NoticeList>(
+      `${MapleStoryNoticeClient.BASE}/notice`,
+      undefined,
+      NOTICE_LIST_SHAPE,
+    );
   }
 
   /**
@@ -54,9 +67,11 @@ export class MapleStoryNoticeClient {
    *
    */
   async getDetail(noticeId: number): Promise<NoticeDetail> {
-    return this.http.get<NoticeDetail>(`${MapleStoryNoticeClient.BASE}/notice/detail`, {
-      notice_id: noticeId,
-    });
+    return this.http.get<NoticeDetail>(
+      `${MapleStoryNoticeClient.BASE}/notice/detail`,
+      { notice_id: noticeId },
+      NOTICE_DETAIL_SHAPE,
+    );
   }
 
   /**
@@ -72,7 +87,11 @@ export class MapleStoryNoticeClient {
    *
    */
   async getUpdateList(): Promise<UpdateNoticeList> {
-    return this.http.get<UpdateNoticeList>(`${MapleStoryNoticeClient.BASE}/notice-update`);
+    return this.http.get<UpdateNoticeList>(
+      `${MapleStoryNoticeClient.BASE}/notice-update`,
+      undefined,
+      UPDATE_NOTICE_LIST_SHAPE,
+    );
   }
 
   /**
@@ -88,9 +107,11 @@ export class MapleStoryNoticeClient {
    *
    */
   async getUpdateDetail(noticeId: number): Promise<NoticeDetail> {
-    return this.http.get<NoticeDetail>(`${MapleStoryNoticeClient.BASE}/notice-update/detail`, {
-      notice_id: noticeId,
-    });
+    return this.http.get<NoticeDetail>(
+      `${MapleStoryNoticeClient.BASE}/notice-update/detail`,
+      { notice_id: noticeId },
+      NOTICE_DETAIL_SHAPE,
+    );
   }
 
   /**
@@ -106,7 +127,11 @@ export class MapleStoryNoticeClient {
    *
    */
   async getEventList(): Promise<EventNoticeList> {
-    return this.http.get<EventNoticeList>(`${MapleStoryNoticeClient.BASE}/notice-event`);
+    return this.http.get<EventNoticeList>(
+      `${MapleStoryNoticeClient.BASE}/notice-event`,
+      undefined,
+      EVENT_NOTICE_LIST_SHAPE,
+    );
   }
 
   /**
@@ -122,9 +147,11 @@ export class MapleStoryNoticeClient {
    *
    */
   async getEventDetail(noticeId: number): Promise<EventNoticeDetail> {
-    return this.http.get<EventNoticeDetail>(`${MapleStoryNoticeClient.BASE}/notice-event/detail`, {
-      notice_id: noticeId,
-    });
+    return this.http.get<EventNoticeDetail>(
+      `${MapleStoryNoticeClient.BASE}/notice-event/detail`,
+      { notice_id: noticeId },
+      EVENT_NOTICE_DETAIL_SHAPE,
+    );
   }
 
   /**
@@ -140,7 +167,11 @@ export class MapleStoryNoticeClient {
    *
    */
   async getCashshopList(): Promise<CashshopNoticeList> {
-    return this.http.get<CashshopNoticeList>(`${MapleStoryNoticeClient.BASE}/notice-cashshop`);
+    return this.http.get<CashshopNoticeList>(
+      `${MapleStoryNoticeClient.BASE}/notice-cashshop`,
+      undefined,
+      CASHSHOP_NOTICE_LIST_SHAPE,
+    );
   }
 
   /**
@@ -159,6 +190,7 @@ export class MapleStoryNoticeClient {
     return this.http.get<CashshopNoticeDetail>(
       `${MapleStoryNoticeClient.BASE}/notice-cashshop/detail`,
       { notice_id: noticeId },
+      CASHSHOP_NOTICE_DETAIL_SHAPE,
     );
   }
 }

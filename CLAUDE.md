@@ -64,6 +64,12 @@ nexon-open-api/
 │   │   │   ├── NexonServerError.ts              # 5xx / OPENAPI00001, 00011
 │   │   │   ├── error-codes.ts                   # OPENAPI00001~00011 as const
 │   │   │   └── classify-error.ts                # (status, code) → 에러 인스턴스
+│   │   ├── metadata/
+│   │   │   └── api-metadata.ts                  # 게임별 API 검증 메타데이터
+│   │   ├── validation/
+│   │   │   └── response-shape.ts                # 런타임 응답 shape 검증
+│   │   ├── deprecation/
+│   │   │   └── deprecation.ts                   # deprecation 경고 유틸
 │   │   └── types/
 │   │       ├── branded.ts                       # OCID, GuildId, NexonDate 브랜드 타입
 │   │       ├── date.ts                          # toNexonDate(), DateRange
@@ -75,6 +81,7 @@ nexon-open-api/
 │   │   │   └── maple-base-types.ts              # 공유 요청 타입 (DateOptions 등)
 │   │   ├── maplestory/                          # KMS — 메이플스토리 (구현 완료)
 │   │       ├── MapleStoryClient.ts
+│   │       ├── shapes.ts                        # 응답 shape descriptors (전 엔드포인트)
 │   │       ├── character/
 │   │       │   ├── MapleStoryCharacterClient.ts
 │   │       │   └── types.ts
@@ -120,6 +127,55 @@ nexon-open-api/
 ├── eslint.config.js
 ├── .prettierrc
 └── README.md
+```
+
+## API 버전 관리 & 변경 감지
+
+### Semver 정책
+
+`SEMVER.md` 참조. 핵심 규칙:
+- 넥슨 응답 필드 추가 → SDK에 optional 필드로 추가 → **MINOR**
+- 넥슨 응답 필드 삭제 → `@deprecated` + optional → **MINOR** (다음 MAJOR에서 삭제)
+- 넥슨 필드 타입 변경 → SDK 타입 변경 → **MAJOR**
+- public 메서드 제거/이름 변경 → **MAJOR**
+
+### API 메타데이터
+
+`src/core/metadata/api-metadata.ts` — 게임별 마지막 검증 일자 추적.
+
+```ts
+import { getApiMetadata } from 'nexon-open-api';
+const meta = getApiMetadata('maplestory');
+console.log(`마지막 검증: ${meta?.lastVerifiedAt}`); // "2025-06-01"
+```
+
+새 게임 추가 시 `API_METADATA`에 엔트리 추가 필수.
+
+### 런타임 응답 Shape 검증
+
+`responseValidation: true` 옵션으로 활성화. Warn-only, opt-in, zero-dependency.
+
+```ts
+const client = new NexonClient({
+  apiKey: 'key',
+  debug: true,
+  responseValidation: true,
+});
+// → [nexon-sdk] ⚠ Response shape mismatch for .../character/basic
+//     unexpected keys: [new_field_from_nexon]
+```
+
+- `src/core/validation/response-shape.ts` — `validateShape()` 함수
+- `src/games/maplestory/shapes.ts` — 전 엔드포인트 shape descriptors
+- `HttpClient.get()` 3번째 param으로 shape 전달 (비활성 시 비용 0)
+
+### Deprecation 유틸
+
+`src/core/deprecation/deprecation.ts` — 프로세스당 1회 경고.
+
+```ts
+import { emitDeprecation } from 'nexon-open-api';
+emitDeprecation('some-feature', '이 기능은 다음 major 버전에서 삭제됩니다.');
 ```
 
 ## 아키텍처 원칙

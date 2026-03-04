@@ -1,5 +1,11 @@
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { OcidDateRequest } from '../../_base/maple-base-types.js';
+import {
+  UNION_SHAPE,
+  UNION_RAIDER_SHAPE,
+  UNION_ARTIFACT_SHAPE,
+  UNION_CHAMPION_SHAPE,
+} from '../shapes.js';
 import type { Union, UnionArtifact, UnionChampion, UnionRaider } from './types.js';
 
 /**
@@ -32,10 +38,11 @@ export class MapleStoryUnionClient {
    *
    */
   async getUnion(params: OcidDateRequest): Promise<Union> {
-    return this.http.get<Union>(`${MapleStoryUnionClient.BASE}/user/union`, {
-      ocid: params.ocid,
-      date: params.date as string | undefined,
-    });
+    return this.http.get<Union>(
+      `${MapleStoryUnionClient.BASE}/user/union`,
+      { ocid: params.ocid, date: params.date as string | undefined },
+      UNION_SHAPE,
+    );
   }
 
   /**
@@ -57,10 +64,11 @@ export class MapleStoryUnionClient {
    *
    */
   async getRaider(params: OcidDateRequest): Promise<UnionRaider> {
-    return this.http.get<UnionRaider>(`${MapleStoryUnionClient.BASE}/user/union-raider`, {
-      ocid: params.ocid,
-      date: params.date as string | undefined,
-    });
+    return this.http.get<UnionRaider>(
+      `${MapleStoryUnionClient.BASE}/user/union-raider`,
+      { ocid: params.ocid, date: params.date as string | undefined },
+      UNION_RAIDER_SHAPE,
+    );
   }
 
   /**
@@ -81,10 +89,11 @@ export class MapleStoryUnionClient {
    *
    */
   async getArtifact(params: OcidDateRequest): Promise<UnionArtifact> {
-    return this.http.get<UnionArtifact>(`${MapleStoryUnionClient.BASE}/user/union-artifact`, {
-      ocid: params.ocid,
-      date: params.date as string | undefined,
-    });
+    return this.http.get<UnionArtifact>(
+      `${MapleStoryUnionClient.BASE}/user/union-artifact`,
+      { ocid: params.ocid, date: params.date as string | undefined },
+      UNION_ARTIFACT_SHAPE,
+    );
   }
 
   /**
@@ -105,9 +114,10 @@ export class MapleStoryUnionClient {
    *
    */
   async getChampion(params: OcidDateRequest): Promise<UnionChampion> {
-    return this.http.get<UnionChampion>(`${MapleStoryUnionClient.BASE}/user/union-champion`, {
-      ocid: params.ocid,
-      date: params.date as string | undefined,
-    });
+    return this.http.get<UnionChampion>(
+      `${MapleStoryUnionClient.BASE}/user/union-champion`,
+      { ocid: params.ocid, date: params.date as string | undefined },
+      UNION_CHAMPION_SHAPE,
+    );
   }
 }

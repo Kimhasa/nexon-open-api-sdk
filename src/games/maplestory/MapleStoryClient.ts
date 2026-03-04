@@ -6,6 +6,7 @@ import { MapleStoryGuildClient } from './guild/MapleStoryGuildClient.js';
 import { MapleStoryHistoryClient } from './history/MapleStoryHistoryClient.js';
 import { MapleStoryRankingClient } from './ranking/MapleStoryRankingClient.js';
 import { MapleStoryNoticeClient } from './notice/MapleStoryNoticeClient.js';
+import { OCID_SHAPE, OUID_SHAPE, ACHIEVEMENT_SHAPE } from './shapes.js';
 import type { Achievement } from './user-types.js';
 
 /**
@@ -84,9 +85,11 @@ export class MapleStoryClient extends AbstractMapleBaseClient {
    */
   async getOcid(characterName: string): Promise<OCID> {
     const url = this.buildUrl('id');
-    const response = await this.http.get<{ ocid: string }>(url, {
-      character_name: characterName,
-    });
+    const response = await this.http.get<{ ocid: string }>(
+      url,
+      { character_name: characterName },
+      OCID_SHAPE,
+    );
     return response.ocid as OCID;
   }
 
@@ -105,7 +108,7 @@ export class MapleStoryClient extends AbstractMapleBaseClient {
    */
   async getOuid(): Promise<string> {
     const url = this.buildUrl('ouid');
-    const response = await this.http.get<{ ouid: string }>(url);
+    const response = await this.http.get<{ ouid: string }>(url, undefined, OUID_SHAPE);
     return response.ouid;
   }
 
@@ -131,6 +134,6 @@ export class MapleStoryClient extends AbstractMapleBaseClient {
    */
   async getAchievement(): Promise<Achievement> {
     const url = this.buildUrl('user/achievement');
-    return this.http.get<Achievement>(url);
+    return this.http.get<Achievement>(url, undefined, ACHIEVEMENT_SHAPE);
   }
 }
