@@ -1,12 +1,34 @@
 # nexon-open-api
 
-> Type-safe Nexon Open API SDK for MapleStory (KMS)
+> Type-safe Nexon Open API SDK for TypeScript/JavaScript
 
 [![npm version](https://img.shields.io/npm/v/nexon-open-api.svg)](https://www.npmjs.com/package/nexon-open-api)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org/)
 
-메이플스토리 Open API를 TypeScript로 감싼 SDK입니다. 외부 의존성 없이 네이티브 `fetch`만 사용하며, CJS/ESM 듀얼 출력을 지원합니다.
+[Nexon Open API](https://openapi.nexon.com/) 전체 게임을 TypeScript로 감싼 SDK입니다. 외부 의존성 없이 네이티브 `fetch`만 사용하며, CJS/ESM 듀얼 출력을 지원합니다.
+
+## 지원 게임
+
+| 게임 | Client | 상태 | 엔드포인트 |
+|------|--------|------|-----------|
+| 메이플스토리 (KMS) | `client.maplestory` | **구현 완료** | 45개 |
+| 메이플스토리M | `client.maplestoryM` | 예정 | - |
+| MapleStory SEA | `client.maplestorySEA` | 예정 | - |
+| MapleStory Taiwan | `client.maplestoryTW` | 예정 | - |
+| EA SPORTS FC 온라인 | `client.fcOnline` | 예정 | - |
+| 던전앤파이터 | `client.dnf` | 예정 | - |
+| 마비노기 | `client.mabinogi` | 예정 | - |
+| 마비노기 영웅전 | `client.mabinogiHeroes` | 예정 | - |
+| 서든어택 | `client.suddenAttack` | 예정 | - |
+| 퍼스트 디센던트 | `client.firstDescendant` | 예정 | - |
+| 카트라이더 러쉬플러스 | `client.kartrider` | 예정 | - |
+| 바람의나라 | `client.baram` | 예정 | - |
+| 바람의나라: 연 | `client.baramYeon` | 예정 | - |
+| 히트2 | `client.hit2` | 예정 | - |
+| 크레이지 아케이드 | `client.crazyArcade` | 예정 | - |
+| V4 | `client.v4` | 예정 | - |
+| 사이퍼즈 | `client.cyphers` | 예정 | - |
 
 ## 주요 특징
 
@@ -15,7 +37,7 @@
 - **자동 재시도** — 429 (Rate Limit) / 503 응답 시 지수 백오프 자동 재시도
 - **에러 분류** — `NexonRateLimitError`, `NexonAuthError` 등 `instanceof`로 에러 분기
 - **외부 의존성 0** — Node.js 18+ 네이티브 `fetch` 사용
-- **45개 엔드포인트** — 캐릭터, 유니온, 길드, 랭킹, 확률/이력, 공지사항
+- **멀티 게임** — 하나의 `NexonClient`로 모든 게임 접근
 
 ## 설치
 
