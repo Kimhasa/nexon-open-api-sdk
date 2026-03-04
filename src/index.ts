@@ -4,6 +4,7 @@ export type { NexonClientOptions } from './NexonClient.js';
 
 // Game clients (also available via sub-path imports)
 export { MapleStoryClient } from './games/maplestory/MapleStoryClient.js';
+export { FcOnlineClient } from './games/fc-online/FcOnlineClient.js';
 
 // Errors
 export {
@@ -20,7 +21,7 @@ export {
 export type { NexonErrorCode, NexonErrorPayload } from './core/errors/index.js';
 
 // Types
-export type { OCID, GuildId, NexonDate } from './core/types/branded.js';
+export type { OCID, GuildId, OUID, NexonDate } from './core/types/branded.js';
 export { toNexonDate } from './core/types/date.js';
 export type { DateRange, CursorPage, CursorPageRequest, AutoPaginationOptions } from './core/types/index.js';
 
@@ -162,6 +163,42 @@ export type {
   CashshopNoticeList,
   CashshopNoticeDetail,
 } from './games/maplestory/notice/types.js';
+
+// FC Online types
+export type {
+  FcUserBasic,
+  FcMaxDivision,
+  FcUserMatchRequest,
+  FcUserTradeRequest,
+  FcTradeType,
+  FcTradeRecord,
+} from './games/fc-online/user/types.js';
+export type {
+  FcMatchListRequest,
+  FcMatchDetail,
+  FcMatchInfo,
+  FcMatchDetailInfo,
+  FcMatchShoot,
+  FcMatchShootDetail,
+  FcMatchPass,
+  FcMatchDefence,
+  FcPlayerStatus,
+  FcMatchPlayer,
+} from './games/fc-online/match/types.js';
+export type {
+  FcRankerPlayer,
+  FcRankerStatsRequest,
+  FcRankerPlayerStatus,
+  FcRankerStats,
+} from './games/fc-online/ranker/types.js';
+export type {
+  FcMatchTypeMeta,
+  FcSpidMeta,
+  FcSeasonIdMeta,
+  FcSpPositionMeta,
+  FcDivisionMeta,
+  FcDivisionVoltaMeta,
+} from './games/fc-online/metadata/types.js';
 
 // HttpClient (for advanced usage)
 export { HttpClient } from './core/http/HttpClient.js';

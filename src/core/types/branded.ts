@@ -30,6 +30,12 @@ export type OCID = Brand<string, 'OCID'>;
 export type GuildId = Brand<string, 'GuildId'>;
 
 /**
+ * EA SPORTS FC Online 계정 고유 식별자 (OUID).
+ * `FcOnlineClient.getOuid()` 로 획득합니다.
+ */
+export type OUID = Brand<string, 'OUID'>;
+
+/**
  * Nexon Open API 날짜 형식 (YYYY-MM-DD).
  * `toNexonDate()` 헬퍼로 생성합니다.
  */
