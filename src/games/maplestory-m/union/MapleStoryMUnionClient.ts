@@ -1,5 +1,5 @@
 import type { HttpClient } from '../../../core/http/HttpClient.js';
-import type { OcidRequest } from '../../_base/maple-base-types.js';
+import type { MOcidRequest } from '../types.js';
 import { M_UNION_SHAPE, M_UNION_RAIDER_SHAPE } from '../shapes.js';
 import type { MUnion, MUnionRaider } from './types.js';
 
@@ -26,7 +26,7 @@ export class MapleStoryMUnionClient {
    * console.log(`유니온 Lv.${union.union_level} (${union.union_grade})`);
    * ```
    */
-  async get(params: OcidRequest): Promise<MUnion> {
+  async get(params: MOcidRequest): Promise<MUnion> {
     return this.http.get<MUnion>(
       `${MapleStoryMUnionClient.BASE}/user/union`,
       { ocid: params.ocid },
@@ -45,7 +45,7 @@ export class MapleStoryMUnionClient {
    * }
    * ```
    */
-  async getRaider(params: OcidRequest): Promise<MUnionRaider> {
+  async getRaider(params: MOcidRequest): Promise<MUnionRaider> {
     return this.http.get<MUnionRaider>(
       `${MapleStoryMUnionClient.BASE}/user/union-raider`,
       { ocid: params.ocid },

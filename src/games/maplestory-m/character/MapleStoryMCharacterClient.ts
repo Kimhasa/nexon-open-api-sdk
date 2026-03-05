@@ -1,5 +1,5 @@
 import type { HttpClient } from '../../../core/http/HttpClient.js';
-import type { OcidRequest } from '../../_base/maple-base-types.js';
+import type { MOcidRequest } from '../types.js';
 import {
   M_CHARACTER_BASIC_SHAPE,
   M_CHARACTER_STAT_SHAPE,
@@ -67,7 +67,7 @@ export class MapleStoryMCharacterClient {
    * console.log(basic.character_name, basic.character_level);
    * ```
    */
-  async getBasic(params: OcidRequest): Promise<MCharacterBasic> {
+  async getBasic(params: MOcidRequest): Promise<MCharacterBasic> {
     return this.http.get<MCharacterBasic>(
       `${MapleStoryMCharacterClient.BASE}/character/basic`,
       { ocid: params.ocid },
@@ -86,7 +86,7 @@ export class MapleStoryMCharacterClient {
    * }
    * ```
    */
-  async getStat(params: OcidRequest): Promise<MCharacterStat> {
+  async getStat(params: MOcidRequest): Promise<MCharacterStat> {
     return this.http.get<MCharacterStat>(
       `${MapleStoryMCharacterClient.BASE}/character/stat`,
       { ocid: params.ocid },
@@ -103,7 +103,7 @@ export class MapleStoryMCharacterClient {
    * console.log(`프리셋 ${hyperStat.use_preset_no} 사용 중`);
    * ```
    */
-  async getHyperStat(params: OcidRequest): Promise<MCharacterHyperStat> {
+  async getHyperStat(params: MOcidRequest): Promise<MCharacterHyperStat> {
     return this.http.get<MCharacterHyperStat>(
       `${MapleStoryMCharacterClient.BASE}/character/hyper-stat`,
       { ocid: params.ocid },
@@ -120,7 +120,7 @@ export class MapleStoryMCharacterClient {
    * console.log(`길드: ${guild.guild_name}`);
    * ```
    */
-  async getGuild(params: OcidRequest): Promise<MCharacterGuild> {
+  async getGuild(params: MOcidRequest): Promise<MCharacterGuild> {
     return this.http.get<MCharacterGuild>(
       `${MapleStoryMCharacterClient.BASE}/character/guild`,
       { ocid: params.ocid },
@@ -139,7 +139,7 @@ export class MapleStoryMCharacterClient {
    * }
    * ```
    */
-  async getItemEquipment(params: OcidRequest): Promise<MCharacterItemEquipment> {
+  async getItemEquipment(params: MOcidRequest): Promise<MCharacterItemEquipment> {
     return this.http.get<MCharacterItemEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/item-equipment`,
       { ocid: params.ocid },
@@ -158,7 +158,7 @@ export class MapleStoryMCharacterClient {
    * }
    * ```
    */
-  async getCashItemEquipment(params: OcidRequest): Promise<MCharacterCashItemEquipment> {
+  async getCashItemEquipment(params: MOcidRequest): Promise<MCharacterCashItemEquipment> {
     return this.http.get<MCharacterCashItemEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/cashitem-equipment`,
       { ocid: params.ocid },
@@ -177,7 +177,7 @@ export class MapleStoryMCharacterClient {
    * }
    * ```
    */
-  async getSymbol(params: OcidRequest): Promise<MCharacterSymbolEquipment> {
+  async getSymbol(params: MOcidRequest): Promise<MCharacterSymbolEquipment> {
     return this.http.get<MCharacterSymbolEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/symbol`,
       { ocid: params.ocid },
@@ -196,7 +196,7 @@ export class MapleStoryMCharacterClient {
    * }
    * ```
    */
-  async getSetEffect(params: OcidRequest): Promise<MCharacterSetEffect> {
+  async getSetEffect(params: MOcidRequest): Promise<MCharacterSetEffect> {
     return this.http.get<MCharacterSetEffect>(
       `${MapleStoryMCharacterClient.BASE}/character/set-effect`,
       { ocid: params.ocid },
@@ -213,7 +213,7 @@ export class MapleStoryMCharacterClient {
    * console.log(`${android.android_name} (${android.android_grade})`);
    * ```
    */
-  async getAndroidEquipment(params: OcidRequest): Promise<MCharacterAndroidEquipment> {
+  async getAndroidEquipment(params: MOcidRequest): Promise<MCharacterAndroidEquipment> {
     return this.http.get<MCharacterAndroidEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/android-equipment`,
       { ocid: params.ocid },
@@ -232,7 +232,7 @@ export class MapleStoryMCharacterClient {
    * }
    * ```
    */
-  async getJewel(params: OcidRequest): Promise<MCharacterJewel> {
+  async getJewel(params: MOcidRequest): Promise<MCharacterJewel> {
     return this.http.get<MCharacterJewel>(
       `${MapleStoryMCharacterClient.BASE}/character/jewel`,
       { ocid: params.ocid },
@@ -249,7 +249,7 @@ export class MapleStoryMCharacterClient {
    * console.log(`헤어: ${beauty.character_hair.hair_name}`);
    * ```
    */
-  async getBeautyEquipment(params: OcidRequest): Promise<MCharacterBeautyEquipment> {
+  async getBeautyEquipment(params: MOcidRequest): Promise<MCharacterBeautyEquipment> {
     return this.http.get<MCharacterBeautyEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/beauty-equipment`,
       { ocid: params.ocid },
@@ -266,7 +266,7 @@ export class MapleStoryMCharacterClient {
    * console.log(`펫1: ${pet.pet_1_name} (${pet.pet_1_nickname})`);
    * ```
    */
-  async getPetEquipment(params: OcidRequest): Promise<MCharacterPetEquipment> {
+  async getPetEquipment(params: MOcidRequest): Promise<MCharacterPetEquipment> {
     return this.http.get<MCharacterPetEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/pet-equipment`,
       { ocid: params.ocid },
@@ -285,7 +285,7 @@ export class MapleStoryMCharacterClient {
    * }
    * ```
    */
-  async getSkillEquipment(params: OcidRequest): Promise<MCharacterSkillEquipment> {
+  async getSkillEquipment(params: MOcidRequest): Promise<MCharacterSkillEquipment> {
     return this.http.get<MCharacterSkillEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/skill-equipment`,
       { ocid: params.ocid },
@@ -304,7 +304,7 @@ export class MapleStoryMCharacterClient {
    * }
    * ```
    */
-  async getLinkSkill(params: OcidRequest): Promise<MCharacterLinkSkill> {
+  async getLinkSkill(params: MOcidRequest): Promise<MCharacterLinkSkill> {
     return this.http.get<MCharacterLinkSkill>(
       `${MapleStoryMCharacterClient.BASE}/character/link-skill`,
       { ocid: params.ocid },
@@ -323,7 +323,7 @@ export class MapleStoryMCharacterClient {
    * }
    * ```
    */
-  async getVMatrix(params: OcidRequest): Promise<MCharacterVMatrix> {
+  async getVMatrix(params: MOcidRequest): Promise<MCharacterVMatrix> {
     return this.http.get<MCharacterVMatrix>(
       `${MapleStoryMCharacterClient.BASE}/character/vmatrix`,
       { ocid: params.ocid },
@@ -342,7 +342,7 @@ export class MapleStoryMCharacterClient {
    * }
    * ```
    */
-  async getHexaMatrixSkill(params: OcidRequest): Promise<MCharacterHexaMatrixSkill> {
+  async getHexaMatrixSkill(params: MOcidRequest): Promise<MCharacterHexaMatrixSkill> {
     return this.http.get<MCharacterHexaMatrixSkill>(
       `${MapleStoryMCharacterClient.BASE}/character/hexamatrix-skill`,
       { ocid: params.ocid },
@@ -361,7 +361,7 @@ export class MapleStoryMCharacterClient {
    * }
    * ```
    */
-  async getHexaMatrixStat(params: OcidRequest): Promise<MCharacterHexaMatrixStat> {
+  async getHexaMatrixStat(params: MOcidRequest): Promise<MCharacterHexaMatrixStat> {
     return this.http.get<MCharacterHexaMatrixStat>(
       `${MapleStoryMCharacterClient.BASE}/character/hexamatrix-stat`,
       { ocid: params.ocid },

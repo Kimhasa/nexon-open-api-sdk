@@ -1,6 +1,6 @@
-// ─── 공통 공지 항목 ─────────────────────────────────────────────────────────
+// ─── GET /maplestorym/v1/notice ──────────────────────────────────────────────
 
-/** 공지 목록 항목 */
+/** 공지사항 항목 */
 export interface MNoticeItem {
   /** 공지 제목 */
   readonly title: string;
@@ -8,11 +8,19 @@ export interface MNoticeItem {
   readonly url: string;
   /** 공지 식별자 */
   readonly notice_id: number;
-  /** 공지 등록일(시) (KST) */
+  /** 공지 등록일(시) (UTC0) */
   readonly date: string;
 }
 
-/** 공지 상세 */
+/** GET /maplestorym/v1/notice 응답 */
+export interface MNoticeList {
+  /** 공지 목록 */
+  readonly notice: MNoticeItem[];
+}
+
+// ─── GET /maplestorym/v1/notice/detail ──────────────────────────────────────
+
+/** GET /maplestorym/v1/notice/detail 응답 */
 export interface MNoticeDetail {
   /** 공지 제목 */
   readonly title: string;
@@ -20,62 +28,27 @@ export interface MNoticeDetail {
   readonly url: string;
   /** 공지 본문 */
   readonly contents: string;
-  /** 공지 등록일(시) (KST) */
+  /** 공지 등록일(시) (UTC0) */
   readonly date: string;
 }
 
-// ─── GET /maplestorym/v1/notice ──────────────────────────────────────────────
+// ─── GET /maplestorym/v1/notice-patch ───────────────────────────────────────
 
-/** 공지사항 목록 응답 */
-export interface MNoticeList {
-  /** 공지 목록 */
-  readonly notice: readonly MNoticeItem[];
-}
-
-// ─── GET /maplestorym/v1/notice-patch ────────────────────────────────────────
-
-/** 패치노트 목록 응답 */
+/** GET /maplestorym/v1/notice-patch 응답 */
 export interface MPatchNoticeList {
   /** 패치노트 목록 */
-  readonly patch_notice: readonly MNoticeItem[];
+  readonly patch_notice: MNoticeItem[];
 }
 
 // ─── GET /maplestorym/v1/notice-event ────────────────────────────────────────
 
-/** 이벤트 공지 항목 */
-export interface MEventNoticeItem {
-  /** 공지 제목 */
-  readonly title: string;
-  /** 공지 링크 */
-  readonly url: string;
-  /** 공지 식별자 */
-  readonly notice_id: number;
-  /** 공지 등록일(시) (KST) */
-  readonly date: string;
-  /** 이벤트 시작일(시) (KST) */
-  readonly date_event_start: string;
-  /** 이벤트 종료일(시) (KST) */
-  readonly date_event_end: string;
-}
-
-/** 이벤트 공지 목록 응답 */
+/** GET /maplestorym/v1/notice-event 응답 */
 export interface MEventNoticeList {
-  /** 공지 목록 */
-  readonly event_notice: readonly MEventNoticeItem[];
+  /** 이벤트 공지 목록 */
+  readonly event_notice: MNoticeItem[];
 }
 
-/** 이벤트 공지 상세 */
-export interface MEventNoticeDetail {
-  /** 공지 제목 */
-  readonly title: string;
-  /** 공지 링크 */
-  readonly url: string;
-  /** 공지 본문 */
-  readonly contents: string;
-  /** 공지 등록일(시) (KST) */
-  readonly date: string;
-  /** 이벤트 시작일(시) (KST) */
-  readonly date_event_start: string;
-  /** 이벤트 종료일(시) (KST) */
-  readonly date_event_end: string;
-}
+// ─── GET /maplestorym/v1/notice-event/detail ────────────────────────────────
+
+/** GET /maplestorym/v1/notice-event/detail 응답 (MNoticeDetail과 동일) */
+export type MEventNoticeDetail = MNoticeDetail;

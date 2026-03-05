@@ -1,5 +1,5 @@
 import type { HttpClient } from '../../../core/http/HttpClient.js';
-import type { GuildIdDateRequest } from '../../_base/maple-base-types.js';
+import type { MGuildIdRequest } from '../types.js';
 import { M_GUILD_ID_SHAPE, M_GUILD_BASIC_SHAPE } from '../shapes.js';
 import type { GuildId } from '../../../core/types/branded.js';
 import type { MGuildIdResponse, MGuildBasic, MWorldName } from './types.js';
@@ -47,13 +47,10 @@ export class MapleStoryMGuildClient {
    * console.log(`${basic.guild_name} Lv.${basic.guild_level} (${basic.guild_member_count}명)`);
    * ```
    */
-  async getBasic(params: GuildIdDateRequest): Promise<MGuildBasic> {
+  async getBasic(params: MGuildIdRequest): Promise<MGuildBasic> {
     return this.http.get<MGuildBasic>(
       `${MapleStoryMGuildClient.BASE}/guild/basic`,
-      {
-        oguild_id: params.oguild_id,
-        date: params.date as string | undefined,
-      },
+      { oguild_id: params.oguild_id },
       M_GUILD_BASIC_SHAPE,
     );
   }

@@ -57,211 +57,169 @@ export const M_CHARACTER_GUILD_SHAPE: ShapeDescriptor = {
 
 export const M_CHARACTER_ITEM_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
-    character_gender: 'string',
     character_class: 'string',
-    preset_no: 'number',
+    use_preset_no: 'number',
     item_equipment: 'array',
+    soul_set_option: 'string',
+    equipment_preset: 'array',
   },
 };
 
 export const M_CHARACTER_CASHITEM_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
-    character_gender: 'string',
     character_class: 'string',
-    preset_no: 'number',
-    cash_item_equipment_base: 'array',
-    cash_item_equipment_preset_1: 'array',
-    cash_item_equipment_preset_2: 'array',
-    cash_item_equipment_preset_3: 'array',
+    character_gender: 'string',
+    use_preset_no: 'number',
+    use_additional_preset_no: 'number',
+    character_look_mode: 'string',
+    cash_item_equipment: 'array',
+    additional_cash_item_equipment: 'array',
+    cash_equipment_preset: 'array',
+    additional_cash_equipment_preset: 'array',
   },
 };
 
 export const M_CHARACTER_SYMBOL_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
     character_class: 'string',
-    symbol: 'array',
+    arcane_symbol: 'array',
+    authentic_symbol: 'array',
   },
 };
 
 export const M_CHARACTER_SET_EFFECT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
-    set_effect: 'array',
+    set_info: 'array',
   },
 };
 
 export const M_CHARACTER_ANDROID_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
-    android_name: 'string',
-    android_nickname: 'string',
-    android_icon: 'string',
-    android_description: 'string',
-    android_hair: 'object',
-    android_face: 'object',
-    android_skin: 'object',
-    android_cash_item_equipment: 'array',
-    android_ear_sensor_clip_flag: 'string',
-    android_gender: 'string',
-    android_grade: 'string',
-    android_non_humanoid_flag: 'string',
-    android_shop_usable_flag: 'string',
+    use_preset_no: 'number',
+    android_equipment: 'object',
+    heart_equipment: 'object',
+    android_heart_equipment_preset: 'array',
   },
 };
 
+// 아래 shape는 실제 API 스펙 확인 후 구현 예정
 export const M_CHARACTER_JEWEL_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
-    jewel: 'array',
+    use_jewel_page_no: 'number',
+    use_jewel_set_option: 'string',
+    jewel_equipment: 'array',
   },
 };
-
 export const M_CHARACTER_BEAUTY_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
     character_gender: 'string',
     character_class: 'string',
     character_hair: 'object',
     character_face: 'object',
-    character_skin: 'object',
+    character_skin_name: 'string',
+    additional_character_hair: 'object',
+    additional_character_face: 'object',
+    additional_character_skin_name: 'string',
   },
 };
-
 export const M_CHARACTER_PET_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
     pet_1_name: 'string',
-    pet_1_nickname: 'string',
+    pet_1_pet_type: 'string',
+    pet_1_date_expire: 'string',
     pet_1_icon: 'string',
-    pet_1_description: 'string',
-    pet_1_equipment: 'object',
-    pet_1_auto_skill: 'object',
-    pet_1_skill: 'array',
-    pet_1_date_expire: 'any',
     pet_2_name: 'string',
-    pet_2_nickname: 'string',
+    pet_2_pet_type: 'string',
+    pet_2_date_expire: 'string',
     pet_2_icon: 'string',
-    pet_2_description: 'string',
-    pet_2_equipment: 'object',
-    pet_2_auto_skill: 'object',
-    pet_2_skill: 'array',
-    pet_2_date_expire: 'any',
     pet_3_name: 'string',
-    pet_3_nickname: 'string',
+    pet_3_pet_type: 'string',
+    pet_3_date_expire: 'string',
     pet_3_icon: 'string',
-    pet_3_description: 'string',
-    pet_3_equipment: 'object',
-    pet_3_auto_skill: 'object',
-    pet_3_skill: 'array',
-    pet_3_date_expire: 'any',
+    pet_set_option: 'array',
   },
 };
-
 export const M_CHARACTER_SKILL_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
     character_class: 'string',
-    character_skill: 'array',
+    skill: 'object',
   },
 };
-
 export const M_CHARACTER_LINK_SKILL_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
-    character_class: 'string',
-    character_link_skill: 'array',
-    character_owned_link_skill: 'object',
+    use_preset_no: 'number',
+    link_skill: 'array',
   },
 };
-
 export const M_CHARACTER_VMATRIX_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
     character_class: 'string',
     character_v_core_equipment: 'array',
-    character_v_matrix_remain_slot_upgrade_point: 'number',
   },
 };
-
 export const M_CHARACTER_HEXAMATRIX_SKILL_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
-    character_hexa_core_equipment: 'array',
+    character_class: 'string',
+    hexamatrix_skill: 'array',
   },
 };
-
 export const M_CHARACTER_HEXAMATRIX_STAT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
     character_class: 'string',
-    character_hexa_stat_core: 'array',
-    preset_hexa_stat_core: 'array',
+    hexamatrix_stat: 'array',
   },
 };
 
-// ─── Union ──────────────────────────────────────────────────────────────────
+// ─── 아래 shape는 실제 API 스펙 확인 후 구현 예정 ───────────────────────────
 
+// Union
 export const M_UNION_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
     union_level: 'number',
     union_grade: 'string',
+    union_level_total_option: 'string',
+    union_grade_icon: 'string',
   },
 };
-
 export const M_UNION_RAIDER_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
-    union_raider_stat: 'array',
-    union_occupied_stat: 'array',
-    union_inner_stat: 'array',
-    union_block: 'array',
+    use_preset_no: 'number',
+    use_union_occupied_option: 'array',
+    use_union_raider_option: 'array',
+    battle_map: 'array',
   },
 };
 
-// ─── Guild ──────────────────────────────────────────────────────────────────
-
+// Guild
 export const M_GUILD_ID_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     oguild_id: 'string',
   },
 };
-
 export const M_GUILD_BASIC_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
-    world_name: 'string',
     guild_name: 'string',
+    world_name: 'string',
     guild_level: 'number',
-    guild_fame: 'number',
-    guild_point: 'number',
+    world_create_date: 'string',
+    guild_keyword: 'array',
+    guild_mark_icon: 'string',
     guild_master_name: 'string',
     guild_member_count: 'number',
     guild_member: 'array',
+    guild_building: 'array',
     guild_skill: 'array',
-    guild_noblesse_skill: 'array',
+    guild_ability: 'array',
   },
 };
 
-// ─── Ranking ────────────────────────────────────────────────────────────────
+// Ranking
+export const M_RANKING_SHAPE: ShapeDescriptor = { expectedKeys: {} };
 
-export const M_RANKING_SHAPE: ShapeDescriptor = {
-  expectedKeys: {
-    ranking: 'array',
-  },
-};
-
-// ─── Notice ─────────────────────────────────────────────────────────────────
-
+// Notice
 export const M_NOTICE_LIST_SHAPE: ShapeDescriptor = {
-  expectedKeys: {
-    notice: 'array',
-  },
+  expectedKeys: { notice: 'array' },
 };
-
 export const M_NOTICE_DETAIL_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     title: 'string',
@@ -270,26 +228,17 @@ export const M_NOTICE_DETAIL_SHAPE: ShapeDescriptor = {
     date: 'string',
   },
 };
-
 export const M_PATCH_NOTICE_LIST_SHAPE: ShapeDescriptor = {
-  expectedKeys: {
-    patch_notice: 'array',
-  },
+  expectedKeys: { patch_notice: 'array' },
 };
-
 export const M_EVENT_NOTICE_LIST_SHAPE: ShapeDescriptor = {
-  expectedKeys: {
-    event_notice: 'array',
-  },
+  expectedKeys: { event_notice: 'array' },
 };
-
 export const M_EVENT_NOTICE_DETAIL_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     title: 'string',
     url: 'string',
     contents: 'string',
     date: 'string',
-    date_event_start: 'string',
-    date_event_end: 'string',
   },
 };

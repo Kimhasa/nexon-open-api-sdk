@@ -212,59 +212,46 @@ export type {
   MCharacterGuild,
   MCharacterItemEquipment,
   MItemEquipment,
-  MItemTotalOption,
-  MItemBaseOption,
-  MItemAddOption,
-  MItemEtcOption,
-  MItemExceptionalOption,
+  MItemOption,
+  MSoulInfo,
+  MEmblemInfo,
+  MEquipmentPreset,
   MCharacterCashItemEquipment,
   MCashItemEquipmentItem,
   MCashItemOption,
   MCashItemColoringPrism,
+  MCashEquipmentPreset,
+  MAdditionalCashEquipmentPreset,
   MCharacterSymbolEquipment,
   MSymbolInfo,
   MCharacterSetEffect,
-  MSetEffectInfo,
-  MSetEffectOption,
+  MSetInfo,
   MCharacterAndroidEquipment,
   MAndroidCashItem,
-  MHairInfo,
-  MFaceInfo,
-  MSkinInfo,
+  MAndroidEquipmentInfo,
+  MHeartEquipment,
+  MAndroidHeartPreset,
+  // 스펙 확인 필요
   MCharacterJewel,
-  MJewelInfo,
   MCharacterBeautyEquipment,
   MCharacterPetEquipment,
-  MPetEquipmentItem,
-  MPetAutoSkill,
-  MPetItemOption,
   MCharacterSkillEquipment,
-  MSkillEquipmentInfo,
   MCharacterLinkSkill,
-  MLinkSkillInfo,
   MCharacterVMatrix,
-  MVCoreEquipment,
   MCharacterHexaMatrixSkill,
-  MHexaCoreEquipment,
-  MHexaLinkedSkill,
   MCharacterHexaMatrixStat,
-  MHexaStatCore,
 } from './games/maplestory-m/character/types.js';
 
-// MapleStory M union types
-export type {
-  MUnion,
-  MUnionRaider,
-  MUnionInnerStat,
-  MUnionBlockPosition,
-  MUnionBlock,
-} from './games/maplestory-m/union/types.js';
+// MapleStory M common types
+export type { MOcidRequest, MGuildIdRequest } from './games/maplestory-m/types.js';
+
+// MapleStory M union types (스펙 확인 필요)
+export type { MUnion, MUnionRaider } from './games/maplestory-m/union/types.js';
 
 // MapleStory M guild types
 export type {
   MGuildIdResponse,
   MWorldName,
-  MGuildSkill,
   MGuildBasic,
 } from './games/maplestory-m/guild/types.js';
 
@@ -290,23 +277,22 @@ export type {
   MKerningMTowerRankingItem,
   MKerningMTowerRanking,
   MAchievementRankingRequest,
+  MHonorBadge,
   MAchievementRankingItem,
   MAchievementRanking,
+  MSharenianRankingItem,
   MSharenianBattlefieldRankingRequest,
-  MSharenianBattlefieldRankingItem,
   MSharenianBattlefieldRanking,
   MSharenianWaterwayRankingRequest,
-  MSharenianWaterwayRankingItem,
   MSharenianWaterwayRanking,
 } from './games/maplestory-m/ranking/types.js';
 
 // MapleStory M notice types
 export type {
   MNoticeItem,
-  MNoticeDetail,
   MNoticeList,
+  MNoticeDetail,
   MPatchNoticeList,
-  MEventNoticeItem,
   MEventNoticeList,
   MEventNoticeDetail,
 } from './games/maplestory-m/notice/types.js';

@@ -1,4 +1,4 @@
-import { AbstractMapleBaseClient } from '../_base/AbstractMapleStoryBaseClient.js';
+import { AbstractGameClient } from '../_base/AbstractGameClient.js';
 import type { OCID } from '../../core/types/branded.js';
 import type { MWorldName } from './guild/types.js';
 import { MapleStoryMCharacterClient } from './character/MapleStoryMCharacterClient.js';
@@ -23,9 +23,8 @@ import { M_OCID_SHAPE } from './shapes.js';
  * const ranking = await client.maplestorym.ranking.getLevel({ date });
  * ```
  */
-export class MapleStoryMClient extends AbstractMapleBaseClient {
+export class MapleStoryMClient extends AbstractGameClient {
   protected readonly pathPrefix = 'maplestorym';
-  protected readonly timezoneOffset = 540; // UTC+9 (KST)
 
   private _character: MapleStoryMCharacterClient | undefined;
   private _union: MapleStoryMUnionClient | undefined;

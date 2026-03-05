@@ -38,7 +38,7 @@ console.log('\n📋 Character API');
 let ocid: string | undefined;
 
 await test('getOcid', async () => {
-  const result = await client.maplestory.getOcid('아르테미스');
+  const result = await client.maplestory.getOcid('아델');
   ocid = result;
   if (!ocid) throw new Error('ocid가 비어있음');
 });
@@ -165,7 +165,7 @@ console.log('\n📋 Guild API');
 let guildId: string | undefined;
 
 await test('guild.getId', async () => {
-  const r = await client.maplestory.guild.getId('아르테미스', '스카니아');
+  const r = await client.maplestory.guild.getId('아델', '스카니아');
   guildId = r;
   if (!guildId) throw new Error('oguild_id가 비어있음');
 });

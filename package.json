@@ -54,6 +54,7 @@
     "test:coverage": "vitest run --coverage",
     "test:maplestory": "tsx scripts/test-maplestory.ts",
     "test:maplestory-m": "tsx scripts/test-maplestory-m.ts",
+    "test:fconline": "tsx scripts/test-fconline.ts",
     "release": "yarn build && yarn test && npm publish"
   },
   "devDependencies": {

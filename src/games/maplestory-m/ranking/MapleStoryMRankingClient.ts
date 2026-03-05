@@ -52,7 +52,6 @@ export class MapleStoryMRankingClient {
       {
         date: params.date as string,
         world_name: params.world_name,
-        class: params.class,
         ocid: params.ocid,
         page: params.page,
       },
@@ -77,7 +76,6 @@ export class MapleStoryMRankingClient {
       {
         date: params.date as string,
         world_name: params.world_name,
-        class: params.class,
         ocid: params.ocid,
         page: params.page,
       },
@@ -92,7 +90,7 @@ export class MapleStoryMRankingClient {
    * ```ts
    * const rot = await client.maplestorym.ranking.getRootOfTime({ date: '2024-01-01' });
    * for (const r of rot.ranking) {
-   *   console.log(`#${r.ranking} ${r.character_name} ${r.root_of_time_floor}층`);
+   *   console.log(`#${r.ranking} ${r.character_name} 최대데미지:${r.max_damage}`);
    * }
    * ```
    */
@@ -102,7 +100,6 @@ export class MapleStoryMRankingClient {
       {
         date: params.date as string,
         world_name: params.world_name,
-        class: params.class,
         ocid: params.ocid,
         page: params.page,
       },
@@ -141,7 +138,7 @@ export class MapleStoryMRankingClient {
    * ```ts
    * const cp = await client.maplestorym.ranking.getCombatPower({ date: '2024-01-01' });
    * for (const r of cp.ranking) {
-   *   console.log(`#${r.ranking} ${r.character_name} 전투력:${r.combat_power}`);
+   *   console.log(`#${r.ranking} ${r.character_name} 전투력:${r.character_combat_power}`);
    * }
    * ```
    */
@@ -151,7 +148,6 @@ export class MapleStoryMRankingClient {
       {
         date: params.date as string,
         world_name: params.world_name,
-        class: params.class,
         ocid: params.ocid,
         page: params.page,
       },
@@ -166,7 +162,7 @@ export class MapleStoryMRankingClient {
    * ```ts
    * const tower = await client.maplestorym.ranking.getKerningMTower({ date: '2024-01-01' });
    * for (const r of tower.ranking) {
-   *   console.log(`#${r.ranking} ${r.character_name} ${r.kerning_m_tower_floor}층`);
+   *   console.log(`#${r.ranking} ${r.character_name} ${r.tower_floor}층`);
    * }
    * ```
    */
@@ -176,7 +172,6 @@ export class MapleStoryMRankingClient {
       {
         date: params.date as string,
         world_name: params.world_name,
-        class: params.class,
         ocid: params.ocid,
         page: params.page,
       },
@@ -191,7 +186,7 @@ export class MapleStoryMRankingClient {
    * ```ts
    * const achievement = await client.maplestorym.ranking.getAchievement({ date: '2024-01-01' });
    * for (const r of achievement.ranking) {
-   *   console.log(`#${r.ranking} ${r.character_name} ${r.trophy_grade}`);
+   *   console.log(`#${r.ranking} ${r.character_name} ${r.achievement_grade_name} ${r.achievement_score}점`);
    * }
    * ```
    */
@@ -215,7 +210,7 @@ export class MapleStoryMRankingClient {
    * ```ts
    * const bf = await client.maplestorym.ranking.getSharenianBattlefield({ date: '2024-01-01' });
    * for (const r of bf.ranking) {
-   *   console.log(`#${r.ranking} ${r.character_name} ${r.sharenian_battlefield_score}점`);
+   *   console.log(`#${r.ranking} ${r.guild_name} ${r.season_score}점`);
    * }
    * ```
    */
@@ -241,7 +236,7 @@ export class MapleStoryMRankingClient {
    * ```ts
    * const ww = await client.maplestorym.ranking.getSharenianWaterway({ date: '2024-01-01' });
    * for (const r of ww.ranking) {
-   *   console.log(`#${r.ranking} ${r.character_name} ${r.sharenian_waterway_score}점`);
+   *   console.log(`#${r.ranking} ${r.guild_name} ${r.season_score}점`);
    * }
    * ```
    */

@@ -113,7 +113,7 @@ export class MapleStoryMNoticeClient {
    * ```ts
    * const list = await client.maplestorym.notice.getEventList();
    * for (const e of list.event_notice) {
-   *   console.log(`${e.title} (${e.date_event_start} ~ ${e.date_event_end})`);
+   *   console.log(`[${e.date}] ${e.title}`);
    * }
    * ```
    */
@@ -133,7 +133,7 @@ export class MapleStoryMNoticeClient {
    * @example
    * ```ts
    * const detail = await client.maplestorym.notice.getEventDetail(12345);
-   * console.log(detail.title, detail.date_event_start, detail.date_event_end);
+   * console.log(detail.title, detail.contents);
    * ```
    */
   async getEventDetail(noticeId: number): Promise<MEventNoticeDetail> {

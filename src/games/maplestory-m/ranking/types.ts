@@ -17,24 +17,18 @@ export interface MRankingBaseRequest {
 export interface MLevelRankingRequest extends MRankingBaseRequest {
   /** 월드 명 */
   readonly world_name?: MWorldName | undefined;
-  /** 직업 및 전직 */
-  readonly class?: string | undefined;
 }
 
 /** 무릉도장 랭킹 요청 파라미터 */
 export interface MDojangRankingRequest extends MRankingBaseRequest {
   /** 월드 명 */
   readonly world_name?: MWorldName | undefined;
-  /** 직업 및 전직 */
-  readonly class?: string | undefined;
 }
 
 /** 시간의 근원 랭킹 요청 파라미터 */
 export interface MRootOfTimeRankingRequest extends MRankingBaseRequest {
   /** 월드 명 */
   readonly world_name?: MWorldName | undefined;
-  /** 직업 및 전직 */
-  readonly class?: string | undefined;
 }
 
 /** 유니온 랭킹 요청 파라미터 */
@@ -47,16 +41,12 @@ export interface MUnionRankingRequest extends MRankingBaseRequest {
 export interface MCombatPowerRankingRequest extends MRankingBaseRequest {
   /** 월드 명 */
   readonly world_name?: MWorldName | undefined;
-  /** 직업 및 전직 */
-  readonly class?: string | undefined;
 }
 
 /** 커닝M타워 랭킹 요청 파라미터 */
 export interface MKerningMTowerRankingRequest extends MRankingBaseRequest {
   /** 월드 명 */
   readonly world_name?: MWorldName | undefined;
-  /** 직업 및 전직 */
-  readonly class?: string | undefined;
 }
 
 /** 업적 랭킹 요청 파라미터 */
@@ -77,260 +67,248 @@ export interface MSharenianWaterwayRankingRequest extends MRankingBaseRequest {
   readonly world_name?: MWorldName | undefined;
 }
 
-// ─── GET /maplestorym/v1/ranking/level ───────────────────────────────────────
+// ─── 랭킹 응답 ──────────────────────────────────────────────────────────────
 
 /** 레벨 랭킹 항목 */
 export interface MLevelRankingItem {
-  /** 랭킹 업데이트 일자 (KST) */
+  /** 랭킹 조회 기준일 (KST) */
   readonly date: string;
   /** 랭킹 순위 */
   readonly ranking: number;
+  /** 월드 랭킹 순위 */
+  readonly world_ranking: number;
   /** 캐릭터 명 */
   readonly character_name: string;
   /** 월드 명 */
   readonly world_name: string;
   /** 직업 명 */
-  readonly class_name: string;
-  /** 전직 직업 명 */
-  readonly sub_class_name: string;
+  readonly character_class: string;
   /** 캐릭터 레벨 */
   readonly character_level: number;
-  /** 캐릭터 경험치 */
-  readonly character_exp: number;
+  /** 길드 명 */
+  readonly guild_name: string;
+  /** 길드 마크 아이콘 */
+  readonly guild_mark_icon: string;
 }
 
-/** 레벨 랭킹 응답 */
+/** GET /maplestorym/v1/ranking/level 응답 */
 export interface MLevelRanking {
-  /** 랭킹 정보 */
-  readonly ranking: readonly MLevelRankingItem[];
+  /** 랭킹 목록 */
+  readonly ranking: MLevelRankingItem[];
 }
-
-// ─── GET /maplestorym/v1/ranking/dojang ──────────────────────────────────────
 
 /** 무릉도장 랭킹 항목 */
 export interface MDojangRankingItem {
-  /** 랭킹 업데이트 일자 (KST) */
+  /** 랭킹 조회 기준일 (KST) */
   readonly date: string;
   /** 랭킹 순위 */
   readonly ranking: number;
+  /** 월드 랭킹 순위 */
+  readonly world_ranking: number;
   /** 캐릭터 명 */
   readonly character_name: string;
   /** 월드 명 */
   readonly world_name: string;
   /** 직업 명 */
-  readonly class_name: string;
-  /** 전직 직업 명 */
-  readonly sub_class_name: string;
+  readonly character_class: string;
   /** 캐릭터 레벨 */
   readonly character_level: number;
-  /** 무릉도장 구간 */
+  /** 무릉도장 층수 */
   readonly dojang_floor: number;
-  /** 무릉도장 클리어 시간 기록 (초 단위) */
-  readonly dojang_time_record: number;
+  /** 길드 명 */
+  readonly guild_name: string;
 }
 
-/** 무릉도장 랭킹 응답 */
+/** GET /maplestorym/v1/ranking/dojang 응답 */
 export interface MDojangRanking {
-  /** 랭킹 정보 */
-  readonly ranking: readonly MDojangRankingItem[];
+  /** 랭킹 목록 */
+  readonly ranking: MDojangRankingItem[];
 }
-
-// ─── GET /maplestorym/v1/ranking/root-of-time ────────────────────────────────
 
 /** 시간의 근원 랭킹 항목 */
 export interface MRootOfTimeRankingItem {
-  /** 랭킹 업데이트 일자 (KST) */
+  /** 랭킹 조회 기준일 (KST) */
   readonly date: string;
   /** 랭킹 순위 */
   readonly ranking: number;
+  /** 월드 랭킹 순위 */
+  readonly world_ranking: number;
   /** 캐릭터 명 */
   readonly character_name: string;
   /** 월드 명 */
   readonly world_name: string;
   /** 직업 명 */
-  readonly class_name: string;
-  /** 전직 직업 명 */
-  readonly sub_class_name: string;
+  readonly character_class: string;
   /** 캐릭터 레벨 */
   readonly character_level: number;
-  /** 시간의 근원 달성 층 */
-  readonly root_of_time_floor: number;
-  /** 시간의 근원 클리어 시간 기록 (초 단위) */
-  readonly root_of_time_time_record: number;
+  /** 최대 데미지 */
+  readonly max_damage: number;
+  /** 길드 명 */
+  readonly guild_name: string;
 }
 
-/** 시간의 근원 랭킹 응답 */
+/** GET /maplestorym/v1/ranking/root-of-time 응답 */
 export interface MRootOfTimeRanking {
-  /** 랭킹 정보 */
-  readonly ranking: readonly MRootOfTimeRankingItem[];
+  /** 랭킹 목록 */
+  readonly ranking: MRootOfTimeRankingItem[];
 }
-
-// ─── GET /maplestorym/v1/ranking/union ───────────────────────────────────────
 
 /** 유니온 랭킹 항목 */
 export interface MUnionRankingItem {
-  /** 랭킹 업데이트 일자 (KST) */
+  /** 랭킹 조회 기준일 (KST) */
   readonly date: string;
   /** 랭킹 순위 */
   readonly ranking: number;
+  /** 월드 랭킹 순위 */
+  readonly world_ranking: number;
   /** 캐릭터 명 */
   readonly character_name: string;
   /** 월드 명 */
   readonly world_name: string;
   /** 직업 명 */
-  readonly class_name: string;
-  /** 전직 직업 명 */
-  readonly sub_class_name: string;
+  readonly character_class: string;
+  /** 유니온 등급 */
+  readonly union_grade: string;
+  /** 유니온 등급 아이콘 */
+  readonly union_grade_icon: string;
   /** 유니온 레벨 */
   readonly union_level: number;
-  /** 유니온 파워 */
-  readonly union_power: number;
+  /** 길드 명 */
+  readonly guild_name: string;
 }
 
-/** 유니온 랭킹 응답 */
+/** GET /maplestorym/v1/ranking/union 응답 */
 export interface MUnionRanking {
-  /** 랭킹 정보 */
-  readonly ranking: readonly MUnionRankingItem[];
+  /** 랭킹 목록 */
+  readonly ranking: MUnionRankingItem[];
 }
-
-// ─── GET /maplestorym/v1/ranking/combat-power ────────────────────────────────
 
 /** 전투력 랭킹 항목 */
 export interface MCombatPowerRankingItem {
-  /** 랭킹 업데이트 일자 (KST) */
+  /** 랭킹 조회 기준일 (KST) */
   readonly date: string;
   /** 랭킹 순위 */
   readonly ranking: number;
+  /** 월드 랭킹 순위 */
+  readonly world_ranking: number;
   /** 캐릭터 명 */
   readonly character_name: string;
   /** 월드 명 */
   readonly world_name: string;
   /** 직업 명 */
-  readonly class_name: string;
-  /** 전직 직업 명 */
-  readonly sub_class_name: string;
+  readonly character_class: string;
   /** 캐릭터 레벨 */
   readonly character_level: number;
-  /** 전투력 */
-  readonly combat_power: number;
+  /** 캐릭터 전투력 */
+  readonly character_combat_power: number;
+  /** 길드 명 */
+  readonly guild_name: string;
 }
 
-/** 전투력 랭킹 응답 */
+/** GET /maplestorym/v1/ranking/combat-power 응답 */
 export interface MCombatPowerRanking {
-  /** 랭킹 정보 */
-  readonly ranking: readonly MCombatPowerRankingItem[];
+  /** 랭킹 목록 */
+  readonly ranking: MCombatPowerRankingItem[];
 }
-
-// ─── GET /maplestorym/v1/ranking/kerning-m-tower ─────────────────────────────
 
 /** 커닝M타워 랭킹 항목 */
 export interface MKerningMTowerRankingItem {
-  /** 랭킹 업데이트 일자 (KST) */
+  /** 랭킹 조회 기준일 (KST) */
   readonly date: string;
   /** 랭킹 순위 */
   readonly ranking: number;
+  /** 월드 랭킹 순위 */
+  readonly world_ranking: number;
   /** 캐릭터 명 */
   readonly character_name: string;
   /** 월드 명 */
   readonly world_name: string;
   /** 직업 명 */
-  readonly class_name: string;
-  /** 전직 직업 명 */
-  readonly sub_class_name: string;
+  readonly character_class: string;
   /** 캐릭터 레벨 */
   readonly character_level: number;
-  /** 커닝M타워 달성 층 */
-  readonly kerning_m_tower_floor: number;
-  /** 커닝M타워 클리어 시간 기록 (초 단위) */
-  readonly kerning_m_tower_time_record: number;
+  /** 최고 도달 층 */
+  readonly tower_floor: number;
+  /** 길드 명 */
+  readonly guild_name: string;
 }
 
-/** 커닝M타워 랭킹 응답 */
+/** GET /maplestorym/v1/ranking/kerning-m-tower 응답 */
 export interface MKerningMTowerRanking {
-  /** 랭킹 정보 */
-  readonly ranking: readonly MKerningMTowerRankingItem[];
+  /** 랭킹 목록 */
+  readonly ranking: MKerningMTowerRankingItem[];
 }
 
-// ─── GET /maplestorym/v1/ranking/achievement ─────────────────────────────────
+/** 대표 명예 배지 정보 */
+export interface MHonorBadge {
+  /** 대표 명예 배지 번호 */
+  readonly badge_no: number;
+  /** 대표 명예 배지 명 */
+  readonly badge_name: string;
+  /** 대표 명예 배지 착용 옵션 */
+  readonly badge_option: string;
+  /** 대표 명예 배지 아이콘 */
+  readonly badge_icon: string;
+}
 
 /** 업적 랭킹 항목 */
 export interface MAchievementRankingItem {
-  /** 랭킹 업데이트 일자 (KST) */
+  /** 랭킹 조회 기준일 (KST) */
   readonly date: string;
   /** 랭킹 순위 */
   readonly ranking: number;
+  /** 월드 랭킹 순위 */
+  readonly world_ranking: number;
   /** 캐릭터 명 */
   readonly character_name: string;
   /** 월드 명 */
   readonly world_name: string;
-  /** 직업 명 */
-  readonly class_name: string;
-  /** 전직 직업 명 */
-  readonly sub_class_name: string;
-  /** 업적 등급 */
-  readonly trophy_grade: string;
   /** 업적 점수 */
-  readonly trophy_score: number;
+  readonly achievement_score: number;
+  /** 업적 등급 명 */
+  readonly achievement_grade_name: string;
+  /** 업적 등급 아이콘 */
+  readonly achievement_grade_icon: string;
+  /** 대표 명예 배지 정보 */
+  readonly main_honor_badge: MHonorBadge[];
 }
 
-/** 업적 랭킹 응답 */
+/** GET /maplestorym/v1/ranking/achievement 응답 */
 export interface MAchievementRanking {
-  /** 랭킹 정보 */
-  readonly ranking: readonly MAchievementRankingItem[];
+  /** 랭킹 목록 */
+  readonly ranking: MAchievementRankingItem[];
 }
 
-// ─── GET /maplestorym/v1/ranking/sharenian-battlefield ───────────────────────
-
-/** 샤레니안의 전장 랭킹 항목 */
-export interface MSharenianBattlefieldRankingItem {
-  /** 랭킹 업데이트 일자 (KST) */
+/** 샤레니안 길드 랭킹 항목 (전장/지하수로 공용) */
+export interface MSharenianRankingItem {
+  /** 랭킹 조회 기준일 (KST) */
   readonly date: string;
   /** 랭킹 순위 */
   readonly ranking: number;
-  /** 캐릭터 명 */
-  readonly character_name: string;
+  /** 월드 랭킹 순위 */
+  readonly world_ranking: number;
+  /** 길드 명 */
+  readonly guild_name: string;
   /** 월드 명 */
   readonly world_name: string;
-  /** 직업 명 */
-  readonly class_name: string;
-  /** 전직 직업 명 */
-  readonly sub_class_name: string;
-  /** 캐릭터 레벨 */
-  readonly character_level: number;
-  /** 샤레니안의 전장 점수 */
-  readonly sharenian_battlefield_score: number;
+  /** 길드 마스터 캐릭터 명 */
+  readonly guild_master_name: string;
+  /** 길드 아이콘 */
+  readonly guild_mark_icon: string;
+  /** 시즌 점수 */
+  readonly season_score: string;
+  /** 등급 아이콘 */
+  readonly grade_icon: string;
 }
 
-/** 샤레니안의 전장 랭킹 응답 */
+/** GET /maplestorym/v1/ranking/sharenian-battlefield 응답 */
 export interface MSharenianBattlefieldRanking {
-  /** 랭킹 정보 */
-  readonly ranking: readonly MSharenianBattlefieldRankingItem[];
+  /** 랭킹 목록 */
+  readonly ranking: MSharenianRankingItem[];
 }
 
-// ─── GET /maplestorym/v1/ranking/sharenian-waterway ──────────────────────────
-
-/** 샤레니안의 지하수로 랭킹 항목 */
-export interface MSharenianWaterwayRankingItem {
-  /** 랭킹 업데이트 일자 (KST) */
-  readonly date: string;
-  /** 랭킹 순위 */
-  readonly ranking: number;
-  /** 캐릭터 명 */
-  readonly character_name: string;
-  /** 월드 명 */
-  readonly world_name: string;
-  /** 직업 명 */
-  readonly class_name: string;
-  /** 전직 직업 명 */
-  readonly sub_class_name: string;
-  /** 캐릭터 레벨 */
-  readonly character_level: number;
-  /** 샤레니안의 지하수로 점수 */
-  readonly sharenian_waterway_score: number;
-}
-
-/** 샤레니안의 지하수로 랭킹 응답 */
+/** GET /maplestorym/v1/ranking/sharenian-waterway 응답 */
 export interface MSharenianWaterwayRanking {
-  /** 랭킹 정보 */
-  readonly ranking: readonly MSharenianWaterwayRankingItem[];
+  /** 랭킹 목록 */
+  readonly ranking: MSharenianRankingItem[];
 }
