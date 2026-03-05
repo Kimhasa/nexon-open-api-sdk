@@ -65,14 +65,13 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 
 <!-- 아이콘 파일: docs/assets/games/{game}.png (48x48 권장) -->
 
-<table width="100%">
+<table width="100%" cellspacing="0" cellpadding="8">
 <tr>
 <td align="center" valign="top" width="25%">
 <br>
 <img src="docs/assets/games/fc-online.png" alt="EA SPORTS FC 온라인" height="48"><br>
 <br>
 <b>EA SPORTS FC 온라인</b><br>
-<sub>────────────────────</sub><br>
 <img src="https://img.shields.io/badge/endpoints-18-blue" alt="18 endpoints"><br>
 <sub>2026-03-04</sub><br>
 <br>
@@ -84,7 +83,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <img src="docs/assets/games/maplestory.png" alt="메이플스토리" height="48"><br>
 <br>
 <b>메이플스토리</b><br>
-<sub>────────────────────</sub><br>
 <img src="https://img.shields.io/badge/endpoints-45-blue" alt="45 endpoints"><br>
 <sub>2026-03-04</sub><br>
 <br>
@@ -96,7 +94,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <img src="docs/assets/games/maplestory-sea.png" alt="MapleStorySEA" height="48"><br>
 <br>
 <b>MapleStorySEA</b><br>
-<sub>────────────────────</sub><br>
 <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
 &nbsp;<br>
 &nbsp;<br>
@@ -107,7 +104,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <img src="docs/assets/games/maplestory-taiwan.png" alt="MapleStoryTaiwan" height="48"><br>
 <br>
 <b>MapleStoryTaiwan</b><br>
-<sub>────────────────────</sub><br>
 <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
 &nbsp;<br>
 &nbsp;<br>
@@ -120,7 +116,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <img src="docs/assets/games/sudden-attack.png" alt="서든어택" height="48"><br>
 <br>
 <b>서든어택</b><br>
-<sub>────────────────────</sub><br>
 <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
 &nbsp;<br>
 &nbsp;<br>
@@ -131,7 +126,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <img src="docs/assets/games/first-descendant.png" alt="퍼스트 디센던트" height="48"><br>
 <br>
 <b>퍼스트 디센던트</b><br>
-<sub>────────────────────</sub><br>
 <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
 &nbsp;<br>
 &nbsp;<br>
@@ -142,7 +136,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <img src="docs/assets/games/mabinogi.png" alt="마비노기" height="48"><br>
 <br>
 <b>마비노기</b><br>
-<sub>────────────────────</sub><br>
 <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
 &nbsp;<br>
 &nbsp;<br>
@@ -153,7 +146,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <img src="docs/assets/games/mabinogi-heroes.png" alt="마비노기 영웅전" height="48"><br>
 <br>
 <b>마비노기 영웅전</b><br>
-<sub>────────────────────</sub><br>
 <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
 &nbsp;<br>
 &nbsp;<br>
@@ -166,7 +158,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <img src="docs/assets/games/maplestory-m.png" alt="메이플스토리M" height="48"><br>
 <br>
 <b>메이플스토리M</b><br>
-<sub>────────────────────</sub><br>
 <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
 &nbsp;<br>
 &nbsp;<br>
@@ -177,7 +168,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <img src="docs/assets/games/kartrider-rush-plus.png" alt="카트라이더 러쉬플러스" height="48"><br>
 <br>
 <b>카트라이더 러쉬플러스</b><br>
-<sub>────────────────────</sub><br>
 <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
 &nbsp;<br>
 &nbsp;<br>
@@ -188,7 +178,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <img src="docs/assets/games/baram-nara.png" alt="바람의나라" height="48"><br>
 <br>
 <b>바람의나라</b><br>
-<sub>────────────────────</sub><br>
 <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
 &nbsp;<br>
 &nbsp;<br>
@@ -199,7 +188,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <img src="docs/assets/games/hit2.png" alt="히트2" height="48"><br>
 <br>
 <b>히트2</b><br>
-<sub>────────────────────</sub><br>
 <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
 &nbsp;<br>
 &nbsp;<br>
@@ -212,7 +200,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <img src="docs/assets/games/crazy-arcade.png" alt="크레이지 아케이드" height="48"><br>
 <br>
 <b>크레이지 아케이드</b><br>
-<sub>────────────────────</sub><br>
 <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
 &nbsp;<br>
 &nbsp;<br>
@@ -223,7 +210,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <img src="docs/assets/games/baram-yeon.png" alt="바람의나라: 연" height="48"><br>
 <br>
 <b>바람의나라: 연</b><br>
-<sub>────────────────────</sub><br>
 <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
 &nbsp;<br>
 &nbsp;<br>
@@ -234,7 +220,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <img src="docs/assets/games/v4.png" alt="V4" height="48"><br>
 <br>
 <b>V4</b><br>
-<sub>────────────────────</sub><br>
 <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
 &nbsp;<br>
 &nbsp;<br>
@@ -245,7 +230,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <img src="docs/assets/games/dungeon-and-fighter.png" alt="던전앤파이터" height="48"><br>
 <br>
 <b>던전앤파이터</b><br>
-<sub>────────────────────</sub><br>
 <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
 &nbsp;<br>
 &nbsp;<br>
@@ -258,7 +242,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <img src="docs/assets/games/cyphers.png" alt="사이퍼즈" height="48"><br>
 <br>
 <b>사이퍼즈</b><br>
-<sub>────────────────────</sub><br>
 <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
 &nbsp;<br>
 &nbsp;<br>
