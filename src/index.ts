@@ -5,6 +5,7 @@ export type { NexonClientOptions } from './NexonClient.js';
 // Game clients (also available via sub-path imports)
 export { MapleStoryClient } from './games/maplestory/MapleStoryClient.js';
 export { FcOnlineClient } from './games/fc-online/FcOnlineClient.js';
+export { MapleStoryMClient } from './games/maplestory-m/MapleStoryMClient.js';
 
 // Errors
 export {
@@ -199,6 +200,102 @@ export type {
   FcDivisionMeta,
   FcDivisionVoltaMeta,
 } from './games/fc-online/metadata/types.js';
+
+// MapleStory M types
+export type {
+  MCharacterBasic,
+  MCharacterStat,
+  MStat,
+  MCharacterHyperStat,
+  MHyperStatInfo,
+  MHyperStatPreset,
+  MCharacterGuild,
+  MCharacterItemEquipment,
+  MItemEquipment,
+  MItemOption,
+  MSoulInfo,
+  MEmblemInfo,
+  MEquipmentPreset,
+  MCharacterCashItemEquipment,
+  MCashItemEquipmentItem,
+  MCashItemOption,
+  MCashItemColoringPrism,
+  MCashEquipmentPreset,
+  MAdditionalCashEquipmentPreset,
+  MCharacterSymbolEquipment,
+  MSymbolInfo,
+  MCharacterSetEffect,
+  MSetInfo,
+  MCharacterAndroidEquipment,
+  MAndroidCashItem,
+  MAndroidEquipmentInfo,
+  MHeartEquipment,
+  MAndroidHeartPreset,
+  // 스펙 확인 필요
+  MCharacterJewel,
+  MCharacterBeautyEquipment,
+  MCharacterPetEquipment,
+  MCharacterSkillEquipment,
+  MCharacterLinkSkill,
+  MCharacterVMatrix,
+  MCharacterHexaMatrixSkill,
+  MCharacterHexaMatrixStat,
+} from './games/maplestory-m/character/types.js';
+
+// MapleStory M common types
+export type { MOcidRequest, MGuildIdRequest } from './games/maplestory-m/types.js';
+
+// MapleStory M union types (스펙 확인 필요)
+export type { MUnion, MUnionRaider } from './games/maplestory-m/union/types.js';
+
+// MapleStory M guild types
+export type {
+  MGuildIdResponse,
+  MWorldName,
+  MGuildBasic,
+} from './games/maplestory-m/guild/types.js';
+
+// MapleStory M ranking types
+export type {
+  MRankingBaseRequest,
+  MLevelRankingRequest,
+  MLevelRankingItem,
+  MLevelRanking,
+  MDojangRankingRequest,
+  MDojangRankingItem,
+  MDojangRanking,
+  MRootOfTimeRankingRequest,
+  MRootOfTimeRankingItem,
+  MRootOfTimeRanking,
+  MUnionRankingRequest,
+  MUnionRankingItem,
+  MUnionRanking,
+  MCombatPowerRankingRequest,
+  MCombatPowerRankingItem,
+  MCombatPowerRanking,
+  MKerningMTowerRankingRequest,
+  MKerningMTowerRankingItem,
+  MKerningMTowerRanking,
+  MAchievementRankingRequest,
+  MHonorBadge,
+  MAchievementRankingItem,
+  MAchievementRanking,
+  MSharenianRankingItem,
+  MSharenianBattlefieldRankingRequest,
+  MSharenianBattlefieldRanking,
+  MSharenianWaterwayRankingRequest,
+  MSharenianWaterwayRanking,
+} from './games/maplestory-m/ranking/types.js';
+
+// MapleStory M notice types
+export type {
+  MNoticeItem,
+  MNoticeList,
+  MNoticeDetail,
+  MPatchNoticeList,
+  MEventNoticeList,
+  MEventNoticeDetail,
+} from './games/maplestory-m/notice/types.js';
 
 // HttpClient (for advanced usage)
 export { HttpClient } from './core/http/HttpClient.js';

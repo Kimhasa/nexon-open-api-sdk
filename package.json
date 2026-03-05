@@ -1,7 +1,7 @@
 {
   "name": "nexon-open-api",
   "version": "0.1.0",
-  "description": "Type-safe Nexon Open API SDK for MapleStory (KMS)",
+  "description": "Type-safe Nexon Open API SDK for MapleStory (KMS, M)",
   "author": "",
   "license": "MIT",
   "repository": {
@@ -28,6 +28,11 @@
       "types": "./dist/fconline.d.ts",
       "import": "./dist/fconline.js",
       "require": "./dist/fconline.cjs"
+    },
+    "./maplestory-m": {
+      "types": "./dist/maplestory-m.d.ts",
+      "import": "./dist/maplestory-m.js",
+      "require": "./dist/maplestory-m.cjs"
     }
   },
   "main": "./dist/index.cjs",
@@ -47,7 +52,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:api": "tsx scripts/test-api.ts",
+    "test:maplestory": "tsx scripts/test-maplestory.ts",
+    "test:maplestory-m": "tsx scripts/test-maplestory-m.ts",
+    "test:fconline": "tsx scripts/test-fconline.ts",
     "release": "yarn build && yarn test && npm publish"
   },
   "devDependencies": {

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { NexonClient } from '../../../src/NexonClient.js';
 import { MapleStoryClient } from '../../../src/games/maplestory/MapleStoryClient.js';
+import { MapleStoryMClient } from '../../../src/games/maplestory-m/MapleStoryMClient.js';
 
 describe('NexonClient', () => {
   it('API 키 없이 생성하면 에러를 던진다', () => {
@@ -21,6 +22,18 @@ describe('NexonClient', () => {
     const client = new NexonClient({ apiKey: 'test-key' });
     const first = client.maplestory;
     const second = client.maplestory;
+    expect(first).toBe(second);
+  });
+
+  it('maplestorym getter가 MapleStoryMClient를 반환한다', () => {
+    const client = new NexonClient({ apiKey: 'test-key' });
+    expect(client.maplestorym).toBeInstanceOf(MapleStoryMClient);
+  });
+
+  it('maplestorym getter는 같은 인스턴스를 반환한다 (lazy singleton)', () => {
+    const client = new NexonClient({ apiKey: 'test-key' });
+    const first = client.maplestorym;
+    const second = client.maplestorym;
     expect(first).toBe(second);
   });
 });
