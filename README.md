@@ -89,6 +89,18 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 </td>
 <td align="center" valign="top" width="33%">
 <br>
+<img src="docs/assets/games/maplestory-m.png" alt="메이플스토리M" height="64">
+<h4>메이플스토리M</h4>
+<img src="https://img.shields.io/badge/endpoints-36-blue" alt="36 endpoints"><br>
+<sub>2026-03-05</sub><br>
+<br>
+<a href="docs/maplestory-m.md">레퍼런스</a><br>
+<br>
+</td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%">
+<br>
 <img src="docs/assets/games/maplestory-sea.png" alt="MapleStorySEA" height="64">
 <h4>MapleStorySEA</h4>
 <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
@@ -97,8 +109,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 &nbsp;<br>
 <br>
 </td>
-</tr>
-<tr>
 <td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/maplestory-taiwan.png" alt="MapleStoryTaiwan" height="64">
@@ -119,6 +129,8 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 &nbsp;<br>
 <br>
 </td>
+</tr>
+<tr>
 <td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/first-descendant.png" alt="퍼스트 디센던트" height="64">
@@ -129,8 +141,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 &nbsp;<br>
 <br>
 </td>
-</tr>
-<tr>
 <td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/mabinogi.png" alt="마비노기" height="64">
@@ -145,16 +155,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/mabinogi-heroes.png" alt="마비노기 영웅전" height="64">
 <h4>마비노기 영웅전</h4>
-<img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
-&nbsp;<br>
-<br>
-&nbsp;<br>
-<br>
-</td>
-<td align="center" valign="top" width="33%">
-<br>
-<img src="docs/assets/games/maplestory-m.png" alt="메이플스토리M" height="64">
-<h4>메이플스토리M</h4>
 <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
 &nbsp;<br>
 <br>
@@ -313,6 +313,7 @@ const client = new NexonClient({
 
 ```ts
 import { MapleStoryClient } from 'nexon-open-api/maplestory';
+import { MapleStoryMClient } from 'nexon-open-api/maplestory-m';
 import { FcOnlineClient } from 'nexon-open-api/fconline';
 ```
 
@@ -321,6 +322,7 @@ import { FcOnlineClient } from 'nexon-open-api/fconline';
 | 게임 | 문서 | 엔드포인트 |
 |------|------|-----------|
 | 메이플스토리 | [API 레퍼런스](docs/maplestory.md) | 캐릭터, 유니온, 길드, 랭킹, 확률/이력, 공지사항 |
+| 메이플스토리M | [API 레퍼런스](docs/maplestory-m.md) | 캐릭터, 유니온, 길드, 랭킹, 공지사항 |
 | FC Online | [API 레퍼런스](docs/fc-online.md) | 계정 정보, 매치, 랭커, 메타데이터, 이미지 URL |
 
 ## 요구사항
