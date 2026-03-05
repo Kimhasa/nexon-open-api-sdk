@@ -8,6 +8,7 @@
  */
 import 'dotenv/config';
 import { NexonClient } from '../src/index.js';
+import type { OCID, GuildId } from '../src/core/types/branded.js';
 
 const apiKey = process.env['NEXON_MAPLESTORY_M_API_KEY'];
 if (!apiKey) {
@@ -47,7 +48,7 @@ async function test(name: string, fn: () => Promise<void>) {
 // ─── 1. Character ────────────────────────────────────────────────────────────
 console.log('\n📋 Character API');
 
-let ocid: string | undefined;
+let ocid: OCID | undefined;
 
 await test('getOcid', async () => {
   const result = await client.maplestorym.getOcid(worldName, characterName);
@@ -57,93 +58,93 @@ await test('getOcid', async () => {
 
 if (ocid) {
   await test('character.getBasic', async () => {
-    const r = await client.maplestorym.character.getBasic({ ocid: ocid as any });
+    const r = await client.maplestorym.character.getBasic({ ocid: ocid! });
     if (!r.character_name) throw new Error('character_name 없음');
   });
 
   await test('character.getStat', async () => {
-    const r = await client.maplestorym.character.getStat({ ocid: ocid as any });
+    const r = await client.maplestorym.character.getStat({ ocid: ocid! });
     if (!('stat' in r)) throw new Error('stat 키 없음');
   });
 
   await test('character.getHyperStat', async () => {
-    const r = await client.maplestorym.character.getHyperStat({ ocid: ocid as any });
+    const r = await client.maplestorym.character.getHyperStat({ ocid: ocid! });
     if (!('use_preset_no' in r)) throw new Error('use_preset_no 키 없음');
   });
 
   await test('character.getGuild', async () => {
-    await client.maplestorym.character.getGuild({ ocid: ocid as any });
+    await client.maplestorym.character.getGuild({ ocid: ocid! });
   });
 
   await test('character.getItemEquipment', async () => {
-    const r = await client.maplestorym.character.getItemEquipment({ ocid: ocid as any });
+    const r = await client.maplestorym.character.getItemEquipment({ ocid: ocid! });
     if (!('item_equipment' in r)) throw new Error('item_equipment 키 없음');
   });
 
   await test('character.getCashItemEquipment', async () => {
-    const r = await client.maplestorym.character.getCashItemEquipment({ ocid: ocid as any });
+    const r = await client.maplestorym.character.getCashItemEquipment({ ocid: ocid! });
     if (!('cash_item_equipment' in r)) throw new Error('cash_item_equipment 키 없음');
   });
 
   await test('character.getSymbol', async () => {
-    const r = await client.maplestorym.character.getSymbol({ ocid: ocid as any });
+    const r = await client.maplestorym.character.getSymbol({ ocid: ocid! });
     if (!('arcane_symbol' in r)) throw new Error('arcane_symbol 키 없음');
   });
 
   await test('character.getSetEffect', async () => {
-    const r = await client.maplestorym.character.getSetEffect({ ocid: ocid as any });
+    const r = await client.maplestorym.character.getSetEffect({ ocid: ocid! });
     if (!('set_info' in r)) throw new Error('set_info 키 없음');
   });
 
   await test('character.getAndroidEquipment', async () => {
-    await client.maplestorym.character.getAndroidEquipment({ ocid: ocid as any });
+    await client.maplestorym.character.getAndroidEquipment({ ocid: ocid! });
   });
 
   await test('character.getJewel', async () => {
-    const r = await client.maplestorym.character.getJewel({ ocid: ocid as any });
+    const r = await client.maplestorym.character.getJewel({ ocid: ocid! });
     if (!('jewel_equipment' in r)) throw new Error('jewel_equipment 키 없음');
   });
 
   await test('character.getBeautyEquipment', async () => {
-    await client.maplestorym.character.getBeautyEquipment({ ocid: ocid as any });
+    await client.maplestorym.character.getBeautyEquipment({ ocid: ocid! });
   });
 
   await test('character.getPetEquipment', async () => {
-    await client.maplestorym.character.getPetEquipment({ ocid: ocid as any });
+    await client.maplestorym.character.getPetEquipment({ ocid: ocid! });
   });
 
   await test('character.getSkillEquipment', async () => {
-    const r = await client.maplestorym.character.getSkillEquipment({ ocid: ocid as any });
+    const r = await client.maplestorym.character.getSkillEquipment({ ocid: ocid! });
     if (!('skill' in r)) throw new Error('skill 키 없음');
   });
 
   await test('character.getLinkSkill', async () => {
-    const r = await client.maplestorym.character.getLinkSkill({ ocid: ocid as any });
+    const r = await client.maplestorym.character.getLinkSkill({ ocid: ocid! });
     if (!('link_skill' in r)) throw new Error('link_skill 키 없음');
   });
 
   await test('character.getVMatrix', async () => {
-    await client.maplestorym.character.getVMatrix({ ocid: ocid as any });
+    await client.maplestorym.character.getVMatrix({ ocid: ocid! });
   });
 
   await test('character.getHexaMatrixSkill', async () => {
-    await client.maplestorym.character.getHexaMatrixSkill({ ocid: ocid as any });
+    await client.maplestorym.character.getHexaMatrixSkill({ ocid: ocid! });
   });
 
   await test('character.getHexaMatrixStat', async () => {
-    await client.maplestorym.character.getHexaMatrixStat({ ocid: ocid as any });
+    await client.maplestorym.character.getHexaMatrixStat({ ocid: ocid! });
   });
 
   // ─── 2. Union ──────────────────────────────────────────────────────────────
   console.log('\n📋 Union API');
 
   await test('union.get', async () => {
-    const r = await client.maplestorym.union.get({ ocid: ocid as any });
+    const r = await client.maplestorym.union.get({ ocid: ocid! });
     if (!('union_level' in r)) throw new Error('union_level 키 없음');
   });
 
   await test('union.getRaider', async () => {
-    const r = await client.maplestorym.union.getRaider({ ocid: ocid as any });
+    const r = await client.maplestorym.union.getRaider({ ocid: ocid! });
     if (!('use_preset_no' in r)) throw new Error('use_preset_no 키 없음');
   });
 }
@@ -155,14 +156,14 @@ console.log('\n📋 Guild API');
 let guildName: string | undefined;
 if (ocid) {
   try {
-    const guildInfo = await client.maplestorym.character.getGuild({ ocid: ocid as any });
-    guildName = (guildInfo as any).guild_name;
+    const guildInfo = await client.maplestorym.character.getGuild({ ocid: ocid! });
+    guildName = guildInfo.guild_name;
   } catch {
     // 길드 미가입 시 무시
   }
 }
 
-let guildId: string | undefined;
+let guildId: GuildId | undefined;
 
 if (guildName) {
   await test('guild.getId', async () => {
@@ -173,7 +174,7 @@ if (guildName) {
 
   if (guildId) {
     await test('guild.getBasic', async () => {
-      const r = await client.maplestorym.guild.getBasic({ oguild_id: guildId as any });
+      const r = await client.maplestorym.guild.getBasic({ oguild_id: guildId! });
       if (!r.guild_name) throw new Error('guild_name 없음');
     });
   }

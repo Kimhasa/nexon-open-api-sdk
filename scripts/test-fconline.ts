@@ -7,6 +7,7 @@
  */
 import 'dotenv/config';
 import { NexonClient } from '../src/index.js';
+import type { OUID } from '../src/core/types/branded.js';
 
 const apiKey = process.env['NEXON_FC_ONLINE_API_KEY'];
 if (!apiKey) {
@@ -40,7 +41,7 @@ async function test(name: string, fn: () => Promise<void>) {
 // ─── 1. User ──────────────────────────────────────────────────────────────────
 console.log('\n📋 User API');
 
-let ouid: string | undefined;
+let ouid: OUID | undefined;
 
 await test('getOuid', async () => {
   const result = await client.fcOnline.getOuid(nickname);
@@ -50,17 +51,17 @@ await test('getOuid', async () => {
 
 if (ouid) {
   await test('getBasic', async () => {
-    const r = await client.fcOnline.getBasic(ouid as any);
+    const r = await client.fcOnline.getBasic(ouid!);
     if (!r.nickname) throw new Error('nickname 없음');
   });
 
   await test('getMaxDivision', async () => {
-    await client.fcOnline.getMaxDivision(ouid as any);
+    await client.fcOnline.getMaxDivision(ouid!);
   });
 
   await test('getMatchList', async () => {
     const r = await client.fcOnline.getMatchList({
-      ouid: ouid as any,
+      ouid: ouid!,
       matchtype: 50,
       limit: 5,
     });
@@ -85,7 +86,7 @@ await test('getAllMatchList', async () => {
 if (ouid) {
   await test('getMatchDetail', async () => {
     const matchIds = await client.fcOnline.getMatchList({
-      ouid: ouid as any,
+      ouid: ouid!,
       matchtype: 50,
       limit: 1,
     });

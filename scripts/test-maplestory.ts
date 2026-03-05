@@ -8,10 +8,14 @@
  */
 import 'dotenv/config';
 import { NexonClient } from '../src/index.js';
+import type { OCID, GuildId } from '../src/core/types/branded.js';
 
 const apiKey = process.env['NEXON_MAPLESTORY_API_KEY'];
-if (!apiKey) {
-  console.error('❌ .env 파일에 NEXON_MAPLESTORY_API_KEY 를 설정해주세요.');
+const characterName = process.env['MAPLESTORY_CHARACTER'];
+const guildName = process.env['MAPLESTORY_GUILD'];
+const worldName = process.env['MAPLESTORY_WORLD'] ?? '스카니아';
+if (!apiKey || !characterName) {
+  console.error('❌ .env 파일에 NEXON_MAPLESTORY_API_KEY, MAPLESTORY_CHARACTER 를 설정해주세요.');
   console.error('   .env.example 파일을 참고하세요.');
   process.exit(1);
 }
@@ -35,144 +39,144 @@ async function test(name: string, fn: () => Promise<void>) {
 // ─── 1. Character ────────────────────────────────────────────────────────────
 console.log('\n📋 Character API');
 
-let ocid: string | undefined;
+let ocid: OCID | undefined;
 
 await test('getOcid', async () => {
-  const result = await client.maplestory.getOcid('아델');
+  const result = await client.maplestory.getOcid(characterName);
   ocid = result;
   if (!ocid) throw new Error('ocid가 비어있음');
 });
 
 if (ocid) {
   await test('character.getBasic', async () => {
-    const r = await client.maplestory.character.getBasic({ ocid: ocid as any });
+    const r = await client.maplestory.character.getBasic({ ocid: ocid! });
     if (!r.character_name) throw new Error('character_name 없음');
   });
 
   await test('character.getPopularity', async () => {
-    const r = await client.maplestory.character.getPopularity({ ocid: ocid as any });
+    const r = await client.maplestory.character.getPopularity({ ocid: ocid! });
     if (r.popularity === undefined) throw new Error('popularity 없음');
   });
 
   await test('character.getStat', async () => {
-    const r = await client.maplestory.character.getStat({ ocid: ocid as any });
+    const r = await client.maplestory.character.getStat({ ocid: ocid! });
     if (!r.final_stat) throw new Error('final_stat 없음');
   });
 
   await test('character.getHyperStat', async () => {
-    const r = await client.maplestory.character.getHyperStat({ ocid: ocid as any });
+    const r = await client.maplestory.character.getHyperStat({ ocid: ocid! });
     if (!r.use_preset_no) throw new Error('use_preset_no 없음');
   });
 
   await test('character.getPropensity', async () => {
-    const r = await client.maplestory.character.getPropensity({ ocid: ocid as any });
+    const r = await client.maplestory.character.getPropensity({ ocid: ocid! });
     if (r.charisma_level === undefined) throw new Error('charisma_level 없음');
   });
 
   await test('character.getAbility', async () => {
-    const r = await client.maplestory.character.getAbility({ ocid: ocid as any });
+    const r = await client.maplestory.character.getAbility({ ocid: ocid! });
     if (!r.ability_grade) throw new Error('ability_grade 없음');
   });
 
   await test('character.getItemEquipment', async () => {
-    const r = await client.maplestory.character.getItemEquipment({ ocid: ocid as any });
+    const r = await client.maplestory.character.getItemEquipment({ ocid: ocid! });
     if (!r.item_equipment) throw new Error('item_equipment 없음');
   });
 
   await test('character.getCashItemEquipment', async () => {
-    const r = await client.maplestory.character.getCashItemEquipment({ ocid: ocid as any });
+    const r = await client.maplestory.character.getCashItemEquipment({ ocid: ocid! });
     if (!r.cash_item_equipment_base) throw new Error('cash_item_equipment_base 없음');
   });
 
   await test('character.getSymbolEquipment', async () => {
-    const r = await client.maplestory.character.getSymbolEquipment({ ocid: ocid as any });
+    const r = await client.maplestory.character.getSymbolEquipment({ ocid: ocid! });
     if (!r.symbol) throw new Error('symbol 없음');
   });
 
   await test('character.getSetEffect', async () => {
-    const r = await client.maplestory.character.getSetEffect({ ocid: ocid as any });
+    const r = await client.maplestory.character.getSetEffect({ ocid: ocid! });
     if (!r.set_effect) throw new Error('set_effect 없음');
   });
 
   await test('character.getBeautyEquipment', async () => {
-    const r = await client.maplestory.character.getBeautyEquipment({ ocid: ocid as any });
+    const r = await client.maplestory.character.getBeautyEquipment({ ocid: ocid! });
     if (!r.character_hair) throw new Error('character_hair 없음');
   });
 
   await test('character.getAndroidEquipment', async () => {
-    await client.maplestory.character.getAndroidEquipment({ ocid: ocid as any });
+    await client.maplestory.character.getAndroidEquipment({ ocid: ocid! });
   });
 
   await test('character.getPetEquipment', async () => {
-    await client.maplestory.character.getPetEquipment({ ocid: ocid as any });
+    await client.maplestory.character.getPetEquipment({ ocid: ocid! });
   });
 
   await test('character.getSkill (4차)', async () => {
     const r = await client.maplestory.character.getSkill({
-      ocid: ocid as any,
+      ocid: ocid!,
       character_skill_grade: '4',
     });
     if (!r.character_skill) throw new Error('character_skill 없음');
   });
 
   await test('character.getLinkSkill', async () => {
-    const r = await client.maplestory.character.getLinkSkill({ ocid: ocid as any });
+    const r = await client.maplestory.character.getLinkSkill({ ocid: ocid! });
     if (!r.character_link_skill) throw new Error('character_link_skill 없음');
   });
 
   await test('character.getVMatrix', async () => {
-    await client.maplestory.character.getVMatrix({ ocid: ocid as any });
+    await client.maplestory.character.getVMatrix({ ocid: ocid! });
   });
 
   await test('character.getHexaMatrix', async () => {
-    await client.maplestory.character.getHexaMatrix({ ocid: ocid as any });
+    await client.maplestory.character.getHexaMatrix({ ocid: ocid! });
   });
 
   await test('character.getHexaMatrixStat', async () => {
-    await client.maplestory.character.getHexaMatrixStat({ ocid: ocid as any });
+    await client.maplestory.character.getHexaMatrixStat({ ocid: ocid! });
   });
 
   await test('character.getDojang', async () => {
-    await client.maplestory.character.getDojang({ ocid: ocid as any });
+    await client.maplestory.character.getDojang({ ocid: ocid! });
   });
 
   // ─── 2. Union ──────────────────────────────────────────────────────────────
   console.log('\n📋 Union API');
 
   await test('union.getUnion', async () => {
-    const r = await client.maplestory.union.getUnion({ ocid: ocid as any });
+    const r = await client.maplestory.union.getUnion({ ocid: ocid! });
     if (r.union_level === undefined) throw new Error('union_level 없음');
   });
 
   await test('union.getRaider', async () => {
-    const r = await client.maplestory.union.getRaider({ ocid: ocid as any });
+    const r = await client.maplestory.union.getRaider({ ocid: ocid! });
     if (!r.union_raider_stat) throw new Error('union_raider_stat 없음');
   });
 
   await test('union.getArtifact', async () => {
-    const r = await client.maplestory.union.getArtifact({ ocid: ocid as any });
+    const r = await client.maplestory.union.getArtifact({ ocid: ocid! });
     if (!r.union_artifact_effect) throw new Error('union_artifact_effect 없음');
   });
 
   await test('union.getChampion', async () => {
-    await client.maplestory.union.getChampion({ ocid: ocid as any });
+    await client.maplestory.union.getChampion({ ocid: ocid! });
   });
 }
 
 // ─── 3. Guild ────────────────────────────────────────────────────────────────
 console.log('\n📋 Guild API');
 
-let guildId: string | undefined;
+let guildId: GuildId | undefined;
 
 await test('guild.getId', async () => {
-  const r = await client.maplestory.guild.getId('아델', '스카니아');
+  const r = await client.maplestory.guild.getId(guildName ?? characterName, worldName);
   guildId = r;
   if (!guildId) throw new Error('oguild_id가 비어있음');
 });
 
 if (guildId) {
   await test('guild.getBasic', async () => {
-    const r = await client.maplestory.guild.getBasic({ oguild_id: guildId as any });
+    const r = await client.maplestory.guild.getBasic({ oguild_id: guildId! });
     if (!r.guild_name) throw new Error('guild_name 없음');
   });
 }
