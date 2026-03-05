@@ -67,7 +67,7 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 
 <table width="100%" cellspacing="0" cellpadding="8">
 <tr>
-<td align="center" valign="top" width="25%">
+<td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/fc-online.png" alt="EA SPORTS FC 온라인" height="48"><br>
 <br>
@@ -78,7 +78,7 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <a href="docs/fc-online.md">레퍼런스</a><br>
 <br>
 </td>
-<td align="center" valign="top" width="25%">
+<td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/maplestory.png" alt="메이플스토리" height="48"><br>
 <br>
@@ -89,7 +89,7 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <a href="docs/maplestory.md">레퍼런스</a><br>
 <br>
 </td>
-<td align="center" valign="top" width="25%">
+<td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/maplestory-sea.png" alt="MapleStorySEA" height="48"><br>
 <br>
@@ -99,7 +99,9 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 &nbsp;<br>
 <br>
 </td>
-<td align="center" valign="top" width="25%">
+</tr>
+<tr>
+<td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/maplestory-taiwan.png" alt="MapleStoryTaiwan" height="48"><br>
 <br>
@@ -109,9 +111,7 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 &nbsp;<br>
 <br>
 </td>
-</tr>
-<tr>
-<td align="center" valign="top" width="25%">
+<td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/sudden-attack.png" alt="서든어택" height="48"><br>
 <br>
@@ -121,7 +121,7 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 &nbsp;<br>
 <br>
 </td>
-<td align="center" valign="top" width="25%">
+<td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/first-descendant.png" alt="퍼스트 디센던트" height="48"><br>
 <br>
@@ -131,7 +131,9 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 &nbsp;<br>
 <br>
 </td>
-<td align="center" valign="top" width="25%">
+</tr>
+<tr>
+<td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/mabinogi.png" alt="마비노기" height="48"><br>
 <br>
@@ -141,7 +143,7 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 &nbsp;<br>
 <br>
 </td>
-<td align="center" valign="top" width="25%">
+<td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/mabinogi-heroes.png" alt="마비노기 영웅전" height="48"><br>
 <br>
@@ -151,9 +153,7 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 &nbsp;<br>
 <br>
 </td>
-</tr>
-<tr>
-<td align="center" valign="top" width="25%">
+<td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/maplestory-m.png" alt="메이플스토리M" height="48"><br>
 <br>
@@ -163,7 +163,9 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 &nbsp;<br>
 <br>
 </td>
-<td align="center" valign="top" width="25%">
+</tr>
+<tr>
+<td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/kartrider-rush-plus.png" alt="카트라이더 러쉬플러스" height="48"><br>
 <br>
@@ -173,7 +175,7 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 &nbsp;<br>
 <br>
 </td>
-<td align="center" valign="top" width="25%">
+<td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/baram-nara.png" alt="바람의나라" height="48"><br>
 <br>
@@ -183,7 +185,7 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 &nbsp;<br>
 <br>
 </td>
-<td align="center" valign="top" width="25%">
+<td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/hit2.png" alt="히트2" height="48"><br>
 <br>
@@ -195,7 +197,7 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 </td>
 </tr>
 <tr>
-<td align="center" valign="top" width="25%">
+<td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/crazy-arcade.png" alt="크레이지 아케이드" height="48"><br>
 <br>
@@ -205,7 +207,7 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 &nbsp;<br>
 <br>
 </td>
-<td align="center" valign="top" width="25%">
+<td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/baram-yeon.png" alt="바람의나라: 연" height="48"><br>
 <br>
@@ -215,7 +217,7 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 &nbsp;<br>
 <br>
 </td>
-<td align="center" valign="top" width="25%">
+<td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/v4.png" alt="V4" height="48"><br>
 <br>
@@ -225,7 +227,9 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 &nbsp;<br>
 <br>
 </td>
-<td align="center" valign="top" width="25%">
+</tr>
+<tr>
+<td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/dungeon-and-fighter.png" alt="던전앤파이터" height="48"><br>
 <br>
@@ -235,9 +239,7 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 &nbsp;<br>
 <br>
 </td>
-</tr>
-<tr>
-<td align="center" valign="top" width="25%">
+<td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/cyphers.png" alt="사이퍼즈" height="48"><br>
 <br>
@@ -247,8 +249,6 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 &nbsp;<br>
 <br>
 </td>
-<td></td>
-<td></td>
 <td></td>
 </tr>
 </table>
