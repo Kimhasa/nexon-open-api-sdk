@@ -73,8 +73,9 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <b>EA SPORTS FC 온라인</b><br>
 <sub>────────────────────</sub><br>
-<b>구현 완료</b> · <code>18개</code><br>
-<sub>2025-06-15</sub><br>
+<img src="https://img.shields.io/badge/구현_완료-18개-blue?style=for-the-badge" alt="구현 완료 · 18개" height="20"><br>
+<sub>2026-03-04</sub><br>
+<br>
 <a href="docs/fc-online.md">레퍼런스</a><br>
 <br>
 </td>
@@ -84,8 +85,9 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <b>메이플스토리</b><br>
 <sub>────────────────────</sub><br>
-<b>구현 완료</b> · <code>45개</code><br>
-<sub>2025-06-01</sub><br>
+<img src="https://img.shields.io/badge/구현_완료-45개-blue?style=for-the-badge" alt="구현 완료 · 45개" height="20"><br>
+<sub>2026-03-04</sub><br>
+<br>
 <a href="docs/maplestory.md">레퍼런스</a><br>
 <br>
 </td>
