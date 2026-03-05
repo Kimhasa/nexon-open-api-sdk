@@ -11,7 +11,16 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 
 ### Added
 - `AbstractGameClient` base class for multi-game architecture support
-- 17개 게임 지원 테이블 (현재 KMS만 구현 완료)
+- EA SPORTS FC Online 클라이언트 — 18개 메서드
+  - 계정 정보 (5): getOuid, getBasic, getMaxDivision, getMatchList, getTradeList
+  - 매치 (2): getAllMatchList, getMatchDetail
+  - 랭커 (1): getRankerStats
+  - 메타데이터 (6): getMatchTypeMeta, getSpidMeta, getSeasonIdMeta, getSpPositionMeta, getDivisionMeta, getDivisionVoltaMeta
+  - 이미지 URL (4): getActionShotUrl, getPlayerImageUrl, getActionShotUrlByPid, getPlayerImageUrlByPid
+- Branded type: `OUID` (FC Online 계정 식별자)
+- Sub-path export: `nexon-open-api/fconline`
+- FC Online 응답 Shape 검증 (4개 descriptor)
+- 17개 게임 지원 테이블
 - API 메타데이터: `getApiMetadata()` — 게임별 API 검증 일자 조회
 - 런타임 응답 Shape 검증: `responseValidation` 옵션 (opt-in, warn-only)
 - Deprecation 유틸리티: `emitDeprecation()` — 런타임 deprecation 경고

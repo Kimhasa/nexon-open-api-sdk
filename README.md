@@ -8,37 +8,6 @@
 
 [Nexon Open API](https://openapi.nexon.com/) 전체 게임을 TypeScript로 감싼 SDK입니다. 외부 의존성 없이 네이티브 `fetch`만 사용하며, CJS/ESM 듀얼 출력을 지원합니다.
 
-## 지원 게임
-
-| 게임 | Client | 상태 | 엔드포인트 |
-|------|--------|------|-----------|
-| 메이플스토리 (KMS) | `client.maplestory` | **구현 완료** | 45개 |
-| 메이플스토리M | `client.maplestoryM` | 예정 | - |
-| MapleStory SEA | `client.maplestorySEA` | 예정 | - |
-| MapleStory Taiwan | `client.maplestoryTW` | 예정 | - |
-| EA SPORTS FC 온라인 | `client.fcOnline` | 예정 | - |
-| 던전앤파이터 | `client.dnf` | 예정 | - |
-| 마비노기 | `client.mabinogi` | 예정 | - |
-| 마비노기 영웅전 | `client.mabinogiHeroes` | 예정 | - |
-| 서든어택 | `client.suddenAttack` | 예정 | - |
-| 퍼스트 디센던트 | `client.firstDescendant` | 예정 | - |
-| 카트라이더 러쉬플러스 | `client.kartrider` | 예정 | - |
-| 바람의나라 | `client.baram` | 예정 | - |
-| 바람의나라: 연 | `client.baramYeon` | 예정 | - |
-| 히트2 | `client.hit2` | 예정 | - |
-| 크레이지 아케이드 | `client.crazyArcade` | 예정 | - |
-| V4 | `client.v4` | 예정 | - |
-| 사이퍼즈 | `client.cyphers` | 예정 | - |
-
-## 주요 특징
-
-- **Type-safe** — 모든 API 응답에 대한 완전한 TypeScript 타입 정의
-- **Branded Types** — `OCID`, `GuildId`, `NexonDate` 브랜드 타입으로 컴파일 타임 안전성
-- **자동 재시도** — 429 (Rate Limit) / 503 응답 시 지수 백오프 자동 재시도
-- **에러 분류** — `NexonRateLimitError`, `NexonAuthError` 등 `instanceof`로 에러 분기
-- **외부 의존성 0** — Node.js 18+ 네이티브 `fetch` 사용
-- **멀티 게임** — 하나의 `NexonClient`로 모든 게임 접근
-
 ## 설치
 
 ```bash
@@ -50,6 +19,8 @@ pnpm add nexon-open-api
 ```
 
 ## 빠른 시작
+
+### 메이플스토리
 
 ```ts
 import { NexonClient } from 'nexon-open-api';
@@ -64,103 +35,172 @@ const basic = await client.maplestory.character.getBasic({ ocid });
 console.log(`${basic.character_name} Lv.${basic.character_level}`);
 ```
 
+### FC Online
+
+```ts
+// OUID 조회
+const ouid = await client.fcOnline.getOuid('닉네임');
+
+// 유저 기본 정보
+const basic = await client.fcOnline.getBasic(ouid);
+console.log(`${basic.nickname} (Lv.${basic.level})`);
+
+// 매치 기록 조회
+const matchIds = await client.fcOnline.getMatchList({ ouid, matchtype: 50, limit: 10 });
+const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
+```
+
 > API 키는 [Nexon Open API 포털](https://openapi.nexon.com/)에서 발급받을 수 있습니다.
 
-## API 목록
+## 주요 특징
 
-### 캐릭터 (22개)
+- **Type-safe** — 모든 API 응답에 대한 완전한 TypeScript 타입 정의
+- **Branded Types** — `OCID`, `OUID`, `GuildId`, `NexonDate` 브랜드 타입으로 컴파일 타임 안전성
+- **자동 재시도** — 429 (Rate Limit) / 503 응답 시 지수 백오프 자동 재시도
+- **에러 분류** — `NexonRateLimitError`, `NexonAuthError` 등 `instanceof`로 에러 분기
+- **외부 의존성 0** — Node.js 18+ 네이티브 `fetch` 사용
+- **멀티 게임** — 하나의 `NexonClient`로 모든 게임 접근
 
-```ts
-const char = client.maplestory.character;
+## 지원 게임
 
-await char.getList();                          // 계정 캐릭터 목록
-await char.getBasic({ ocid });                 // 기본 정보
-await char.getPopularity({ ocid });            // 인기도
-await char.getStat({ ocid });                  // 종합 능력치
-await char.getHyperStat({ ocid });             // 하이퍼스탯
-await char.getPropensity({ ocid });            // 성향
-await char.getAbility({ ocid });               // 어빌리티
-await char.getItemEquipment({ ocid });         // 장착 장비
-await char.getCashItemEquipment({ ocid });     // 캐시 장비
-await char.getSymbolEquipment({ ocid });       // 심볼
-await char.getSetEffect({ ocid });             // 세트 효과
-await char.getBeautyEquipment({ ocid });       // 헤어/성형/피부
-await char.getAndroidEquipment({ ocid });      // 안드로이드
-await char.getPetEquipment({ ocid });          // 펫 장비
-await char.getSkill({ ocid, character_skill_grade: '6' }); // 스킬
-await char.getLinkSkill({ ocid });             // 링크 스킬
-await char.getVMatrix({ ocid });               // V매트릭스
-await char.getHexaMatrix({ ocid });            // HEXA 매트릭스
-await char.getHexaMatrixStat({ ocid });        // HEXA 스탯
-await char.getDojang({ ocid });                // 무릉도장
-await char.getOtherStat({ ocid });             // 기타 능력치
-await char.getRingExchangeSkillEquipment({ ocid }); // 링 익스체인지
-```
+<!-- 아이콘 파일: docs/assets/games/{game}.png (48x48 권장) -->
 
-### 유니온 (4개)
-
-```ts
-const union = client.maplestory.union;
-
-await union.getUnion({ ocid });      // 유니온 레벨/등급
-await union.getRaider({ ocid });     // 공격대원 효과
-await union.getArtifact({ ocid });   // 아티팩트
-await union.getChampion({ ocid });   // 챔피언
-```
-
-### 길드 (2개)
-
-```ts
-const guild = client.maplestory.guild;
-
-const guildId = await guild.getId('길드명', '스카니아');
-await guild.getBasic({ oguild_id: guildId });
-```
-
-### 랭킹 (6개)
-
-```ts
-const ranking = client.maplestory.ranking;
-
-await ranking.getOverall({ date: '2024-01-01' });     // 종합 랭킹
-await ranking.getUnion({ date: '2024-01-01' });        // 유니온 랭킹
-await ranking.getGuild({ date: '2024-01-01' });        // 길드 랭킹
-await ranking.getDojang({ date: '2024-01-01' });       // 무릉도장 랭킹
-await ranking.getTheSeed({ date: '2024-01-01' });      // 더 시드 랭킹
-await ranking.getAchievement({ date: '2024-01-01' });  // 업적 랭킹
-```
-
-### 확률/이력 (3개)
-
-```ts
-const history = client.maplestory.history;
-
-await history.getStarforce({ count: 100, date: '2024-01-01' });  // 스타포스
-await history.getPotential({ count: 100, date: '2024-01-01' });  // 잠재능력
-await history.getCube({ count: 100, date: '2024-01-01' });       // 큐브
-```
-
-### 공지사항 (8개)
-
-```ts
-const notice = client.maplestory.notice;
-
-await notice.getList();              // 공지 목록
-await notice.getDetail(12345);       // 공지 상세
-await notice.getUpdateList();        // 업데이트 목록
-await notice.getUpdateDetail(12345); // 업데이트 상세
-await notice.getEventList();         // 이벤트 목록
-await notice.getEventDetail(12345);  // 이벤트 상세
-await notice.getCashshopList();      // 캐시샵 목록
-await notice.getCashshopDetail(12345); // 캐시샵 상세
-```
-
-### 기타 (2개)
-
-```ts
-await client.maplestory.getOuid();        // 계정 식별자
-await client.maplestory.getAchievement(); // 계정 업적
-```
+<div align="center">
+<table>
+<tr>
+<td align="center" valign="top" width="120">
+<img src="docs/assets/games/fc-online.png" alt="EA SPORTS FC 온라인" width="48"><br>
+<b>EA SPORTS FC 온라인</b><br>
+<img src="https://img.shields.io/badge/구현_완료-18개-blue" alt="구현 완료 · 18개" height="18"><br>
+<sub>2025-06-15</sub><br>
+<a href="docs/fc-online.md"><sub>레퍼런스</sub></a>
+</td>
+<td align="center" valign="top" width="120">
+<img src="docs/assets/games/maplestory.png" alt="메이플스토리" width="48"><br>
+<b>메이플스토리</b><br>
+<img src="https://img.shields.io/badge/구현_완료-45개-blue" alt="구현 완료 · 45개" height="18"><br>
+<sub>2025-06-01</sub><br>
+<a href="docs/maplestory.md"><sub>레퍼런스</sub></a>
+</td>
+<td align="center" valign="top" width="120">
+<img src="docs/assets/games/maplestory-sea.png" alt="MapleStorySEA" width="48"><br>
+<b>MapleStorySEA</b><br>
+<img src="https://img.shields.io/badge/예정-lightgrey" alt="예정" height="18"><br>
+<sub>&nbsp;</sub><br>
+<sub>&nbsp;</sub>
+</td>
+<td align="center" valign="top" width="120">
+<img src="docs/assets/games/maplestory-taiwan.png" alt="MapleStoryTaiwan" width="48"><br>
+<b>MapleStoryTaiwan</b><br>
+<img src="https://img.shields.io/badge/예정-lightgrey" alt="예정" height="18"><br>
+<sub>&nbsp;</sub><br>
+<sub>&nbsp;</sub>
+</td>
+</tr>
+<tr>
+<td align="center" valign="top" width="120">
+<img src="docs/assets/games/sudden-attack.png" alt="서든어택" width="48"><br>
+<b>서든어택</b><br>
+<img src="https://img.shields.io/badge/예정-lightgrey" alt="예정" height="18"><br>
+<sub>&nbsp;</sub><br>
+<sub>&nbsp;</sub>
+</td>
+<td align="center" valign="top" width="120">
+<img src="docs/assets/games/first-descendant.png" alt="퍼스트 디센던트" width="48"><br>
+<b>퍼스트 디센던트</b><br>
+<img src="https://img.shields.io/badge/예정-lightgrey" alt="예정" height="18"><br>
+<sub>&nbsp;</sub><br>
+<sub>&nbsp;</sub>
+</td>
+<td align="center" valign="top" width="120">
+<img src="docs/assets/games/mabinogi.png" alt="마비노기" width="48"><br>
+<b>마비노기</b><br>
+<img src="https://img.shields.io/badge/예정-lightgrey" alt="예정" height="18"><br>
+<sub>&nbsp;</sub><br>
+<sub>&nbsp;</sub>
+</td>
+<td align="center" valign="top" width="120">
+<img src="docs/assets/games/mabinogi-heroes.png" alt="마비노기 영웅전" width="48"><br>
+<b>마비노기 영웅전</b><br>
+<img src="https://img.shields.io/badge/예정-lightgrey" alt="예정" height="18"><br>
+<sub>&nbsp;</sub><br>
+<sub>&nbsp;</sub>
+</td>
+</tr>
+<tr>
+<td align="center" valign="top" width="120">
+<img src="docs/assets/games/maplestory-m.png" alt="메이플스토리M" width="48"><br>
+<b>메이플스토리M</b><br>
+<img src="https://img.shields.io/badge/예정-lightgrey" alt="예정" height="18"><br>
+<sub>&nbsp;</sub><br>
+<sub>&nbsp;</sub>
+</td>
+<td align="center" valign="top" width="120">
+<img src="docs/assets/games/kartrider-rush-plus.png" alt="카트라이더 러쉬플러스" width="48"><br>
+<b>카트라이더 러쉬플러스</b><br>
+<img src="https://img.shields.io/badge/예정-lightgrey" alt="예정" height="18"><br>
+<sub>&nbsp;</sub><br>
+<sub>&nbsp;</sub>
+</td>
+<td align="center" valign="top" width="120">
+<img src="docs/assets/games/baram-nara.png" alt="바람의나라" width="48"><br>
+<b>바람의나라</b><br>
+<img src="https://img.shields.io/badge/예정-lightgrey" alt="예정" height="18"><br>
+<sub>&nbsp;</sub><br>
+<sub>&nbsp;</sub>
+</td>
+<td align="center" valign="top" width="120">
+<img src="docs/assets/games/hit2.png" alt="히트2" width="48"><br>
+<b>히트2</b><br>
+<img src="https://img.shields.io/badge/예정-lightgrey" alt="예정" height="18"><br>
+<sub>&nbsp;</sub><br>
+<sub>&nbsp;</sub>
+</td>
+</tr>
+<tr>
+<td align="center" valign="top" width="120">
+<img src="docs/assets/games/crazy-arcade.png" alt="크레이지 아케이드" width="48"><br>
+<b>크레이지 아케이드</b><br>
+<img src="https://img.shields.io/badge/예정-lightgrey" alt="예정" height="18"><br>
+<sub>&nbsp;</sub><br>
+<sub>&nbsp;</sub>
+</td>
+<td align="center" valign="top" width="120">
+<img src="docs/assets/games/baram-yeon.png" alt="바람의나라: 연" width="48"><br>
+<b>바람의나라: 연</b><br>
+<img src="https://img.shields.io/badge/예정-lightgrey" alt="예정" height="18"><br>
+<sub>&nbsp;</sub><br>
+<sub>&nbsp;</sub>
+</td>
+<td align="center" valign="top" width="120">
+<img src="docs/assets/games/v4.png" alt="V4" width="48"><br>
+<b>V4</b><br>
+<img src="https://img.shields.io/badge/예정-lightgrey" alt="예정" height="18"><br>
+<sub>&nbsp;</sub><br>
+<sub>&nbsp;</sub>
+</td>
+<td align="center" valign="top" width="120">
+<img src="docs/assets/games/dungeon-and-fighter.png" alt="던전앤파이터" width="48"><br>
+<b>던전앤파이터</b><br>
+<img src="https://img.shields.io/badge/예정-lightgrey" alt="예정" height="18"><br>
+<sub>&nbsp;</sub><br>
+<sub>&nbsp;</sub>
+</td>
+</tr>
+<tr>
+<td align="center" valign="top" width="120">
+<img src="docs/assets/games/cyphers.png" alt="사이퍼즈" width="48"><br>
+<b>사이퍼즈</b><br>
+<img src="https://img.shields.io/badge/예정-lightgrey" alt="예정" height="18"><br>
+<sub>&nbsp;</sub><br>
+<sub>&nbsp;</sub>
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+</div>
 
 ## 에러 처리
 
@@ -220,11 +260,19 @@ const client = new NexonClient({
 
 ## Sub-path Import
 
-KMS 코드만 번들에 포함하고 싶다면 sub-path import를 사용하세요.
+특정 게임 코드만 번들에 포함하고 싶다면 sub-path import를 사용하세요.
 
 ```ts
 import { MapleStoryClient } from 'nexon-open-api/maplestory';
+import { FcOnlineClient } from 'nexon-open-api/fconline';
 ```
+
+## 상세 문서
+
+| 게임 | 문서 | 엔드포인트 |
+|------|------|-----------|
+| 메이플스토리 | [API 레퍼런스](docs/maplestory.md) | 캐릭터, 유니온, 길드, 랭킹, 확률/이력, 공지사항 |
+| FC Online | [API 레퍼런스](docs/fc-online.md) | 계정 정보, 매치, 랭커, 메타데이터, 이미지 URL |
 
 ## 요구사항
 
@@ -235,9 +283,9 @@ import { MapleStoryClient } from 'nexon-open-api/maplestory';
 
 이 프로젝트는 넥슨(NEXON Korea Corporation)이 제휴, 승인, 후원하지 않는 **비공식** 서드파티 라이브러리입니다.
 
-- 메이플스토리, NEXON, Nexon Open API 및 관련 상표의 모든 권리는 넥슨에 있습니다 ([이용약관 제6조 ①](https://openapi.nexon.com/ko/support/terms/)).
+- 이 SDK에서 사용하는 모든 게임명, 로고 및 관련 상표의 권리는 넥슨에 있습니다 ([이용약관 제6조 ①](https://openapi.nexon.com/ko/support/terms/)).
 - 이 SDK는 [NEXON Open API](https://openapi.nexon.com/)를 통해 데이터를 제공받습니다 ([이용약관 제6조 ④](https://openapi.nexon.com/ko/support/terms/)).
-- API 사용 시 [Nexon Open API 이용약관](https://openapi.nexon.com/ko/support/terms/)을 준수하세요.
+- API 사용 시 [Nexon Open API 이용약관](https://openapi.nexon.com/ko/support/terms/)을 준수해 주세요.
 
 ## 라이선스
 

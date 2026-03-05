@@ -41,6 +41,7 @@ const basic    = await client.maplestory.character.getBasic({ ocid });
 | `yarn format` | Prettier 포맷팅 |
 | `yarn test` | Vitest 1회 실행 |
 | `yarn test:watch` | Vitest watch 모드 |
+| `yarn test:fconline` | FC Online E2E 테스트 (실제 API 키 필요) |
 | `yarn release` | 버전 범프 + npm publish |
 
 **코드 변경 후 반드시**: `yarn type-check` → `yarn test` → `yarn build` 순서로 확인.
@@ -104,7 +105,19 @@ nexon-open-api/
 │   │   ├── maplestory-m/                        # 메이플스토리M (예정)
 │   │   ├── maplestory-sea/                      # MapleStorySEA (예정)
 │   │   ├── maplestory-tw/                       # MapleStoryTW (예정)
-│   │   ├── fc-online/                           # EA SPORTS FC Online (예정)
+│   │   ├── fc-online/                           # EA SPORTS FC Online (구현 완료)
+│   │   │   ├── FcOnlineClient.ts
+│   │   │   ├── endpoints.ts
+│   │   │   ├── shapes.ts
+│   │   │   ├── index.ts
+│   │   │   ├── user/
+│   │   │   │   └── types.ts
+│   │   │   ├── match/
+│   │   │   │   └── types.ts
+│   │   │   ├── ranker/
+│   │   │   │   └── types.ts
+│   │   │   └── metadata/
+│   │   │       └── types.ts
 │   │   ├── dnf/                                 # 던전앤파이터 (예정)
 │   │   ├── mabinogi/                            # 마비노기 (예정)
 │   │   └── ...                                  # 기타 게임 (예정)
@@ -119,6 +132,9 @@ nexon-open-api/
 │   └── unit/
 │       ├── core/
 │       └── games/
+├── scripts/
+│   ├── test-api.ts                              # KMS E2E 테스트 (43개)
+│   └── test-fconline.ts                         # FC Online E2E 테스트 (15개)
 ├── dist/                                        # 빌드 출력 (gitignore)
 ├── tsup.config.ts
 ├── vitest.config.ts
@@ -188,7 +204,7 @@ NexonClient
 ├── .maplestoryM   → (예정) MapleStoryMClient
 ├── .maplestorySEA → (예정) MapleStorySEAClient
 ├── .maplestoryTW  → (예정) MapleStoryTWClient
-├── .fcOnline      → (예정) FcOnlineClient
+├── .fcOnline      → FcOnlineClient           (구현 완료)
 ├── .dnf           → (예정) DnfClient
 ├── .mabinogi      → (예정) MabinogiClient
 ├── .mabinogiHeroes→ (예정) MabinogiHeroesClient
@@ -221,7 +237,23 @@ MapleStoryClient extends AbstractMapleBaseClient
 └── .notice     → MapleStoryNoticeClient      (lazy getter)
 
 (비메이플 게임은 AbstractGameClient를 직접 상속)
-FcOnlineClient extends AbstractGameClient
+FcOnlineClient extends AbstractGameClient   ← 구현 완료
+├── getOuid(nickname): Promise<OUID>
+├── getBasic(ouid): Promise<FcUserBasic>
+├── getMaxDivision(ouid): Promise<FcMaxDivision>
+├── getMatchList(params): Promise<string[]>
+├── getTradeList(params): Promise<FcTradeRecord[]>
+├── getAllMatchList(params): Promise<string[]>
+├── getMatchDetail(matchId): Promise<FcMatchDetail>
+├── getRankerStats(params): Promise<FcRankerStats[]>
+├── getMatchTypeMeta(): Promise<FcMatchTypeMeta[]>
+├── getSpidMeta(): Promise<FcSpidMeta[]>
+├── getSeasonIdMeta(): Promise<FcSeasonIdMeta[]>
+├── getSpPositionMeta(): Promise<FcSpPositionMeta[]>
+├── getDivisionMeta(): Promise<FcDivisionMeta[]>
+├── getDivisionVoltaMeta(): Promise<FcDivisionVoltaMeta[]>
+├── getActionShotUrl(spid): string           (HTTP 호출 없음)
+└── getPlayerImageUrl(spid): string          (HTTP 호출 없음)
 DnfClient extends AbstractGameClient
 ...
 
@@ -672,7 +704,7 @@ Base URL: `https://open.api.nexon.com/`
 | 메이플스토리M | `client.maplestoryM` | `MapleStoryMClient` | `maplestorym` | `AbstractMapleBaseClient` | 예정 |
 | MapleStory SEA | `client.maplestorySEA` | `MapleStorySEAClient` | `maplestorysea` | `AbstractMapleBaseClient` | 예정 |
 | MapleStory Taiwan | `client.maplestoryTW` | `MapleStoryTWClient` | `maplestorytw` | `AbstractMapleBaseClient` | 예정 |
-| EA SPORTS FC 온라인 | `client.fcOnline` | `FcOnlineClient` | `fconline` | `AbstractGameClient` | 예정 |
+| EA SPORTS FC 온라인 | `client.fcOnline` | `FcOnlineClient` | `fconline` | `AbstractGameClient` | **구현 완료** |
 | 던전앤파이터 | `client.dnf` | `DnfClient` | `dnf` | `AbstractGameClient` | 예정 |
 | 마비노기 | `client.mabinogi` | `MabinogiClient` | `mabinogi` | `AbstractGameClient` | 예정 |
 | 마비노기 영웅전 | `client.mabinogiHeroes` | `MabinogiHeroesClient` | `mabinogiheroes` | `AbstractGameClient` | 예정 |
