@@ -1,4 +1,15 @@
-import type { OUID } from '../../../core/types/branded.js';
+// ─── Brand 기반 ──────────────────────────────────────────────────────────────
+
+declare const __brand: unique symbol;
+type Brand<T, B extends string> = T & { readonly [__brand]: B };
+
+/**
+ * EA SPORTS FC Online 계정 고유 식별자 (OUID).
+ *
+ * FC Online 전용 브랜드 타입입니다.
+ * `FcOnlineClient.getOuid()` 로 획득합니다.
+ */
+export type OUID = Brand<string, 'OUID'>;
 
 // ─── GET /fconline/v1/user/basic ────────────────────────────────────────────
 

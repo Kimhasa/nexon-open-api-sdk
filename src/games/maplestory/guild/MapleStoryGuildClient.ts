@@ -1,5 +1,5 @@
 import type { HttpClient } from '../../../core/http/HttpClient.js';
-import type { GuildId } from '../../../core/types/branded.js';
+import type { GuildId } from '../../_base/maple-base-types.js';
 import type { GuildIdDateRequest } from '../../_base/maple-base-types.js';
 import { GUILD_ID_SHAPE, GUILD_BASIC_SHAPE } from '../shapes.js';
 import type { GuildBasic, WorldName } from './types.js';

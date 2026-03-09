@@ -6,6 +6,7 @@ export type { NexonClientOptions } from './NexonClient.js';
 export { MapleStoryClient } from './games/maplestory/MapleStoryClient.js';
 export { FcOnlineClient } from './games/fc-online/FcOnlineClient.js';
 export { MapleStoryMClient } from './games/maplestory-m/MapleStoryMClient.js';
+export { MapleStorySEAClient } from './games/maplestory-sea/MapleStorySEAClient.js';
 
 // Errors
 export {
@@ -22,9 +23,11 @@ export {
 export type { NexonErrorCode, NexonErrorPayload } from './core/errors/index.js';
 
 // Types
-export type { OCID, GuildId, OUID, NexonDate } from './core/types/branded.js';
-export { toNexonDate } from './core/types/date.js';
-export type { DateRange, CursorPage, CursorPageRequest, AutoPaginationOptions } from './core/types/index.js';
+export type { OCID, NexonDate, GuildId } from './games/_base/maple-base-types.js';
+export type { OUID } from './games/fc-online/user/types.js';
+export { toNexonDate } from './games/_base/maple-date.js';
+export type { DateRange } from './games/_base/maple-date.js';
+export type { CursorPage, CursorPageRequest, AutoPaginationOptions } from './core/types/index.js';
 
 // MapleStory types
 export type { Achievement, AccountAchievement, AchievementInfo } from './games/maplestory/user-types.js';
@@ -296,6 +299,87 @@ export type {
   MEventNoticeList,
   MEventNoticeDetail,
 } from './games/maplestory-m/notice/types.js';
+
+// MapleStory SEA character types
+export type {
+  SEACharacterBasic,
+  SEACharacterPopularity,
+  SEACharacterStat,
+  SEAStatDetail,
+  SEACharacterHyperStat,
+  SEAHyperStatPreset,
+  SEACharacterPropensity,
+  SEACharacterAbility,
+  SEAAbilityInfo,
+  SEAAbilityPreset,
+  SEAItemTotalOption,
+  SEAItemBaseOption,
+  SEAItemExceptionalOption,
+  SEAItemAddOption,
+  SEAItemEtcOption,
+  SEAItemEquipment,
+  SEAPresetItemEquipment,
+  SEATitleInfo,
+  SEAMedalShape,
+  SEACharacterItemEquipment,
+  SEACashItemOption,
+  SEACashItemColoringPrism,
+  SEACashItemEquipmentItem,
+  SEACharacterCashItemEquipment,
+  SEASymbolInfo,
+  SEACharacterSymbolEquipment,
+  SEASetEffectInfo,
+  SEASetEffectDetail,
+  SEACharacterSetEffect,
+  SEAHairInfo,
+  SEAFaceInfo,
+  SEASkinInfo,
+  SEACharacterBeautyEquipment,
+  SEAAndroidCashItem,
+  SEAAndroidPreset,
+  SEACharacterAndroidEquipment,
+  SEAPetItemOption,
+  SEAPetEquipmentInfo,
+  SEAPetAutoSkill,
+  SEACharacterPetEquipment,
+  SEASkillRequest,
+  SEASkillInfo,
+  SEACharacterSkill,
+  SEALinkSkillInfo,
+  SEALinkSkillPresetInfo,
+  SEACharacterLinkSkill,
+  SEAVCoreInfo,
+  SEACharacterVMatrix,
+  SEAHexaLinkedSkill,
+  SEAHexaCoreInfo,
+  SEACharacterHexaMatrix,
+  SEAHexaStatCoreInfo,
+  SEACharacterHexaMatrixStat,
+  SEACharacterDojang,
+} from './games/maplestory-sea/character/types.js';
+
+// MapleStory SEA union types
+export type {
+  SEAUnion,
+  SEAUnionRaider,
+  SEAUnionInnerStat,
+  SEAUnionBlockPosition,
+  SEAUnionBlock,
+  SEAUnionRaiderPreset,
+  SEAUnionArtifact,
+  SEAUnionArtifactEffect,
+  SEAUnionArtifactCrystal,
+  SEAUnionChampion,
+  SEAUnionChampionInfo,
+  SEAUnionChampionBadgeInfo,
+} from './games/maplestory-sea/union/types.js';
+
+// MapleStory SEA guild types
+export type {
+  SEAGuildIdResponse,
+  SEAGuildSkill,
+  SEAGuildBasic,
+} from './games/maplestory-sea/guild/types.js';
 
 // HttpClient (for advanced usage)
 export { HttpClient } from './core/http/HttpClient.js';

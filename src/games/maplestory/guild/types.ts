@@ -1,4 +1,4 @@
-import type { GuildId } from '../../../core/types/branded.js';
+import type { GuildId } from '../../_base/maple-base-types.js';
 
 // ─── GET /maplestory/v1/guild/id ──────────────────────────────────────────────
 

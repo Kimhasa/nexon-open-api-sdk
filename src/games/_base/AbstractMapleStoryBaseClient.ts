@@ -1,5 +1,5 @@
-import { toNexonDate } from '../../core/types/date.js';
-import type { NexonDate } from '../../core/types/branded.js';
+import { toNexonDate } from './maple-date.js';
+import type { NexonDate } from './maple-base-types.js';
 import { AbstractGameClient } from './AbstractGameClient.js';
 
 /**

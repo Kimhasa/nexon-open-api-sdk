@@ -8,7 +8,7 @@
  */
 import 'dotenv/config';
 import { NexonClient } from '../src/index.js';
-import type { OCID, GuildId } from '../src/core/types/branded.js';
+import type { OCID, GuildId } from '../src/games/_base/maple-base-types.js';
 
 const apiKey = process.env['NEXON_MAPLESTORY_API_KEY'];
 const characterName = process.env['MAPLESTORY_CHARACTER'];

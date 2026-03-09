@@ -1,4 +1,33 @@
-import type { OCID, GuildId, NexonDate } from '../../core/types/branded.js';
+// ─── Brand 기반 ──────────────────────────────────────────────────────────────
+
+declare const __brand: unique symbol;
+type Brand<T, B extends string> = T & { readonly [__brand]: B };
+
+/**
+ * 캐릭터 고유 식별자 (OCID).
+ *
+ * 메이플스토리 패밀리(KMS, M, SEA, TW) 전용 브랜드 타입입니다.
+ * `getOcid()` 로 획득합니다.
+ */
+export type OCID = Brand<string, 'OCID'>;
+
+/**
+ * Nexon Open API 날짜 형식 (YYYY-MM-DD).
+ *
+ * 메이플스토리 패밀리(KMS, M, SEA, TW)의 날짜 파라미터에 사용됩니다.
+ * `toNexonDate()` 헬퍼로 생성합니다.
+ */
+export type NexonDate = Brand<string, 'NexonDate'>;
+
+/**
+ * 길드 고유 식별자.
+ *
+ * 메이플스토리 패밀리(KMS, M, SEA, TW) 전용 브랜드 타입입니다.
+ * `guild.getId()` 로 획득합니다.
+ */
+export type GuildId = Brand<string, 'GuildId'>;
+
+// ─── 요청 파라미터 ────────────────────────────────────────────────────────────
 
 /** OCID 기반 기본 요청 파라미터 */
 export interface OcidRequest {

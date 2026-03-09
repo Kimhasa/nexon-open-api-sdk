@@ -1,4 +1,4 @@
-import type { NexonDate } from './branded.js';
+import type { NexonDate } from './maple-base-types.js';
 
 /**
  * 날짜를 Nexon Open API 형식(YYYY-MM-DD)으로 변환한다.

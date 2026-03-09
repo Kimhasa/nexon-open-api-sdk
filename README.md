@@ -35,6 +35,20 @@ const basic = await client.maplestory.character.getBasic({ ocid });
 console.log(`${basic.character_name} Lv.${basic.character_level}`);
 ```
 
+### MapleStorySEA
+
+```ts
+// OCID 조회
+const ocid = await client.maplestorySEA.getOcid('CharacterName');
+
+// 캐릭터 기본 정보
+const basic = await client.maplestorySEA.character.getBasic({ ocid });
+console.log(`${basic.character_name} Lv.${basic.character_level}`);
+
+// 유니온 정보
+const union = await client.maplestorySEA.union.getUnion({ ocid });
+```
+
 ### FC Online
 
 ```ts
@@ -103,10 +117,10 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/maplestory-sea.png" alt="MapleStorySEA" height="64">
 <h4>MapleStorySEA</h4>
-<img src="https://img.shields.io/badge/Live-brightgreen" alt="Live"> <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
-&nbsp;<br>
+<img src="https://img.shields.io/badge/Live-brightgreen" alt="Live"> <img src="https://img.shields.io/badge/endpoints-26-blue" alt="26 endpoints"><br>
+<sub>2026-03-09</sub><br>
 <br>
-&nbsp;<br>
+<a href="docs/maplestory-sea.md">레퍼런스</a><br>
 <br>
 </td>
 <td align="center" valign="top" width="33%">
@@ -314,6 +328,7 @@ const client = new NexonClient({
 ```ts
 import { MapleStoryClient } from 'nexon-open-api/maplestory';
 import { MapleStoryMClient } from 'nexon-open-api/maplestory-m';
+import { MapleStorySEAClient } from 'nexon-open-api/maplestory-sea';
 import { FcOnlineClient } from 'nexon-open-api/fconline';
 ```
 
@@ -323,6 +338,7 @@ import { FcOnlineClient } from 'nexon-open-api/fconline';
 |------|------|-----------|
 | 메이플스토리 | [API 레퍼런스](docs/maplestory.md) | 캐릭터, 유니온, 길드, 랭킹, 확률/이력, 공지사항 |
 | 메이플스토리M | [API 레퍼런스](docs/maplestory-m.md) | 캐릭터, 유니온, 길드, 랭킹, 공지사항 |
+| MapleStorySEA | [API 레퍼런스](docs/maplestory-sea.md) | 캐릭터, 유니온, 길드 |
 | FC Online | [API 레퍼런스](docs/fc-online.md) | 계정 정보, 매치, 랭커, 메타데이터, 이미지 URL |
 
 ## 요구사항

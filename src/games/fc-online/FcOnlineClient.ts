@@ -1,5 +1,5 @@
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
-import type { OUID } from '../../core/types/branded.js';
+import type { OUID } from './user/types.js';
 import {
   FC_OUID_SHAPE,
   FC_USER_BASIC_SHAPE,

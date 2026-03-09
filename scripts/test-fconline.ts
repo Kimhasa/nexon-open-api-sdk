@@ -7,7 +7,7 @@
  */
 import 'dotenv/config';
 import { NexonClient } from '../src/index.js';
-import type { OUID } from '../src/core/types/branded.js';
+import type { OUID } from '../src/games/fc-online/user/types.js';
 
 const apiKey = process.env['NEXON_FC_ONLINE_API_KEY'];
 if (!apiKey) {

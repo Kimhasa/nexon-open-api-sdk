@@ -1,4 +1,4 @@
-import type { OCID, NexonDate } from '../../../core/types/branded.js';
+import type { OCID, NexonDate } from '../../_base/maple-base-types.js';
 
 // ─── GET /maplestory/v1/character/list ───────────────────────────────────────
 

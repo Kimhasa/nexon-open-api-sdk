@@ -1,4 +1,4 @@
-import type { OCID, NexonDate } from '../../../core/types/branded.js';
+import type { OCID, NexonDate } from '../../_base/maple-base-types.js';
 import type { MWorldName } from '../guild/types.js';
 
 // ─── 공통 요청 파라미터 ──────────────────────────────────────────────────────

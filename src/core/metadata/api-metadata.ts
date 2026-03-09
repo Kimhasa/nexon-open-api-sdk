@@ -40,6 +40,14 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     endpointCount: 37,
     note: 'Types based on KMS patterns, API verification pending',
   },
+  maplestorysea: {
+    game: 'MapleStory SEA',
+    pathPrefix: 'maplestorysea',
+    lastVerifiedAt: '2026-03-09',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 26,
+    note: 'Character(20) + Union(4) + Guild(2). Types from Nexon OpenAPI spec.',
+  },
 };
 
 /**

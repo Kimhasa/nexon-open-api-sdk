@@ -1,5 +1,5 @@
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
-import type { OCID } from '../../core/types/branded.js';
+import type { OCID } from '../_base/maple-base-types.js';
 import type { MWorldName } from './guild/types.js';
 import { MapleStoryMCharacterClient } from './character/MapleStoryMCharacterClient.js';
 import { MapleStoryMUnionClient } from './union/MapleStoryMUnionClient.js';

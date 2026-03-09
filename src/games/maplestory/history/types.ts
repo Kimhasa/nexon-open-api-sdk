@@ -1,4 +1,4 @@
-import type { NexonDate } from '../../../core/types/branded.js';
+import type { NexonDate } from '../../_base/maple-base-types.js';
 
 // ─── 공통 요청 파라미터 ──────────────────────────────────────────────────────
 

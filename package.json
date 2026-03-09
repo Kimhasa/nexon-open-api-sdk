@@ -33,6 +33,11 @@
       "types": "./dist/maplestory-m.d.ts",
       "import": "./dist/maplestory-m.js",
       "require": "./dist/maplestory-m.cjs"
+    },
+    "./maplestory-sea": {
+      "types": "./dist/maplestory-sea.d.ts",
+      "import": "./dist/maplestory-sea.js",
+      "require": "./dist/maplestory-sea.cjs"
     }
   },
   "main": "./dist/index.cjs",
@@ -55,6 +60,7 @@
     "test:maplestory": "tsx scripts/test-maplestory.ts",
     "test:maplestory-m": "tsx scripts/test-maplestory-m.ts",
     "test:fconline": "tsx scripts/test-fconline.ts",
+    "test:maplestory-sea": "tsx scripts/test-maplestory-sea.ts",
     "release": "yarn build && yarn test && npm publish"
   },
   "devDependencies": {

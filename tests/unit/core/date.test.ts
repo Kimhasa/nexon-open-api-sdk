@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { toNexonDate } from '../../../src/core/types/date.js';
-import type { NexonDate } from '../../../src/core/types/branded.js';
+import { toNexonDate } from '../../../src/games/_base/maple-date.js';
+import type { NexonDate } from '../../../src/games/_base/maple-base-types.js';
 
 describe('toNexonDate', () => {
   it('YYYY-MM-DD 문자열은 그대로 반환한다', () => {

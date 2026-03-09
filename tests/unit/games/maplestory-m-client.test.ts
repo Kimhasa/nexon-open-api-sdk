@@ -6,8 +6,8 @@ import { MapleStoryMUnionClient } from '../../../src/games/maplestory-m/union/Ma
 import { MapleStoryMGuildClient } from '../../../src/games/maplestory-m/guild/MapleStoryMGuildClient.js';
 import { MapleStoryMRankingClient } from '../../../src/games/maplestory-m/ranking/MapleStoryMRankingClient.js';
 import { MapleStoryMNoticeClient } from '../../../src/games/maplestory-m/notice/MapleStoryMNoticeClient.js';
-import type { OCID } from '../../../src/core/types/branded.js';
-import type { GuildId } from '../../../src/core/types/branded.js';
+import type { OCID } from '../../../src/games/_base/maple-base-types.js';
+import type { GuildId } from '../../../src/games/_base/maple-base-types.js';
 import { mOcidFixture } from '../../fixtures/maplestory-m/ocid.fixture.js';
 import { mCharacterBasicFixture } from '../../fixtures/maplestory-m/character-basic.fixture.js';
 import { mUnionFixture } from '../../fixtures/maplestory-m/union.fixture.js';
