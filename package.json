@@ -74,13 +74,25 @@
     "test:maplestory-m": "tsx scripts/test-maplestory-m.ts",
     "test:fconline": "tsx scripts/test-fconline.ts",
     "test:maplestory-sea": "tsx scripts/test-maplestory-sea.ts",
-    "release": "yarn build && yarn test && npm publish"
+    "release": "yarn build && yarn test && npm publish",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
     "@vitest/coverage-v8": "^3.0.0",
     "dotenv": "^17.3.1",
     "eslint": "^9.18.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "msw": "^2.7.0",
     "prettier": "^3.4.0",
     "tsup": "^8.3.0",
