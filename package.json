@@ -1,9 +1,22 @@
 {
   "name": "nexon-open-api",
   "version": "0.1.0",
-  "description": "Type-safe Nexon Open API SDK for MapleStory (KMS, M)",
-  "author": "",
+  "description": "Type-safe Nexon Open API SDK for MapleStory, FC Online, and more — zero dependencies",
+  "author": "Kimhasa",
   "license": "MIT",
+  "keywords": [
+    "nexon",
+    "nexon-api",
+    "nexon-open-api",
+    "maplestory",
+    "maplestory-m",
+    "maplestory-sea",
+    "fc-online",
+    "sdk",
+    "typescript",
+    "api-wrapper",
+    "game-api"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Kimhasa/nexon-open-api-sdk.git"

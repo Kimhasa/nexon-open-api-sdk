@@ -3,6 +3,8 @@
 > Type-safe Nexon Open API SDK for TypeScript/JavaScript
 
 [![npm version](https://img.shields.io/npm/v/nexon-open-api.svg)](https://www.npmjs.com/package/nexon-open-api)
+[![CI](https://github.com/Kimhasa/nexon-open-api-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/Kimhasa/nexon-open-api-sdk/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/Kimhasa/nexon-open-api-sdk/graph/badge.svg)](https://codecov.io/gh/Kimhasa/nexon-open-api-sdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org/)
 

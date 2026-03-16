@@ -1,0 +1,246 @@
+# ─────────────────────────────────────────────────────
+# CI/CD Pipeline — nexon-open-api SDK
+#
+# 트리거 조건:
+#   - main 브랜치에 push
+#   - main 대상 PR 생성/업데이트
+#   - v* 태그 push (npm publish)
+#   - 수동 실행 (workflow_dispatch)
+#
+# 실행 흐름:
+#   install → quality (병렬: type-check, lint, format)
+#           → test    (병렬: node 18, 20, 22 + coverage)
+#                → build → publish (v* 태그일 때만)
+# ─────────────────────────────────────────────────────
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*'] # v1.0.0, v0.2.0-beta.1 등
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# 같은 브랜치에서 연속 push 시 이전 워크플로우를 자동 취소
+# 예: PR에 커밋 3개를 빠르게 push하면 마지막 것만 실행됨
+# 단, 태그 push는 취소하지 않음 (배포이므로)
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
+# 최소 권한 원칙 — 기본은 코드 읽기만 허용
+permissions:
+  contents: read
+
+jobs:
+  # ─────────────────────────────────────────────────────
+  # 1단계: 의존성 설치 + 캐시 생성
+  #
+  # node_modules를 GitHub 캐시에 저장하여
+  # 이후 quality, test, build job에서 재사용
+  # → 전체 파이프라인에서 install은 딱 한 번만 수행
+  # ─────────────────────────────────────────────────────
+  install:
+    name: Install Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Corepack을 setup-node보다 먼저 활성화해야 함
+      # setup-node가 cache: 'yarn' 처리 시 Yarn Berry 경로를 조회하는데
+      # packageManager: "yarn@4.x"를 인식하려면 Corepack이 필요
+      - name: Enable Corepack
+        run: corepack enable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      # --immutable: yarn.lock과 실제 설치 결과가 다르면 에러
+      # CI에서 lock 파일 무결성을 강제하여 "내 로컬에선 됐는데" 방지
+      - name: Install
+        run: yarn install --immutable
+
+      # 캐시 키: yarn.lock의 해시값 기반
+      # yarn.lock이 동일하면 → 캐시 히트 → 다음 job에서 install 생략
+      - name: Save node_modules cache
+        uses: actions/cache/save@v4
+        with:
+          path: node_modules
+          key: nm-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
+  # ─────────────────────────────────────────────────────
+  # 2단계-A: 품질 검사 (병렬 실행)
+  #
+  # matrix 전략으로 3개의 검사를 각각 별도 러너에서 동시 실행:
+  #   - Type Check: TypeScript 타입 오류 검사
+  #   - Lint: ESLint 코드 품질/스타일 검사
+  #   - Format: Prettier 포맷팅 규칙 준수 여부
+  #
+  # fail-fast: false → 하나가 실패해도 나머지는 계속 실행
+  # → 한 번의 CI 실행으로 모든 문제를 확인 가능
+  # ─────────────────────────────────────────────────────
+  quality:
+    name: Quality (${{ matrix.check.name }})
+    runs-on: ubuntu-latest
+    needs: install
+    strategy:
+      fail-fast: false
+      matrix:
+        check:
+          - { name: Type Check, command: type-check }
+          - { name: Lint, command: lint }
+          - { name: Format, command: 'format:check' }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      - name: ${{ matrix.check.name }}
+        run: yarn ${{ matrix.check.command }}
+
+  # ─────────────────────────────────────────────────────
+  # 2단계-B: 테스트 (quality와 동시에 병렬 실행)
+  #
+  # Node.js 18, 20, 22에서 각각 테스트 실행
+  # → engines: ">=18" 선언에 대한 실제 호환성 보장
+  #
+  # Node 20에서만 커버리지를 수집하여 Codecov에 업로드
+  # (모든 버전에서 수집하면 중복 + 불필요한 시간 소모)
+  # ─────────────────────────────────────────────────────
+  test:
+    name: Test (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    needs: install
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # Node 20에서만 커버리지 수집, 나머지는 일반 테스트만
+      - name: Run tests
+        run: |
+          if [ "${{ matrix.node-version }}" = "20" ]; then
+            yarn test:coverage
+          else
+            yarn test
+          fi
+
+      # 커버리지 리포트를 Codecov에 업로드
+      # public repo는 CODECOV_TOKEN 없이도 동작하지만
+      # 설정해두면 더 안정적 (tokenless upload는 간헐적 실패 가능)
+      - name: Upload coverage to Codecov
+        if: matrix.node-version == 20
+        uses: codecov/codecov-action@v5
+        with:
+          files: coverage/lcov.info
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false # Codecov 장애 시 CI가 실패하지 않도록
+
+  # ─────────────────────────────────────────────────────
+  # 3단계: 프로덕션 빌드
+  #
+  # quality 3개 + test 3개 = 총 6개 job이 모두 통과해야 실행
+  # 빌드 후 dist/에 CJS + ESM + .d.ts가 정상 생성됐는지 검증
+  # ─────────────────────────────────────────────────────
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [quality, test]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      - name: Build
+        run: yarn build
+
+      # dist/ 산출물 검증 — CJS, ESM, .d.ts 파일이 모두 존재하는지 확인
+      # 빌드가 성공해도 entry 설정 실수로 파일이 빠질 수 있으므로
+      - name: Verify build output
+        run: |
+          echo "=== Build output ==="
+          ls -lh dist/
+
+          EXPECTED_FILES=("index.js" "index.cjs" "index.d.ts")
+          MISSING=()
+          for f in "${EXPECTED_FILES[@]}"; do
+            if [ ! -f "dist/$f" ]; then
+              MISSING+=("$f")
+            fi
+          done
+
+          if [ ${#MISSING[@]} -gt 0 ]; then
+            echo "::error::Missing build artifacts: ${MISSING[*]}"
+            exit 1
+          fi
+          echo "All expected files present"
+
+      # publish job에서 사용할 빌드 결과물 업로드
+      - name: Upload build artifacts
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 7
+
+  # ─────────────────────────────────────────────────────
+  # 4단계: npm 배포 (v* 태그 push일 때만)
+  #
+  # 실행 조건:
+  #   - v* 태그 push (예: git tag v0.2.0 && git push --tags)
+  #   - build job 통과
+  #
+  # 사전 준비 (한 번만):
+  #   1) npmjs.com → Access Tokens → Generate (Automation 타입)
+  #   2) GitHub repo Settings → Secrets → NPM_TOKEN 추가
+  #
+  # 태그의 버전과 package.json의 버전이 일치하는지 검증 후 배포
+  # → 실수로 잘못된 버전 태그를 push하는 것을 방지
+  # ─────────────────────────────────────────────────────
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: read
+      id-token: write # npm provenance 지원 (선택)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      # npm publish에 NODE_AUTH_TOKEN을 인식시키려면
+      # setup-node에 registry-url을 명시하여 .npmrc를 생성해야 함
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      # 태그 버전 (v0.2.0 → 0.2.0)과 package.json 버전이 일치하는지 검증
+      - name: Verify version match
+        run: |
+          TAG_VERSION="${GITHUB_REF#refs/tags/v}"
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          echo "Tag: $TAG_VERSION | package.json: $PKG_VERSION"
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "::error::Tag version ($TAG_VERSION) does not match package.json ($PKG_VERSION)"
+            exit 1
+          fi
+
+      - name: Publish
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

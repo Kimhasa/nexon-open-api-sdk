@@ -1,0 +1,44 @@
+# ─────────────────────────────────────────────────────
+# Composite Action: 공통 setup
+#
+# quality, test, build 등 여러 job에서 반복되는
+# corepack → setup-node → cache restore를 한 곳에 정의
+#
+# 사용법:
+#   steps:
+#     - uses: actions/checkout@v4   ← 반드시 먼저!
+#     - uses: ./.github/actions/setup
+#       with:
+#         node-version: "22"        ← 필요할 때만 오버라이드
+# ─────────────────────────────────────────────────────
+name: Setup Node & Restore Cache
+description: Enable Corepack, setup Node, restore node_modules cache
+
+inputs:
+  node-version:
+    description: Node.js version
+    required: false
+    default: '20'
+
+runs:
+  using: composite
+  steps:
+    # Corepack을 setup-node보다 먼저 활성화해야 함
+    # packageManager: "yarn@4.x"를 인식하려면 Corepack이 필요
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    # install job에서 저장한 node_modules 캐시를 복원
+    # key가 매칭 안 되면 restore-keys의 prefix로 가장 최근 캐시 복원
+    - name: Restore node_modules
+      uses: actions/cache/restore@v4
+      with:
+        path: node_modules
+        key: nm-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+        restore-keys: |
+          nm-${{ runner.os }}-
