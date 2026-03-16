@@ -1,0 +1,136 @@
+{
+  "version": 2,
+  "lastChecked": "2026-03-16T06:10:50.064Z",
+  "games": {
+    "maplestory": {
+      "name": "MapleStory",
+      "portalPath": "/ko/game/maplestory/",
+      "categories": {
+        "14": "캐릭터 정보 조회",
+        "15": "유니온 정보 조회",
+        "16": "길드 정보 조회",
+        "17": "확률 정보 조회",
+        "18": "랭킹 정보 조회",
+        "24": "공지 정보 조회"
+      }
+    },
+    "maplestorym": {
+      "name": "MapleStory M",
+      "portalPath": "/ko/game/maplestorym/",
+      "categories": {
+        "1": "캐릭터 정보 조회",
+        "25": "공지 정보 조회",
+        "52": "길드 정보 조회",
+        "53": "유니온 정보 조회",
+        "54": "랭킹 정보 조회"
+      }
+    },
+    "maplestorysea": {
+      "name": "MapleStory SEA",
+      "portalPath": "/ko/game/maplestorysea/",
+      "categories": {
+        "45": "캐릭터 정보 조회",
+        "46": "유니온 정보 조회",
+        "47": "길드 정보 조회"
+      }
+    },
+    "maplestorytw": {
+      "name": "MapleStory TW",
+      "portalPath": "/ko/game/maplestorytw/",
+      "categories": {
+        "49": "캐릭터 정보 조회",
+        "50": "유니온 정보 조회",
+        "51": "길드 정보 조회"
+      }
+    },
+    "fconline": {
+      "name": "FC Online",
+      "portalPath": "/ko/game/fconline/",
+      "categories": {
+        "2": "계정 정보 조회",
+        "3": "매치 정보 조회",
+        "4": "랭커 정보 조회",
+        "5": "메타데이터 조회",
+        "6": "이미지 조회"
+      }
+    },
+    "mabinogi": {
+      "name": "Mabinogi",
+      "portalPath": "/ko/game/mabinogi/",
+      "categories": {
+        "32": "NPC 상점 조회",
+        "33": "경매장 조회",
+        "34": "거대한 외침 조회"
+      }
+    },
+    "tfd": {
+      "name": "The First Descendant",
+      "portalPath": "/ko/game/tfd/",
+      "categories": {
+        "20": "계정 정보 조회",
+        "21": "메타데이터 조회",
+        "22": "모듈 추천 조회"
+      }
+    },
+    "suddenattack": {
+      "name": "Sudden Attack",
+      "portalPath": "/ko/game/suddenattack/",
+      "categories": {
+        "43": "계정 정보 조회",
+        "44": "매치 정보 조회",
+        "48": "메타데이터 조회"
+      }
+    },
+    "v4": {
+      "name": "V4",
+      "portalPath": "/ko/game/v4/",
+      "categories": {
+        "9": "캐릭터 정보 조회"
+      }
+    },
+    "hit2": {
+      "name": "HIT2",
+      "portalPath": "/ko/game/hit2/",
+      "categories": {
+        "10": "캐릭터 정보 조회"
+      }
+    },
+    "mabinogiheroes": {
+      "name": "마비노기 영웅전",
+      "portalPath": "/ko/game/mabinogiheroes/",
+      "categories": {}
+    },
+    "kartrider": {
+      "name": "카트라이더 러쉬플러스",
+      "portalPath": "/ko/game/kartrider/",
+      "categories": {}
+    },
+    "baramnara": {
+      "name": "바람의나라",
+      "portalPath": "/ko/game/baramnara/",
+      "categories": {}
+    },
+    "baramyeon": {
+      "name": "바람의나라: 연",
+      "portalPath": "/ko/game/baramyeon/",
+      "categories": {}
+    },
+    "crazyarcade": {
+      "name": "크레이지 아케이드",
+      "portalPath": "/ko/game/crazyarcade/",
+      "categories": {}
+    }
+  },
+  "externalApis": {
+    "dnf": {
+      "name": "던전앤파이터",
+      "portal": "https://developers.neople.co.kr/contents/apiDocs/df",
+      "note": "네오플 개발자 포털에서 별도 제공 — 넥슨 Open API 아님"
+    },
+    "cyphers": {
+      "name": "사이퍼즈",
+      "portal": "https://developers.neople.co.kr/contents/apiDocs/cyphers",
+      "note": "네오플 개발자 포털에서 별도 제공 — 넥슨 Open API 아님"
+    }
+  }
+}
