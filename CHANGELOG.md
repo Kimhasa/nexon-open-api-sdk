@@ -10,6 +10,7 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 ## [Unreleased]
 
 ### Added
+
 - `AbstractGameClient` base class for multi-game architecture support
 - EA SPORTS FC Online 클라이언트 — 18개 메서드
   - 계정 정보 (5): getOuid, getBasic, getMaxDivision, getMatchList, getTradeList
@@ -29,6 +30,7 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 ## [0.1.0] - 2025-06-01
 
 ### Added
+
 - 초기 릴리즈
 - 메이플스토리 KMS 클라이언트 — 45개 엔드포인트
   - character (22), union (4), guild (2), ranking (6), history (3), notice (8)

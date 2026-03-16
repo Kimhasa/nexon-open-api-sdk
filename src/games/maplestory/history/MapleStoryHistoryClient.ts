@@ -1,15 +1,6 @@
 import type { HttpClient } from '../../../core/http/HttpClient.js';
-import {
-  STARFORCE_HISTORY_SHAPE,
-  POTENTIAL_HISTORY_SHAPE,
-  CUBE_HISTORY_SHAPE,
-} from '../shapes.js';
-import type {
-  CubeHistory,
-  HistoryRequest,
-  PotentialHistory,
-  StarforceHistory,
-} from './types.js';
+import { STARFORCE_HISTORY_SHAPE, POTENTIAL_HISTORY_SHAPE, CUBE_HISTORY_SHAPE } from '../shapes.js';
+import type { CubeHistory, HistoryRequest, PotentialHistory, StarforceHistory } from './types.js';
 
 /**
  * 메이플스토리 확률/이력 API 클라이언트.

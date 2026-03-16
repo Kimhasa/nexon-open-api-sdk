@@ -37,9 +37,9 @@
 
 ## Implementation Status
 
-| Category | # Endpoints | Types | Shapes | Client | Tests | Status |
-|----------|-------------|-------|--------|--------|-------|--------|
-| {cat} | {n} | - | - | - | - | not-started |
+| Category | # Endpoints | Types | Shapes | Client | Tests | Status      |
+| -------- | ----------- | ----- | ------ | ------ | ----- | ----------- |
+| {cat}    | {n}         | -     | -      | -      | -     | not-started |
 
 ## Notes
 
@@ -66,20 +66,20 @@
 
 #### Query Parameters
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| ocid | string | yes | Character identifier |
-| date | string | no | Query date (YYYY-MM-DD). Defaults to previous day |
+| Parameter | Type   | Required | Description                                       |
+| --------- | ------ | -------- | ------------------------------------------------- |
+| ocid      | string | yes      | Character identifier                              |
+| date      | string | no       | Query date (YYYY-MM-DD). Defaults to previous day |
 
 #### Response
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| date | string | yes | Query date |
-| character_name | string | yes | Character name |
-| character_level | number | yes | Character level |
-| some_array | Object[] | yes | Array of nested objects |
-| optional_field | string | no | Nullable field |
+| Field           | Type     | Required | Description             |
+| --------------- | -------- | -------- | ----------------------- |
+| date            | string   | yes      | Query date              |
+| character_name  | string   | yes      | Character name          |
+| character_level | number   | yes      | Character level         |
+| some_array      | Object[] | yes      | Array of nested objects |
+| optional_field  | string   | no       | Nullable field          |
 
 <!--
   Type 표기 규칙:
@@ -93,10 +93,10 @@
 
 ##### some_array element
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| sub_field | string | yes | Description |
-| sub_number | number | yes | Description |
+| Field      | Type   | Required | Description |
+| ---------- | ------ | -------- | ----------- |
+| sub_field  | string | yes      | Description |
+| sub_number | number | yes      | Description |
 
 #### Example Response
 
@@ -105,9 +105,7 @@
   "date": "2025-01-01T00:00+09:00",
   "character_name": "TestChar",
   "character_level": 275,
-  "some_array": [
-    { "sub_field": "value", "sub_number": 100 }
-  ],
+  "some_array": [{ "sub_field": "value", "sub_number": 100 }],
   "optional_field": null
 }
 ```

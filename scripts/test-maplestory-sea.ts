@@ -137,8 +137,7 @@ if (ocid) {
 
   await test('character.getHexaMatrix', async () => {
     const r = await client.maplestorySEA.character.getHexaMatrix({ ocid: ocid! });
-    if (!r.character_hexa_core_equipment)
-      throw new Error('character_hexa_core_equipment 없음');
+    if (!r.character_hexa_core_equipment) throw new Error('character_hexa_core_equipment 없음');
   });
 
   await test('character.getHexaMatrixStat', async () => {
@@ -166,8 +165,7 @@ if (ocid) {
 
   await test('union.getArtifact', async () => {
     const r = await client.maplestorySEA.union.getArtifact({ ocid: ocid! });
-    if (r.union_artifact_remain_ap === undefined)
-      throw new Error('union_artifact_remain_ap 없음');
+    if (r.union_artifact_remain_ap === undefined) throw new Error('union_artifact_remain_ap 없음');
   });
 
   await test('union.getChampion', async () => {

@@ -5,9 +5,11 @@
  * @template T - 목록 아이템 타입
  */
 export interface CursorPage<T> {
+  /** 현재 페이지 아이템 목록 */
+  readonly items: T[];
   /** 다음 페이지 커서. `null`이면 마지막 페이지입니다. */
   readonly next_cursor: string | null;
-  /** 현재 페이지 아이템 목록 */
+  /** 현재 페이지 아이템 수 */
   readonly count: number;
 }
 

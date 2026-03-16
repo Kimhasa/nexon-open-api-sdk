@@ -13,21 +13,21 @@ import { NexonClient } from 'nexon-open-api';
 const client = new NexonClient({ apiKey: 'your-api-key' });
 
 const { ocid } = await client.maplestory.getOcid('캐릭터명');
-const basic    = await client.maplestory.character.getBasic({ ocid });
+const basic = await client.maplestory.character.getBasic({ ocid });
 ```
 
 ## 개발 명령어
 
-| 명령어 | 설명 |
-|--------|------|
-| `yarn dev` | tsup watch 모드 |
-| `yarn build` | 프로덕션 빌드 (`dist/`) |
-| `yarn type-check` | `tsc --noEmit` |
-| `yarn lint` / `yarn lint:fix` | ESLint |
-| `yarn format` | Prettier |
-| `yarn test` | Vitest 1회 실행 |
-| `yarn test:watch` | Vitest watch |
-| `yarn release` | 버전 범프 + npm publish |
+| 명령어                        | 설명                    |
+| ----------------------------- | ----------------------- |
+| `yarn dev`                    | tsup watch 모드         |
+| `yarn build`                  | 프로덕션 빌드 (`dist/`) |
+| `yarn type-check`             | `tsc --noEmit`          |
+| `yarn lint` / `yarn lint:fix` | ESLint                  |
+| `yarn format`                 | Prettier                |
+| `yarn test`                   | Vitest 1회 실행         |
+| `yarn test:watch`             | Vitest watch            |
+| `yarn release`                | 버전 범프 + npm publish |
 
 **코드 변경 후 반드시**: `yarn type-check` → `yarn test` → `yarn build` 순서로 확인.
 
@@ -151,9 +151,9 @@ SDK 내부에서 지역 타임존 기준 `YYYY-MM-DD` 변환.
 ```ts
 throw new NexonRateLimitError(
   'API 호출 한도를 초과했습니다. ' +
-  'SDK가 자동으로 3회 재시도했으나 실패했습니다. ' +
-  'new NexonClient({ maxRetries: 5 })로 재시도 횟수를 늘리거나 요청 빈도를 줄여주세요.',
-  { code: 'OPENAPI00007', retryAfter: 1000 }
+    'SDK가 자동으로 3회 재시도했으나 실패했습니다. ' +
+    'new NexonClient({ maxRetries: 5 })로 재시도 횟수를 늘리거나 요청 빈도를 줄여주세요.',
+  { code: 'OPENAPI00007', retryAfter: 1000 },
 );
 ```
 
@@ -163,25 +163,25 @@ API 서버 400 응답에 의존하지 않고 SDK에서 즉시 throw (빈 ocid, �
 
 ### 메서드 네이밍
 
-| 패턴 | 메서드명 | 반환 타입 |
-|---|---|---|
-| 단건 조회 | `getXxx(params)` | `Promise<T>` |
-| 이름으로 단건 조회 | `getXxxByName(name)` | `Promise<T>` |
-| 식별자 조회 | `getOcid(name)` | `Promise<OCID>` |
-| 단일 페이지 | `listXxx(params)` | `Promise<CursorPage<T>>` |
-| 자동 순회 | `iterateXxx(params)` | `AsyncGenerator<T>` |
-| 전체 수집 | `collectXxx(params)` | `Promise<T[]>` |
+| 패턴               | 메서드명             | 반환 타입                |
+| ------------------ | -------------------- | ------------------------ |
+| 단건 조회          | `getXxx(params)`     | `Promise<T>`             |
+| 이름으로 단건 조회 | `getXxxByName(name)` | `Promise<T>`             |
+| 식별자 조회        | `getOcid(name)`      | `Promise<OCID>`          |
+| 단일 페이지        | `listXxx(params)`    | `Promise<CursorPage<T>>` |
+| 자동 순회          | `iterateXxx(params)` | `AsyncGenerator<T>`      |
+| 전체 수집          | `collectXxx(params)` | `Promise<T[]>`           |
 
 **금지**: 메서드 이름에 컨텍스트 중복 — `character.getBasic()` ✅, `character.getCharacterBasic()` ❌
 
 ## 파일 네이밍 규칙
 
-| 종류 | 패턴 | 예시 |
-|------|------|------|
-| 클래스 파일 | `PascalCase.ts` | `NexonClient.ts` |
-| 타입 파일 | `types.ts` | `character/types.ts` |
-| 유틸/인프라 | `kebab-case.ts` | `maple-date.ts` |
-| 테스트 | `[파일명].test.ts` | `maplestory-client.test.ts` |
+| 종류        | 패턴               | 예시                        |
+| ----------- | ------------------ | --------------------------- |
+| 클래스 파일 | `PascalCase.ts`    | `NexonClient.ts`            |
+| 타입 파일   | `types.ts`         | `character/types.ts`        |
+| 유틸/인프라 | `kebab-case.ts`    | `maple-date.ts`             |
+| 테스트      | `[파일명].test.ts` | `maplestory-client.test.ts` |
 
 **barrel file (index.ts) 사용 안 함** — `src/index.ts` 단 하나만 허용 (public exports 전용).
 
@@ -201,25 +201,25 @@ API 서버 400 응답에 의존하지 않고 SDK에서 즉시 throw (빈 ocid, �
 
 Base URL: `https://open.api.nexon.com/`
 
-| 게임 | Client 프로퍼티 | Client 클래스 | Path Prefix | Base Class | 상태 |
-|------|----------------|--------------|-------------|------------|------|
-| 메이플스토리 (KMS) | `client.maplestory` | `MapleStoryClient` | `maplestory` | `AbstractMapleBaseClient` | **구현 완료** |
-| 메이플스토리M | `client.maplestoryM` | `MapleStoryMClient` | `maplestorym` | `AbstractMapleBaseClient` | **구현 완료** |
-| MapleStory SEA | `client.maplestorySEA` | `MapleStorySEAClient` | `maplestorysea` | `AbstractMapleBaseClient` | 진행 중 |
-| MapleStory Taiwan | `client.maplestoryTW` | `MapleStoryTWClient` | `maplestorytw` | `AbstractMapleBaseClient` | 예정 |
-| EA SPORTS FC 온라인 | `client.fcOnline` | `FcOnlineClient` | `fconline` | `AbstractGameClient` | **구현 완료** |
-| 던전앤파이터 | `client.dnf` | `DnfClient` | `dnf` | `AbstractGameClient` | 예정 |
-| 마비노기 | `client.mabinogi` | `MabinogiClient` | `mabinogi` | `AbstractGameClient` | 예정 |
-| 마비노기 영웅전 | `client.mabinogiHeroes` | `MabinogiHeroesClient` | `mabinogiheroes` | `AbstractGameClient` | 예정 |
-| 서든어택 | `client.suddenAttack` | `SuddenAttackClient` | `suddenattack` | `AbstractGameClient` | 예정 |
-| 퍼스트 디센던트 | `client.firstDescendant` | `FirstDescendantClient` | `tfd` | `AbstractGameClient` | 예정 |
-| 카트라이더 러쉬플러스 | `client.kartrider` | `KartriderClient` | `kartrider` | `AbstractGameClient` | 예정 |
-| 바람의나라 | `client.baram` | `BaramClient` | `baramnara` | `AbstractGameClient` | 예정 |
-| 바람의나라: 연 | `client.baramYeon` | `BaramYeonClient` | `baramyeon` | `AbstractGameClient` | 예정 |
-| 히트2 | `client.hit2` | `Hit2Client` | `hit2` | `AbstractGameClient` | 예정 |
-| 크레이지 아케이드 | `client.crazyArcade` | `CrazyArcadeClient` | `crazyarcade` | `AbstractGameClient` | 예정 |
-| V4 | `client.v4` | `V4Client` | `v4` | `AbstractGameClient` | 예정 |
-| 사이퍼즈 | `client.cyphers` | `CyphersClient` | `cyphers` | `AbstractGameClient` | 예정 |
+| 게임                  | Client 프로퍼티          | Client 클래스           | Path Prefix      | Base Class                | 상태          |
+| --------------------- | ------------------------ | ----------------------- | ---------------- | ------------------------- | ------------- |
+| 메이플스토리 (KMS)    | `client.maplestory`      | `MapleStoryClient`      | `maplestory`     | `AbstractMapleBaseClient` | **구현 완료** |
+| 메이플스토리M         | `client.maplestoryM`     | `MapleStoryMClient`     | `maplestorym`    | `AbstractMapleBaseClient` | **구현 완료** |
+| MapleStory SEA        | `client.maplestorySEA`   | `MapleStorySEAClient`   | `maplestorysea`  | `AbstractMapleBaseClient` | 진행 중       |
+| MapleStory Taiwan     | `client.maplestoryTW`    | `MapleStoryTWClient`    | `maplestorytw`   | `AbstractMapleBaseClient` | 예정          |
+| EA SPORTS FC 온라인   | `client.fcOnline`        | `FcOnlineClient`        | `fconline`       | `AbstractGameClient`      | **구현 완료** |
+| 던전앤파이터          | `client.dnf`             | `DnfClient`             | `dnf`            | `AbstractGameClient`      | 예정          |
+| 마비노기              | `client.mabinogi`        | `MabinogiClient`        | `mabinogi`       | `AbstractGameClient`      | 예정          |
+| 마비노기 영웅전       | `client.mabinogiHeroes`  | `MabinogiHeroesClient`  | `mabinogiheroes` | `AbstractGameClient`      | 예정          |
+| 서든어택              | `client.suddenAttack`    | `SuddenAttackClient`    | `suddenattack`   | `AbstractGameClient`      | 예정          |
+| 퍼스트 디센던트       | `client.firstDescendant` | `FirstDescendantClient` | `tfd`            | `AbstractGameClient`      | 예정          |
+| 카트라이더 러쉬플러스 | `client.kartrider`       | `KartriderClient`       | `kartrider`      | `AbstractGameClient`      | 예정          |
+| 바람의나라            | `client.baram`           | `BaramClient`           | `baramnara`      | `AbstractGameClient`      | 예정          |
+| 바람의나라: 연        | `client.baramYeon`       | `BaramYeonClient`       | `baramyeon`      | `AbstractGameClient`      | 예정          |
+| 히트2                 | `client.hit2`            | `Hit2Client`            | `hit2`           | `AbstractGameClient`      | 예정          |
+| 크레이지 아케이드     | `client.crazyArcade`     | `CrazyArcadeClient`     | `crazyarcade`    | `AbstractGameClient`      | 예정          |
+| V4                    | `client.v4`              | `V4Client`              | `v4`             | `AbstractGameClient`      | 예정          |
+| 사이퍼즈              | `client.cyphers`         | `CyphersClient`         | `cyphers`        | `AbstractGameClient`      | 예정          |
 
 ## 커밋 컨벤션
 
@@ -232,15 +232,15 @@ prefix(scope): 주요 메시지 (한글 OK, 50자 이내)
 Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 ```
 
-| prefix | 용도 |
-|--------|------|
-| `feat` | 새 기능 |
-| `fix` | 버그 수정 |
+| prefix     | 용도                       |
+| ---------- | -------------------------- |
+| `feat`     | 새 기능                    |
+| `fix`      | 버그 수정                  |
 | `refactor` | 구조 개선 (동작 변경 없음) |
-| `chore` | 설정, 의존성, 빌드 |
-| `docs` | 문서 |
-| `test` | 테스트 |
-| `release` | 릴리즈 |
+| `chore`    | 설정, 의존성, 빌드         |
+| `docs`     | 문서                       |
+| `test`     | 테스트                     |
+| `release`  | 릴리즈                     |
 
 ## 테스트 전략
 

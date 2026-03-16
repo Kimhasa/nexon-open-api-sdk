@@ -30,7 +30,11 @@ export type { DateRange } from './games/_base/maple-date.js';
 export type { CursorPage, CursorPageRequest, AutoPaginationOptions } from './core/types/index.js';
 
 // MapleStory types
-export type { Achievement, AccountAchievement, AchievementInfo } from './games/maplestory/user-types.js';
+export type {
+  Achievement,
+  AccountAchievement,
+  AchievementInfo,
+} from './games/maplestory/user-types.js';
 export type {
   CharacterList,
   AccountCharacterList,

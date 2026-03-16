@@ -46,9 +46,9 @@ export class MapleStorySEAGuildClient {
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
    */
   async getBasic(params: GuildIdDateRequest): Promise<SEAGuildBasic> {
-    return this.http.get<SEAGuildBasic>(
-      `${MapleStorySEAGuildClient.BASE}/guild/basic`,
-      { oguild_id: params.oguild_id, date: params.date as string | undefined },
-    );
+    return this.http.get<SEAGuildBasic>(`${MapleStorySEAGuildClient.BASE}/guild/basic`, {
+      oguild_id: params.oguild_id,
+      date: params.date as string | undefined,
+    });
   }
 }

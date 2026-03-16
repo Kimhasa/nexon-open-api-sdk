@@ -2,7 +2,10 @@ import { http, HttpResponse } from 'msw';
 import { seaOcidFixture } from '../../fixtures/maplestory-sea/ocid.fixture.js';
 import { seaCharacterBasicFixture } from '../../fixtures/maplestory-sea/character-basic.fixture.js';
 import { seaUnionFixture } from '../../fixtures/maplestory-sea/union.fixture.js';
-import { seaGuildIdFixture, seaGuildBasicFixture } from '../../fixtures/maplestory-sea/guild.fixture.js';
+import {
+  seaGuildIdFixture,
+  seaGuildBasicFixture,
+} from '../../fixtures/maplestory-sea/guild.fixture.js';
 
 const BASE = 'https://open.api.nexon.com/maplestorysea/v1';
 

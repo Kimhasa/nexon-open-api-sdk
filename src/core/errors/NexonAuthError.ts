@@ -17,10 +17,7 @@ import type { NexonErrorCode } from './error-codes.js';
  * ```
  */
 export class NexonAuthError extends NexonError {
-  constructor(
-    message: string,
-    { status, code }: { status: number; code: NexonErrorCode },
-  ) {
+  constructor(message: string, { status, code }: { status: number; code: NexonErrorCode }) {
     super(message, { status, code });
     this.name = 'NexonAuthError';
     Object.setPrototypeOf(this, new.target.prototype);

@@ -39,10 +39,17 @@
 
 ```ts
 // before
-interface CharacterBasic { character_name: string; character_level: number; }
+interface CharacterBasic {
+  character_name: string;
+  character_level: number;
+}
 
 // after (MINOR)
-interface CharacterBasic { character_name: string; character_level: number; new_field?: string; }
+interface CharacterBasic {
+  character_name: string;
+  character_level: number;
+  new_field?: string;
+}
 ```
 
 ### 넥슨이 응답 필드를 삭제한 경우

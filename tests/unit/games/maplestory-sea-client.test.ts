@@ -9,10 +9,13 @@ import type { GuildId } from '../../../src/games/_base/maple-base-types.js';
 import { seaOcidFixture } from '../../fixtures/maplestory-sea/ocid.fixture.js';
 import { seaCharacterBasicFixture } from '../../fixtures/maplestory-sea/character-basic.fixture.js';
 import { seaUnionFixture } from '../../fixtures/maplestory-sea/union.fixture.js';
-import { seaGuildIdFixture, seaGuildBasicFixture } from '../../fixtures/maplestory-sea/guild.fixture.js';
+import {
+  seaGuildIdFixture,
+  seaGuildBasicFixture,
+} from '../../fixtures/maplestory-sea/guild.fixture.js';
 
 const TEST_API_KEY = 'test-api-key';
-const createClient = () => {
+const createClient = (): MapleStorySEAClient => {
   const http = new HttpClient({ apiKey: TEST_API_KEY });
   return new MapleStorySEAClient(http);
 };

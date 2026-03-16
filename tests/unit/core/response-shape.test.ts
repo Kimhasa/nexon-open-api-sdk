@@ -149,9 +149,7 @@ describe('validateShape', () => {
     const result = validateShape(TEST_URL, data, shape);
     // old_field는 deprecated이므로 unexpectedKeys에 포함되지 않음
     expect(result).toBeNull();
-    expect(spy).toHaveBeenCalledWith(
-      '[nexon-sdk] DEPRECATED: old_field는 제거 예정입니다.',
-    );
+    expect(spy).toHaveBeenCalledWith('[nexon-sdk] DEPRECATED: old_field는 제거 예정입니다.');
   });
 
   it('url 필드가 결과에 포함된다', () => {

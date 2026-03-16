@@ -13,7 +13,7 @@ import {
 } from '../../fixtures/fc-online/fixtures.fixture.js';
 
 const TEST_API_KEY = 'test-api-key';
-const createClient = () => {
+const createClient = (): FcOnlineClient => {
   const http = new HttpClient({ apiKey: TEST_API_KEY });
   return new FcOnlineClient(http);
 };

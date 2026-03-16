@@ -75,8 +75,4 @@ export type {
 } from './union/types.js';
 
 // Guild types
-export type {
-  SEAGuildIdResponse,
-  SEAGuildSkill,
-  SEAGuildBasic,
-} from './guild/types.js';
+export type { SEAGuildIdResponse, SEAGuildSkill, SEAGuildBasic } from './guild/types.js';

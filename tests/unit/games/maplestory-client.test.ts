@@ -13,12 +13,15 @@ import { ocidFixture } from '../../fixtures/maplestory/ocid.fixture.js';
 import { characterBasicFixture } from '../../fixtures/maplestory/character-basic.fixture.js';
 import { unionFixture } from '../../fixtures/maplestory/union.fixture.js';
 import { guildIdFixture, guildBasicFixture } from '../../fixtures/maplestory/guild.fixture.js';
-import { overallRankingFixture } from '../../fixtures/maplestory/ranking.fixture.js';
+
 import { starforceHistoryFixture } from '../../fixtures/maplestory/history.fixture.js';
-import { noticeListFixture, noticeDetailFixture } from '../../fixtures/maplestory/notice.fixture.js';
+import {
+  noticeListFixture,
+  noticeDetailFixture,
+} from '../../fixtures/maplestory/notice.fixture.js';
 
 const TEST_API_KEY = 'test-api-key';
-const createMapleStoryClient = () => {
+const createMapleStoryClient = (): MapleStoryClient => {
   const http = new HttpClient({ apiKey: TEST_API_KEY });
   return new MapleStoryClient(http);
 };

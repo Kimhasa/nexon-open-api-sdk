@@ -79,10 +79,10 @@ export class MapleStorySEACharacterClient {
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
    */
   async getStat(params: OcidDateRequest): Promise<SEACharacterStat> {
-    return this.http.get<SEACharacterStat>(
-      `${MapleStorySEACharacterClient.BASE}/character/stat`,
-      { ocid: params.ocid, date: params.date as string | undefined },
-    );
+    return this.http.get<SEACharacterStat>(`${MapleStorySEACharacterClient.BASE}/character/stat`, {
+      ocid: params.ocid,
+      date: params.date as string | undefined,
+    });
   }
 
   // ─── GET /maplestorysea/v1/character/hyper-stat ─────────────────────────

@@ -10,15 +10,13 @@ import { NexonServerError } from '../../../src/core/errors/NexonServerError.js';
 const TEST_URL = 'https://test-api.example.com/test';
 const TEST_API_KEY = 'test-api-key-123';
 
-const createClient = (overrides: Record<string, unknown> = {}) =>
+const createClient = (overrides: Record<string, unknown> = {}): HttpClient =>
   new HttpClient({ apiKey: TEST_API_KEY, ...overrides });
 
 describe('HttpClient', () => {
   describe('성공적인 요청', () => {
     it('JSON 응답을 파싱하여 반환한다', async () => {
-      server.use(
-        http.get(TEST_URL, () => HttpResponse.json({ name: 'test', value: 42 })),
-      );
+      server.use(http.get(TEST_URL, () => HttpResponse.json({ name: 'test', value: 42 })));
 
       const client = createClient();
       const result = await client.get<{ name: string; value: number }>(TEST_URL);
@@ -195,9 +193,7 @@ describe('HttpClient', () => {
 
     it('Response 인터셉터가 실행된다', async () => {
       const interceptor = vi.fn();
-      server.use(
-        http.get(TEST_URL, () => HttpResponse.json({ ok: true })),
-      );
+      server.use(http.get(TEST_URL, () => HttpResponse.json({ ok: true })));
 
       const client = createClient();
       client.addResponseInterceptor(interceptor);

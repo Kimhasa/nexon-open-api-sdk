@@ -34,17 +34,15 @@ export function classifyError(
 
   // Auth errors
   if (code === NEXON_ERROR_CODES.UNAUTHORIZED || code === NEXON_ERROR_CODES.FORBIDDEN) {
-    return new NexonAuthError(
-      `${baseMessage}\n→ API 키를 확인하세요: https://openapi.nexon.com/`,
-      { status, code },
-    );
+    return new NexonAuthError(`${baseMessage}\n→ API 키를 확인하세요: https://openapi.nexon.com/`, {
+      status,
+      code,
+    });
   }
 
   // Not found
   if (code === NEXON_ERROR_CODES.NOT_FOUND) {
-    return new NexonNotFoundError(
-      `${baseMessage}\n→ 캐릭터명 또는 길드명이 올바른지 확인하세요.`,
-    );
+    return new NexonNotFoundError(`${baseMessage}\n→ 캐릭터명 또는 길드명이 올바른지 확인하세요.`);
   }
 
   // Data not ready

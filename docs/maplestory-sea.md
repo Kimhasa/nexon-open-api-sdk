@@ -30,54 +30,54 @@ const ocid = await client.maplestorySEA.getOcid('CharacterName');
 ```ts
 const char = client.maplestorySEA.character;
 
-await char.getBasic({ ocid });               // Basic information
-await char.getPopularity({ ocid });          // Popularity
-await char.getStat({ ocid });                // Comprehensive stats
-await char.getHyperStat({ ocid });           // Hyper Stat
-await char.getPropensity({ ocid });          // Traits (Propensity)
-await char.getAbility({ ocid });             // Ability
-await char.getItemEquipment({ ocid });       // Equipped items
-await char.getCashItemEquipment({ ocid });   // Cash items
-await char.getSymbolEquipment({ ocid });     // Symbols (Arcane/Authentic)
-await char.getSetEffect({ ocid });           // Set effects
-await char.getBeautyEquipment({ ocid });     // Hair/Face/Skin
-await char.getAndroidEquipment({ ocid });    // Android
-await char.getPetEquipment({ ocid });        // Pet equipment
-await char.getSkill({ ocid, character_skill_grade: '6' });  // Skills
-await char.getLinkSkill({ ocid });           // Link Skills
-await char.getVMatrix({ ocid });             // V Matrix
-await char.getHexaMatrix({ ocid });          // HEXA Matrix
-await char.getHexaMatrixStat({ ocid });      // HEXA Stats
-await char.getDojang({ ocid });              // Mu Lung Dojang
+await char.getBasic({ ocid }); // Basic information
+await char.getPopularity({ ocid }); // Popularity
+await char.getStat({ ocid }); // Comprehensive stats
+await char.getHyperStat({ ocid }); // Hyper Stat
+await char.getPropensity({ ocid }); // Traits (Propensity)
+await char.getAbility({ ocid }); // Ability
+await char.getItemEquipment({ ocid }); // Equipped items
+await char.getCashItemEquipment({ ocid }); // Cash items
+await char.getSymbolEquipment({ ocid }); // Symbols (Arcane/Authentic)
+await char.getSetEffect({ ocid }); // Set effects
+await char.getBeautyEquipment({ ocid }); // Hair/Face/Skin
+await char.getAndroidEquipment({ ocid }); // Android
+await char.getPetEquipment({ ocid }); // Pet equipment
+await char.getSkill({ ocid, character_skill_grade: '6' }); // Skills
+await char.getLinkSkill({ ocid }); // Link Skills
+await char.getVMatrix({ ocid }); // V Matrix
+await char.getHexaMatrix({ ocid }); // HEXA Matrix
+await char.getHexaMatrixStat({ ocid }); // HEXA Stats
+await char.getDojang({ ocid }); // Mu Lung Dojang
 ```
 
 ### Skill 조회 파라미터
 
 `character_skill_grade` 값:
 
-| 값 | 설명 |
-|---|---|
-| `"0"` | 0차 |
-| `"1"` | 1차 |
-| `"1.5"` | 1.5차 |
-| `"2"` | 2차 |
-| `"2.5"` | 2.5차 |
-| `"3"` | 3차 |
-| `"4"` | 4차 |
+| 값               | 설명          |
+| ---------------- | ------------- |
+| `"0"`            | 0차           |
+| `"1"`            | 1차           |
+| `"1.5"`          | 1.5차         |
+| `"2"`            | 2차           |
+| `"2.5"`          | 2.5차         |
+| `"3"`            | 3차           |
+| `"4"`            | 4차           |
 | `"hyperpassive"` | Hyper Passive |
-| `"hyperactive"` | Hyper Active |
-| `"5"` | 5차 |
-| `"6"` | 6차 |
+| `"hyperactive"`  | Hyper Active  |
+| `"5"`            | 5차           |
+| `"6"`            | 6차           |
 
 ## 유니온 (4개)
 
 ```ts
 const union = client.maplestorySEA.union;
 
-await union.getUnion({ ocid });      // Union level/grade
-await union.getRaider({ ocid });     // Union Raider (Legion)
-await union.getArtifact({ ocid });   // Union Artifact
-await union.getChampion({ ocid });   // Union Champion
+await union.getUnion({ ocid }); // Union level/grade
+await union.getRaider({ ocid }); // Union Raider (Legion)
+await union.getArtifact({ ocid }); // Union Artifact
+await union.getChampion({ ocid }); // Union Champion
 ```
 
 ## 길드 (2개)

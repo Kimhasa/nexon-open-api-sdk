@@ -64,7 +64,9 @@ export interface HttpClientConfig {
 }
 
 /** 요청 전 호출되는 인터셉터. 반환값으로 요청 정보를 수정할 수 있다. */
-export type RequestInterceptor = (request: HttpRequestInfo) => HttpRequestInfo | Promise<HttpRequestInfo>;
+export type RequestInterceptor = (
+  request: HttpRequestInfo,
+) => HttpRequestInfo | Promise<HttpRequestInfo>;
 
 /** 응답 후 호출되는 인터셉터. 응답을 가공하거나 사이드이펙트를 추가할 수 있다. */
 export type ResponseInterceptor = (response: HttpResponseInfo) => void | Promise<void>;

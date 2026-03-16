@@ -1,4 +1,4 @@
-import type { NexonDate, OcidDateRequest } from '../../_base/maple-base-types.js';
+import type { OcidDateRequest } from '../../_base/maple-base-types.js';
 
 // ─── GET /maplestorysea/v1/character/basic ────────────────────────────────────
 

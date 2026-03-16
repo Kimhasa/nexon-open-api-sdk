@@ -5,7 +5,10 @@ import { unionFixture } from '../../fixtures/maplestory/union.fixture.js';
 import { guildIdFixture, guildBasicFixture } from '../../fixtures/maplestory/guild.fixture.js';
 import { overallRankingFixture } from '../../fixtures/maplestory/ranking.fixture.js';
 import { starforceHistoryFixture } from '../../fixtures/maplestory/history.fixture.js';
-import { noticeListFixture, noticeDetailFixture } from '../../fixtures/maplestory/notice.fixture.js';
+import {
+  noticeListFixture,
+  noticeDetailFixture,
+} from '../../fixtures/maplestory/notice.fixture.js';
 
 const BASE = 'https://open.api.nexon.com/maplestory/v1';
 

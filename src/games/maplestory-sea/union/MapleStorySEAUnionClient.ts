@@ -1,11 +1,6 @@
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { OcidDateRequest } from '../../_base/maple-base-types.js';
-import type {
-  SEAUnion,
-  SEAUnionRaider,
-  SEAUnionArtifact,
-  SEAUnionChampion,
-} from './types.js';
+import type { SEAUnion, SEAUnionRaider, SEAUnionArtifact, SEAUnionChampion } from './types.js';
 
 /**
  * MapleStory SEA Union API client.
@@ -33,10 +28,10 @@ export class MapleStorySEAUnionClient {
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
    */
   async getUnion(params: OcidDateRequest): Promise<SEAUnion> {
-    return this.http.get<SEAUnion>(
-      `${MapleStorySEAUnionClient.BASE}/user/union`,
-      { ocid: params.ocid, date: params.date as string | undefined },
-    );
+    return this.http.get<SEAUnion>(`${MapleStorySEAUnionClient.BASE}/user/union`, {
+      ocid: params.ocid,
+      date: params.date as string | undefined,
+    });
   }
 
   // ─── GET /maplestorysea/v1/user/union-raider ───────────────────────────
@@ -48,10 +43,10 @@ export class MapleStorySEAUnionClient {
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
    */
   async getRaider(params: OcidDateRequest): Promise<SEAUnionRaider> {
-    return this.http.get<SEAUnionRaider>(
-      `${MapleStorySEAUnionClient.BASE}/user/union-raider`,
-      { ocid: params.ocid, date: params.date as string | undefined },
-    );
+    return this.http.get<SEAUnionRaider>(`${MapleStorySEAUnionClient.BASE}/user/union-raider`, {
+      ocid: params.ocid,
+      date: params.date as string | undefined,
+    });
   }
 
   // ─── GET /maplestorysea/v1/user/union-artifact ─────────────────────────
@@ -63,10 +58,10 @@ export class MapleStorySEAUnionClient {
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
    */
   async getArtifact(params: OcidDateRequest): Promise<SEAUnionArtifact> {
-    return this.http.get<SEAUnionArtifact>(
-      `${MapleStorySEAUnionClient.BASE}/user/union-artifact`,
-      { ocid: params.ocid, date: params.date as string | undefined },
-    );
+    return this.http.get<SEAUnionArtifact>(`${MapleStorySEAUnionClient.BASE}/user/union-artifact`, {
+      ocid: params.ocid,
+      date: params.date as string | undefined,
+    });
   }
 
   // ─── GET /maplestorysea/v1/user/union-champion ─────────────────────────
@@ -78,9 +73,9 @@ export class MapleStorySEAUnionClient {
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
    */
   async getChampion(params: OcidDateRequest): Promise<SEAUnionChampion> {
-    return this.http.get<SEAUnionChampion>(
-      `${MapleStorySEAUnionClient.BASE}/user/union-champion`,
-      { ocid: params.ocid, date: params.date as string | undefined },
-    );
+    return this.http.get<SEAUnionChampion>(`${MapleStorySEAUnionClient.BASE}/user/union-champion`, {
+      ocid: params.ocid,
+      date: params.date as string | undefined,
+    });
   }
 }

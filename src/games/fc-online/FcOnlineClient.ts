@@ -95,11 +95,7 @@ export class FcOnlineClient extends AbstractGameClient {
    */
   async getMaxDivision(ouid: OUID): Promise<FcMaxDivision> {
     const url = this.buildUrl('user/maxdivision');
-    return this.http.get<FcMaxDivision>(
-      url,
-      { ouid: ouid as string },
-      FC_MAX_DIVISION_SHAPE,
-    );
+    return this.http.get<FcMaxDivision>(url, { ouid: ouid as string }, FC_MAX_DIVISION_SHAPE);
   }
 
   /**

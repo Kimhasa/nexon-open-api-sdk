@@ -7,9 +7,14 @@ import { NexonBadRequestError } from '../../../src/core/errors/NexonBadRequestEr
 import { NexonDataNotReadyError } from '../../../src/core/errors/NexonDataNotReadyError.js';
 import { NexonServerError } from '../../../src/core/errors/NexonServerError.js';
 import { NexonError } from '../../../src/core/errors/NexonError.js';
-import { NEXON_ERROR_CODES } from '../../../src/core/errors/error-codes.js';
+import type { NEXON_ERROR_CODES } from '../../../src/core/errors/error-codes.js';
 
-const makePayload = (name: string, message = 'Test error') => ({
+const makePayload = (
+  name: string,
+  message = 'Test error',
+): {
+  error: { name: (typeof NEXON_ERROR_CODES)[keyof typeof NEXON_ERROR_CODES]; message: string };
+} => ({
   error: { name: name as (typeof NEXON_ERROR_CODES)[keyof typeof NEXON_ERROR_CODES], message },
 });
 

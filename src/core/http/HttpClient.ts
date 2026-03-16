@@ -3,11 +3,7 @@ import type { NexonErrorPayload } from '../errors/NexonError.js';
 import { NexonError } from '../errors/NexonError.js';
 import { validateShape } from '../validation/response-shape.js';
 import type { ShapeDescriptor, ShapeMismatch } from '../validation/response-shape.js';
-import {
-  computeRetryDelay,
-  isRetryableStatus,
-  sleep,
-} from './retry.js';
+import { computeRetryDelay, isRetryableStatus, sleep } from './retry.js';
 import type {
   HttpClientConfig,
   HttpLogger,
@@ -138,10 +134,9 @@ export class HttpClient {
           { cause: err },
         );
       }
-      throw new NexonError(
-        `네트워크 오류: ${err instanceof Error ? err.message : String(err)}`,
-        { cause: err },
-      );
+      throw new NexonError(`네트워크 오류: ${err instanceof Error ? err.message : String(err)}`, {
+        cause: err,
+      });
     }
 
     const durationMs = Date.now() - startTime;

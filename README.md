@@ -303,10 +303,10 @@ try {
 ```ts
 const client = new NexonClient({
   apiKey: 'YOUR_API_KEY',
-  timeoutMs: 10_000,        // 요청 타임아웃 (기본: 10초)
-  maxRetries: 3,             // 429/503 재시도 횟수 (기본: 3)
-  retryBaseDelayMs: 500,     // 재시도 기본 대기시간 (기본: 500ms)
-  debug: true,               // 콘솔 디버그 로그 활성화
+  timeoutMs: 10_000, // 요청 타임아웃 (기본: 10초)
+  maxRetries: 3, // 429/503 재시도 횟수 (기본: 3)
+  retryBaseDelayMs: 500, // 재시도 기본 대기시간 (기본: 500ms)
+  debug: true, // 콘솔 디버그 로그 활성화
 });
 ```
 
@@ -336,12 +336,12 @@ import { FcOnlineClient } from 'nexon-open-api/fconline';
 
 ## 상세 문서
 
-| 게임 | 문서 | 엔드포인트 |
-|------|------|-----------|
-| 메이플스토리 | [API 레퍼런스](docs/maplestory.md) | 캐릭터, 유니온, 길드, 랭킹, 확률/이력, 공지사항 |
-| 메이플스토리M | [API 레퍼런스](docs/maplestory-m.md) | 캐릭터, 유니온, 길드, 랭킹, 공지사항 |
-| MapleStorySEA | [API 레퍼런스](docs/maplestory-sea.md) | 캐릭터, 유니온, 길드 |
-| FC Online | [API 레퍼런스](docs/fc-online.md) | 계정 정보, 매치, 랭커, 메타데이터, 이미지 URL |
+| 게임          | 문서                                   | 엔드포인트                                      |
+| ------------- | -------------------------------------- | ----------------------------------------------- |
+| 메이플스토리  | [API 레퍼런스](docs/maplestory.md)     | 캐릭터, 유니온, 길드, 랭킹, 확률/이력, 공지사항 |
+| 메이플스토리M | [API 레퍼런스](docs/maplestory-m.md)   | 캐릭터, 유니온, 길드, 랭킹, 공지사항            |
+| MapleStorySEA | [API 레퍼런스](docs/maplestory-sea.md) | 캐릭터, 유니온, 길드                            |
+| FC Online     | [API 레퍼런스](docs/fc-online.md)      | 계정 정보, 매치, 랭커, 메타데이터, 이미지 URL   |
 
 ## 요구사항
 
