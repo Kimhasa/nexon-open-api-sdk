@@ -1,6 +1,6 @@
 {
   "name": "nexon-open-api",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Type-safe Nexon Open API SDK for MapleStory, FC Online, and more — zero dependencies",
   "author": "Kimhasa",
   "license": "MIT",
@@ -20,6 +20,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Kimhasa/nexon-open-api-sdk.git"
+  },
+  "homepage": "https://github.com/Kimhasa/nexon-open-api-sdk#readme",
+  "bugs": {
+    "url": "https://github.com/Kimhasa/nexon-open-api-sdk/issues"
   },
   "packageManager": "yarn@4.6.0",
   "engines": {
@@ -57,7 +61,9 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsup",
