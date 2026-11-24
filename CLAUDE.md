@@ -270,58 +270,53 @@ Base URL: `https://open.api.nexon.com/`
 범위는 넥슨 Open API 포털(`https://openapi.nexon.com`)이 제공하는 **14개 게임 + `platform`** 이다 (2026-11-24 포털 기준).
 "포털 API 수"는 포털 OpenAPI YAML의 경로 수, "SDK"는 게임 클라이언트의 public API 메서드 수다.
 
-### 구현된 게임
+### 구현된 게임 (15개, 포털 270/270)
 
-| 게임                | Client 프로퍼티        | Client 클래스         | Path Prefix     | 디렉토리 / sub-path                 | Base Class                | SDK / 포털 | 상태                         |
-| ------------------- | ---------------------- | --------------------- | --------------- | ----------------------------------- | ------------------------- | ---------- | ---------------------------- |
-| 메이플스토리 (KMS)  | `client.maplestory`    | `MapleStoryClient`    | `maplestory`    | `maplestory` / `maplestory`         | `AbstractMapleBaseClient` | 56 / 56    | 구현 완료                    |
-| 메이플스토리M       | `client.maplestorym`   | `MapleStoryMClient`   | `maplestorym`   | `maplestory-m` / `maplestory-m`     | `AbstractGameClient`      | 38 / 38    | 구현 완료                    |
-| MapleStory SEA      | `client.maplestorySEA` | `MapleStorySEAClient` | `maplestorysea` | `maplestory-sea` / `maplestory-sea` | `AbstractMapleBaseClient` | 26 / 26    | 구현 완료                    |
-| EA SPORTS FC 온라인 | `client.fcOnline`      | `FcOnlineClient`      | `fconline`      | `fc-online` / `fconline`            | `AbstractGameClient`      | 18 / 19    | 구현 완료 (포털 19경로 전부) |
+| 게임                  | Client 프로퍼티          | Client 클래스           | Path Prefix     | 디렉토리 / sub-path                     | Base Class                | 타입 prefix    | SDK / 포털 |
+| --------------------- | ------------------------ | ----------------------- | --------------- | --------------------------------------- | ------------------------- | -------------- | ---------- |
+| 메이플스토리 (KMS)    | `client.maplestory`      | `MapleStoryClient`      | `maplestory`    | `maplestory` / `maplestory`             | `AbstractMapleBaseClient` | (없음)         | 56 / 56    |
+| 메이플스토리M         | `client.maplestorym`     | `MapleStoryMClient`     | `maplestorym`   | `maplestory-m` / `maplestory-m`         | `AbstractGameClient`      | `M`            | 38 / 38    |
+| MapleStory SEA        | `client.maplestorySEA`   | `MapleStorySEAClient`   | `maplestorysea` | `maplestory-sea` / `maplestory-sea`     | `AbstractMapleBaseClient` | `SEA`          | 26 / 26    |
+| MapleStory Taiwan     | `client.maplestoryTW`    | `MapleStoryTWClient`    | `maplestorytw`  | `maplestory-tw` / `maplestory-tw`       | `AbstractMapleBaseClient` | `TW`           | 27 / 27    |
+| EA SPORTS FC 온라인   | `client.fcOnline`        | `FcOnlineClient`        | `fconline`      | `fc-online` / `fconline`                | `AbstractGameClient`      | `Fc`           | 18 / 19    |
+| 퍼스트 디센던트       | `client.firstDescendant` | `FirstDescendantClient` | `tfd`           | `first-descendant` / `first-descendant` | `AbstractGameClient`      | `Tfd`          | 42 / 42    |
+| 마비노기 영웅전       | `client.mabinogiHeroes`  | `MabinogiHeroesClient`  | `heroes`        | `mabinogi-heroes` / `mabinogi-heroes`   | `AbstractGameClient`      | `Heroes`       | 19 / 19    |
+| 서든어택              | `client.suddenAttack`    | `SuddenAttackClient`    | `suddenattack`  | `sudden-attack` / `sudden-attack`       | `AbstractGameClient`      | `SuddenAttack` | 11 / 11    |
+| 카트라이더 러쉬플러스 | `client.kartrider`       | `KartriderClient`       | `kartrush`      | `kartrider` / `kartrider`               | `AbstractGameClient`      | `Kartrider`    | 9 / 9      |
+| 바람의나라            | `client.baram`           | `BaramClient`           | `baram`         | `baram` / `baram`                       | `AbstractGameClient`      | `Baram`        | 7 / 7      |
+| 마비노기              | `client.mabinogi`        | `MabinogiClient`        | `mabinogi`      | `mabinogi` / `mabinogi`                 | `AbstractGameClient`      | `Mabinogi`     | 5 / 5      |
+| 바람의나라: 연        | `client.baramYeon`       | `BaramYeonClient`       | `baramy`        | `baram-yeon` / `baram-yeon`             | `AbstractGameClient`      | `BaramYeon`    | 4 / 4      |
+| V4                    | `client.v4`              | `V4Client`              | `v4`            | `v4` / `v4`                             | `AbstractGameClient`      | `V4`           | 4 / 4      |
+| 히트2                 | `client.hit2`            | `Hit2Client`            | `hit2`          | `hit2` / `hit2`                         | `AbstractGameClient`      | `Hit2`         | 2 / 2      |
+| 넥슨 Open API 공지    | `client.platform`        | `PlatformClient`        | `platform`      | `platform` / `platform`                 | `AbstractGameClient`      | `Platform`     | 1 / 1      |
 
-- `client.maplestorym` 은 소문자 `m` 이다 (`maplestoryM` 아님). 문서를 코드에 맞춘다.
-- FC는 디렉토리(`fc-online`)와 sub-path(`fconline`)가 다르다. 나머지는 같다.
+- `client.maplestorym` 은 소문자 `m` 이다 (`maplestoryM` 아님).
+- FC는 디렉토리(`fc-online`)와 sub-path(`fconline`)가 다르다. 나머지 게임은 같다.
 - FC의 18은 HTTP 메서드 16 + 이미지 URL 헬퍼 2. 헬퍼 2개가 포털의 이미지 4경로를 담당하며 호스트는 CDN `fco.dn.nexoncdn.co.kr` 이다 (`open.api.nexon.com` 은 400). `getAllMatchList` (`/fconline/v1/match`)는 넥슨이 제공을 종료해 deprecated이고 포털 스펙에 없다.
-- FC `getMaxDivision` 은 스펙(단일 객체)과 달리 매치 종류별 배열로 정규화하고, `getSeasonMeta` 는 실응답의 `seasonid`(문자열)를 스펙 형태 `seasonId`(정수)로 맞춘다. 이런 의도적 차이는 `specs:drift` 예외 목록에 이유와 함께 기록한다.
-
-### 미구현 게임 (이름은 기존 패턴을 따른 예정값)
-
-| 게임                   | Client 프로퍼티 (예정)   | Client 클래스 (예정)    | Path Prefix (포털 실제) | 디렉토리 (예정)    | Base Class                | 포털 API 수 |
-| ---------------------- | ------------------------ | ----------------------- | ----------------------- | ------------------ | ------------------------- | ----------- |
-| MapleStory Taiwan      | `client.maplestoryTW`    | `MapleStoryTWClient`    | `maplestorytw`          | `maplestory-tw`    | `AbstractMapleBaseClient` | 27          |
-| 퍼스트 디센던트        | `client.firstDescendant` | `FirstDescendantClient` | `tfd`                   | `first-descendant` | `AbstractGameClient`      | 42          |
-| 마비노기 영웅전        | `client.mabinogiHeroes`  | `MabinogiHeroesClient`  | `heroes`                | `mabinogi-heroes`  | `AbstractGameClient`      | 19          |
-| 서든어택               | `client.suddenAttack`    | `SuddenAttackClient`    | `suddenattack`          | `sudden-attack`    | `AbstractGameClient`      | 11          |
-| 카트라이더 러쉬플러스  | `client.kartrider`       | `KartriderClient`       | `kartrush`              | `kartrider`        | `AbstractGameClient`      | 9           |
-| 바람의나라             | `client.baram`           | `BaramClient`           | `baram`                 | `baram`            | `AbstractGameClient`      | 7           |
-| 마비노기               | `client.mabinogi`        | `MabinogiClient`        | `mabinogi`              | `mabinogi`         | `AbstractGameClient`      | 5           |
-| 바람의나라: 연         | `client.baramYeon`       | `BaramYeonClient`       | `baramy`                | `baram-yeon`       | `AbstractGameClient`      | 4           |
-| V4                     | `client.v4`              | `V4Client`              | `v4`                    | `v4`               | `AbstractGameClient`      | 4           |
-| 히트2                  | `client.hit2`            | `Hit2Client`            | `hit2`                  | `hit2`             | `AbstractGameClient`      | 2           |
-| 플랫폼 (Open API 공지) | `client.platform`        | `PlatformClient`        | `platform`              | `platform`         | `AbstractGameClient`      | 1           |
-
-- **Path prefix는 포털 slug와 같다.** `mabinogiheroes`, `kartrider`, `baramnara`, `baramyeon` 은 틀린 값이다 (포털이 모르는 slug에도 200을 돌려줘서 생긴 오해).
-- `platform` 의 경로는 `/platform/openapi/v1/notice` 로, `{prefix}/v1/{path}` 꼴이 아니다. `buildUrl('notice', 'openapi/v1')` 처럼 version 인자로 맞추거나 전용 상수를 쓴다.
+- FC `getMaxDivision` 은 스펙(단일 객체)과 달리 매치 종류별 배열로 정규화하고, `getSeasonMeta` 는 실응답의 `seasonid`(문자열)를 스펙 형태 `seasonId`(정수)로 맞춘다. 이런 의도적 차이는 `specs/drift-baseline.json` 에 이유와 함께 기록한다.
+- **Path prefix는 포털 slug와 같다** (`heroes`, `kartrush`, `baram`, `baramy` 등). 포털은 모르는 slug에도 200(목록 페이지)을 돌려주므로 slug는 `specs/openapi/index.json` 에서 확인한다.
+- `platform` 의 경로는 `/platform/openapi/v1/notice` 로 `{prefix}/v1/{path}` 꼴이 아니다 (`buildUrl('notice', 'openapi/v1')`).
 - 일부 경로는 `v1` 이 아니다 (예: 영웅전 V2 캐릭터 API, KMS `/maplestory/legacy/ouid`, 정적 메타 `/static/{prefix}/meta/...`). 경로는 항상 스펙 YAML에서 그대로 가져온다.
-- 크레이지 아케이드는 포털에서 제거되어 로드맵에서 뺐다.
+- 카트라이더 러쉬플러스는 라이더명의 `|` 를 `_` 로 바꿔 보내야 한다 (스펙 안내). SDK가 자동 변환한다.
+- 신규 게임은 `src/index.ts` 에 `export * from './games/{dir}/index.js'` 한 줄로 연결하고, 공개할 Client·타입은 게임의 `index.ts` 가 관리한다. root 이름 충돌을 막기 위해 공개 타입 이름에는 게임 타입 prefix를 붙인다.
+- 크레이지 아케이드는 포털에서 제거되어 범위에서 뺐다.
 
 ### 범위 외: 네오플 API
 
 던전앤파이터와 사이퍼즈는 넥슨 Open API가 아니라 네오플 API(`https://developers.neople.co.kr`)다. host와 API 키가 달라 이 SDK의 범위에 넣지 않는다. `HttpClient` 의 `x-nxopen-api-key` 인증으로는 호출할 수 없다.
 
-## 남은 작업
+## 현황과 후속 과제
 
-2026-11-24 포털 대조 기준. 포털 14개 게임 + platform 합계 270개 중 SDK가 덮는 것은 139개다.
+2026-11-24 기준 포털 14개 게임 + platform의 API **270개를 모두 SDK가 지원**한다 (`yarn specs:coverage` 270/270, CI `specs:drift --strict` 통과).
 
-**완료**
+**포털 변경 대응**: 주간 API Monitor가 변경을 감지하면 스펙 갱신 PR을 열고, `sdk-auto-update.yml` 이 MINOR·DEPRECATE 변경을 SDK에 자동 반영한다. MAJOR와 신규 게임은 사람이 판단한다 ("포털 변경 대응" 참고).
 
-- 기존 4개 게임 보강 (2026-11-24): KMS 56/56, M 38/38, SEA 26/26, FC 19/19. 누락 API 11개 추가, 응답 필드 드리프트 보정, 모든 public 메서드 단위 테스트
+**후속 과제 (선택)**
 
-**우선순위**
-
-1. **MapleStory Taiwan** (27) — SEA와 거의 같고 `character/familiar` 가 추가됨
-2. **중대형 게임**: 퍼스트 디센던트 (42), 마비노기 영웅전 (19), 서든어택 (11), 마비노기 (5)
-3. **소형 게임**: 카트라이더 러쉬플러스 (9), 바람의나라 (7), 바람의나라: 연 (4), V4 (4), 히트2 (2), platform (1)
+- 실 API 키로 E2E 검증: 대부분의 게임은 포털 스펙 기반으로 구현됐고 실응답은 정적 메타만 확인했다 (`API_METADATA.note`). 키가 있으면 `yarn test:{game}` 으로 검증한다.
+- 자동 페이지네이션 `iterateXxx`/`collectXxx` (DX 원칙): 현재 커서 API는 단일 페이지 메서드다.
+- 런타임 shape 검증의 중첩 필드 확인: 현재는 최상위 키만 본다.
+- 던전앤파이터·사이퍼즈(네오플 API)는 범위 외.
 
 현재 수치는 `yarn specs:coverage` 로 다시 확인한다. 이 섹션의 숫자와 다르면 명령 결과가 맞다.
 

@@ -88,7 +88,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
   },
 
   suddenattack: {
-    game: '서든어택',
+    game: 'Sudden Attack',
     pathPrefix: 'suddenattack',
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
@@ -115,7 +115,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
   },
 
   mabinogi: {
-    game: '마비노기',
+    game: 'Mabinogi',
     pathPrefix: 'mabinogi',
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',

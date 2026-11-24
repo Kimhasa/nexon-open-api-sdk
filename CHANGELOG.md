@@ -13,6 +13,20 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 
 ### Added
 
+- **넥슨 Open API 포털 전체 지원** — 신규 게임 클라이언트 11개를 추가해 포털의 API 270개를 모두 지원한다 (14개 게임 + Open API 공지)
+  - MapleStory Taiwan — `client.maplestoryTW`, `nexon-open-api/maplestory-tw` (27)
+  - 퍼스트 디센던트 — `client.firstDescendant`, `nexon-open-api/first-descendant` (42)
+  - 마비노기 영웅전 — `client.mabinogiHeroes`, `nexon-open-api/mabinogi-heroes` (19)
+  - 서든어택 — `client.suddenAttack`, `nexon-open-api/sudden-attack` (11)
+  - 카트라이더 러쉬플러스 — `client.kartrider`, `nexon-open-api/kartrider` (9)
+  - 바람의나라 — `client.baram`, `nexon-open-api/baram` (7)
+  - 마비노기 — `client.mabinogi`, `nexon-open-api/mabinogi` (5)
+  - 바람의나라: 연 — `client.baramYeon`, `nexon-open-api/baram-yeon` (4)
+  - V4 — `client.v4`, `nexon-open-api/v4` (4)
+  - 히트2 — `client.hit2`, `nexon-open-api/hit2` (2)
+  - 넥슨 Open API 공지 — `client.platform`, `nexon-open-api/platform` (1)
+- 신규 게임 E2E 스크립트 `yarn test:{game}` 11개 (실 API 키 필요, `.env.example` 참고)
+
 - 넥슨 포털 OpenAPI 스펙 저장소: `yarn specs:fetch` 가 포털의 카테고리별 OpenAPI YAML을 `specs/openapi/{slug}/{categoryId}.yaml` 로 수집하고 `specs/openapi/index.json` 색인을 만든다 (2026-11-24 기준 15개 게임, 270개 오퍼레이션)
 - `yarn specs:check` — 저장된 스펙과 포털을 비교해 게임·카테고리·오퍼레이션 추가/삭제, YAML 수정(시각·해시)을 감지
 - `yarn specs:coverage` — SDK가 호출하는 경로와 스펙 경로를 게임별로 대조
