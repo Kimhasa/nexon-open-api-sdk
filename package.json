@@ -32,29 +32,54 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     },
     "./maplestory": {
-      "types": "./dist/maplestory.d.ts",
-      "import": "./dist/maplestory.js",
-      "require": "./dist/maplestory.cjs"
+      "import": {
+        "types": "./dist/maplestory.d.ts",
+        "default": "./dist/maplestory.js"
+      },
+      "require": {
+        "types": "./dist/maplestory.d.cts",
+        "default": "./dist/maplestory.cjs"
+      }
     },
     "./fconline": {
-      "types": "./dist/fconline.d.ts",
-      "import": "./dist/fconline.js",
-      "require": "./dist/fconline.cjs"
+      "import": {
+        "types": "./dist/fconline.d.ts",
+        "default": "./dist/fconline.js"
+      },
+      "require": {
+        "types": "./dist/fconline.d.cts",
+        "default": "./dist/fconline.cjs"
+      }
     },
     "./maplestory-m": {
-      "types": "./dist/maplestory-m.d.ts",
-      "import": "./dist/maplestory-m.js",
-      "require": "./dist/maplestory-m.cjs"
+      "import": {
+        "types": "./dist/maplestory-m.d.ts",
+        "default": "./dist/maplestory-m.js"
+      },
+      "require": {
+        "types": "./dist/maplestory-m.d.cts",
+        "default": "./dist/maplestory-m.cjs"
+      }
     },
     "./maplestory-sea": {
-      "types": "./dist/maplestory-sea.d.ts",
-      "import": "./dist/maplestory-sea.js",
-      "require": "./dist/maplestory-sea.cjs"
+      "import": {
+        "types": "./dist/maplestory-sea.d.ts",
+        "default": "./dist/maplestory-sea.js"
+      },
+      "require": {
+        "types": "./dist/maplestory-sea.d.cts",
+        "default": "./dist/maplestory-sea.cjs"
+      }
     }
   },
   "main": "./dist/index.cjs",
@@ -68,7 +93,8 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
+    "check:exports": "attw --pack . --profile node16 --entrypoints . maplestory fconline maplestory-m maplestory-sea",
     "lint": "eslint src tests",
     "lint:fix": "eslint src tests --fix",
     "format": "prettier --write .",
@@ -93,6 +119,7 @@
     ]
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
     "@types/node": "^22.10.0",
     "@vitest/coverage-v8": "^3.0.0",
     "dotenv": "^17.3.1",

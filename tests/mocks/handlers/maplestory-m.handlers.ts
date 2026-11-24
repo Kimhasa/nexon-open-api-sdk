@@ -11,7 +11,7 @@ import {
 
 const BASE = 'https://open.api.nexon.com/maplestorym/v1';
 
-const checkApiKey = (request: Request): HttpResponse | null => {
+const checkApiKey = (request: Request): ReturnType<typeof HttpResponse.json> | null => {
   const apiKey = request.headers.get('x-nxopen-api-key');
   if (!apiKey) {
     return HttpResponse.json(

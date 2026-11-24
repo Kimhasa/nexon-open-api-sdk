@@ -45,9 +45,7 @@ describe('FcOnlineClient', () => {
       const client = createClient();
       const result = await client.getMaxDivision(TEST_OUID);
 
-      expect(result).toHaveLength(2);
-      expect(result[0]?.matchType).toBe(fcMaxDivisionFixture[0]?.matchType);
-      expect(result[0]?.division).toBe(fcMaxDivisionFixture[0]?.division);
+      expect(result).toEqual(fcMaxDivisionFixture);
     });
   });
 
