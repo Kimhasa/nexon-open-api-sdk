@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { http as mswHttp, HttpResponse } from 'msw';
 import { HttpClient } from '../../../src/core/http/HttpClient.js';
+import type { ShapeMismatch } from '../../../src/core/validation/response-shape.js';
 import { NexonAuthError } from '../../../src/core/errors/NexonAuthError.js';
 import { NexonBadRequestError } from '../../../src/core/errors/NexonBadRequestError.js';
 import { NexonRateLimitError } from '../../../src/core/errors/NexonRateLimitError.js';
@@ -69,14 +70,20 @@ const META = 'https://open.api.nexon.com/static/tfd/meta';
 /** 클라이언트와, 실제로 나간 요청 URL 기록을 함께 만든다. */
 const createClient = (
   apiKey: string = 'test-api-key',
-): { client: FirstDescendantClient; urls: string[] } => {
-  const http = new HttpClient({ apiKey, maxRetries: 0 });
+): { client: FirstDescendantClient; urls: string[]; mismatches: ShapeMismatch[] } => {
+  const mismatches: ShapeMismatch[] = [];
+  const http = new HttpClient({
+    apiKey,
+    maxRetries: 0,
+    responseValidation: true,
+    logger: { onResponseShapeMismatch: (mismatch) => mismatches.push(mismatch) },
+  });
   const urls: string[] = [];
   http.addRequestInterceptor((info) => {
     urls.push(info.url);
     return info;
   });
-  return { client: new FirstDescendantClient(http), urls };
+  return { client: new FirstDescendantClient(http), urls, mismatches };
 };
 
 const query = (params: Record<string, string>): string => new URLSearchParams(params).toString();
@@ -272,6 +279,20 @@ describe('FirstDescendantClient', () => {
   });
 
   describe('meta', () => {
+    it('공통 메타데이터 배열의 mastery_level 타입 불일치를 보고한다', async () => {
+      const url = `${META}/mastery-rank-level-detail.json`;
+      const response = [{ ...tfdMasteryRankLevelDetailMetaFixture[0], mastery_level: '1' }];
+      const { client, mismatches } = createClient();
+      server.use(mswHttp.get(url, () => HttpResponse.json(response)));
+
+      await expect(client.meta.getMasteryRankLevelDetail()).resolves.toEqual(response);
+      expect(mismatches).toEqual([
+        expect.objectContaining({
+          url,
+          typeMismatches: [{ key: '[0].mastery_level', expected: 'number', actual: 'string' }],
+        }),
+      ]);
+    });
     const localized = [
       ['getAcquisitionDetail', 'acquisition-detail', tfdAcquisitionDetailMetaFixture],
       ['getArcheTuningNode', 'arche-tuning-node', tfdArcheTuningNodeMetaFixture],
@@ -317,7 +338,7 @@ describe('FirstDescendantClient', () => {
     it.each(localized)(
       '%s — GET /static/tfd/meta/{language_code}/%s.json',
       async (method, file, fixture) => {
-        const { client, urls } = createClient();
+        const { client, urls, mismatches } = createClient();
 
         const byDefault = await client.meta[method]();
         const english = await client.meta[method]('en');
@@ -326,16 +347,18 @@ describe('FirstDescendantClient', () => {
         expect(english).toEqual(fixture);
         expect(byDefault.length).toBeGreaterThan(0);
         expect(urls).toEqual([`${META}/ko/${file}.json`, `${META}/en/${file}.json`]);
+        expect(mismatches).toEqual([]);
       },
     );
 
     it.each(common)('%s — GET /static/tfd/meta/%s.json', async (method, file, fixture) => {
-      const { client, urls } = createClient();
+      const { client, urls, mismatches } = createClient();
       const result = await client.meta[method]();
 
       expect(result).toEqual(fixture);
       expect(result.length).toBeGreaterThan(0);
       expect(urls).toEqual([`${META}/${file}.json`]);
+      expect(mismatches).toEqual([]);
     });
 
     it('스펙의 메타데이터 32개를 모두 덮는다', () => {

@@ -1,3 +1,4 @@
+import { arrayOf } from '../../core/validation/response-shape.js';
 import type { ShapeDescriptor } from '../../core/validation/response-shape.js';
 
 export const OUID_SHAPE: ShapeDescriptor = {
@@ -65,3 +66,11 @@ export const MATCH_DETAIL_SHAPE: ShapeDescriptor = {
 export const LOGO_SHAPE: ShapeDescriptor = {
   expectedKeys: { logo_image: 'string' },
 };
+
+export const GRADE_SHAPE = arrayOf({ expectedKeys: { grade: 'string', grade_image: 'string' } });
+
+export const SEASON_GRADE_SHAPE = arrayOf({
+  expectedKeys: { season_grade: 'string', season_grade_image: 'string' },
+});
+
+export const TIER_SHAPE = arrayOf({ expectedKeys: { tier: 'string', tier_image: 'string' } });

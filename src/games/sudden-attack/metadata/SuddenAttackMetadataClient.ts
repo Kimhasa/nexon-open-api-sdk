@@ -1,6 +1,6 @@
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import { SUDDEN_ATTACK_ENDPOINTS } from '../endpoints.js';
-import { LOGO_SHAPE } from '../shapes.js';
+import { GRADE_SHAPE, LOGO_SHAPE, SEASON_GRADE_SHAPE, TIER_SHAPE } from '../shapes.js';
 import type {
   SuddenAttackLogo,
   SuddenAttackGradeMeta,
@@ -45,7 +45,7 @@ export class SuddenAttackMetadataClient {
    * ```
    */
   async getGrade(): Promise<readonly SuddenAttackGradeMeta[]> {
-    return this.http.get(SUDDEN_ATTACK_ENDPOINTS.GRADE);
+    return this.http.get(SUDDEN_ATTACK_ENDPOINTS.GRADE, undefined, GRADE_SHAPE);
   }
 
   /**
@@ -63,7 +63,7 @@ export class SuddenAttackMetadataClient {
    * ```
    */
   async getSeasonGrade(): Promise<readonly SuddenAttackSeasonGradeMeta[]> {
-    return this.http.get(SUDDEN_ATTACK_ENDPOINTS.SEASON_GRADE);
+    return this.http.get(SUDDEN_ATTACK_ENDPOINTS.SEASON_GRADE, undefined, SEASON_GRADE_SHAPE);
   }
 
   /**
@@ -81,6 +81,6 @@ export class SuddenAttackMetadataClient {
    * ```
    */
   async getTier(): Promise<readonly SuddenAttackTierMeta[]> {
-    return this.http.get(SUDDEN_ATTACK_ENDPOINTS.TIER);
+    return this.http.get(SUDDEN_ATTACK_ENDPOINTS.TIER, undefined, TIER_SHAPE);
   }
 }

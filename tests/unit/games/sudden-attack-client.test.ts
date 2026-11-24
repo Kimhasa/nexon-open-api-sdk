@@ -100,6 +100,20 @@ describe('SuddenAttackClient', () => {
     expectRequest(`/static/suddenattack/meta/${path}`);
   });
 
+  it('계급 배열 항목의 잘못된 이미지 타입을 보고하고 응답을 반환한다', async () => {
+    const url = 'https://open.api.nexon.com/static/suddenattack/meta/grade';
+    const response = [{ grade: '훈련병', grade_image: 1 }];
+    server.use(http.get(url, () => HttpResponse.json(response)));
+
+    await expect(game.metadata.getGrade()).resolves.toEqual(response);
+    expect(onResponseShapeMismatch).toHaveBeenCalledWith(
+      expect.objectContaining({
+        url,
+        typeMismatches: [{ key: '[0].grade_image', expected: 'string', actual: 'number' }],
+      }),
+    );
+  });
+
   it('403 응답을 NexonAuthError로 분류한다', async () => {
     server.use(
       http.get('https://open.api.nexon.com/suddenattack/v1/id', () =>

@@ -413,6 +413,20 @@ describe('MabinogiHeroesClient', () => {
       expectRequest(harness, `${V2}/ranking/real-time`, { ranking_type: '1', page_no: '2' });
     });
 
+    it('랭킹 배열 항목에 누락된 필드를 보고하고 응답을 반환한다', async () => {
+      const harness = createHarness();
+      const url = `${V2}/ranking/hall-of-honor`;
+      const response = [{ ranking_type: '0', ranking: 1, character_name: '합성 캐릭터' }];
+      server.use(http.get(url, () => HttpResponse.json(response)));
+
+      await expect(harness.client.ranking.getHallOfHonor({ ranking_type: '0' })).resolves.toEqual(
+        response,
+      );
+      expect(harness.mismatches).toEqual([
+        expect.objectContaining({ url: `${url}?ranking_type=0`, missingKeys: ['[0].score'] }),
+      ]);
+    });
+
     it('잘못된 ranking_type / page_no는 요청 없이 NexonBadRequestError', async () => {
       const harness = createHarness();
       const { ranking } = harness.client;
