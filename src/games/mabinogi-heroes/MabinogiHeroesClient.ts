@@ -1,4 +1,5 @@
 import { assertNonEmptyString } from '../../core/validation/input.js';
+import { lookupByName } from '../../core/errors/name-lookup.js';
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
 import { MabinogiHeroesCharacterClient } from './character/MabinogiHeroesCharacterClient.js';
 import { MabinogiHeroesMarketplaceClient } from './marketplace/MabinogiHeroesMarketplaceClient.js';
@@ -99,10 +100,18 @@ export class MabinogiHeroesClient extends AbstractGameClient {
       'characterName',
       "조회할 영웅(캐릭터) 명을 넘겨주세요 (예: client.mabinogiHeroes.getOcid('캐릭터명')).",
     );
-    const response = await this.http.get<{ ocid: string }>(
-      this.buildUrl('id', 'v2'),
-      { character_name: characterName },
-      HEROES_OCID_SHAPE,
+    const notFound = {
+      message: `'${characterName}' 캐릭터를 찾을 수 없습니다.`,
+      hint: '마비노기 영웅전 캐릭터 이름을 확인하세요.',
+    };
+    const response = await lookupByName(
+      () =>
+        this.http.get<{ ocid: string }>(
+          this.buildUrl('id', 'v2'),
+          { character_name: characterName },
+          HEROES_OCID_SHAPE,
+        ),
+      notFound,
     );
     return response.ocid as HeroesOCID;
   }

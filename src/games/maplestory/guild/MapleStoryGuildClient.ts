@@ -3,6 +3,8 @@ import type { GuildId } from '../../_base/maple-base-types.js';
 import type { GuildIdDateRequest } from '../../_base/maple-base-types.js';
 import { GUILD_ID_SHAPE, GUILD_BASIC_SHAPE } from '../shapes.js';
 import type { GuildBasic, WorldName } from './types.js';
+import { lookupByName, requireFoundId } from '../../../core/errors/name-lookup.js';
+import { assertNonEmptyString } from '../../../core/validation/input.js';
 
 /**
  * 메이플스토리 길드: 길드 이름으로 길드 고유 번호를 받아 길드 정보를 조회합니다.
@@ -34,12 +36,26 @@ export class MapleStoryGuildClient {
    *
    */
   async getId(guildName: string, worldName: WorldName | (string & {})): Promise<GuildId> {
-    const response = await this.http.get<{ oguild_id: string }>(
-      `${MapleStoryGuildClient.BASE}/guild/id`,
-      { guild_name: guildName, world_name: worldName },
-      GUILD_ID_SHAPE,
+    assertNonEmptyString(
+      guildName,
+      'guildName',
+      "조회할 길드명을 넣으세요. 예: guild.getId('길드명', '스카니아')",
     );
-    return response.oguild_id as GuildId;
+    assertNonEmptyString(worldName, 'worldName', "길드가 있는 월드명을 넣으세요. 예: '스카니아'");
+    const notFound = {
+      message: `${worldName} 월드에서 '${guildName}' 길드를 찾을 수 없습니다.`,
+      hint: '길드 이름과 월드 이름을 확인하세요.',
+    };
+    const response = await lookupByName(
+      () =>
+        this.http.get<{ oguild_id: string | null }>(
+          `${MapleStoryGuildClient.BASE}/guild/id`,
+          { guild_name: guildName, world_name: worldName },
+          GUILD_ID_SHAPE,
+        ),
+      notFound,
+    );
+    return requireFoundId(response.oguild_id, notFound) as GuildId;
   }
 
   /**

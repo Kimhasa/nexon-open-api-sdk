@@ -1,4 +1,5 @@
 import { assertNonEmptyString } from '../../core/validation/input.js';
+import { lookupByName } from '../../core/errors/name-lookup.js';
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
 import { SUDDEN_ATTACK_ENDPOINTS } from './endpoints.js';
 import { SuddenAttackMatchClient } from './match/SuddenAttackMatchClient.js';
@@ -54,10 +55,18 @@ export class SuddenAttackClient extends AbstractGameClient {
   async getOuid(userName: string): Promise<SuddenAttackOuid> {
     assertNonEmptyString(userName, 'userName', '조회할 서든어택 닉네임을 입력하세요.');
 
-    const response = await this.http.get<SuddenAttackOuidResponse>(
-      SUDDEN_ATTACK_ENDPOINTS.ID,
-      { user_name: userName },
-      OUID_SHAPE,
+    const notFound = {
+      message: `'${userName}' 계정을 찾을 수 없습니다.`,
+      hint: '서든어택 닉네임을 확인하세요. 닉네임을 바꿨다면 새 닉네임으로 조회합니다.',
+    };
+    const response = await lookupByName(
+      () =>
+        this.http.get<SuddenAttackOuidResponse>(
+          SUDDEN_ATTACK_ENDPOINTS.ID,
+          { user_name: userName },
+          OUID_SHAPE,
+        ),
+      notFound,
     );
     return response.ouid;
   }

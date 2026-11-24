@@ -12,7 +12,7 @@ const raiderPreset = {
   union_block: [
     {
       block_type: 'Thief',
-      block_class: 'Night Lord',
+      block_class: null,
       block_level: '275',
       block_control_point: {
         x: 1,
@@ -36,7 +36,7 @@ export const twUnionRaiderFixture: TWUnionRaider = {
   union_block: [
     {
       block_type: 'Thief',
-      block_class: 'Night Lord',
+      block_class: null,
       block_level: '275',
       block_control_point: {
         x: 1,

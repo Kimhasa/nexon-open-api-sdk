@@ -118,6 +118,7 @@ API 키는 게임마다 따로 발급받습니다. 한국 메이플스토리 키
 - **날짜는 대만 시간(UTC+8) 기준입니다.** `date` 에 `'2026-11-01'` 같은 문자열, `new Date()`, `'today'` 를 넣을 수 있고, SDK가 대만 시간의 날짜로 바꿔 보냅니다.
 - **조회할 수 없는 날짜는 요청 전에 걸러 줍니다.** 데이터 제공 시작일보다 이르거나 오늘보다 뒤인 날짜를 넣으면 `NexonBadRequestError` 가 납니다. 시작일은 캐릭터·길드 2025-10-15, 유니온 2025-10-14, 유니온 챔피언 2025-12-18 입니다.
 - **데이터 반영:** 게임에서 바뀐 내용은 약 15분 뒤에 조회됩니다. `date` 를 생략하면 가장 최근 데이터를 받습니다. 날짜를 넣으면 그날 하루(0시~24시)의 데이터이고, 지난 날짜의 데이터는 다음날 오전 2시(대만 시간)부터 조회됩니다.
+- **응답의 기준일:** 캐릭터·유니온·길드의 최신 데이터에서 `date` 는 `null` 일 수 있습니다.
 - **월드 이름:** 艾麗亞, 普力特, 琉德, 優依娜, 愛麗西亞, 米特拉, 挑戰者, 殺人鯨, 賽蓮. `guild.getId()` 는 이 이름만 받습니다.
 - **스킬 차수(`character_skill_grade`):** `'0'`(0차·제로 공용), `'1'`, `'1.5'`, `'2'`, `'2.5'`, `'3'`, `'4'`(제로 알파/베타 포함), `'5'`, `'6'`, `'hyperpassive'`, `'hyperactive'`
 - **숫자와 참/거짓이 문자열로 올 때가 많습니다.** 스타포스(`starforce`), 스탯 값(`stat_value`), 패밀리어 연결 슬롯의 `active_flag`(`"true"` / `"false"`) 등은 문자열입니다.
@@ -133,7 +134,7 @@ API 키는 게임마다 따로 발급받습니다. 한국 메이플스토리 키
 const familiar = await client.maplestoryTW.character.getFamiliar({ ocid });
 
 for (const f of familiar.familiar_info) {
-  console.log(`${f.familiar_name} Lv.${f.familiar_level} (${f.familiar_grade})`);
+  console.log(`${f.familiar_name} Lv.${f.familiar_level} (${f.familiar_grade ?? '-'})`);
   for (const opt of f.option) console.log(`  ${opt.option_name} ${opt.option_value}`);
 }
 
@@ -143,7 +144,7 @@ for (const slot of familiar.familiar_link_slot) {
 }
 ```
 
-- `familiar_info[]` — 패밀리어 한 마리. `familiar_grade` 등급, `familiar_level` 레벨, `skill_name` 배운 스킬, `option[]` 옵션 목록
+- `familiar_info[]` — 패밀리어 한 마리. `familiar_grade` 등급, `familiar_level` 레벨, `skill_name` 배운 스킬, `option[]` 옵션 목록. 등급이나 배운 스킬에 값이 없으면 `null` 입니다.
 - `familiar_info[].slot_id` — 연결된 슬롯 (`"1"`, `"2"`, `"3"`, `"vip"`). 연결되지 않았으면 `"not link"`
 - `familiar_link_slot[]` — 연결 슬롯. `familiar_name` 이 `null` 이면 빈 슬롯, `active_flag` 가 `"true"` 면 활성화된 슬롯
 
@@ -165,7 +166,12 @@ const skill = await client.maplestoryTW.character.getSkill({ ocid, character_ski
 console.log(skill.character_skill.map((s) => s.skill_name));
 ```
 
-- `item_equipment[]` — `starforce` 스타포스, `potential_option_1`~`3` 잠재능력, `additional_potential_option_1`~`3` 에디셔널 잠재능력, `item_total_option` 최종 옵션
+- `item_equipment[]` — `starforce` 스타포스, `potential_option_1`~`3` 잠재능력, `additional_potential_option_1`~`3` 에디셔널 잠재능력, `item_total_option` 최종 옵션. 잠재능력 줄에 값이 없으면 `null` 입니다.
+- 장착한 칭호가 없으면 `title` 값은 `null` 입니다. 훈장 외형 정보가 없으면 `medal_shape` 값도 `null` 일 수 있습니다.
+- 업그레이드 가능 횟수 — `scroll_upgradeable_count` (`string | undefined`). 장착 장비와 프리셋 장비에 쓰입니다.
+- 프리셋 장비 슬롯 — `item_equipment_slot` (`string | undefined`). 프리셋 장비에는 잠재능력 봉인 상태 `potential_option_flag`, `additional_potential_option_flag` (`string | undefined`)도 올 수 있습니다.
+- 펫 잠재능력 증가량 — `pet_1_potential`~`pet_3_potential` 원소의 `potential_increase1`, `potential_increase2` (`string | null | undefined`).
+- HEXA 코어 — `character_hexa_core_equipment` 값이 `null` 이면 표시할 코어 정보가 없습니다. HEXA 스탯의 코어 II·III 배열도 각각 `null` 일 수 있습니다.
 - `final_stat[]` — `{ stat_name, stat_value }` 목록. 원하는 스탯은 이름으로 찾습니다.
 - `getBasic()` 의 `character_image` 는 캐릭터 외형 이미지 주소입니다. 넥슨 안내에 따르면 주소 뒤에 쿼리 파라미터를 붙여 동작·감정표현을 바꿀 수 있습니다.
 
@@ -257,7 +263,7 @@ async function summarize(characterName) {
     return [
       `**${basic.character_name}** (${basic.world_name})`,
       `Lv.${basic.character_level} ${basic.character_class}`,
-      `公會: ${basic.character_guild_name || '-'}`,
+      `公會: ${basic.character_guild_name ?? '-'}`,
       `戰地 Lv.${union.union_level} (${union.union_grade})`,
       `武陵道場: ${dojang.dojang_best_floor}F`,
     ].join('\n');

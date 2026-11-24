@@ -82,6 +82,7 @@ SDK가 스펙과 의도적으로 다르게 동작하는 곳(예: FC 온라인 `g
 | `yarn test:live`    | 불필요 | 빌드 결과로 실서버의 정적 메타데이터, FC 온라인 이미지, 잘못된 키의 에러 경로를 확인       |
 | `yarn test:package` | 불필요 | npm tarball을 오프라인 설치해 CJS·ESM 실호출과 TypeScript(Node16·Bundler) 타입 검사        |
 | `yarn test:{game}`  | 필요   | 게임별 실 API E2E (`scripts/test-*.ts`, 15개). `.env` 에 그 게임의 키와 캐릭터명 등이 필요 |
+| `yarn test:deep`    | 필요   | E2E를 돌리며 모든 메서드 반환값을 SDK 응답 타입과 중첩 필드까지 대조 (차이 목록 출력)      |
 
 ```bash
 corepack yarn build && corepack yarn test:live
@@ -89,7 +90,10 @@ corepack yarn test:package
 
 cp .env.example .env            # 확인할 게임의 API 키와 캐릭터명 등을 채운다
 corepack yarn test:maplestory   # test:{game} 목록은 package.json 참고
+corepack yarn test:deep         # 15개 게임 전부, 또는 test:deep maplestory v4 처럼 일부만
 ```
+
+`yarn test:deep` 은 E2E가 대표 필드 몇 개만 보는 한계를 메웁니다. 응답에 예상하지 못한 `null`, 타입에 없는 필드, 응답에 없는 필수 필드, 타입 차이가 있으면 메서드와 경로를 출력합니다. 캐릭터마다 장비·펫·스킬 구성이 달라 드러나는 차이도 달라지므로, 직업·레벨·월드가 다른 캐릭터 몇 명으로 돌려 보는 것이 좋습니다 (`.env` 의 캐릭터 변수를 바꾸거나 같은 이름의 환경변수로 덮어씁니다). 포털 스펙과 다르게 실제 응답에 맞춘 필드는 `specs/drift-baseline.json` 에 근거를 남깁니다.
 
 API 키는 게임마다 따로 발급됩니다. 실 키로 확인한 뒤에는 `src/core/metadata/api-metadata.ts` 의 `lastVerifiedAt` 과 `note` 를 갱신하고, README의 "실서버 검증 현황" 수치도 맞춥니다. 실제 캐릭터명·계정 식별자는 fixture와 문서에 넣지 않습니다.
 

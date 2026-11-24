@@ -140,6 +140,9 @@ describe('FcOnlineClient', () => {
       expect(result.matchInfo[0]?.nickname).toBe('테스트유저FC');
       expect(result.matchInfo[0]?.division).toBe(800);
       expect(result.matchInfo[0]?.matchDetail.matchResult).toBe('승');
+      expect(result.matchInfo[0]?.matchDetail.offsideCount).toBe(1);
+      expect(result.matchInfo[0]?.player[0]?.status.ballPossesionSuccess).toBe(8);
+      expect(result.matchInfo[0]?.shootDetail[0]?.assistSpId).toBe(100167680);
       expect(onResponseShapeMismatch).not.toHaveBeenCalled();
     });
 
@@ -166,9 +169,14 @@ describe('FcOnlineClient', () => {
   });
 
   it('getRankerStats sends the players array as a JSON query value', async () => {
+    const onResponseShapeMismatch = vi.fn();
     await expect(
-      createClient().getRankerStats({ matchtype: 52, players: [{ id: 100167680, po: 18 }] }),
+      createClient({ onResponseShapeMismatch }).getRankerStats({
+        matchtype: 52,
+        players: [{ id: 100167680, po: 18 }],
+      }),
     ).resolves.toEqual(fcRankerFixture);
+    expect(onResponseShapeMismatch).not.toHaveBeenCalled();
   });
 
   it('rejects an empty match ID before making a request', async () => {

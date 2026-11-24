@@ -8,8 +8,8 @@ export interface V4CharacterBasic {
   readonly character_name: string;
   /** 캐릭터를 만든 날짜(UTC). 시·분·초는 모두 0이다. */
   readonly character_date_create: string;
-  /** 생성 방식. 문자열 "0"은 일반 캐릭터, "1"은 점핑 캐릭터다. */
-  readonly character_create_type: string;
+  /** 생성 방식. 문자열 "0"은 일반 캐릭터, "1"은 점핑 캐릭터다. 값이 없으면 null */
+  readonly character_create_type: string | null;
   /** 캐릭터 마지막 로그인 일(시) (UTC0, 예: `"2023-12-14T08:28:35Z"`) */
   readonly character_date_last_login: string;
   /** 캐릭터 마지막 로그아웃 일(시) (UTC0) */

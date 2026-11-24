@@ -1,4 +1,5 @@
 import { assertNonEmptyString } from '../../core/validation/input.js';
+import { lookupByName } from '../../core/errors/name-lookup.js';
 import { AbstractMapleBaseClient } from '../_base/AbstractMapleStoryBaseClient.js';
 import type { OCID } from '../_base/maple-base-types.js';
 import { MapleStoryCharacterClient } from './character/MapleStoryCharacterClient.js';
@@ -113,10 +114,13 @@ export class MapleStoryClient extends AbstractMapleBaseClient {
       "조회할 캐릭터명을 전달하세요. 예: client.maplestory.getOcid('캐릭터명')",
     );
     const url = this.buildUrl('id');
-    const response = await this.http.get<{ ocid: string }>(
-      url,
-      { character_name: characterName },
-      OCID_SHAPE,
+    const notFound = {
+      message: `'${characterName}' 캐릭터를 찾을 수 없습니다.`,
+      hint: '캐릭터 이름의 띄어쓰기와 대소문자를 확인하세요. 닉네임을 바꿨다면 새 이름으로 조회합니다.',
+    };
+    const response = await lookupByName(
+      () => this.http.get<{ ocid: string }>(url, { character_name: characterName }, OCID_SHAPE),
+      notFound,
     );
     return response.ocid as OCID;
   }

@@ -1,4 +1,3 @@
-import { arrayOf } from '../../core/validation/response-shape.js';
 import type { ShapeDescriptor } from '../../core/validation/response-shape.js';
 
 /**
@@ -18,21 +17,20 @@ export const HEROES_OCID_SHAPE: ShapeDescriptor = {
   },
 };
 
-export const HEROES_RANKING_SHAPE = arrayOf({
+// 포털 스펙은 최상위를 배열로 적지만 실제 응답은 `{ ranking: [...] }` 객체다 (2026-11-24 실측).
+// 스펙 형태(배열)가 오면 불일치로 보고되고, 클라이언트는 그 배열을 그대로 돌려준다.
+export const HEROES_RANKING_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    ranking_type: 'string',
-    ranking: 'number',
-    character_name: 'string',
-    score: 'number',
+    ranking: 'array',
   },
-});
+};
 
 // ─── Character ──────────────────────────────────────────────────────────────
 
 export const HEROES_CHARACTER_BASIC_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     character_name: 'string',
-    character_date_create: 'string',
+    character_date_create: 'any',
     access_flag: 'string',
     character_class_name: 'string',
     character_gender: 'string',
@@ -82,7 +80,7 @@ export const HEROES_CHARACTER_GUILD_SHAPE: ShapeDescriptor = {
 
 export const HEROES_ENCHANT_META_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    enchant_grade: 'number',
+    enchant_grade: 'string',
     enchant_available_slot_name: 'array',
     enchant_stat: 'array',
   },

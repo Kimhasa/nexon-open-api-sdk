@@ -70,5 +70,15 @@ export const mapleStoryTWHandlers = [
   http.get(`${BASE}/user/union-artifact`, () => HttpResponse.json(twUnionArtifactFixture)),
   http.get(`${BASE}/user/union-champion`, () => HttpResponse.json(twUnionChampionFixture)),
   http.get(`${BASE}/guild/id`, () => HttpResponse.json(twGuildIdResponseFixture)),
-  http.get(`${BASE}/guild/basic`, () => HttpResponse.json(twGuildBasicFixture)),
+  http.get(`${BASE}/guild/basic`, ({ request }) => {
+    const { searchParams } = new URL(request.url);
+    return HttpResponse.json(
+      searchParams.has('date')
+        ? twGuildBasicFixture
+        : {
+            ...twGuildBasicFixture,
+            date: null,
+          },
+    );
+  }),
 ];

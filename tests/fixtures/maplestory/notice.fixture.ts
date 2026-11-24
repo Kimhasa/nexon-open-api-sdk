@@ -56,6 +56,7 @@ export const noticeEventFixture: EventNoticeList = {
       date: '2023-12-21T00:00+09:00',
       date_event_start: '2023-12-21T00:00+09:00',
       date_event_end: '2023-12-21T00:00+09:00',
+      thumbnail_url: 'https://open.api.nexon.com/static/maplestory/notice/SAMPLE',
     },
   ],
 };
@@ -80,7 +81,18 @@ export const noticeCashshopFixture: CashshopNoticeList = {
       date: '2023-12-21T00:00+09:00',
       date_sale_start: '2023-12-21T00:00+09:00',
       date_sale_end: '2023-12-21T00:00+09:00',
+      ongoing_flag: 'false',
+      thumbnail_url: 'https://open.api.nexon.com/static/maplestory/notice/SAMPLE',
+    },
+    {
+      title: '상시 판매 공지',
+      url: 'https://maplestory.nexon.com/News/CashShop/2',
+      notice_id: 2,
+      date: '2023-12-21T00:00+09:00',
+      date_sale_start: null,
+      date_sale_end: null,
       ongoing_flag: 'true',
+      thumbnail_url: 'https://open.api.nexon.com/static/maplestory/notice/SAMPLE',
     },
   ],
 };

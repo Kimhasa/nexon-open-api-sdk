@@ -1,4 +1,5 @@
 import { assertNonEmptyString } from '../../../core/validation/input.js';
+import { lookupByName, requireFoundId } from '../../../core/errors/name-lookup.js';
 import { SEA_GUILD_ID_SHAPE, SEA_GUILD_BASIC_SHAPE } from '../shapes.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { GuildId } from '../../_base/maple-base-types.js';
@@ -43,12 +44,20 @@ export class MapleStorySEAGuildClient {
   async getId(guildName: string, worldName: string): Promise<GuildId> {
     assertNonEmptyString(guildName, 'guildName', undefined, 'trim-truthy');
     assertNonEmptyString(worldName, 'worldName', undefined, 'trim-truthy');
-    const response = await this.http.get<{ oguild_id: string }>(
-      `${MapleStorySEAGuildClient.BASE}/guild/id`,
-      { guild_name: guildName, world_name: worldName },
-      SEA_GUILD_ID_SHAPE,
+    const notFound = {
+      message: `${worldName} 월드에서 '${guildName}' 길드를 찾을 수 없습니다.`,
+      hint: '길드 이름과 월드 이름(Aquila 등)을 확인하세요.',
+    };
+    const response = await lookupByName(
+      () =>
+        this.http.get<{ oguild_id: string | null }>(
+          `${MapleStorySEAGuildClient.BASE}/guild/id`,
+          { guild_name: guildName, world_name: worldName },
+          SEA_GUILD_ID_SHAPE,
+        ),
+      notFound,
     );
-    return response.oguild_id as GuildId;
+    return requireFoundId(response.oguild_id, notFound) as GuildId;
   }
 
   // ─── GET /maplestorysea/v1/guild/basic ──────────────────────────────────

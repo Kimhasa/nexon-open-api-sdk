@@ -5,6 +5,8 @@ import type { ShapeDescriptor } from '../../core/validation/response-shape.js';
  *
  * 각 엔드포인트의 top-level 키와 타입을 정의합니다.
  * `responseValidation: true` 시 런타임에서 응답 shape drift를 감지하는 데 사용됩니다.
+ *
+ * - null이 올 수 있는 배열 키는 `'any'` 로 둔다 (validator가 null을 `'object'` 로만 허용하기 때문).
  */
 
 // ─── User ───────────────────────────────────────────────────────────────────
@@ -57,6 +59,6 @@ export const KARTRIDER_NOTICE_DETAIL_SHAPE: ShapeDescriptor = {
     url: 'string',
     contents: 'string',
     date: 'string',
-    notice_tag: 'array',
+    notice_tag: 'any',
   },
 };

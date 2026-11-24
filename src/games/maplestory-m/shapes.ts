@@ -105,7 +105,7 @@ export const M_CHARACTER_ANDROID_EQUIPMENT_SHAPE: ShapeDescriptor = {
 export const M_CHARACTER_JEWEL_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     use_jewel_page_no: 'number',
-    use_jewel_set_option: 'string',
+    use_jewel_set_option: 'any', // 세트 효과가 없으면 null
     jewel_equipment: 'array',
   },
 };
@@ -118,23 +118,23 @@ export const M_CHARACTER_BEAUTY_EQUIPMENT_SHAPE: ShapeDescriptor = {
     character_skin_name: 'string',
     additional_character_hair: 'object',
     additional_character_face: 'object',
-    additional_character_skin_name: 'string',
+    additional_character_skin_name: 'any',
   },
 };
 export const M_CHARACTER_PET_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    pet_1_name: 'string',
-    pet_1_pet_type: 'string',
-    pet_1_date_expire: 'string',
-    pet_1_icon: 'string',
-    pet_2_name: 'string',
-    pet_2_pet_type: 'string',
-    pet_2_date_expire: 'string',
-    pet_2_icon: 'string',
-    pet_3_name: 'string',
-    pet_3_pet_type: 'string',
-    pet_3_date_expire: 'string',
-    pet_3_icon: 'string',
+    pet_1_name: 'any',
+    pet_1_pet_type: 'any',
+    pet_1_date_expire: 'any',
+    pet_1_icon: 'any',
+    pet_2_name: 'any',
+    pet_2_pet_type: 'any',
+    pet_2_date_expire: 'any',
+    pet_2_icon: 'any',
+    pet_3_name: 'any',
+    pet_3_pet_type: 'any',
+    pet_3_date_expire: 'any',
+    pet_3_icon: 'any',
     pet_set_option: 'array',
   },
 };
@@ -146,7 +146,8 @@ export const M_CHARACTER_SKILL_EQUIPMENT_SHAPE: ShapeDescriptor = {
 };
 export const M_CHARACTER_LINK_SKILL_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    use_preset_no: 'number',
+    use_preset_no: 'optional',
+    use_prest_no: 'optional',
     link_skill: 'array',
   },
 };
@@ -209,7 +210,8 @@ export const M_GUILD_BASIC_SHAPE: ShapeDescriptor = {
     guild_name: 'string',
     world_name: 'string',
     guild_level: 'number',
-    world_create_date: 'string',
+    world_create_date: 'optional',
+    guild_create_date: 'optional',
     guild_keyword: 'array',
     guild_mark_icon: 'string',
     guild_master_name: 'string',

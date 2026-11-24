@@ -48,6 +48,15 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
   - 키 없이 실행하는 설치 확인과 퍼스트 디센던트 계승자 도감
   - 봇 에러 안내, CommonJS, TypeScript
 - `yarn examples:check` — 빌드된 패키지로 예제를 타입 검사한다 (CI Examples 게이트, SDK 자동 반영 게이트)
+- `yarn test:deep` — 실 API E2E를 돌리며 호출된 모든 public 메서드의 반환값을 SDK 응답 타입과 중첩 필드까지 대조한다 (`scripts/lib/deep-check.ts`). 예상하지 못한 `null`, 타입에 없는 필드, 응답에 없는 필수 필드, 타입 차이를 메서드·경로별로 출력한다 (`.env` 의 게임별 키 필요)
+- **실 API 키 검증 (2026-11-24, 게임별 개발 단계 키)** — 직업·레벨·월드가 다른 공개 캐릭터 42명(게임별 2~6명)으로 HTTP 메서드 263/267개를 불러 응답을 SDK 타입과 대조했다. 처음 600종이 넘던 차이를 아래 Fixed·Changed 항목으로 정정해 0건이 됐다. 부르지 못한 메서드는 다음과 같다
+  - FC `getTradeList`: 키 계정 본인의 거래 기록만 나온다
+  - 메이플스토리 `getLegacyOuid`: 구 개발자센터 키가 필요하다
+  - FC `getAllMatchList`: 제공이 종료됐다
+  - FC `getSeasonIdMeta`: 정적 파일은 `test:live` 로 확인했다
+- 실제 응답에만 있는 필드를 선택 필드로 추가했다 (포털 스펙에 없음, 근거는 `specs/drift-baseline.json`)
+  - 메이플스토리: 칭호 프리셋 `title_preset1~3`, 프리셋 장비의 `potential_option_flag`·`additional_potential_option_flag`, 공지 `thumbnail_url`
+  - 서든어택 매치 상세 `guild_name` 등
 
 - 넥슨 포털 OpenAPI 스펙 저장소: `yarn specs:fetch` 가 포털의 카테고리별 OpenAPI YAML을 `specs/openapi/{slug}/{categoryId}.yaml` 로 수집하고 `specs/openapi/index.json` 색인을 만든다 (2026-11-24 기준 15개 게임, 270개 오퍼레이션)
 - `yarn specs:check` — 저장된 스펙과 포털을 비교해 게임·카테고리·오퍼레이션 추가/삭제, YAML 수정(시각·해시)을 감지
@@ -95,10 +104,40 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 - 메이플스토리·SEA·TW `date` 설명 정정 — 생략하면 전일이 아니라 가장 최근 데이터(평균 15분 뒤 반영)를 조회한다 (포털 스펙)
 - `nexon-open-api/maplestory-m` sub-path가 응답 타입 일부(4개)만 내보내던 문제 — 루트와 같은 M 타입 84개를 내보낸다
 - JSDoc 예제 오류: 메이플스토리 클래스 예제의 없는 메서드 `union.get`(→ `union.getUnion`), 필수 인자가 빠진 `ranking.getGuild`·`getDojang` 예제, 조회 범위를 벗어난 예제 날짜
+- **동작 변경** 없는 이름 조회가 `NexonNotFoundError` 로 알려진다. 대상은 14개 게임의 `getOcid`·`getOuid`·`getOuidInfo` 와 메이플 4종의 `guild.getId` 다
+  - 넥슨은 없는 캐릭터·계정·길드 이름에 `OPENAPI00003` 이 아니라 `OPENAPI00004`(파라미터 오류)를 돌려준다 (14개 게임 실측). 그래서 문서대로 `instanceof NexonNotFoundError` 로 "캐릭터를 찾을 수 없어요"를 안내하는 코드가 동작하지 않았다
+  - 이제 이름 조회에서 온 `OPENAPI00004` 를 `NexonNotFoundError` 로 바꾸고, 메시지로 무엇을 확인할지 안내한다. `code`·`nexonMessage` 는 넥슨 값 그대로다
+- 메이플스토리·SEA·TW `guild.getId()` 가 없는 길드에 `null` 을 길드 번호처럼 돌려주던 버그를 고쳤다. 넥슨이 200과 `oguild_id: null` 을 준다. 이제 `NexonNotFoundError` 를 던진다. 메이플스토리는 빈 길드명·월드명도 요청 전에 검증한다
+- 마비노기 영웅전 `ranking.getHallOfHonor()`·`getRealTime()` 이 배열 대신 응답 객체를 돌려줘 `list[0]`, `list.length` 가 비던 버그를 고쳤다. 실제 응답은 `{ ranking: [...] }` 이다. 선언대로 배열을 돌려준다
+- 퍼스트 디센던트 리더보드: 서버가 거부하는 요청(400)을 요청 전에 알린다
+  - 솔로(`leaderboard_type: 'Solo'`)에 `descendant_id` 가 없거나, 스쿼드에 `squad_user_count` 가 없으면 넥슨이 400을 돌려준다
+  - 이제 요청 타입에서 둘을 필수로 받고, SDK가 `NexonBadRequestError` 로 먼저 알린다
+- 응답 타입의 `null` 허용 누락 500여 곳을 실측에 맞춰 넓혔다 (장착하지 않은 펫 장비, 날짜를 생략한 최신 조회의 `date`, 세트 효과가 없는 프리셋 등)
+- 실제 응답과 이름이 다른 필드에 실제 이름을 선택 필드로 추가했다. 포털 이름도 선택 필드로 남겨 두었다
+  - 메이플스토리·SEA·TW 장비: 업그레이드 가능 횟수 `scroll_upgradable_count` → 실제 `scroll_upgradeable_count`, 프리셋 장착 슬롯 `equipment_slot` → 실제 `item_equipment_slot`
+  - 메이플스토리M: `use_preset_no` → `use_prest_no`, 길드 `world_create_date` → `guild_create_date`, 안드로이드 캐시 아이템 `android_item_gender` → `cash_item_gender`
+  - FC 온라인 매치 상세·랭커 통계: `OffsideCount` → `offsideCount`, `ballPossesionSuc` → `ballPossesionSuccess`, `assistSpI` → `assistSpId`, `spId` → `spid`
+  - TW 펫 잠재능력: `potential_increase_1/2` → `potential_increase1/2`
+  - 마비노기 영웅전 골드 거래소 TOP 30: `total_buy_gold`·`total_sell_gold` → `buy_gold`·`sell_gold`
+  - 히트2: `character_last_login`·`character_last_logout` → `character_date_last_login`·`character_date_last_logout`
+- 메이플스토리 연무장 `getCharacterInfo()`: 리플레이 스냅숏에 없는 필드를 선택 필드로 바꿨다 (소울, 월드 공유 펫, 유니온 상태 스탯 등). 스킬 효과 `null` 은 새 `BattlePracticeSkillInfo` 로 따로 표현한다
+- 실 API E2E 스크립트
+  - 메이플스토리 강화 기록·랭킹이 최근 2년 밖인 고정 날짜를 쓰던 문제
+  - 스케줄러를 다른 계정 캐릭터로 부르던 문제 (키 계정 본인 캐릭터만 조회됨)
+  - FC 선수 이미지 URL 검사가 엉뚱한 번호를 찾던 문제
+- `.env` 에서 `#` 뒤가 주석으로 잘려 퍼스트 디센던트 닉네임(`닉네임#1234`)이 깨지던 문제 — `.env.example` 과 문서에 큰따옴표로 감싸라는 안내를 추가했다
 
 ### Changed
 
 - **BREAKING** FC 온라인 `getMaxDivision()` 반환 타입 `FcMaxDivision` → `readonly FcMaxDivision[]`. 역대 최고 등급은 매치 종류별로 존재하며, 응답이 단일 객체여도 배열로 정규화한다
+- **BREAKING** 실제 응답과 타입이 달랐던 필드를 실제 타입으로 바꿨다 (2026-11-24 실측)
+  - 메이플스토리 `CharacterPetEquipment.world_share_pet_equipment_preset`: 객체 → 배열
+  - 메이플스토리M: `MCashItemEquipmentItem.cash_item_gender` 숫자 → 문자열. `MEmblemInfo.emblem_level`, `MLinkSkillInfo.skill_level`, `MEquipmentSkill.equipment_skill_set`, 지하 수로 랭킹 `season_score` 는 문자열 → 숫자
+  - 마비노기 영웅전: 인챈트 `enchant_grade` 숫자 → 문자열, 장착 장비의 `power_infusion_preset_1/2` 배열 → `{ stat_name, stat_value } | null`
+  - 서든어택 `solo_rank_match_tier`·`party_rank_match_tier`: 숫자 → 문자열
+  - 카트라이더 러쉬플러스 `ouid_info[].racer_level`: 문자열 → 숫자
+  - 메이플스토리·SEA·TW 장비의 `scroll_upgradable_count`, 프리셋의 `equipment_slot`: 필수 → 선택 (실제 이름은 Fixed 참고)
+  - 퍼스트 디센던트 리더보드 요청: 솔로는 `descendant_id`, 스쿼드는 `squad_user_count` 가 필수
 - SDK 입력 검증 실패를 모든 게임에서 `NexonBadRequestError`(code `OPENAPI00004`, status 400)로 통일했다. 오류 메시지는 유효한 값이나 조회 방법을 안내한다. 이전에 `toNexonDate()` 가 파싱할 수 없는 날짜 문자열에 던지던 `Error` 도 이 에러로 바뀐다. `NexonBadRequestError` 는 `Error` 의 하위 클래스이므로 `catch (e)` / `instanceof Error` 처리는 그대로 동작한다
 - 런타임 응답 shape 검증(`responseValidation`)이 최상위 배열 응답에도 적용된다 (`arrayOf()` 사용, 서든어택·마비노기 영웅전·퍼스트 디센던트 메타데이터 등 37개)
 - CI에 `specs:drift --strict` 게이트 추가 — SDK 타입이 커밋된 포털 스펙에서 벗어나면 실패 (nullable 넓힘과 `@deprecated` 유지는 허용)

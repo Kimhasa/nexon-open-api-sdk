@@ -114,8 +114,8 @@ export interface MabinogiAuctionItem {
   readonly auction_price_per_unit: number;
   /** 만료 기한 (해당 아이템의 판매가 종료되는 일시) (UTC0) */
   readonly date_auction_expire: string;
-  /** 경매장 매물의 옵션 목록 */
-  readonly item_option: readonly MabinogiItemOption[];
+  /** 경매장 매물의 옵션 목록. 옵션이 없는 매물이면 null */
+  readonly item_option: readonly MabinogiItemOption[] | null;
 }
 
 /** 판매 중인 경매장 매물 한 페이지. 다음 페이지를 조회할 수 있다. */

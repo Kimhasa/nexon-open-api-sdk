@@ -272,7 +272,7 @@ describe('MapleStoryTWClient', () => {
   });
 
   it.each(snapshotCases)(
-    'GET /$endpoint matches the portal contract',
+    'GET /$endpoint returns the response without shape warnings',
     async ({ endpoint, call, response, query }) => {
       const { client, onRequest, onResponseShapeMismatch } = createClient();
       await expect(call(client)).resolves.toEqual(response);
@@ -288,12 +288,25 @@ describe('MapleStoryTWClient', () => {
     },
   );
 
-  it('leaves the date query unset when omitted', async () => {
-    const { client, onRequest } = createClient();
-    await client.character.getBasic({ ocid: TEST_OCID });
+  it('leaves the date query unset and accepts a null response date for latest data', async () => {
+    const { client, onRequest, onResponseShapeMismatch } = createClient();
+    const response = { ...twCharacterBasicFixture, date: null };
+    server.use(http.get(`${BASE}/character/basic`, () => HttpResponse.json(response)));
+
+    await expect(client.character.getBasic({ ocid: TEST_OCID })).resolves.toEqual(response);
+    expect(onResponseShapeMismatch).not.toHaveBeenCalled();
     expect(onRequest).toHaveBeenCalledExactlyOnceWith(
       expect.objectContaining({ params: { ocid: TEST_OCID } }),
     );
+  });
+
+  it('accepts a null response date for the latest guild data', async () => {
+    const { client, onResponseShapeMismatch } = createClient();
+    await expect(client.guild.getBasic({ oguild_id: TEST_GUILD_ID })).resolves.toEqual({
+      ...twGuildBasicFixture,
+      date: null,
+    });
+    expect(onResponseShapeMismatch).not.toHaveBeenCalled();
   });
 
   it('formats timestamps at the Taiwan day boundary', async () => {

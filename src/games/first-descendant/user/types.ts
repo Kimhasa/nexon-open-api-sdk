@@ -64,10 +64,10 @@ export interface TfdUserBasic {
   readonly mastery_rank_level: number;
   /** 마스터리 랭크 경험치 */
   readonly mastery_rank_exp: number;
-  /** 접두 칭호 번호. 타이틀 도감의 같은 번호에서 이름을 찾는다. */
-  readonly title_prefix_id: string;
-  /** 접미 칭호 번호. 타이틀 도감의 같은 번호에서 이름을 찾는다. */
-  readonly title_suffix_id: string;
+  /** 접두 칭호 번호. 타이틀 도감의 같은 번호에서 이름을 찾는다. 접두 칭호를 달지 않았으면 null */
+  readonly title_prefix_id: string | null;
+  /** 접미 칭호 번호. 타이틀 도감의 같은 번호에서 이름을 찾는다. 접미 칭호를 달지 않았으면 null */
+  readonly title_suffix_id: string | null;
   /** 접속 환경의 운영체제 표시 언어 */
   readonly os_language: string;
   /** 게임 설정 언어 */
@@ -92,16 +92,16 @@ export interface TfdUserCustomizingPaint {
 
 /** 커스터마이징 정보 */
 export interface TfdUserCustomizing {
-  /** 커스터마이징 슬롯 식별자 */
-  readonly customizing_item_slot_id: string;
+  /** 커스터마이징 슬롯 식별자. 슬롯 구분이 없는 커스터마이징이면 null (2026-11-24 실측) */
+  readonly customizing_item_slot_id: string | null;
   /** 커스터마이징 아이템 유형 */
   readonly customizing_item_type: string;
   /** 커스터마이징 아이템 식별자 (`meta.getCustomizingItem()` 참고) */
   readonly customizing_item_id: string;
-  /** 커스터마이징 아이템의 진화 단계 */
-  readonly customizing_item_evolution_stage: number;
-  /** 커스터마이징 아이템의 현재 선택된 진화 단계 */
-  readonly customizing_item_current_evolution_stage: number;
+  /** 커스터마이징 아이템의 진화 단계. 값이 없으면 null */
+  readonly customizing_item_evolution_stage: number | null;
+  /** 커스터마이징 아이템의 현재 선택된 진화 단계. 값이 없으면 null */
+  readonly customizing_item_current_evolution_stage: number | null;
   /** 염색 정보 */
   readonly paint: readonly TfdUserCustomizingPaint[];
 }
@@ -138,26 +138,26 @@ export interface TfdUserDescendant {
 
 /** 장착 무기 1개 */
 export interface TfdUserWeaponItem {
-  /** 장착 가능한 최대 모듈 수용량 */
-  readonly module_max_capacity: number;
-  /** 실제 적용된 수용량 */
-  readonly module_capacity: number;
-  /** 에너지 활성체 사용 횟수 */
-  readonly energy_activator_use_count: number;
+  /** 장착 가능한 최대 모듈 수용량. 값이 없으면 null */
+  readonly module_max_capacity: number | null;
+  /** 실제 적용된 수용량. 값이 없으면 null */
+  readonly module_capacity: number | null;
+  /** 에너지 활성체 사용 횟수. 값이 없으면 null */
+  readonly energy_activator_use_count: number | null;
   /** 무기 슬롯 식별자 */
   readonly weapon_slot_id: string;
   /** 무기 식별자 (`meta.getWeapon()` 참고) */
   readonly weapon_id: string;
   /** 무기 레벨 */
   readonly weapon_level: number;
-  /** 무기 고유 능력 강화 단계 */
-  readonly perk_ability_enchant_level: number;
+  /** 무기 고유 능력 강화 단계. 값이 없으면 null */
+  readonly perk_ability_enchant_level: number | null;
   /** 무기 랜덤 옵션 정보 */
   readonly weapon_additional_stat: readonly TfdUserAdditionalStat[];
   /** 모듈 정보 */
   readonly module: readonly TfdUserModule[];
-  /** 무기 코어 슬롯 개방 여부. 문자열 "0"은 잠금, "1"은 개방이다. */
-  readonly core_unlock_flag: string;
+  /** 무기 코어 슬롯 개방 여부. 문자열 "0"은 잠금, "1"은 개방이다. 값이 없으면 null */
+  readonly core_unlock_flag: string | null;
   /** 코어 옵션 정보 */
   readonly core: readonly TfdUserCore[];
 }
@@ -258,8 +258,8 @@ export interface TfdUserArcheTuning {
   readonly ouid: TfdOuid;
   /** 계승자 그룹 식별자 (`meta.getDescendantGroup()` 참고) */
   readonly descendant_group_id: string;
-  /** 아르케 조율 보드 그룹 식별자 (`meta.getArcheTuningBoardGroup()` 참고) */
-  readonly arche_tuning_board_group_id: string;
+  /** 아르케 조율 보드 그룹 식별자 (`meta.getArcheTuningBoardGroup()` 참고). 아르케 조율을 하지 않은 계승자면 null (2026-11-24 실측) */
+  readonly arche_tuning_board_group_id: string | null;
   /** 아르케 조율 목록 */
   readonly arche_tuning: readonly TfdUserArcheTuningSlot[];
 }

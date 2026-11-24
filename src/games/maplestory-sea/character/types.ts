@@ -4,8 +4,8 @@ import type { OcidDateRequest } from '../../_base/maple-base-types.js';
 
 /** 캐릭터 기본 정보 — `client.maplestorySEA.character.getBasic()` 의 응답. */
 export interface SEACharacterBasic {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character name */
   readonly character_name: string;
   /** World name */
@@ -22,8 +22,8 @@ export interface SEACharacterBasic {
   readonly character_exp: number;
   /** Percentage of experience points at the current level */
   readonly character_exp_rate: string;
-  /** Guild name the character belongs to */
-  readonly character_guild_name: string;
+  /** 캐릭터의 길드 이름. 가입한 길드가 없으면 null. */
+  readonly character_guild_name: string | null;
   /**
    * Character appearance image URL.
    *
@@ -56,8 +56,8 @@ export interface SEACharacterBasic {
 
 /** 캐릭터 인기도 — `client.maplestorySEA.character.getPopularity()` 의 응답. */
 export interface SEACharacterPopularity {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character popularity */
   readonly popularity: number;
 }
@@ -66,8 +66,8 @@ export interface SEACharacterPopularity {
 
 /** 캐릭터 정보창의 스탯(종합 능력치) — `client.maplestorySEA.character.getStat()` 의 응답. */
 export interface SEACharacterStat {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character job */
   readonly character_class: string;
   /** Current stat information */
@@ -90,8 +90,8 @@ export interface SEAStatDetail {
 
 /** 하이퍼 스탯 — `client.maplestorySEA.character.getHyperStat()` 의 응답. */
 export interface SEACharacterHyperStat {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character job */
   readonly character_class: string;
   /** Active preset number */
@@ -128,8 +128,8 @@ export interface SEAHyperStatPreset {
 
 /** 성향 — `client.maplestorySEA.character.getPropensity()` 의 응답. */
 export interface SEACharacterPropensity {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Ambition level */
   readonly charisma_level: number;
   /** Empathy level */
@@ -148,8 +148,8 @@ export interface SEACharacterPropensity {
 
 /** 어빌리티 — `client.maplestorySEA.character.getAbility()` 의 응답. */
 export interface SEACharacterAbility {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Ability grade */
   readonly ability_grade: string;
   /** Ability information */
@@ -288,14 +288,14 @@ export interface SEAItemEquipment {
   readonly item_name: string;
   /** Equipment icon */
   readonly item_icon: string;
-  /** Equipment description */
-  readonly item_description: string;
+  /** 장비 설명. 설명이 없으면 null. */
+  readonly item_description: string | null;
   /** Equipment appearance name */
   readonly item_shape_name: string;
   /** Equipment appearance icon */
   readonly item_shape_icon: string;
-  /** Gender restriction */
-  readonly item_gender: string;
+  /** 장비 착용 성별 제한. 제한이 없으면 null. */
+  readonly item_gender: string | null;
   /** Total option (sum of all options) */
   readonly item_total_option: SEAItemTotalOption;
   /** Base option */
@@ -304,22 +304,22 @@ export interface SEAItemEquipment {
   readonly potential_option_flag: string;
   /** Additional potential option seal status */
   readonly additional_potential_option_flag: string;
-  /** Potential option grade */
-  readonly potential_option_grade: string;
-  /** Additional potential option grade */
-  readonly additional_potential_option_grade: string;
-  /** Potential option 1 */
-  readonly potential_option_1: string;
-  /** Potential option 2 */
-  readonly potential_option_2: string;
-  /** Potential option 3 */
-  readonly potential_option_3: string;
-  /** Additional potential option 1 */
-  readonly additional_potential_option_1: string;
-  /** Additional potential option 2 */
-  readonly additional_potential_option_2: string;
-  /** Additional potential option 3 */
-  readonly additional_potential_option_3: string;
+  /** 잠재능력 등급. 잠재능력이 없으면 null. */
+  readonly potential_option_grade: string | null;
+  /** 에디셔널 잠재능력 등급. 에디셔널 잠재능력이 없으면 null. */
+  readonly additional_potential_option_grade: string | null;
+  /** 잠재능력 1번째 줄. 해당 줄이 없으면 null. */
+  readonly potential_option_1: string | null;
+  /** 잠재능력 2번째 줄. 해당 줄이 없으면 null. */
+  readonly potential_option_2: string | null;
+  /** 잠재능력 3번째 줄. 해당 줄이 없으면 null. */
+  readonly potential_option_3: string | null;
+  /** 에디셔널 잠재능력 1번째 줄. 해당 줄이 없으면 null. */
+  readonly additional_potential_option_1: string | null;
+  /** 에디셔널 잠재능력 2번째 줄. 해당 줄이 없으면 null. */
+  readonly additional_potential_option_2: string | null;
+  /** 에디셔널 잠재능력 3번째 줄. 해당 줄이 없으면 null. */
+  readonly additional_potential_option_3: string | null;
   /** Equipment level increase */
   readonly equipment_level_increase: number;
   /** Exceptional option */
@@ -338,12 +338,14 @@ export interface SEAItemEquipment {
   readonly golden_hammer_flag: string;
   /** Scroll resilience count */
   readonly scroll_resilience_count: string;
-  /** Remaining scroll upgrade count */
-  readonly scroll_upgradable_count: string;
-  /** Soul name */
-  readonly soul_name: string;
-  /** Soul option */
-  readonly soul_option: string;
+  /** 업그레이드 가능 횟수. 포털 스펙의 이름. 2026-11-24 실제 응답에는 없고 scroll_upgradeable_count로 온다. */
+  readonly scroll_upgradable_count?: string | undefined;
+  /** 업그레이드 가능 횟수. 실제 응답의 필드. 포털 스펙에는 scroll_upgradable_count로 적혀 있다. */
+  readonly scroll_upgradeable_count?: string | undefined;
+  /** 장착한 소울 이름. 소울이 없으면 null. */
+  readonly soul_name: string | null;
+  /** 장착한 소울 옵션. 값이 없으면 null. */
+  readonly soul_option: string | null;
   /** Etc option (scroll stats) */
   readonly item_etc_option: SEAItemEtcOption;
   /** Starforce enhancement level */
@@ -356,31 +358,47 @@ export interface SEAItemEquipment {
   readonly special_ring_level: number;
   /** Equipment expiry date (null = permanent) */
   readonly date_expire: string | null;
-  /** Freestyle coupon applied ("0": not applied, "1": applied) */
-  readonly freestyle_flag: string;
+  /** 프리스타일 쿠폰 적용 여부 ("0" 미적용, "1" 적용). 적용 정보가 없으면 null. */
+  readonly freestyle_flag: string | null;
 }
 
-/** Preset item info (uses equipment_slot, no potential flags) */
+/** 장비 프리셋의 장비 정보. */
 export interface SEAPresetItemEquipment {
   readonly item_equipment_part: string;
-  /** Preset uses equipment_slot instead of item_equipment_slot */
-  readonly equipment_slot: string;
+  /** 프리셋 장비 슬롯. 포털 스펙의 이름. 2026-11-24 실제 응답에는 없고 item_equipment_slot으로 온다. */
+  readonly equipment_slot?: string | undefined;
+  /** 프리셋 장비 슬롯. 실제 응답의 필드. 포털 스펙에는 equipment_slot으로 적혀 있다. */
+  readonly item_equipment_slot?: string | undefined;
+  /** 잠재능력 봉인 상태. 포털 스펙에는 없고 실제 응답에 있는 필드 (2026-11-24 실측). */
+  readonly potential_option_flag?: string | undefined;
+  /** 에디셔널 잠재능력 봉인 상태. 포털 스펙에는 없고 실제 응답에 있는 필드 (2026-11-24 실측). */
+  readonly additional_potential_option_flag?: string | undefined;
   readonly item_name: string;
   readonly item_icon: string;
-  readonly item_description: string;
+  /** 장비 설명. 설명이 없으면 null. */
+  readonly item_description: string | null;
   readonly item_shape_name: string;
   readonly item_shape_icon: string;
-  readonly item_gender: string;
+  /** 장비 착용 성별 제한. 제한이 없으면 null. */
+  readonly item_gender: string | null;
   readonly item_total_option: SEAItemTotalOption;
   readonly item_base_option: SEAItemBaseOption;
-  readonly potential_option_grade: string;
-  readonly additional_potential_option_grade: string;
-  readonly potential_option_1: string;
-  readonly potential_option_2: string;
-  readonly potential_option_3: string;
-  readonly additional_potential_option_1: string;
-  readonly additional_potential_option_2: string;
-  readonly additional_potential_option_3: string;
+  /** 잠재능력 등급. 잠재능력이 없으면 null. */
+  readonly potential_option_grade: string | null;
+  /** 에디셔널 잠재능력 등급. 에디셔널 잠재능력이 없으면 null. */
+  readonly additional_potential_option_grade: string | null;
+  /** 잠재능력 1번째 줄. 해당 줄이 없으면 null. */
+  readonly potential_option_1: string | null;
+  /** 잠재능력 2번째 줄. 해당 줄이 없으면 null. */
+  readonly potential_option_2: string | null;
+  /** 잠재능력 3번째 줄. 해당 줄이 없으면 null. */
+  readonly potential_option_3: string | null;
+  /** 에디셔널 잠재능력 1번째 줄. 해당 줄이 없으면 null. */
+  readonly additional_potential_option_1: string | null;
+  /** 에디셔널 잠재능력 2번째 줄. 해당 줄이 없으면 null. */
+  readonly additional_potential_option_2: string | null;
+  /** 에디셔널 잠재능력 3번째 줄. 해당 줄이 없으면 null. */
+  readonly additional_potential_option_3: string | null;
   readonly equipment_level_increase: number;
   readonly item_exceptional_option: SEAItemExceptionalOption;
   readonly item_add_option: SEAItemAddOption;
@@ -390,16 +408,22 @@ export interface SEAPresetItemEquipment {
   readonly cuttable_count: string;
   readonly golden_hammer_flag: string;
   readonly scroll_resilience_count: string;
-  readonly scroll_upgradable_count: string;
-  readonly soul_name: string;
-  readonly soul_option: string;
+  /** 업그레이드 가능 횟수. 포털 스펙의 이름. 2026-11-24 실제 응답에는 없고 scroll_upgradeable_count로 온다. */
+  readonly scroll_upgradable_count?: string | undefined;
+  /** 업그레이드 가능 횟수. 실제 응답의 필드. 포털 스펙에는 scroll_upgradable_count로 적혀 있다. */
+  readonly scroll_upgradeable_count?: string | undefined;
+  /** 장착한 소울 이름. 소울이 없으면 null. */
+  readonly soul_name: string | null;
+  /** 장착한 소울 옵션. 값이 없으면 null. */
+  readonly soul_option: string | null;
   readonly item_etc_option: SEAItemEtcOption;
   readonly starforce: string;
   readonly starforce_scroll_flag: string;
   readonly item_starforce_option: SEAItemEtcOption;
   readonly special_ring_level: number;
   readonly date_expire: string | null;
-  readonly freestyle_flag: string;
+  /** 프리스타일 쿠폰 적용 여부 ("0" 미적용, "1" 적용). 적용 정보가 없으면 null. */
+  readonly freestyle_flag: string | null;
 }
 
 /** Exceptional options on Evan dragon or Mechanic equipment. */
@@ -411,6 +435,10 @@ interface SEAClassItemExceptionalOption extends SEAItemExceptionalOption {
 /** Evan dragon or Mechanic equipment. */
 export interface SEAClassItemEquipment extends Omit<
   SEAPresetItemEquipment,
+  | 'item_equipment_slot'
+  | 'scroll_upgradeable_count'
+  | 'potential_option_flag'
+  | 'additional_potential_option_flag'
   | 'potential_option_grade'
   | 'additional_potential_option_grade'
   | 'potential_option_1'
@@ -420,6 +448,15 @@ export interface SEAClassItemEquipment extends Omit<
   | 'additional_potential_option_2'
   | 'additional_potential_option_3'
 > {
+  /** 직업 전용 장비 슬롯. */
+  readonly equipment_slot: string;
+  /** 직업 전용 장비의 업그레이드 가능 횟수. */
+  readonly scroll_upgradable_count: string;
+  readonly item_description: string;
+  readonly item_gender: string;
+  readonly soul_name: string;
+  readonly soul_option: string;
+  readonly freestyle_flag: string;
   /** @deprecated The portal omits potential options for class equipment. */
   readonly potential_option_grade?: string | undefined;
   /** @deprecated The portal omits potential options for class equipment. */
@@ -451,19 +488,20 @@ export interface SEATitleInfo {
   readonly date_expire: string | null;
   /** Title option expiry date */
   readonly date_option_expire: string | null;
-  /** Title appearance name */
-  readonly title_shape_name: string;
-  /** Title appearance icon */
-  readonly title_shape_icon: string;
-  /** Title appearance description */
-  readonly title_shape_description: string;
+  /** 칭호 외형 이름. 값이 없으면 null. */
+  readonly title_shape_name: string | null;
+  /** 칭호 외형 아이콘. 값이 없으면 null. */
+  readonly title_shape_icon: string | null;
+  /** 칭호 외형 설명. 값이 없으면 null. */
+  readonly title_shape_description: string | null;
 }
 
 /** Medal shape info */
 export interface SEAMedalShape {
   readonly medal_shape_name: string;
   readonly medal_shape_icon: string;
-  readonly medal_shape_description: string;
+  /** 훈장 외형 설명. 설명이 없으면 null. */
+  readonly medal_shape_description: string | null;
   readonly medal_shape_changed_name: string;
   readonly medal_shape_changed_icon: string;
   readonly medal_shape_changed_description: string;
@@ -471,8 +509,8 @@ export interface SEAMedalShape {
 
 /** 장착 장비(캐시 장비 제외) — `client.maplestorySEA.character.getItemEquipment()` 의 응답. */
 export interface SEACharacterItemEquipment {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character gender */
   readonly character_gender: string;
   /** Character job */
@@ -487,10 +525,10 @@ export interface SEACharacterItemEquipment {
   readonly item_equipment_preset_2: readonly SEAPresetItemEquipment[];
   /** Preset 3 equipment */
   readonly item_equipment_preset_3: readonly SEAPresetItemEquipment[];
-  /** Title info */
-  readonly title: SEATitleInfo;
-  /** Medal shape info */
-  readonly medal_shape: SEAMedalShape;
+  /** 장착한 칭호 정보. 장착한 칭호가 없으면 null. */
+  readonly title: SEATitleInfo | null;
+  /** 훈장 외형 정보. 값이 없으면 null. */
+  readonly medal_shape: SEAMedalShape | null;
   /** Evan dragon equipment (only for Evan class) */
   readonly dragon_equipment: readonly SEAClassItemEquipment[];
   /** Mechanic equipment (only for Mechanic class) */
@@ -537,20 +575,20 @@ export interface SEACashItemEquipmentItem {
   readonly cash_item_name: string;
   /** Cash equipment icon */
   readonly cash_item_icon: string;
-  /** Cash equipment description */
-  readonly cash_item_description: string;
+  /** 캐시 장비 설명. 설명이 없으면 null. */
+  readonly cash_item_description: string | null;
   /** Cash equipment options */
   readonly cash_item_option: readonly SEACashItemOption[];
   /** Cash equipment expiry date (SGT, null = permanent) */
   readonly date_expire: string | null;
   /** Cash equipment option expiry date (SGT, null = permanent) */
   readonly date_option_expire: string | null;
-  /** Cash equipment label information */
-  readonly cash_item_label: string;
+  /** 캐시 장비 라벨. 라벨이 없으면 null. */
+  readonly cash_item_label: string | null;
   /** Cash equipment coloring prism info (null = not applied) */
   readonly cash_item_coloring_prism: SEACashItemColoringPrism | null;
-  /** Gender compatibility for item equipment */
-  readonly item_gender: string;
+  /** 캐시 장비 착용 성별 제한. 제한이 없으면 null. */
+  readonly item_gender: string | null;
   /** @deprecated Use skill_info for skill names and levels. */
   readonly skills?: readonly string[] | undefined;
   /** Skill information granted to the cash equipment */
@@ -561,16 +599,16 @@ export interface SEACashItemEquipmentItem {
 
 /** 장착 캐시 장비 — `client.maplestorySEA.character.getCashItemEquipment()` 의 응답. */
 export interface SEACharacterCashItemEquipment {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character gender */
   readonly character_gender: string;
   /** Character job */
   readonly character_class: string;
   /** Character appearance mode ("0": Normal, "1": Beta for Zero / Dress-up for Angelic Buster) */
   readonly character_look_mode: string;
-  /** Active cash item preset number */
-  readonly preset_no: number;
+  /** 적용 중인 캐시 장비 프리셋 번호. 적용된 프리셋이 없으면 null. */
+  readonly preset_no: number | null;
   /** Equipped cash item info */
   readonly cash_item_equipment_base: readonly SEACashItemEquipmentItem[];
   /** Preset 1 cash item info */
@@ -627,8 +665,8 @@ export interface SEASymbolInfo {
 
 /** 장착 심볼 — `client.maplestorySEA.character.getSymbolEquipment()` 의 응답. */
 export interface SEACharacterSymbolEquipment {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character job */
   readonly character_class: string;
   /** Symbol information */
@@ -659,8 +697,8 @@ export interface SEASetEffectDetail {
 
 /** 적용 중인 세트 효과 — `client.maplestorySEA.character.getSetEffect()` 의 응답. */
 export interface SEACharacterSetEffect {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Set Item effect information */
   readonly set_effect: readonly SEASetEffectDetail[];
 }
@@ -669,50 +707,50 @@ export interface SEACharacterSetEffect {
 
 /** Hair info */
 export interface SEAHairInfo {
-  /** Hair name */
-  readonly hair_name: string;
-  /** Base hair color */
-  readonly base_color: string;
-  /** Mixed hair color */
-  readonly mix_color: string;
+  /** 헤어 이름. 값이 없으면 null. */
+  readonly hair_name: string | null;
+  /** 기본 헤어 색상. 값이 없으면 null. */
+  readonly base_color: string | null;
+  /** 믹스염색 색상. 믹스염색이 없으면 null. */
+  readonly mix_color: string | null;
   /** Dye ratio for mixed hair color */
   readonly mix_rate: string;
-  /** Freestyle Coupon application status ("0": not applied, "1": applied) */
-  readonly freestyle_flag: string;
+  /** 프리스타일 쿠폰 적용 여부 ("0" 미적용, "1" 적용). 적용 정보가 없으면 null. */
+  readonly freestyle_flag: string | null;
 }
 
 /** Face info */
 export interface SEAFaceInfo {
-  /** Face name */
-  readonly face_name: string;
-  /** Base face color */
-  readonly base_color: string;
-  /** Mixed face color */
-  readonly mix_color: string;
+  /** 성형 이름. 값이 없으면 null. */
+  readonly face_name: string | null;
+  /** 기본 컬러렌즈 색상. 값이 없으면 null. */
+  readonly base_color: string | null;
+  /** 믹스 컬러렌즈 색상. 믹스 컬러렌즈가 없으면 null. */
+  readonly mix_color: string | null;
   /** Dye ratio for mixed face color */
   readonly mix_rate: string;
-  /** Freestyle Coupon application status ("0": not applied, "1": applied) */
-  readonly freestyle_flag: string;
+  /** 프리스타일 쿠폰 적용 여부 ("0" 미적용, "1" 적용). 적용 정보가 없으면 null. */
+  readonly freestyle_flag: string | null;
 }
 
 /** Skin info */
 export interface SEASkinInfo {
   /** Skin name */
   readonly skin_name: string;
-  /** Color style */
-  readonly color_style: string;
-  /** Skin hue */
-  readonly hue: number;
-  /** Skin saturation */
-  readonly saturation: number;
-  /** Skin brightness */
-  readonly brightness: number;
+  /** 피부 색상 유형. 색상 보정 정보가 없으면 null. */
+  readonly color_style: string | null;
+  /** 피부 색조. 색상 보정 정보가 없으면 null. */
+  readonly hue: number | null;
+  /** 피부 채도. 색상 보정 정보가 없으면 null. */
+  readonly saturation: number | null;
+  /** 피부 밝기. 색상 보정 정보가 없으면 null. */
+  readonly brightness: number | null;
 }
 
 /** 헤어·성형·피부 — `client.maplestorySEA.character.getBeautyEquipment()` 의 응답. */
 export interface SEACharacterBeautyEquipment {
-  /** Reference date for query (SGT) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character gender */
   readonly character_gender: string;
   /** Character job */
@@ -723,12 +761,12 @@ export interface SEACharacterBeautyEquipment {
   readonly character_face: SEAFaceInfo;
   /** Character skin info (Normal mode / Alpha mode for Zero) */
   readonly character_skin: SEASkinInfo;
-  /** Additional hair info (Beta mode for Zero / Dress-up mode for Angelic Buster) */
-  readonly additional_character_hair: SEAHairInfo;
-  /** Additional face info (Beta mode for Zero / Dress-up mode for Angelic Buster) */
-  readonly additional_character_face: SEAFaceInfo;
-  /** Additional skin info (Beta mode for Zero / Dress-up mode for Angelic Buster) */
-  readonly additional_character_skin: SEASkinInfo;
+  /** 제로 베타 모드 또는 엔젤릭버스터 드레스업 모드의 헤어. 해당 외형이 없으면 null. */
+  readonly additional_character_hair: SEAHairInfo | null;
+  /** 제로 베타 모드 또는 엔젤릭버스터 드레스업 모드의 성형. 해당 외형이 없으면 null. */
+  readonly additional_character_face: SEAFaceInfo | null;
+  /** 제로 베타 모드 또는 엔젤릭버스터 드레스업 모드의 피부. 해당 외형이 없으면 null. */
+  readonly additional_character_skin: SEASkinInfo | null;
 }
 
 // ─── GET /maplestorysea/v1/character/android-equipment ────────────────────────
@@ -743,20 +781,20 @@ export interface SEAAndroidCashItem {
   readonly cash_item_name: string;
   /** Cash item icon */
   readonly cash_item_icon: string;
-  /** Cash item description */
-  readonly cash_item_description: string;
+  /** 캐시 장비 설명. 설명이 없으면 null. */
+  readonly cash_item_description: string | null;
   /** Cash item options */
   readonly cash_item_option: readonly SEACashItemOption[];
   /** Cash item expiry date (SGT) */
   readonly date_expire: string | null;
   /** Cash item option expiry date (SGT) */
   readonly date_option_expire: string | null;
-  /** Cash item label info */
-  readonly cash_item_label: string;
+  /** 캐시 장비 라벨. 라벨이 없으면 null. */
+  readonly cash_item_label: string | null;
   /** Cash item coloring prism info (null = not applied) */
   readonly cash_item_coloring_prism: SEACashItemColoringPrism | null;
-  /** Gender compatibility for android item */
-  readonly android_item_gender: string;
+  /** 안드로이드 캐시 장비 착용 성별 제한. 제한이 없으면 null. */
+  readonly android_item_gender: string | null;
   /** Freestyle Coupon application status ("0": not applied, "1": applied) */
   readonly freestyle_flag: string;
 }
@@ -769,14 +807,14 @@ export interface SEAAndroidPreset {
   readonly android_nickname: string;
   /** Android icon */
   readonly android_icon: string;
-  /** Android item description */
-  readonly android_description: string;
+  /** 프리셋 안드로이드 설명. 설명이 없으면 null. */
+  readonly android_description: string | null;
   /** Android gender */
   readonly android_gender: string;
   /** Android grade */
   readonly android_grade: string;
-  /** Android skin info */
-  readonly android_skin: SEASkinInfo;
+  /** 안드로이드 피부 정보. 값이 없으면 null. */
+  readonly android_skin: SEASkinInfo | null;
   /** Android hair info */
   readonly android_hair: SEAHairInfo;
   /** Android face info */
@@ -791,8 +829,8 @@ export interface SEAAndroidPreset {
 
 /** 장착 안드로이드 — `client.maplestorySEA.character.getAndroidEquipment()` 의 응답. */
 export interface SEACharacterAndroidEquipment {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Android name */
   readonly android_name: string | null;
   /** Android nickname */
@@ -805,8 +843,8 @@ export interface SEACharacterAndroidEquipment {
   readonly android_hair: SEAHairInfo;
   /** Android face info */
   readonly android_face: SEAFaceInfo;
-  /** Android skin info */
-  readonly android_skin: SEASkinInfo;
+  /** 안드로이드 피부 정보. 값이 없으면 null. */
+  readonly android_skin: SEASkinInfo | null;
   /** Android cash item equipment info */
   readonly android_cash_item_equipment: readonly SEAAndroidCashItem[];
   /** Whether the Android ear sensor clip is applied */
@@ -815,10 +853,10 @@ export interface SEACharacterAndroidEquipment {
   readonly android_gender: string | null;
   /** Android grade */
   readonly android_grade: string | null;
-  /** Whether the Android is non-humanoid */
-  readonly android_non_humanoid_flag: string;
-  /** Whether the Android can use the general store */
-  readonly android_shop_usable_flag: string;
+  /** 비인간형 안드로이드 여부. 값이 없으면 null. */
+  readonly android_non_humanoid_flag: string | null;
+  /** 안드로이드 잡화상점 이용 가능 여부. 값이 없으면 null. */
+  readonly android_shop_usable_flag: string | null;
   /** Active equipment preset number */
   readonly preset_no: number;
   /** Android preset 1 info */
@@ -861,20 +899,20 @@ export interface SEAPetEquipmentInfo {
 
 /** Pet auto buff skill info */
 export interface SEAPetAutoSkill {
-  /** Auto skill in the first slot */
-  readonly skill_1: string;
-  /** Icon for the auto skill in the first slot */
-  readonly skill_1_icon: string;
-  /** Auto skill in the second slot */
-  readonly skill_2: string;
-  /** Icon for the auto skill in the second slot */
-  readonly skill_2_icon: string;
+  /** 펫 자동 스킬 첫 번째 슬롯의 스킬 이름. 슬롯이 비어 있으면 null. */
+  readonly skill_1: string | null;
+  /** 펫 자동 스킬 첫 번째 슬롯의 스킬 아이콘. 슬롯이 비어 있으면 null. */
+  readonly skill_1_icon: string | null;
+  /** 펫 자동 스킬 두 번째 슬롯의 스킬 이름. 슬롯이 비어 있으면 null. */
+  readonly skill_2: string | null;
+  /** 펫 자동 스킬 두 번째 슬롯의 스킬 아이콘. 슬롯이 비어 있으면 null. */
+  readonly skill_2_icon: string | null;
 }
 
 /** 장착 펫과 펫 장비·펫 스킬 — `client.maplestorySEA.character.getPetEquipment()` 의 응답. */
 export interface SEACharacterPetEquipment {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Name of pet 1 */
   readonly pet_1_name: string | null;
   /** Nickname of pet 1 */
@@ -961,20 +999,20 @@ export interface SEASkillInfo {
   readonly skill_level: number;
   /** Effect description by skill level */
   readonly skill_effect: string;
-  /** Effect description for the next skill level */
-  readonly skill_effect_next: string;
+  /** 다음 레벨 스킬 효과. 다음 레벨 효과가 없으면 null. */
+  readonly skill_effect_next: string | null;
   /** Skill icon */
   readonly skill_icon: string;
 }
 
 /** 전직 차수별 스킬 — `client.maplestorySEA.character.getSkill()` 의 응답. */
 export interface SEACharacterSkill {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character job */
   readonly character_class: string;
-  /** Job advancement tier */
-  readonly character_skill_grade: string;
+  /** 스킬의 전직 차수. 값이 없으면 null. */
+  readonly character_skill_grade: string | null;
   /** Skill information */
   readonly character_skill: readonly SEASkillInfo[];
 }
@@ -991,8 +1029,8 @@ export interface SEALinkSkillInfo {
   readonly skill_level: number;
   /** Skill effect */
   readonly skill_effect: string;
-  /** Effect for the next skill level */
-  readonly skill_effect_next: string;
+  /** 다음 레벨 스킬 효과. 다음 레벨 효과가 없으면 null. */
+  readonly skill_effect_next: string | null;
   /** Skill icon */
   readonly skill_icon: string;
 }
@@ -1013,10 +1051,10 @@ export interface SEALinkSkillPresetInfo {
 
 /** 링크 스킬 — `client.maplestorySEA.character.getLinkSkill()` 의 응답. */
 export interface SEACharacterLinkSkill {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
-  /** Character job */
-  readonly character_class: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
+  /** 링크 스킬 정보에 기록된 캐릭터 직업. 값이 없으면 null. */
+  readonly character_class: string | null;
   /** Link Skill information */
   readonly character_link_skill: readonly SEALinkSkillInfo[];
   /** Link Skill preset 1 */
@@ -1043,30 +1081,30 @@ export interface SEAVCoreInfo {
   readonly slot_id: string;
   /** Slot level */
   readonly slot_level: number;
-  /** Node name */
-  readonly v_core_name: string;
-  /** Node type */
-  readonly v_core_type: string;
+  /** V코어 이름. 슬롯에 코어가 없으면 null. */
+  readonly v_core_name: string | null;
+  /** V코어 종류. 슬롯에 코어가 없으면 null. */
+  readonly v_core_type: string | null;
   /** Node level */
   readonly v_core_level: number;
-  /** Name of the skill that corresponds to the node */
-  readonly v_core_skill_1: string;
-  /** Name of the second skill (Boost Nodes) */
-  readonly v_core_skill_2: string;
-  /** Name of the third skill (Boost Nodes) */
-  readonly v_core_skill_3: string;
+  /** 코어의 첫 번째 스킬 이름. 해당 스킬이 없으면 null. */
+  readonly v_core_skill_1: string | null;
+  /** 코어의 두 번째 스킬 이름. 해당 스킬이 없으면 null. */
+  readonly v_core_skill_2: string | null;
+  /** 코어의 세 번째 스킬 이름. 해당 스킬이 없으면 null. */
+  readonly v_core_skill_3: string | null;
 }
 
 /** V매트릭스(5차) — `client.maplestorySEA.character.getVMatrix()` 의 응답. */
 export interface SEACharacterVMatrix {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
-  /** Character job */
-  readonly character_class: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
+  /** V매트릭스에 기록된 캐릭터 직업. 값이 없으면 null. */
+  readonly character_class: string | null;
   /** V Matrix Node information */
   readonly character_v_core_equipment: readonly SEAVCoreInfo[];
-  /** Remaining Matrix enhancement points */
-  readonly character_v_matrix_remain_slot_upgrade_point: number;
+  /** 남은 V매트릭스 슬롯 강화 포인트. 값이 없으면 null. */
+  readonly character_v_matrix_remain_slot_upgrade_point: number | null;
 }
 
 // ─── GET /maplestorysea/v1/character/hexamatrix ───────────────────────────────
@@ -1091,10 +1129,10 @@ export interface SEAHexaCoreInfo {
 
 /** HEXA 매트릭스(6차)의 HEXA 코어 — `client.maplestorySEA.character.getHexaMatrix()` 의 응답. */
 export interface SEACharacterHexaMatrix {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
-  /** HEXA Node information */
-  readonly character_hexa_core_equipment: readonly SEAHexaCoreInfo[];
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
+  /** 장착한 HEXA 코어 정보. HEXA 매트릭스 정보가 없으면 null. */
+  readonly character_hexa_core_equipment: readonly SEAHexaCoreInfo[] | null;
 }
 
 // ─── GET /maplestorysea/v1/character/hexamatrix-stat ──────────────────────────
@@ -1103,12 +1141,12 @@ export interface SEACharacterHexaMatrix {
 export interface SEAHexaStatCoreInfo {
   /** Slot index */
   readonly slot_id: string;
-  /** Main Stat name */
-  readonly main_stat_name: string;
-  /** First sub stat name */
-  readonly sub_stat_name_1: string;
-  /** Second sub stat name */
-  readonly sub_stat_name_2: string;
+  /** HEXA 스탯 코어의 메인 스탯 이름. 선택한 스탯이 없으면 null. */
+  readonly main_stat_name: string | null;
+  /** HEXA 스탯 코어의 첫 번째 추가 스탯 이름. 선택한 스탯이 없으면 null. */
+  readonly sub_stat_name_1: string | null;
+  /** HEXA 스탯 코어의 두 번째 추가 스탯 이름. 선택한 스탯이 없으면 null. */
+  readonly sub_stat_name_2: string | null;
   /** Main Stat level */
   readonly main_stat_level: number;
   /** First sub stat level */
@@ -1121,30 +1159,30 @@ export interface SEAHexaStatCoreInfo {
 
 /** HEXA 스탯 — `client.maplestorySEA.character.getHexaMatrixStat()` 의 응답. */
 export interface SEACharacterHexaMatrixStat {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
-  /** Character job */
-  readonly character_class: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
+  /** HEXA 스탯에 기록된 캐릭터 직업. 값이 없으면 null. */
+  readonly character_class: string | null;
   /** HEXA Stat Node I information */
   readonly character_hexa_stat_core: readonly SEAHexaStatCoreInfo[];
-  /** HEXA Stat Node II information */
-  readonly character_hexa_stat_core_2: readonly SEAHexaStatCoreInfo[];
-  /** HEXA Stat Node III information */
-  readonly character_hexa_stat_core_3: readonly SEAHexaStatCoreInfo[];
+  /** HEXA 스탯 코어 II 정보. 값이 없으면 null. */
+  readonly character_hexa_stat_core_2: readonly SEAHexaStatCoreInfo[] | null;
+  /** HEXA 스탯 코어 III 정보. 값이 없으면 null. */
+  readonly character_hexa_stat_core_3: readonly SEAHexaStatCoreInfo[] | null;
   /** Preset HEXA Stat Node I information */
   readonly preset_hexa_stat_core: readonly SEAHexaStatCoreInfo[];
-  /** Preset HEXA Stat Node II information */
-  readonly preset_hexa_stat_core_2: readonly SEAHexaStatCoreInfo[];
-  /** Preset HEXA Stat Node III information */
-  readonly preset_hexa_stat_core_3: readonly SEAHexaStatCoreInfo[];
+  /** 프리셋의 HEXA 스탯 코어 II 정보. 값이 없으면 null. */
+  readonly preset_hexa_stat_core_2: readonly SEAHexaStatCoreInfo[] | null;
+  /** 프리셋의 HEXA 스탯 코어 III 정보. 값이 없으면 null. */
+  readonly preset_hexa_stat_core_3: readonly SEAHexaStatCoreInfo[] | null;
 }
 
 // ─── GET /maplestorysea/v1/character/dojang ───────────────────────────────────
 
 /** 무릉도장 최고 기록 — `client.maplestorySEA.character.getDojang()` 의 응답. */
 export interface SEACharacterDojang {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character job */
   readonly character_class: string;
   /** World name */

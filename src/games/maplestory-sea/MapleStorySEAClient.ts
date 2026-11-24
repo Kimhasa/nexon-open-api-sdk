@@ -1,4 +1,5 @@
 import { assertNonEmptyString } from '../../core/validation/input.js';
+import { lookupByName } from '../../core/errors/name-lookup.js';
 import { SEA_OCID_SHAPE } from './shapes.js';
 import { AbstractMapleBaseClient } from '../_base/AbstractMapleStoryBaseClient.js';
 import type { OCID } from '../_base/maple-base-types.js';
@@ -75,12 +76,20 @@ export class MapleStorySEAClient extends AbstractMapleBaseClient {
   async getOcid(characterName: string): Promise<OCID> {
     assertNonEmptyString(characterName, 'characterName', undefined, 'trim-truthy');
     const url = this.buildUrl('id');
-    const response = await this.http.get<{ ocid: string }>(
-      url,
-      {
-        character_name: characterName,
-      },
-      SEA_OCID_SHAPE,
+    const notFound = {
+      message: `'${characterName}' 캐릭터를 찾을 수 없습니다.`,
+      hint: 'MapleStory SEA 캐릭터 이름(대소문자)을 확인하세요.',
+    };
+    const response = await lookupByName(
+      () =>
+        this.http.get<{ ocid: string }>(
+          url,
+          {
+            character_name: characterName,
+          },
+          SEA_OCID_SHAPE,
+        ),
+      notFound,
     );
     return response.ocid as OCID;
   }

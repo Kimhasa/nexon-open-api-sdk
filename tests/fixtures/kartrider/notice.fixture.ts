@@ -21,7 +21,7 @@ export const kartriderNoticeListFixture: KartriderNoticeList = {
       url: 'https://kartrush.nexon.com/news/notice/1002',
       notice_id: 1002,
       date: '2023-12-15T02:00:00Z',
-      notice_tag: [],
+      notice_tag: null,
     },
   ],
 };
@@ -71,5 +71,5 @@ export const kartriderEventNoticeDetailFixture: KartriderNoticeDetail = {
   url: 'https://kartrush.nexon.com/news/event/3001',
   contents: '<p>테스트 이벤트&대회 본문입니다.</p>',
   date: '2023-12-14T08:28:35Z',
-  notice_tag: ['이벤트', '대회'],
+  notice_tag: null,
 };

@@ -31,7 +31,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
     endpointCount: 56,
-    note: 'Portal OpenAPI spec (specs/openapi/maplestory/, 2026-11-24): all 56 operations, request params and response fields compared. Not verified with a real API key; the last real-API E2E run was 43/43 on 2026-03-05 (PR #2, 48 methods).',
+    note: "Real API E2E with a development key on 2026-11-24 (yarn test:deep): 55 of 56 methods called with 6 public ranking characters (2 with battle-practice replays) and the key owner's account. Responses were compared with the SDK types down to nested fields (0 differences); where live data differs from the portal spec, types follow the live data (specs/drift-baseline.json). Not called: getLegacyOuid (needs a legacy developer-center key).",
   },
   maplestorym: {
     game: 'MapleStory M',
@@ -39,7 +39,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
     endpointCount: 38,
-    note: 'Portal OpenAPI spec (specs/openapi/maplestorym/, 2026-11-24) and spec-based fixtures. Not verified with a real API key for this update.',
+    note: 'Real API E2E with a development key on 2026-11-24 (yarn test:deep): all 38 methods called with 3 public ranking characters. Responses were compared with the SDK types down to nested fields (0 differences); where live data differs from the portal spec, types follow the live data (specs/drift-baseline.json).',
   },
   maplestorysea: {
     game: 'MapleStory SEA',
@@ -47,7 +47,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
     endpointCount: 26,
-    note: 'Portal OpenAPI spec (specs/openapi/maplestorysea/, 2026-11-24). All 26 response shapes and MSW fixtures verified. Not verified with a real API key.',
+    note: 'Real API E2E with a development key on 2026-11-24 (yarn test:deep): all 26 methods called with 3 public characters (incl. guild APIs). Responses were compared with the SDK types down to nested fields (0 differences); where live data differs from the portal spec, types follow the live data (specs/drift-baseline.json).',
   },
   fconline: {
     game: 'EA SPORTS FC Online',
@@ -55,7 +55,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
     endpointCount: 18,
-    note: 'Portal OpenAPI spec (specs/openapi/fconline/, 2026-11-24). Public static metadata and image CDN checked without a key. Authenticated endpoints verified with MSW fixtures.',
+    note: "Real API E2E with a development key on 2026-11-24 (yarn test:deep): 13 of 16 HTTP methods called with 3 public ranking managers. Responses were compared with the SDK types down to nested fields (0 differences); where live data differs from the portal spec, types follow the live data (specs/drift-baseline.json). Not called: getTradeList (returns only the key owner's own transfer-market trades), getAllMatchList (service ended), getSeasonIdMeta (deprecated; its static file is checked by yarn test:live). Image URL helpers are checked by yarn test:live.",
   },
 
   // ── 아래 자리는 게임 구현 워커가 채운다: 자기 게임의 [slot] 주석 한 줄을 엔트리로 교체 ──
@@ -66,7 +66,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
     endpointCount: 27,
-    note: 'Portal OpenAPI spec (specs/openapi/maplestorytw/, 2026-11-24). Not verified with a real API key.',
+    note: 'Real API E2E with a development key on 2026-11-24 (yarn test:deep): all 27 methods called with 3 public characters (incl. guild APIs). Responses were compared with the SDK types down to nested fields (0 differences); where live data differs from the portal spec, types follow the live data (specs/drift-baseline.json).',
   },
 
   tfd: {
@@ -75,7 +75,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
     endpointCount: 42,
-    note: 'OUID(1) + User(6) + Meta(32) + Recommendation(1) + Leaderboard(2). Portal OpenAPI spec (specs/openapi/tfd/, 2026-11-24). The 32 static meta files were checked against live responses (no key needed); types follow the live data where it differs from the spec. The 10 keyed APIs are not verified with a real API key (spec-based synthetic fixtures).',
+    note: 'OUID(1) + User(6) + Meta(32) + Recommendation(1) + Leaderboard(2). Real API E2E with a development key on 2026-11-24 (yarn test:deep): all 42 methods called with 2 public leaderboard players. Responses were compared with the SDK types down to nested fields (0 differences); where live data differs from the portal spec, types follow the live data (specs/drift-baseline.json).',
   },
 
   heroes: {
@@ -84,7 +84,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
     endpointCount: 19,
-    note: 'OCID(1) + Character V2(6) + Meta(1) + Notice V1(6) + Marketplace(3) + Ranking(2). Portal OpenAPI spec (specs/openapi/heroes/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec, and nullable fields are an SDK-side assumption (the spec marks none).',
+    note: 'OCID(1) + Character V2(6) + Meta(1) + Notice V1(6) + Marketplace(3) + Ranking(2). Real API E2E with a development key on 2026-11-24 (yarn test:deep): all 19 methods called with 4 public ranking characters. Responses were compared with the SDK types down to nested fields (0 differences); where live data differs from the portal spec, types follow the live data (specs/drift-baseline.json).',
   },
 
   suddenattack: {
@@ -93,7 +93,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
     endpointCount: 11,
-    note: 'Portal OpenAPI spec (specs/openapi/suddenattack/, 2026-11-24). All four static metadata endpoints verified against live data. Authenticated endpoints were mocked from the spec.',
+    note: 'Real API E2E with a development key on 2026-11-24 (yarn test:deep): all 11 methods called with 3 public ranking players. Responses were compared with the SDK types down to nested fields (0 differences); where live data differs from the portal spec, types follow the live data (specs/drift-baseline.json).',
   },
 
   kartrush: {
@@ -102,7 +102,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
     endpointCount: 9,
-    note: 'OUID(1) + User(2) + Notice(6). Portal OpenAPI spec (specs/openapi/kartrush/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+    note: 'OUID(1) + User(2) + Notice(6). Real API E2E with a development key on 2026-11-24 (yarn test:deep): all 9 methods called with 3 racers. Responses were compared with the SDK types down to nested fields (0 differences); where live data differs from the portal spec, types follow the live data (specs/drift-baseline.json).',
   },
 
   baram: {
@@ -111,7 +111,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
     endpointCount: 7,
-    note: 'OCID(1) + Character(6). Portal OpenAPI spec (specs/openapi/baram/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+    note: 'OCID(1) + Character(6). Real API E2E with a development key on 2026-11-24 (yarn test:deep): all 7 methods called with 3 public ranking characters. Responses were compared with the SDK types down to nested fields (0 differences); where live data differs from the portal spec, types follow the live data (specs/drift-baseline.json).',
   },
 
   mabinogi: {
@@ -120,7 +120,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
     endpointCount: 5,
-    note: 'Portal OpenAPI spec (specs/openapi/mabinogi/, 2026-11-24). Fixtures synthesized from the spec. Not verified with a real API key.',
+    note: 'Real API E2E with a development key on 2026-11-24 (yarn test:deep): all 5 methods called (auction, NPC shop, horn bugle). Responses were compared with the SDK types down to nested fields (0 differences); where live data differs from the portal spec, types follow the live data (specs/drift-baseline.json).',
   },
 
   baramy: {
@@ -129,7 +129,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
     endpointCount: 4,
-    note: 'OCID(1) + Character(3). Portal OpenAPI spec (specs/openapi/baramy/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+    note: 'OCID(1) + Character(3). Real API E2E with a development key on 2026-11-24 (yarn test:deep): all 4 methods called with 3 characters. Responses were compared with the SDK types down to nested fields (0 differences); where live data differs from the portal spec, types follow the live data (specs/drift-baseline.json).',
   },
 
   v4: {
@@ -138,7 +138,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
     endpointCount: 4,
-    note: 'OCID(1) + Character(3). Portal OpenAPI spec (specs/openapi/v4/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+    note: 'OCID(1) + Character(3). Real API E2E with a development key on 2026-11-24 (yarn test:deep): all 4 methods called with 3 public ranking characters. Responses were compared with the SDK types down to nested fields (0 differences); where live data differs from the portal spec, types follow the live data (specs/drift-baseline.json).',
   },
 
   hit2: {
@@ -147,7 +147,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
     endpointCount: 2,
-    note: 'OCID(1) + Character(1). Portal OpenAPI spec (specs/openapi/hit2/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+    note: 'OCID(1) + Character(1). Real API E2E with a development key on 2026-11-24 (yarn test:deep): both methods called with 3 public ranking characters. Responses were compared with the SDK types down to nested fields (0 differences); where live data differs from the portal spec, types follow the live data (specs/drift-baseline.json).',
   },
 
   platform: {
@@ -156,7 +156,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
     endpointCount: 1,
-    note: 'Notice(1), path /platform/openapi/v1/notice. Portal OpenAPI spec (specs/openapi/platform/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+    note: 'Notice(1), path /platform/openapi/v1/notice. Real API E2E with a development key on 2026-11-24 (yarn test:deep). Responses were compared with the SDK types down to nested fields (0 differences); where live data differs from the portal spec, types follow the live data (specs/drift-baseline.json).',
   },
 };
 

@@ -8,8 +8,8 @@ export interface KartriderOuidInfo {
   readonly ouid: KartriderOUID;
   /** 라이더(계정) 생성 일(시) (UTC0, 예: `"2023-12-14T08:28:35Z"`) */
   readonly racer_date_create: string;
-  /** 라이더 후보를 고를 때 확인하는 레벨. 문자열로 제공된다. */
-  readonly racer_level: string;
+  /** 라이더 후보를 고를 때 확인하는 레벨. 숫자로 온다 (포털 스펙은 문자열로 적지만 2026-11-24 실제 응답은 숫자) */
+  readonly racer_level: number;
 }
 
 /** 계정 식별자(ouid) 조회 응답 */
@@ -38,8 +38,8 @@ export interface KartriderUserBasic {
 
 /** 장착 칭호 항목 */
 export interface KartriderTitleEquipment {
-  /** 장착 칭호 명 */
-  readonly title_name: string;
+  /** 장착 칭호 명. 칭호를 장착하지 않았으면 null */
+  readonly title_name: string | null;
 }
 
 /** 장착 칭호 정보 조회 응답 */

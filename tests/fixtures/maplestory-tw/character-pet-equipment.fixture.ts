@@ -7,9 +7,9 @@ export const twCharacterPetEquipmentFixture: TWCharacterPetEquipment = {
   pet_1_icon: 'https://example.com/fixture.png',
   pet_1_description: 'pet 1 description',
   pet_1_equipment: {
-    item_name: 'Fixture item',
-    item_icon: 'https://example.com/fixture.png',
-    item_description: 'item description',
+    item_name: null,
+    item_icon: null,
+    item_description: null,
     item_option: [
       {
         option_type: 'option type',
@@ -18,8 +18,8 @@ export const twCharacterPetEquipmentFixture: TWCharacterPetEquipment = {
     ],
     scroll_upgrade: 1,
     scroll_upgradable: 1,
-    item_shape: 'item shape',
-    item_shape_icon: 'https://example.com/fixture.png',
+    item_shape: null,
+    item_shape_icon: null,
   },
   pet_1_auto_skill: {
     skill_1: 'skill 1',
@@ -36,8 +36,14 @@ export const twCharacterPetEquipmentFixture: TWCharacterPetEquipment = {
     {
       potential_step: '1',
       potential_type: 'Attack Power / Magic Attack',
-      potential_increase_1: '10',
-      potential_increase_2: '8',
+      potential_increase1: '10',
+      potential_increase2: null,
+    },
+    {
+      potential_step: '2',
+      potential_type: null,
+      potential_increase1: null,
+      potential_increase2: null,
     },
   ],
   pet_2_name: null,
@@ -51,7 +57,7 @@ export const twCharacterPetEquipmentFixture: TWCharacterPetEquipment = {
   pet_2_date_expire: null,
   pet_2_appearance: null,
   pet_2_appearance_icon: null,
-  pet_2_potential: [],
+  pet_2_potential: null,
   pet_3_name: null,
   pet_3_nickname: null,
   pet_3_icon: null,
@@ -63,5 +69,5 @@ export const twCharacterPetEquipmentFixture: TWCharacterPetEquipment = {
   pet_3_date_expire: null,
   pet_3_appearance: null,
   pet_3_appearance_icon: null,
-  pet_3_potential: [],
+  pet_3_potential: null,
 };

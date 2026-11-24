@@ -74,7 +74,7 @@ for (const item of gear.item_equipment) console.log(item.item_equipment_slot_nam
 for (const stat of stats.stat) console.log(stat.stat_name, stat.stat_value);
 ```
 
-- 장착·보유 칭호의 `title_id`와 장비의 `item_id`는 포털 설명에서 각각 칭호 이름과 아이템 이름으로 안내합니다. 칭호의 `date_expire`는 만료 시각으로 SDK 타입에서 `null`을 허용합니다.
+- 장착·보유 칭호의 `title_id`와 장비의 `item_id`는 포털 설명에서 각각 칭호 이름과 아이템 이름으로 안내합니다. 아이템을 장착하지 않은 슬롯의 `item_id`는 `null`입니다. 칭호의 `date_expire`는 만료 시각으로 SDK 타입에서 `null`을 허용합니다.
 - `stat[].stat_value`는 문자열로 오는 능력치 값입니다.
 - `guild_name`은 가입한 문파 이름으로 SDK 타입에서 `null`을 허용합니다.
 - `character_exp`와 `character_level`은 경험치와 레벨입니다. 버프나 아이템 효과로 게임 화면의 값과 다를 수 있습니다.

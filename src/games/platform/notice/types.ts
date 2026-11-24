@@ -41,8 +41,8 @@ export interface PlatformNoticeItem {
   readonly contents: string;
   /** 공지 등록일(시) (UTC0, 예: `"2023-12-14T08:28:35Z"`) */
   readonly date: string;
-  /** 설정된 공지 태그 */
-  readonly notice_tag: readonly string[];
+  /** 설정된 공지 태그. 태그가 없는 공지면 null */
+  readonly notice_tag: readonly string[] | null;
 }
 
 /** NEXON Open API 공지 목록 응답 */

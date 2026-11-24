@@ -19,8 +19,8 @@ export type TWWorldName = (typeof TW_WORLD_NAMES)[number];
 
 /** GET /maplestorytw/v1/guild/id response */
 export interface TWGuildIdResponse {
-  /** Guild identifier */
-  readonly oguild_id: GuildId;
+  /** 길드 고유 번호. 없는 길드면 넥슨이 null 을 준다 (SDK는 NexonNotFoundError 를 던진다) */
+  readonly oguild_id: GuildId | null;
 }
 
 // ─── GET /maplestorytw/v1/guild/basic ────────────────────────────────────────
@@ -41,8 +41,8 @@ export interface TWGuildSkill {
 
 /** 길드 기본 정보 — `client.maplestoryTW.guild.getBasic()` 의 응답. */
 export interface TWGuildBasic {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 날짜를 생략해 최신 길드 정보를 조회하면 null. */
+  readonly date: string | null;
   /** World name */
   readonly world_name: string;
   /** Guild name */

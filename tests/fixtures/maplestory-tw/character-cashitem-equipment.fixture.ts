@@ -5,7 +5,7 @@ const cashItem = {
   cash_item_equipment_slot: '1',
   cash_item_name: 'Fixture cash item',
   cash_item_icon: 'https://example.com/fixture.png',
-  cash_item_description: 'cash item description',
+  cash_item_description: null,
   cash_item_option: [
     {
       option_type: 'option type',
@@ -14,14 +14,14 @@ const cashItem = {
   ],
   date_expire: '2025-10-15T17:28+08:00',
   date_option_expire: '2025-10-15T17:00+08:00',
-  cash_item_label: 'cash item label',
+  cash_item_label: null,
   cash_item_coloring_prism: {
     color_range: 'color range',
     hue: 1,
     saturation: 1,
     value: 1,
   },
-  item_gender: 'item gender',
+  item_gender: null,
   skills: ['skills'],
   skill_info: [
     {
@@ -37,7 +37,7 @@ export const twCharacterCashItemEquipmentFixture: TWCharacterCashItemEquipment =
   character_gender: 'Male',
   character_class: 'Night Lord',
   character_look_mode: '0',
-  preset_no: 1,
+  preset_no: null,
   cash_item_equipment_base: [cashItem],
   cash_item_equipment_preset_1: [cashItem],
   cash_item_equipment_preset_2: [cashItem],

@@ -784,7 +784,7 @@ export const battlePracticeCharacterInfoFixture: BattlePracticeCharacterInfo = {
         skill_name: '샘플 스킬',
         skill_description: '설명 텍스트',
         skill_level: 10,
-        skill_effect: '10',
+        skill_effect: null,
         skill_icon: 'https://open.api.nexon.com/static/maplestory/item/icon/SAMPLE',
       },
     ],

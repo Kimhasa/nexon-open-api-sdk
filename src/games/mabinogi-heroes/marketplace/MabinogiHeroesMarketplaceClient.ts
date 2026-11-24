@@ -101,7 +101,7 @@ export class MabinogiHeroesMarketplaceClient {
    * // 골드 거래소 주간 리포트에 구매 상위권을 표시할 때
    * const { buy_gold } = await client.mabinogiHeroes.marketplace.getGoldBuyTop30();
    * for (const [index, buyer] of buy_gold.entries()) {
-   *   console.log(`${index + 1}. ${buyer.cairde_name}: ${buyer.total_buy_gold}`);
+   *   console.log(`${index + 1}. ${buyer.cairde_name}: ${buyer.buy_gold ?? buyer.total_buy_gold}`);
    * }
    * ```
    */
@@ -130,7 +130,7 @@ export class MabinogiHeroesMarketplaceClient {
    * // 골드 거래소 주간 리포트에 판매 상위권을 표시할 때
    * const { sell_gold } = await client.mabinogiHeroes.marketplace.getGoldSellTop30();
    * for (const [index, seller] of sell_gold.entries()) {
-   *   console.log(`${index + 1}. ${seller.cairde_name}: ${seller.total_sell_gold}`);
+   *   console.log(`${index + 1}. ${seller.cairde_name}: ${seller.sell_gold ?? seller.total_sell_gold}`);
    * }
    * ```
    */

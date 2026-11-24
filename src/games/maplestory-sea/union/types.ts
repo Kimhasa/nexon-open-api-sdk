@@ -2,8 +2,8 @@
 
 /** 유니온 레벨·등급 — `client.maplestorySEA.union.getUnion()` 의 응답. */
 export interface SEAUnion {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Union level */
   readonly union_level: number;
   /** Union grade */
@@ -38,8 +38,8 @@ export interface SEAUnionBlockPosition {
 export interface SEAUnionBlock {
   /** Block shapes (Warrior, Magician, Bowman, Thief, Pirate, Maple M, Hybrid) */
   readonly block_type: string;
-  /** Character class corresponding to the block */
-  readonly block_class: string;
+  /** 유니온 공격대 블록에 해당하는 캐릭터 직업. 직업 정보가 없으면 null. */
+  readonly block_class: string | null;
   /** Character level corresponding to the block */
   readonly block_level: string;
   /**
@@ -70,8 +70,8 @@ export interface SEAUnionRaiderPreset {
 
 /** 유니온 공격대 배치 — `client.maplestorySEA.union.getRaider()` 의 응답. */
 export interface SEAUnionRaider {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Union raid member effects */
   readonly union_raider_stat: readonly string[];
   /** Union raid capture effects */
@@ -124,14 +124,14 @@ export interface SEAUnionArtifactCrystal {
 
 /** 유니온 아티팩트 — `client.maplestorySEA.union.getArtifact()` 의 응답. */
 export interface SEAUnionArtifact {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Artifact effect information */
   readonly union_artifact_effect: readonly SEAUnionArtifactEffect[];
   /** Artifact crystal information */
   readonly union_artifact_crystal: readonly SEAUnionArtifactCrystal[];
-  /** Remaining artifact AP */
-  readonly union_artifact_remain_ap: number;
+  /** 남아 있는 유니온 아티팩트 포인트. 값이 없으면 null. */
+  readonly union_artifact_remain_ap: number | null;
 }
 
 // ─── GET /maplestorysea/v1/user/union-champion ────────────────────────────────
@@ -158,8 +158,8 @@ export interface SEAUnionChampionInfo {
 
 /** 유니온 챔피언 — `client.maplestorySEA.union.getChampion()` 의 응답. */
 export interface SEAUnionChampion {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Union Champion information */
   readonly union_champion: readonly SEAUnionChampionInfo[];
   /** Champion Insignia effects */

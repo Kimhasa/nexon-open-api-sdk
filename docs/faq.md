@@ -15,7 +15,9 @@
 
 ## 캐릭터를 못 찾아요
 
-**증상** — `getOcid()` 나 `getOuid()` 에서 `NexonNotFoundError` (`OPENAPI00003`)가 납니다.
+**증상** — `getOcid()` 나 `getOuid()` 에서 `NexonNotFoundError` 가 나고, 메시지가 `'캐릭터명' 캐릭터를 찾을 수 없습니다.` 처럼 시작합니다.
+
+> 넥슨은 없는 이름에 "찾을 수 없음"(`OPENAPI00003`)이 아니라 "파라미터 오류"(`OPENAPI00004`)를 돌려줍니다. SDK는 이름으로 찾는 조회에서 이 응답을 알아보기 쉽게 `NexonNotFoundError` 로 바꿔 알려 주고, `err.code` 에는 넥슨이 준 `OPENAPI00004` 를 그대로 둡니다. 저장해 둔 고유 번호(OCID·OUID)로 조회했는데 이 에러가 나면 `OPENAPI00003` 입니다 — 번호가 바뀌었으니 이름으로 다시 받으세요.
 
 **원인과 해결**
 
@@ -32,6 +34,7 @@
 | 카트라이더 러쉬플러스      | 라이더명 그대로 (`\|` 문자는 SDK가 알아서 변환) | `client.kartrider.getOuidInfo('라이더명')` — 결과가 목록이다 |
 
 - **다른 게임의 캐릭터** — 메이플스토리와 메이플스토리M, 바람의나라와 바람의나라: 연은 서로 다른 게임입니다. `client.maplestory` 와 `client.maplestorym` 을 구분해 부릅니다.
+- **`.env` 에 적은 닉네임의 `#` 뒤가 잘림** — `.env` 에서는 따옴표가 없으면 `#` 부터 주석으로 읽힙니다. 퍼스트 디센던트 닉네임처럼 `#` 이 들어간 값은 `TFD_USER_NAME="닉네임#1234"` 처럼 큰따옴표로 감쌉니다.
 
 ```js
 import { NexonNotFoundError } from 'nexon-open-api';
@@ -300,7 +303,7 @@ console.log(await checking.maplestory.character.getBasic({ ocid }));
 
 `debug: true` 와 함께 켜면 따로 `logger` 를 적지 않아도 콘솔에 경고가 나옵니다.
 
-- **SDK가 틀렸다** — 이 라이브러리는 넥슨 포털의 공식 스펙을 기준으로 만들었고, API 키가 필요한 조회는 아직 실제 키로 전부 확인하지 못했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)). 실제 응답과 다른 점을 발견하면 [GitHub 이슈](https://github.com/Kimhasa/nexon-open-api-sdk/issues)로 알려 주세요. 게임 이름, 호출한 코드(예: `client.maplestory.character.getStat`), 기대한 값과 실제 값을 적어 주시면 됩니다. **API 키와 실제 캐릭터·계정 이름은 지우고** 올려 주세요.
+- **SDK가 틀렸다** — 이 라이브러리는 넥슨 포털의 공식 스펙으로 만들고 실제 키로 여러 캐릭터의 응답을 맞춰 봤습니다. 그래도 처음 보는 장비·펫·스킬 구성에서는 다른 값이 나올 수 있습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)). 실제 응답과 다른 점을 발견하면 [GitHub 이슈](https://github.com/Kimhasa/nexon-open-api-sdk/issues)로 알려 주세요. 게임 이름, 호출한 코드(예: `client.maplestory.character.getStat`), 기대한 값과 실제 값을 적어 주시면 됩니다. **API 키와 실제 캐릭터·계정 이름은 지우고** 올려 주세요.
 
 넥슨 API 자체의 점검·변경 소식은 [넥슨 Open API 공지](platform.md)(`client.platform.getNoticeList()`)로 확인할 수 있습니다.
 

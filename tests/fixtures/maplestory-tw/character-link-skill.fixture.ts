@@ -9,7 +9,7 @@ export const twCharacterLinkSkillFixture: TWCharacterLinkSkill = {
       skill_description: 'skill description',
       skill_level: 1,
       skill_effect: 'skill effect',
-      skill_effect_next: 'skill effect next',
+      skill_effect_next: null,
       skill_icon: 'https://example.com/fixture.png',
     },
   ],

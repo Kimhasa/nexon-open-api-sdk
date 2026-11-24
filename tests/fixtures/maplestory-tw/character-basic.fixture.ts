@@ -10,7 +10,7 @@ export const twCharacterBasicFixture: TWCharacterBasic = {
   character_level: 275,
   character_exp: 1,
   character_exp_rate: '42.12',
-  character_guild_name: 'FixtureGuild',
+  character_guild_name: null,
   character_image: 'https://example.com/tw-character.png',
   character_date_create: '2025-10-15T00:00+08:00',
   access_flag: 'true',

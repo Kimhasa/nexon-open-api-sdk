@@ -30,9 +30,9 @@ export const USER_RANK_SHAPE: ShapeDescriptor = {
 export const USER_TIER_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     user_name: 'string',
-    solo_rank_match_tier: 'number',
+    solo_rank_match_tier: 'string',
     solo_rank_match_score: 'number',
-    party_rank_match_tier: 'number',
+    party_rank_match_tier: 'string',
     party_rank_match_score: 'number',
   },
 };

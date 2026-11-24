@@ -10,8 +10,8 @@ export interface KartriderNoticeItem {
   readonly notice_id: number;
   /** 공지 등록일(시) (UTC0, 예: `"2023-12-14T08:28:35Z"`) */
   readonly date: string;
-  /** 설정된 공지 태그 */
-  readonly notice_tag: readonly string[];
+  /** 설정된 공지 태그. 태그가 없는 글이면 null */
+  readonly notice_tag: readonly string[] | null;
 }
 
 /** 공지 상세 (공지사항 / 시즌 알림판 / 이벤트&대회 공유 — 스펙의 세 상세 스키마가 동일) */
@@ -24,8 +24,8 @@ export interface KartriderNoticeDetail {
   readonly contents: string;
   /** 공지 등록일(시) (UTC0) */
   readonly date: string;
-  /** 설정된 공지 태그 */
-  readonly notice_tag: readonly string[];
+  /** 설정된 공지 태그. 태그가 없는 글이면 null */
+  readonly notice_tag: readonly string[] | null;
 }
 
 // ─── GET /kartrush/v1/notice ─────────────────────────────────────────────────

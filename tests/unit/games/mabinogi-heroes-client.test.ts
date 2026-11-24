@@ -242,6 +242,7 @@ describe('MabinogiHeroesClient', () => {
       });
 
       expect(result).toEqual(heroesEnchantMetaFixture);
+      expect(typeof result.enchant_grade).toBe('string');
       expectRequest(harness, `${V2}/meta/enchant`, { enchant_type: '0', enchant_name: '용맹한' });
     });
 
@@ -382,6 +383,7 @@ describe('MabinogiHeroesClient', () => {
       const result = await harness.client.marketplace.getGoldBuyTop30();
 
       expect(result).toEqual(heroesGoldMarketBuyTop30Fixture);
+      expect(result.buy_gold[0]?.buy_gold).toBe(5200000000);
       expectRequest(harness, `${V2}/marketplace/gold-market-buy-top-30`);
     });
 
@@ -390,40 +392,68 @@ describe('MabinogiHeroesClient', () => {
       const result = await harness.client.marketplace.getGoldSellTop30();
 
       expect(result).toEqual(heroesGoldMarketSellTop30Fixture);
+      expect(result.sell_gold[0]?.sell_gold).toBe(6300000000);
       expectRequest(harness, `${V2}/marketplace/gold-market-sell-top-30`);
     });
   });
 
   describe('ranking', () => {
-    it('getHallOfHonor — GET /heroes/v2/ranking/hall-of-honor (배열 응답)', async () => {
+    it('getHallOfHonor — GET /heroes/v2/ranking/hall-of-honor ({ ranking: [...] } 응답에서 배열을 꺼낸다)', async () => {
       const harness = createHarness();
       const result = await harness.client.ranking.getHallOfHonor({ ranking_type: '0' });
 
       expect(Array.isArray(result)).toBe(true);
-      expect(result).toEqual(heroesHallOfHonorRankingFixture);
+      expect(result).toEqual(heroesHallOfHonorRankingFixture.ranking);
+      expect(result).toHaveLength(2);
+      expect(result[0]?.character_name).toBe('테스트랭커1');
       expectRequest(harness, `${V2}/ranking/hall-of-honor`, { ranking_type: '0' });
     });
 
-    it('getRealTime — GET /heroes/v2/ranking/real-time (배열 응답)', async () => {
+    it('getRealTime — GET /heroes/v2/ranking/real-time ({ ranking: [...] } 응답에서 배열을 꺼낸다)', async () => {
       const harness = createHarness();
       const result = await harness.client.ranking.getRealTime({ ranking_type: '1', page_no: 2 });
 
       expect(Array.isArray(result)).toBe(true);
-      expect(result).toEqual(heroesRealTimeRankingFixture);
+      expect(result).toEqual(heroesRealTimeRankingFixture.ranking);
+      expect(result[0]?.ranking).toBe(501);
       expectRequest(harness, `${V2}/ranking/real-time`, { ranking_type: '1', page_no: '2' });
     });
 
-    it('랭킹 배열 항목에 누락된 필드를 보고하고 응답을 반환한다', async () => {
+    it('포털 스펙 형태(최상위 배열)가 와도 두 메서드 모두 그 배열을 그대로 돌려준다', async () => {
       const harness = createHarness();
-      const url = `${V2}/ranking/hall-of-honor`;
-      const response = [{ ranking_type: '0', ranking: 1, character_name: '합성 캐릭터' }];
-      server.use(http.get(url, () => HttpResponse.json(response)));
+      const honorUrl = `${V2}/ranking/hall-of-honor`;
+      const realTimeUrl = `${V2}/ranking/real-time`;
+      server.use(
+        http.get(honorUrl, () => HttpResponse.json(heroesHallOfHonorRankingFixture.ranking)),
+        http.get(realTimeUrl, () => HttpResponse.json(heroesRealTimeRankingFixture.ranking)),
+      );
 
       await expect(harness.client.ranking.getHallOfHonor({ ranking_type: '0' })).resolves.toEqual(
-        response,
+        heroesHallOfHonorRankingFixture.ranking,
+      );
+      await expect(
+        harness.client.ranking.getRealTime({ ranking_type: '1', page_no: 2 }),
+      ).resolves.toEqual(heroesRealTimeRankingFixture.ranking);
+      // shape는 실제 응답(객체)을 기준으로 하므로 스펙 형태는 불일치로 보고된다
+      expect(harness.mismatches).toEqual([
+        expect.objectContaining({ url: `${honorUrl}?ranking_type=0`, missingKeys: ['ranking'] }),
+        expect.objectContaining({
+          url: `${realTimeUrl}?ranking_type=1&page_no=2`,
+          missingKeys: ['ranking'],
+        }),
+      ]);
+    });
+
+    it('ranking 배열이 빠진 객체 응답은 불일치를 보고하고 빈 배열을 돌려준다', async () => {
+      const harness = createHarness();
+      const url = `${V2}/ranking/hall-of-honor`;
+      server.use(http.get(url, () => HttpResponse.json({})));
+
+      await expect(harness.client.ranking.getHallOfHonor({ ranking_type: '0' })).resolves.toEqual(
+        [],
       );
       expect(harness.mismatches).toEqual([
-        expect.objectContaining({ url: `${url}?ranking_type=0`, missingKeys: ['[0].score'] }),
+        expect.objectContaining({ url: `${url}?ranking_type=0`, missingKeys: ['ranking'] }),
       ]);
     });
 

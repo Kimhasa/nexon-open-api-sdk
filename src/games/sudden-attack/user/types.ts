@@ -34,12 +34,12 @@ export interface SuddenAttackUserRank {
 export interface SuddenAttackUserTier {
   /** 닉네임 */
   readonly user_name: string;
-  /** 솔로 랭크전 티어의 숫자 값 */
-  readonly solo_rank_match_tier: number;
+  /** 솔로 랭크전 티어. 숫자가 아닌 문자열로 온다 (포털 스펙은 숫자로 적지만 2026-11-24 실제 응답은 문자열) */
+  readonly solo_rank_match_tier: string;
   /** 솔로 랭크전 점수 */
   readonly solo_rank_match_score: number;
-  /** 파티 랭크전 티어의 숫자 값 */
-  readonly party_rank_match_tier: number;
+  /** 파티 랭크전 티어. 숫자가 아닌 문자열로 온다 (포털 스펙은 숫자로 적지만 2026-11-24 실제 응답은 문자열) */
+  readonly party_rank_match_tier: string;
   /** 파티 랭크전 점수 */
   readonly party_rank_match_score: number;
 }

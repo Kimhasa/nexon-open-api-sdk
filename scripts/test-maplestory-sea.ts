@@ -149,7 +149,9 @@ if (ocid) {
 
   await test('character.getHexaMatrix', async () => {
     const r = await client.maplestorySEA.character.getHexaMatrix({ ocid: ocid! });
-    if (!r.character_hexa_core_equipment) throw new Error('character_hexa_core_equipment 없음');
+    if (!Object.hasOwn(r, 'character_hexa_core_equipment')) {
+      throw new Error('character_hexa_core_equipment 없음');
+    }
   });
 
   await test('character.getHexaMatrixStat', async () => {

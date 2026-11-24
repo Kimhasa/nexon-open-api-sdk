@@ -8,7 +8,7 @@ export const mGuildBasicFixture: MGuildBasic = {
   world_name: '스카니아',
   guild_name: '테스트길드M',
   guild_level: 25,
-  world_create_date: '2024-01-01T00:00+09:00',
+  guild_create_date: '2024-01-01T00:00+09:00',
   guild_keyword: ['친목'],
   guild_mark_icon: 'https://example.com/guild-mark.png',
   guild_master_name: '테스트길드장M',

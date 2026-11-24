@@ -62,7 +62,7 @@ if (latest) console.log(latest.title, latest.url, latest.contents);
 
 - `title`과 `url`은 공지 제목과 링크입니다.
 - `contents`는 목록에 함께 오는 공지 본문입니다.
-- `notice_tag`는 공지에 붙은 분류 태그입니다.
+- `notice_tag`는 공지에 붙은 분류 태그입니다. 태그가 없는 공지는 `null`입니다.
 
 <details>
 <summary>넥슨 API 경로</summary>

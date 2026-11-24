@@ -12,12 +12,12 @@ export const kartriderOuidLookupFixture: KartriderOuidLookup = {
     {
       ouid: 'test-kartrider-ouid-0001' as KartriderOUID,
       racer_date_create: '2023-12-14T08:28:35Z',
-      racer_level: '108',
+      racer_level: 108,
     },
     {
       ouid: 'test-kartrider-ouid-0002' as KartriderOUID,
       racer_date_create: '2024-03-02T01:10:00Z',
-      racer_level: '12',
+      racer_level: 12,
     },
   ],
 };
@@ -31,5 +31,5 @@ export const kartriderUserBasicFixture: KartriderUserBasic = {
 };
 
 export const kartriderUserTitleEquipmentFixture: KartriderUserTitleEquipment = {
-  title_equipment: [{ title_name: '전설의 라이더' }],
+  title_equipment: [{ title_name: '전설의 라이더' }, { title_name: null }],
 };

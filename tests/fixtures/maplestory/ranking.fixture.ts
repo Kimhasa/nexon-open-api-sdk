@@ -21,6 +21,18 @@ export const overallRankingFixture: OverallRanking = {
       character_popularity: 50000,
       character_guildname: '최강길드',
     },
+    {
+      date: '2024-01-15T00:00+09:00',
+      ranking: 2,
+      character_name: '2위캐릭터',
+      world_name: '스카니아',
+      class_name: '아크메이지(불,독)',
+      sub_class_name: '',
+      character_level: 299,
+      character_exp: 888888888888,
+      character_popularity: 100,
+      character_guildname: null,
+    },
   ],
 };
 

@@ -4,6 +4,7 @@ import {
   assertOneOf,
   invalidInput,
 } from '../../core/validation/input.js';
+import { lookupByName } from '../../core/errors/name-lookup.js';
 import { emitDeprecation } from '../../core/deprecation/deprecation.js';
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
 import type { OUID } from './user/types.js';
@@ -89,7 +90,14 @@ export class FcOnlineClient extends AbstractGameClient {
   async getOuid(nickname: string): Promise<OUID> {
     assertNonEmptyString(nickname, 'nickname', undefined, 'trim-truthy');
     const url = this.buildUrl('id');
-    const response = await this.http.get<{ ouid: string }>(url, { nickname }, FC_OUID_SHAPE);
+    const notFound = {
+      message: `'${nickname}' 구단주를 찾을 수 없습니다.`,
+      hint: 'FC 온라인 구단주 닉네임을 확인하세요. 닉네임을 바꿨다면 새 닉네임으로 조회합니다.',
+    };
+    const response = await lookupByName(
+      () => this.http.get<{ ouid: string }>(url, { nickname }, FC_OUID_SHAPE),
+      notFound,
+    );
     return response.ouid as OUID;
   }
 
@@ -187,7 +195,7 @@ export class FcOnlineClient extends AbstractGameClient {
   /**
    * 내 이적시장 거래 기록(거래한 선수 카드, 강화 등급, 거래 가격)을 조회한다 (최근 거래부터).
    *
-   * API 키를 발급받은 계정의 거래만 조회됩니다. 다른 구단주의 거래는 볼 수 없습니다.
+   * API 키를 발급한 넥슨 계정 본인의 이적시장 거래 기록만 조회됩니다.
    *
    * @param params.tradetype - 거래 종류 (`'buy'`: 구입, `'sell'`: 판매)
    * @param params.offset - 건너뛸 거래 수 (기본값: 0)
@@ -300,7 +308,7 @@ export class FcOnlineClient extends AbstractGameClient {
    *   ],
    * });
    * for (const s of stats) {
-   *   console.log(`spId ${s.spId} — 평균 골 ${s.status.goal}, 패스 ${s.status.passSuccess}`);
+   *   console.log(`선수 카드 ${s.spid} — 평균 골 ${s.status.goal}, 패스 ${s.status.passSuccess}`);
    * }
    * ```
    */

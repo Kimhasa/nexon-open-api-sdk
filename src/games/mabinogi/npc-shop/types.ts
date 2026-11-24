@@ -51,10 +51,10 @@ export interface MabinogiNpcShopItem {
   readonly item_option: readonly MabinogiItemOption[];
   /** 아이템 판매 가격 정보 */
   readonly price: readonly MabinogiNpcShopPrice[];
-  /** 판매 제한 종류 (주간/월간/이벤트 등) */
-  readonly limit_type: string;
-  /** 판매 제한 수량 */
-  readonly limit_value: number;
+  /** 판매 제한 종류 (주간/월간/이벤트 등). 판매 제한이 없는 상품이면 null */
+  readonly limit_type: string | null;
+  /** 판매 제한 수량. 판매 제한이 없는 상품이면 null */
+  readonly limit_value: number | null;
   /** 아이템 이미지 */
   readonly image_url: string;
 }

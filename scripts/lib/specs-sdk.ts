@@ -53,6 +53,28 @@ function unwrap(expression: ts.Expression): ts.Expression {
   return expression;
 }
 
+/**
+ * 값을 바꾸지 않고 감싸기만 하는 SDK 도우미 호출을 벗긴다 (`src/core/errors/name-lookup.ts`).
+ *
+ * - `lookupByName(() => this.http.get(...), notFound)` → `this.http.get(...)`
+ * - `requireFoundId(response.oguild_id, notFound)` → `response.oguild_id`
+ */
+function unwrapHelper(expression: ts.Expression): ts.Expression {
+  const node = unwrap(expression);
+  if (!ts.isCallExpression(node) || !ts.isIdentifier(node.expression)) return node;
+  const [first] = node.arguments;
+  if (!first) return node;
+  if (node.expression.text === 'requireFoundId') return unwrap(first);
+  if (
+    node.expression.text === 'lookupByName' &&
+    ts.isArrowFunction(first) &&
+    !ts.isBlock(first.body)
+  ) {
+    return unwrap(first.body);
+  }
+  return node;
+}
+
 function propertyName(name: ts.PropertyName): string | undefined {
   return ts.isIdentifier(name) || ts.isStringLiteralLike(name) || ts.isNumericLiteral(name)
     ? name.text
@@ -313,7 +335,7 @@ class Analyzer {
     const statement = returns[0];
     if (returns.length !== 1 || !statement?.expression || statement.parent !== body)
       return undefined;
-    const result = unwrap(statement.expression);
+    const result = unwrapHelper(statement.expression);
     if (!ts.isPropertyAccessExpression(result) || result.questionDotToken) return undefined;
     const value = unwrap(result.expression);
     if (!ts.isIdentifier(value)) return undefined;
@@ -321,7 +343,7 @@ class Analyzer {
     if (!source || !ts.isVariableDeclaration(source) || !isConst(source) || !source.initializer)
       return undefined;
     const initializer = unwrap(source.initializer);
-    return ts.isAwaitExpression(initializer) && unwrap(initializer.expression) === call
+    return ts.isAwaitExpression(initializer) && unwrapHelper(initializer.expression) === call
       ? result.name.text
       : undefined;
   }

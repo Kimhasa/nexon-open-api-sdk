@@ -72,8 +72,8 @@ export interface StarforceHistoryItem {
 export interface StarforceHistory {
   /** 결과 건 수 */
   readonly count: number;
-  /** 페이징 처리를 위한 cursor */
-  readonly next_cursor: string;
+  /** 페이징 처리를 위한 cursor (마지막 페이지면 null) */
+  readonly next_cursor: string | null;
   /** 스타포스 히스토리 */
   readonly starforce_history: readonly StarforceHistoryItem[];
 }
@@ -132,8 +132,8 @@ export interface PotentialHistoryItem {
 export interface PotentialHistory {
   /** 결과 건 수 */
   readonly count: number;
-  /** 페이징 처리를 위한 cursor */
-  readonly next_cursor: string;
+  /** 페이징 처리를 위한 cursor (마지막 페이지면 null) */
+  readonly next_cursor: string | null;
   /** 잠재능력 재설정 히스토리 */
   readonly potential_history: readonly PotentialHistoryItem[];
 }
@@ -222,8 +222,8 @@ export interface CubeHistoryItem {
 export interface CubeHistory {
   /** 결과 건 수 */
   readonly count: number;
-  /** 페이징 처리를 위한 cursor */
-  readonly next_cursor: string;
+  /** 페이징 처리를 위한 cursor (마지막 페이지면 null) */
+  readonly next_cursor: string | null;
   /** 큐브 히스토리 */
   readonly cube_history: readonly CubeHistoryItem[];
 }

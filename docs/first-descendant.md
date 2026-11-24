@@ -38,6 +38,8 @@ try {
 
 파일을 `index.mjs`(ES 모듈)로 저장하고 `.env`에 `NEXON_API_KEY`를 설정한 뒤 Node.js 20.6 이상에서 `node --env-file=.env index.mjs '닉네임#1234'`로 실행합니다. 예제의 이름을 실제 조회할 이름으로 바꿔 실행하세요.
 
+닉네임을 `.env`에 적어 둘 때는 `TFD_USER_NAME="닉네임#1234"`처럼 따옴표로 감쌉니다. 따옴표가 없으면 `#` 뒤가 주석으로 잘려 태그 없는 닉네임만 읽힙니다.
+
 ## 게임 용어 ↔ SDK 대응표
 
 메서드는 `client.firstDescendant`에서 호출합니다.
@@ -124,6 +126,7 @@ for (const part of gear.external_component) {
 - `module`의 `module_id`는 도감의 모듈 번호입니다. `module_enchant_level`은 장착한 모듈의 강화 단계입니다.
 - `module_capacity`와 `module_max_capacity`는 실제 적용된 모듈 수용량과 장착 가능한 최대 수용량입니다.
 - 장착 무기와 외장 부품의 `core_unlock_flag`는 문자열 `"0"`이면 잠금, `"1"`이면 개방입니다.
+- 값이 없는 항목은 `null`로 옵니다. 칭호를 달지 않은 계정의 `title_prefix_id`·`title_suffix_id`, 커스터마이징의 진화 단계(`customizing_item_evolution_stage`, `customizing_item_current_evolution_stage`), 장착 무기의 `module_max_capacity`·`module_capacity`·`energy_activator_use_count`·`perk_ability_enchant_level`·`core_unlock_flag`가 그렇습니다.
 - `additional_stat_value`와 `core_option_value`는 문자열입니다. 아르케 조율 노드의 `position_row`, `position_column`도 문자열입니다. `descendant_group_id`는 `meta.getDescendantGroup()`에서 찾습니다.
 
 ### 계승자·무기·모듈 도감
@@ -192,7 +195,7 @@ for (const entry of (solo.leaderboard ?? []).slice(0, 10)) {
 console.log(squad.leaderboard[0]?.stage);
 ```
 
-- `leaderboard_type`은 필수입니다. `'Solo'`에는 계승자 번호(`descendant_id`), `'Squad'`에는 인원수(`squad_user_count`, 숫자 `2`·`3`·`4`)를 선택해서 넣을 수 있습니다.
+- `leaderboard_type`은 필수입니다. `'Solo'`에는 계승자 번호(`descendant_id`, 계승자 도감 `meta.getDescendant()`에서 찾습니다), `'Squad'`에는 인원수(`squad_user_count`, 숫자 `2`·`3`·`4`)를 반드시 함께 넣습니다. 빠뜨리면 SDK가 요청 전에 `NexonBadRequestError`를 던집니다.
 - `platform_type`은 `'All'`(기본값), `'Pc'`, `'PlayStation'`, `'Xbox'`입니다. 보이드 요격전의 `contents_type`은 `'RiskMode'`만 받으며 생략해도 같은 값이 적용됩니다.
 - `ranking`은 순위, `score`는 클리어 타임, `stage`는 도전 단계입니다. `score`와 `stage`는 문자열입니다.
 - `member`는 참가자 목록입니다. 보이드 요격전의 `leaderboard`, 각 기록의 `ranking`과 `score`, 멤버의 일부 필드는 `null`일 수 있습니다.

@@ -10,7 +10,7 @@ export const SEA_OCID_SHAPE: ShapeDescriptor = {
 
 export const SEA_CHARACTER_BASIC_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_name: 'string',
     world_name: 'string',
     character_gender: 'string',
@@ -19,7 +19,7 @@ export const SEA_CHARACTER_BASIC_SHAPE: ShapeDescriptor = {
     character_level: 'number',
     character_exp: 'number',
     character_exp_rate: 'string',
-    character_guild_name: 'string',
+    character_guild_name: 'any',
     character_image: 'string',
     character_date_create: 'string',
     access_flag: 'string',
@@ -30,14 +30,14 @@ export const SEA_CHARACTER_BASIC_SHAPE: ShapeDescriptor = {
 
 export const SEA_CHARACTER_POPULARITY_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     popularity: 'number',
   },
 };
 
 export const SEA_CHARACTER_STAT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_class: 'string',
     final_stat: 'array',
     remain_ap: 'number',
@@ -47,7 +47,7 @@ export const SEA_CHARACTER_STAT_SHAPE: ShapeDescriptor = {
 
 export const SEA_CHARACTER_HYPER_STAT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_class: 'string',
     use_preset_no: 'string',
     use_available_hyper_stat: 'number',
@@ -62,7 +62,7 @@ export const SEA_CHARACTER_HYPER_STAT_SHAPE: ShapeDescriptor = {
 
 export const SEA_CHARACTER_PROPENSITY_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     charisma_level: 'number',
     sensibility_level: 'number',
     insight_level: 'number',
@@ -74,7 +74,7 @@ export const SEA_CHARACTER_PROPENSITY_SHAPE: ShapeDescriptor = {
 
 export const SEA_CHARACTER_ABILITY_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     ability_grade: 'string',
     ability_info: 'array',
     remain_fame: 'number',
@@ -87,7 +87,7 @@ export const SEA_CHARACTER_ABILITY_SHAPE: ShapeDescriptor = {
 
 export const SEA_CHARACTER_ITEM_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_gender: 'string',
     character_class: 'string',
     preset_no: 'any',
@@ -104,11 +104,11 @@ export const SEA_CHARACTER_ITEM_EQUIPMENT_SHAPE: ShapeDescriptor = {
 
 export const SEA_CHARACTER_CASHITEM_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_gender: 'string',
     character_class: 'string',
     character_look_mode: 'string',
-    preset_no: 'number',
+    preset_no: 'any',
     cash_item_equipment_base: 'array',
     cash_item_equipment_preset_1: 'array',
     cash_item_equipment_preset_2: 'array',
@@ -122,7 +122,7 @@ export const SEA_CHARACTER_CASHITEM_EQUIPMENT_SHAPE: ShapeDescriptor = {
 
 export const SEA_CHARACTER_SYMBOL_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_class: 'string',
     symbol: 'array',
   },
@@ -130,14 +130,14 @@ export const SEA_CHARACTER_SYMBOL_EQUIPMENT_SHAPE: ShapeDescriptor = {
 
 export const SEA_CHARACTER_SET_EFFECT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     set_effect: 'array',
   },
 };
 
 export const SEA_CHARACTER_BEAUTY_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_gender: 'string',
     character_class: 'string',
     character_hair: 'object',
@@ -151,7 +151,7 @@ export const SEA_CHARACTER_BEAUTY_EQUIPMENT_SHAPE: ShapeDescriptor = {
 
 export const SEA_CHARACTER_ANDROID_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     android_name: 'any',
     android_nickname: 'any',
     android_icon: 'any',
@@ -163,8 +163,8 @@ export const SEA_CHARACTER_ANDROID_EQUIPMENT_SHAPE: ShapeDescriptor = {
     android_ear_sensor_clip_flag: 'string',
     android_gender: 'any',
     android_grade: 'any',
-    android_non_humanoid_flag: 'string',
-    android_shop_usable_flag: 'string',
+    android_non_humanoid_flag: 'any',
+    android_shop_usable_flag: 'any',
     preset_no: 'number',
     android_preset_1: 'object',
     android_preset_2: 'object',
@@ -174,7 +174,7 @@ export const SEA_CHARACTER_ANDROID_EQUIPMENT_SHAPE: ShapeDescriptor = {
 
 export const SEA_CHARACTER_PET_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     pet_1_name: 'any',
     pet_1_nickname: 'any',
     pet_1_icon: 'any',
@@ -213,17 +213,17 @@ export const SEA_CHARACTER_PET_EQUIPMENT_SHAPE: ShapeDescriptor = {
 
 export const SEA_CHARACTER_SKILL_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_class: 'string',
-    character_skill_grade: 'string',
+    character_skill_grade: 'any',
     character_skill: 'array',
   },
 };
 
 export const SEA_CHARACTER_LINK_SKILL_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
-    character_class: 'string',
+    date: 'any',
+    character_class: 'any',
     character_link_skill: 'array',
     character_link_skill_preset_1: 'array',
     character_link_skill_preset_2: 'array',
@@ -237,36 +237,36 @@ export const SEA_CHARACTER_LINK_SKILL_SHAPE: ShapeDescriptor = {
 
 export const SEA_CHARACTER_VMATRIX_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
-    character_class: 'string',
+    date: 'any',
+    character_class: 'any',
     character_v_core_equipment: 'array',
-    character_v_matrix_remain_slot_upgrade_point: 'number',
+    character_v_matrix_remain_slot_upgrade_point: 'any',
   },
 };
 
 export const SEA_CHARACTER_HEXAMATRIX_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
-    character_hexa_core_equipment: 'array',
+    date: 'any',
+    character_hexa_core_equipment: 'any',
   },
 };
 
 export const SEA_CHARACTER_HEXAMATRIX_STAT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
-    character_class: 'string',
+    date: 'any',
+    character_class: 'any',
     character_hexa_stat_core: 'array',
-    character_hexa_stat_core_2: 'array',
-    character_hexa_stat_core_3: 'array',
+    character_hexa_stat_core_2: 'any',
+    character_hexa_stat_core_3: 'any',
     preset_hexa_stat_core: 'array',
-    preset_hexa_stat_core_2: 'array',
-    preset_hexa_stat_core_3: 'array',
+    preset_hexa_stat_core_2: 'any',
+    preset_hexa_stat_core_3: 'any',
   },
 };
 
 export const SEA_CHARACTER_DOJANG_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_class: 'string',
     world_name: 'string',
     dojang_best_floor: 'number',
@@ -277,13 +277,14 @@ export const SEA_CHARACTER_DOJANG_SHAPE: ShapeDescriptor = {
 
 export const SEA_GUILD_ID_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    oguild_id: 'string',
+    // 없는 길드면 넥슨이 200과 null 을 준다 (2026-11-24 실측). SDK가 NexonNotFoundError 로 바꾼다
+    oguild_id: 'any',
   },
 };
 
 export const SEA_GUILD_BASIC_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     world_name: 'string',
     guild_name: 'string',
     guild_level: 'number',
@@ -299,7 +300,7 @@ export const SEA_GUILD_BASIC_SHAPE: ShapeDescriptor = {
 
 export const SEA_UNION_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     union_level: 'number',
     union_grade: 'string',
     union_artifact_level: 'number',
@@ -310,7 +311,7 @@ export const SEA_UNION_SHAPE: ShapeDescriptor = {
 
 export const SEA_UNION_RAIDER_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     union_raider_stat: 'array',
     union_occupied_stat: 'array',
     union_inner_stat: 'array',
@@ -326,16 +327,16 @@ export const SEA_UNION_RAIDER_SHAPE: ShapeDescriptor = {
 
 export const SEA_UNION_ARTIFACT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     union_artifact_effect: 'array',
     union_artifact_crystal: 'array',
-    union_artifact_remain_ap: 'number',
+    union_artifact_remain_ap: 'any',
   },
 };
 
 export const SEA_UNION_CHAMPION_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     union_champion: 'array',
     champion_badge_total_info: 'array',
   },

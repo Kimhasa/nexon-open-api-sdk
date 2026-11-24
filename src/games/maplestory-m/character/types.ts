@@ -112,7 +112,7 @@ export interface MEmblemInfo {
   /** 문장 명 */
   readonly emblem_name: string;
   /** 문장 레벨 */
-  readonly emblem_level: string;
+  readonly emblem_level: number;
   /** 문장 옵션 */
   readonly emblem_option: string;
 }
@@ -143,10 +143,10 @@ export interface MItemEquipment {
   readonly item_equipment_slot_name: string;
   /** 아이템 등급 */
   readonly item_grade: string;
-  /** 전투력 */
-  readonly item_combat_power: number;
-  /** 스타포스 강화 단계 */
-  readonly starforce_upgrade: string;
+  /** 장비 전투력. 값이 없으면 null */
+  readonly item_combat_power: number | null;
+  /** 스타포스 강화 단계. 값이 없으면 null */
+  readonly starforce_upgrade: string | null;
   /** 남은 스타포스 확장 수 */
   readonly starforce_remain_count: number;
   /** 착용 가능 레벨 */
@@ -159,12 +159,12 @@ export interface MItemEquipment {
   readonly transmission_able: string;
   /** 전수 가능 여부 */
   readonly todd_able: string;
-  /** 추가 옵션 등급 (1,4:파란색, 2:보라색, 3:주황색) */
-  readonly item_additional_option_grade: string;
-  /** 잠재 능력 등급 (1:레어, 2:에픽, 3:유니크, 4:레전더리) */
-  readonly item_potential_option_grade: string;
-  /** 에디셔널 잠재 능력 등급 (1:레어, 2:에픽, 3:유니크, 4:레전더리) */
-  readonly item_additional_potential_option_grade: string;
+  /** 추가 옵션 등급 (1,4:파란색, 2:보라색, 3:주황색). 추가 옵션이 없으면 null */
+  readonly item_additional_option_grade: string | null;
+  /** 잠재 능력 등급 (1:레어, 2:에픽, 3:유니크, 4:레전더리). 잠재 능력이 없으면 null */
+  readonly item_potential_option_grade: string | null;
+  /** 에디셔널 잠재 능력 등급 (1:레어, 2:에픽, 3:유니크, 4:레전더리). 에디셔널 잠재 능력이 없으면 null */
+  readonly item_additional_potential_option_grade: string | null;
   /** 아이템 아이콘 */
   readonly item_icon: string;
   /**
@@ -182,14 +182,14 @@ export interface MItemEquipment {
   readonly item_additional_potential_option: MItemOption[];
   /** 소울 장착 여부 (0:미장착, 1:장착) */
   readonly soul_equipment_flag: string;
-  /** 소울 정보 */
-  readonly soul_info: MSoulInfo;
-  /** 문장 정보 */
-  readonly emblem_info: MEmblemInfo;
-  /** 프리스타일 쿠폰 적용 여부 (0:미적용, 1:적용) */
-  readonly freestyle_coupon_flag?: string | undefined;
-  /** 마스터리 정보 */
-  readonly mastery_info?: MItemMasteryInfo | undefined;
+  /** 소울 정보. 장착한 소울이 없으면 null */
+  readonly soul_info: MSoulInfo | null;
+  /** 문장 정보. 문장이 없으면 null */
+  readonly emblem_info: MEmblemInfo | null;
+  /** 프리스타일 쿠폰 적용 여부 (0:미적용, 1:적용). 프리셋 장비에서는 null 이 올 수 있다 (2026-11-24 실측) */
+  readonly freestyle_coupon_flag?: string | null | undefined;
+  /** 마스터리 정보. 값이 없으면 null */
+  readonly mastery_info?: MItemMasteryInfo | null | undefined;
 }
 
 /** 장비 프리셋 정보 */
@@ -198,8 +198,8 @@ export interface MEquipmentPreset {
   readonly preset_no: number;
   /** 아이템 정보 */
   readonly item_equipment: MItemEquipment[];
-  /** 소울 세트 옵션 */
-  readonly soul_set_option: string;
+  /** 소울 세트 옵션. 세트 효과가 없는 프리셋이면 null (2026-11-24 실측) */
+  readonly soul_set_option: string | null;
 }
 
 /** 장착 장비(캐시 아이템 제외) — `client.maplestorym.character.getItemEquipment()` 의 응답. */
@@ -248,22 +248,22 @@ export interface MCashItemEquipmentItem {
   readonly cash_item_name: string;
   /** 캐시 아이템 아이콘 (컬러링 프리즘 효과 미반영 상태) */
   readonly cash_item_icon: string;
-  /** 신비의 모루로 설정된 외형 아이템 명 */
-  readonly miracle_anvil_item_name: string;
-  /** 신비의 모루로 설정된 외형 아이템 아이콘 (컬러링 프리즘 효과 미반영 상태) */
-  readonly miracle_anvil_item_icon: string;
+  /** 신비의 모루로 설정된 외형 아이템 명. 모루를 적용하지 않았으면 null */
+  readonly miracle_anvil_item_name: string | null;
+  /** 신비의 모루로 설정된 외형 아이템 아이콘 (컬러링 프리즘 효과 미반영 상태). 모루를 적용하지 않았으면 null */
+  readonly miracle_anvil_item_icon: string | null;
   /** 캐시 아이템 설명 */
   readonly cash_item_description: string;
   /** 아이템 장착 가능 성별 */
-  readonly cash_item_gender: number;
+  readonly cash_item_gender: string;
   /** 캐시 아이템 옵션 */
   readonly cash_item_option: MCashItemOption[];
   /** 캐시 아이템 유효 기간 (UTC:0) (null: 무제한) */
   readonly date_expire: string | null;
   /** 캐시 아이템 옵션 유효 기간 (UTC:0) (null: 무제한) */
   readonly date_option_expire: string | null;
-  /** 캐시 아이템 라벨 정보 */
-  readonly cash_item_label: string;
+  /** 캐시 아이템 라벨 정보. 라벨이 없으면 null */
+  readonly cash_item_label: string | null;
   /** 캐시 아이템 컬러링프리즘 정보 (null: 미적용) */
   readonly cash_item_coloring_prism: MCashItemColoringPrism | null;
   /** 프리스타일 쿠폰 적용 여부 (0:미적용, 1:적용) */
@@ -366,10 +366,12 @@ export interface MAndroidCashItem {
   readonly cash_item_icon: string;
   /** 안드로이드 캐시 아이템 설명 */
   readonly cash_item_description: string;
-  /** 아이템 장착 가능 성별 */
-  readonly android_item_gender: string;
-  /** 안드로이드 캐시 아이템 라벨 정보 */
-  readonly cash_item_label: string;
+  /** 안드로이드 캐시 아이템 장착 가능 성별. 포털 스펙의 이름. 2026-11-24 실제 응답에는 없고 `cash_item_gender`로 온다. */
+  readonly android_item_gender?: string | undefined;
+  /** 안드로이드 캐시 아이템 장착 가능 성별. 실제 응답의 필드. 포털 스펙에는 `android_item_gender`로 적혀 있다. */
+  readonly cash_item_gender?: string | undefined;
+  /** 안드로이드 캐시 아이템 라벨 정보. 라벨이 없으면 null */
+  readonly cash_item_label: string | null;
   /** 안드로이드 캐시 아이템 컬러링프리즘 정보 */
   readonly cash_item_coloring_prism: MCashItemColoringPrism | null;
   /** 프리스타일 쿠폰 적용 여부 (0:미적용, 1:적용) */
@@ -380,8 +382,8 @@ export interface MAndroidCashItem {
 export interface MAndroidEquipmentInfo {
   /** 안드로이드 명 */
   readonly android_name: string;
-  /** 안드로이드 닉네임 */
-  readonly android_nickname: string;
+  /** 안드로이드 닉네임. 닉네임을 정하지 않았으면 null (2026-11-24 실측) */
+  readonly android_nickname: string | null;
   /** 안드로이드 아이콘 */
   readonly android_icon: string;
   /** 안드로이드 설명 */
@@ -470,8 +472,8 @@ export interface MJewelEquipmentPage {
 export interface MCharacterJewel {
   /** 적용 중인 쥬얼 페이지 번호 */
   readonly use_jewel_page_no: number;
-  /** 적용 중인 쥬얼 세트 옵션 */
-  readonly use_jewel_set_option: string;
+  /** 적용 중인 쥬얼 세트 옵션. 세트 효과가 없으면 null (2026-11-24 실측) */
+  readonly use_jewel_set_option: string | null;
   /** 쥬얼 장착 정보 */
   readonly jewel_equipment: MJewelEquipmentPage[];
 }
@@ -480,30 +482,30 @@ export interface MCharacterJewel {
 
 /** 헤어 정보 */
 export interface MHairInfo {
-  /** 헤어 명 */
-  readonly hair_name: string;
-  /** 헤어 베이스 컬러 */
-  readonly base_color: string;
-  /** 헤어 믹스 컬러 */
-  readonly mix_color: string;
-  /** 헤어 믹스 컬러의 염색 비율 */
-  readonly mix_rate: string;
-  /** 프리스타일 쿠폰 적용 여부 (0:미적용, 1:적용) */
-  readonly freestyle_coupon_flag?: string | undefined;
+  /** 헤어 명. 값이 없으면 null */
+  readonly hair_name: string | null;
+  /** 헤어 베이스 컬러. 값이 없으면 null */
+  readonly base_color: string | null;
+  /** 헤어 믹스 컬러. 믹스 컬러가 없으면 null */
+  readonly mix_color: string | null;
+  /** 헤어 믹스 컬러의 염색 비율. 값이 없으면 null */
+  readonly mix_rate: string | null;
+  /** 프리스타일 쿠폰 적용 여부 (0:미적용, 1:적용). 값이 없으면 null */
+  readonly freestyle_coupon_flag?: string | null | undefined;
 }
 
 /** 성형 정보 */
 export interface MFaceInfo {
-  /** 성형 명 */
-  readonly face_name: string;
-  /** 성형 베이스 컬러 */
-  readonly base_color: string;
-  /** 성형 믹스 컬러 */
-  readonly mix_color: string;
-  /** 성형 믹스 컬러의 염색 비율 */
-  readonly mix_rate: string;
-  /** 프리스타일 쿠폰 적용 여부 (0:미적용, 1:적용) */
-  readonly freestyle_coupon_flag?: string | undefined;
+  /** 성형 명. 값이 없으면 null */
+  readonly face_name: string | null;
+  /** 성형 베이스 컬러. 값이 없으면 null */
+  readonly base_color: string | null;
+  /** 성형 믹스 컬러. 믹스 컬러가 없으면 null */
+  readonly mix_color: string | null;
+  /** 성형 믹스 컬러의 염색 비율. 값이 없으면 null */
+  readonly mix_rate: string | null;
+  /** 프리스타일 쿠폰 적용 여부 (0:미적용, 1:적용). 값이 없으면 null */
+  readonly freestyle_coupon_flag?: string | null | undefined;
 }
 
 /** 헤어·성형·피부 — `client.maplestorym.character.getBeautyEquipment()` 의 응답. */
@@ -522,8 +524,8 @@ export interface MCharacterBeautyEquipment {
   readonly additional_character_hair: MHairInfo;
   /** 엔젤릭버스터 드레스 업 모드 성형 정보 */
   readonly additional_character_face: MFaceInfo;
-  /** 엔젤릭버스터 드레스 업 모드 피부 명 */
-  readonly additional_character_skin_name: string;
+  /** 엔젤릭버스터 드레스 업 모드 피부 명. 드레스 업 외형 정보가 없으면 null */
+  readonly additional_character_skin_name: string | null;
 }
 
 // ─── GET /maplestorym/v1/character/pet-equipment ─────────────────────────────
@@ -540,30 +542,30 @@ export interface MPetSetOption {
 
 /** 장착 펫 — `client.maplestorym.character.getPetEquipment()` 의 응답. */
 export interface MCharacterPetEquipment {
-  /** 펫1 명 */
-  readonly pet_1_name: string;
-  /** 펫1 원더 펫 종류 */
-  readonly pet_1_pet_type: string;
-  /** 펫1 마법의 시간 (UTC0) */
-  readonly pet_1_date_expire: string;
-  /** 펫1 아이콘 */
-  readonly pet_1_icon: string;
-  /** 펫2 명 */
-  readonly pet_2_name: string;
-  /** 펫2 원더 펫 종류 */
-  readonly pet_2_pet_type: string;
-  /** 펫2 마법의 시간 (UTC0) */
-  readonly pet_2_date_expire: string;
-  /** 펫2 아이콘 */
-  readonly pet_2_icon: string;
-  /** 펫3 명 */
-  readonly pet_3_name: string;
-  /** 펫3 원더 펫 종류 */
-  readonly pet_3_pet_type: string;
-  /** 펫3 마법의 시간 (UTC0) */
-  readonly pet_3_date_expire: string;
-  /** 펫3 아이콘 */
-  readonly pet_3_icon: string;
+  /** 펫1 명. 펫 미장착 시 null */
+  readonly pet_1_name: string | null;
+  /** 펫1 원더 펫 종류. 값이 없으면 null */
+  readonly pet_1_pet_type: string | null;
+  /** 펫1 마법의 시간 (UTC0). 값이 없으면 null */
+  readonly pet_1_date_expire: string | null;
+  /** 펫1 아이콘. 펫 미장착 시 null */
+  readonly pet_1_icon: string | null;
+  /** 펫2 명. 펫 미장착 시 null */
+  readonly pet_2_name: string | null;
+  /** 펫2 원더 펫 종류. 값이 없으면 null */
+  readonly pet_2_pet_type: string | null;
+  /** 펫2 마법의 시간 (UTC0). 값이 없으면 null */
+  readonly pet_2_date_expire: string | null;
+  /** 펫2 아이콘. 펫 미장착 시 null */
+  readonly pet_2_icon: string | null;
+  /** 펫3 명. 펫 미장착 시 null */
+  readonly pet_3_name: string | null;
+  /** 펫3 원더 펫 종류. 값이 없으면 null */
+  readonly pet_3_pet_type: string | null;
+  /** 펫3 마법의 시간 (UTC0). 값이 없으면 null */
+  readonly pet_3_date_expire: string | null;
+  /** 펫3 아이콘. 펫 미장착 시 null */
+  readonly pet_3_icon: string | null;
   /** 창작 펫 세트 정보 */
   readonly pet_set_option: MPetSetOption[];
 }
@@ -575,19 +577,19 @@ export interface MEquipmentSkill {
   /** 현재 사용 중인 스킬 모드 */
   readonly skill_mode: number;
   /** 해당 스킬을 장착한 스킬 세팅 */
-  readonly equipment_skill_set: string;
+  readonly equipment_skill_set: number;
   /** 스킬 장착 슬롯 인덱스 */
   readonly slot_id: string;
   /** 스킬 명 */
   readonly skill_name: string;
   /** 스킬 아이콘 */
   readonly skill_icon: string;
-  /** 스킬 타입 */
-  readonly skill_type: string;
-  /** 스킬 차수 (프리셋의 경우 스킬 프리셋 번호) */
-  readonly skill_grade: string;
-  /** 추가 기능 활성화 여부 */
-  readonly add_feature_flag: string;
+  /** 스킬 타입. 값이 없으면 null */
+  readonly skill_type: string | null;
+  /** 스킬 차수 (프리셋의 경우 스킬 프리셋 번호). 값이 없으면 null */
+  readonly skill_grade: string | null;
+  /** 추가 기능 활성화 여부. 값이 없으면 null */
+  readonly add_feature_flag: string | null;
 }
 
 /** 스킬 프리셋 정보 */
@@ -602,14 +604,14 @@ export interface MSkillPreset {
   readonly skill_name_2: string;
   /** 2번 슬롯에 등록된 스킬 아이콘 */
   readonly skill_icon_2: string;
-  /** 3번 슬롯에 등록된 스킬 명 */
-  readonly skill_name_3: string;
-  /** 3번 슬롯에 등록된 스킬 아이콘 */
-  readonly skill_icon_3: string;
-  /** 4번 슬롯에 등록된 스킬 명 */
-  readonly skill_name_4: string;
-  /** 4번 슬롯에 등록된 스킬 아이콘 */
-  readonly skill_icon_4: string;
+  /** 3번 슬롯에 등록된 스킬 명. 슬롯이 비어 있으면 null */
+  readonly skill_name_3: string | null;
+  /** 3번 슬롯에 등록된 스킬 아이콘. 슬롯이 비어 있으면 null */
+  readonly skill_icon_3: string | null;
+  /** 4번 슬롯에 등록된 스킬 명. 슬롯이 비어 있으면 null */
+  readonly skill_name_4: string | null;
+  /** 4번 슬롯에 등록된 스킬 아이콘. 슬롯이 비어 있으면 null */
+  readonly skill_icon_4: string | null;
   /** 스킬 프리셋 커맨드 ON 활성화 여부 */
   readonly preset_command_flag: string;
 }
@@ -661,7 +663,7 @@ export interface MLinkSkillInfo {
   /** 링크 스킬 명 */
   readonly skill_name: string;
   /** 링크 스킬 레벨 */
-  readonly skill_level: string;
+  readonly skill_level: number;
   /** 링크 스킬 설명 */
   readonly skill_description: string;
   /** 스킬 효과 */
@@ -682,8 +684,10 @@ export interface MLinkSkillPreset {
 
 /** 장착 링크 스킬 — `client.maplestorym.character.getLinkSkill()` 의 응답. */
 export interface MCharacterLinkSkill {
-  /** 적용 중인 프리셋 번호 */
-  readonly use_preset_no: number;
+  /** 적용 중인 링크 스킬 프리셋 번호. 포털 스펙의 이름. 2026-11-24 실제 응답에는 없고 `use_prest_no`로 온다. */
+  readonly use_preset_no?: number | undefined;
+  /** 적용 중인 링크 스킬 프리셋 번호. 실제 응답의 필드. 포털 스펙에는 `use_preset_no`로 적혀 있다. */
+  readonly use_prest_no?: number | undefined;
   /** 링크 스킬 */
   readonly link_skill: MLinkSkillPreset[];
 }
@@ -712,16 +716,16 @@ export interface MVCoreEquipment {
   readonly vcore_score?: number | undefined;
   /** 스킬 명 1 */
   readonly vcore_skill_name1?: string | undefined;
-  /** 스킬 명 2 */
-  readonly vcore_skill_name2?: string | undefined;
-  /** 스킬 명 3 */
-  readonly vcore_skill_name3?: string | undefined;
-  /** 스킬 명 4 */
-  readonly vcore_skill_name4?: string | undefined;
+  /** 스킬 명 2. 해당 코어에 두 번째 스킬이 없으면 null */
+  readonly vcore_skill_name2?: string | null | undefined;
+  /** 스킬 명 3. 해당 코어에 세 번째 스킬이 없으면 null */
+  readonly vcore_skill_name3?: string | null | undefined;
+  /** 스킬 명 4. 해당 코어에 네 번째 스킬이 없으면 null */
+  readonly vcore_skill_name4?: string | null | undefined;
   /** 기간제 여부 (0:영구, 1:기간제) */
   readonly vcore_expire_flag?: string | undefined;
-  /** 만료 시간 (UTC0) */
-  readonly vcore_expire_date?: string | undefined;
+  /** 만료 시간 (UTC0). 영구 코어는 null */
+  readonly vcore_expire_date?: string | null | undefined;
   /** 장착 여부 (0:미장착, 1:장착) */
   readonly vcore_equipment_flag?: string | undefined;
 }
