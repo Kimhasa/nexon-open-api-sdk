@@ -1,4 +1,34 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+import { http, HttpResponse } from 'msw';
+import { _resetDeprecationWarnings } from '../../../src/core/deprecation/deprecation.js';
+import { NexonAuthError } from '../../../src/core/errors/NexonAuthError.js';
+import { NexonBadRequestError } from '../../../src/core/errors/NexonBadRequestError.js';
+import { server } from '../../mocks/server.js';
+import {
+  seaCharacterPopularityFixture,
+  seaCharacterStatFixture,
+  seaCharacterHyperStatFixture,
+  seaCharacterPropensityFixture,
+  seaCharacterAbilityFixture,
+  seaCharacterItemEquipmentFixture,
+  seaCharacterCashItemEquipmentFixture,
+  seaCharacterSymbolEquipmentFixture,
+  seaCharacterSetEffectFixture,
+  seaCharacterBeautyEquipmentFixture,
+  seaCharacterAndroidEquipmentFixture,
+  seaCharacterPetEquipmentFixture,
+  seaCharacterSkillFixture,
+  seaCharacterLinkSkillFixture,
+  seaCharacterVMatrixFixture,
+  seaCharacterHexaMatrixFixture,
+  seaCharacterHexaMatrixStatFixture,
+  seaCharacterDojangFixture,
+} from '../../fixtures/maplestory-sea/character.fixture.js';
+import {
+  seaUnionRaiderFixture,
+  seaUnionArtifactFixture,
+  seaUnionChampionFixture,
+} from '../../fixtures/maplestory-sea/union-detail.fixture.js';
 import { HttpClient } from '../../../src/core/http/HttpClient.js';
 import { MapleStorySEAClient } from '../../../src/games/maplestory-sea/MapleStorySEAClient.js';
 import { MapleStorySEACharacterClient } from '../../../src/games/maplestory-sea/character/MapleStorySEACharacterClient.js';
@@ -22,6 +52,7 @@ const createClient = (): MapleStorySEAClient => {
 
 const TEST_OCID = seaOcidFixture.ocid as OCID;
 const TEST_GUILD_ID = seaGuildIdFixture.oguild_id as GuildId;
+const query = { ocid: TEST_OCID, date: '2025-04-21' };
 
 describe('MapleStorySEAClient', () => {
   describe('lazy getters', () => {
@@ -51,12 +82,48 @@ describe('MapleStorySEAClient', () => {
   describe('getOcid', () => {
     it('캐릭터명으로 OCID를 조회한다', async () => {
       const client = createClient();
-      const ocid = await client.getOcid('BubbIeLord');
+      const ocid = await client.getOcid(seaCharacterBasicFixture.character_name);
       expect(ocid).toBe(seaOcidFixture.ocid);
     });
   });
 
   describe('character', () => {
+    it.each([
+      { name: 'getPopularity', fixture: seaCharacterPopularityFixture },
+      { name: 'getStat', fixture: seaCharacterStatFixture },
+      { name: 'getHyperStat', fixture: seaCharacterHyperStatFixture },
+      { name: 'getPropensity', fixture: seaCharacterPropensityFixture },
+      { name: 'getAbility', fixture: seaCharacterAbilityFixture },
+      { name: 'getItemEquipment', fixture: seaCharacterItemEquipmentFixture },
+      { name: 'getCashItemEquipment', fixture: seaCharacterCashItemEquipmentFixture },
+      { name: 'getSymbolEquipment', fixture: seaCharacterSymbolEquipmentFixture },
+      { name: 'getSetEffect', fixture: seaCharacterSetEffectFixture },
+      { name: 'getBeautyEquipment', fixture: seaCharacterBeautyEquipmentFixture },
+      { name: 'getAndroidEquipment', fixture: seaCharacterAndroidEquipmentFixture },
+      { name: 'getPetEquipment', fixture: seaCharacterPetEquipmentFixture },
+      { name: 'getSkill', fixture: seaCharacterSkillFixture },
+      { name: 'getLinkSkill', fixture: seaCharacterLinkSkillFixture },
+      { name: 'getVMatrix', fixture: seaCharacterVMatrixFixture },
+      { name: 'getHexaMatrix', fixture: seaCharacterHexaMatrixFixture },
+      { name: 'getHexaMatrixStat', fixture: seaCharacterHexaMatrixStatFixture },
+      { name: 'getDojang', fixture: seaCharacterDojangFixture },
+    ] as const)('$name returns the portal response', async ({ name, fixture }) => {
+      const onResponseShapeMismatch = vi.fn();
+      const client = new MapleStorySEAClient(
+        new HttpClient({
+          apiKey: TEST_API_KEY,
+          responseValidation: true,
+          logger: { onResponseShapeMismatch },
+        }),
+      );
+      const result =
+        name === 'getSkill'
+          ? await client.character.getSkill({ ...query, character_skill_grade: '6' })
+          : await client.character[name](query);
+      expect(result).toEqual(fixture);
+      expect(onResponseShapeMismatch).not.toHaveBeenCalled();
+    });
+
     it('getBasic — 캐릭터 기본 정보를 반환한다', async () => {
       const client = createClient();
       const result = await client.character.getBasic({ ocid: TEST_OCID });
@@ -68,6 +135,24 @@ describe('MapleStorySEAClient', () => {
   });
 
   describe('union', () => {
+    it.each([
+      { name: 'getRaider', fixture: seaUnionRaiderFixture },
+      { name: 'getArtifact', fixture: seaUnionArtifactFixture },
+      { name: 'getChampion', fixture: seaUnionChampionFixture },
+    ] as const)('$name returns the portal response', async ({ name, fixture }) => {
+      const onResponseShapeMismatch = vi.fn();
+      const client = new MapleStorySEAClient(
+        new HttpClient({
+          apiKey: TEST_API_KEY,
+          responseValidation: true,
+          logger: { onResponseShapeMismatch },
+        }),
+      );
+      const result = await client.union[name](query);
+      expect(result).toEqual(fixture);
+      expect(onResponseShapeMismatch).not.toHaveBeenCalled();
+    });
+
     it('getUnion — 유니온 정보를 반환한다', async () => {
       const client = createClient();
       const result = await client.union.getUnion({ ocid: TEST_OCID });
@@ -92,5 +177,94 @@ describe('MapleStorySEAClient', () => {
       expect(result.guild_level).toBe(seaGuildBasicFixture.guild_level);
       expect(result.guild_member_count).toBe(seaGuildBasicFixture.guild_member_count);
     });
+  });
+
+  it('reports a missing SEA response field through responseValidation', async () => {
+    const onResponseShapeMismatch = vi.fn();
+    const client = new MapleStorySEAClient(
+      new HttpClient({
+        apiKey: TEST_API_KEY,
+        responseValidation: true,
+        logger: { onResponseShapeMismatch },
+      }),
+    );
+    server.use(
+      http.get('https://open.api.nexon.com/maplestorysea/v1/character/popularity', () =>
+        HttpResponse.json({ date: seaCharacterPopularityFixture.date }),
+      ),
+    );
+    await expect(client.character.getPopularity(query)).resolves.toEqual({
+      date: seaCharacterPopularityFixture.date,
+    });
+    expect(onResponseShapeMismatch).toHaveBeenCalledWith(
+      expect.objectContaining({ missingKeys: ['popularity'] }),
+    );
+  });
+
+  it('accepts stat responses from before mentorship was added', async () => {
+    const { date, character_class, final_stat, remain_ap } = seaCharacterStatFixture;
+    const response = { date, character_class, final_stat, remain_ap };
+    server.use(
+      http.get('https://open.api.nexon.com/maplestorysea/v1/character/stat', () =>
+        HttpResponse.json(response),
+      ),
+    );
+    const onResponseShapeMismatch = vi.fn();
+    const client = new MapleStorySEAClient(
+      new HttpClient({
+        apiKey: TEST_API_KEY,
+        responseValidation: true,
+        logger: { onResponseShapeMismatch },
+      }),
+    );
+    await expect(client.character.getStat(query)).resolves.toEqual(response);
+    expect(onResponseShapeMismatch).not.toHaveBeenCalled();
+  });
+
+  it('preserves legacy cash equipment skills and warns once', async () => {
+    _resetDeprecationWarnings();
+    const warning = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const response = {
+      ...seaCharacterCashItemEquipmentFixture,
+      cash_item_equipment_base: seaCharacterCashItemEquipmentFixture.cash_item_equipment_base.map(
+        (item) => ({ ...item, skills: ['Example Skill'] }),
+      ),
+    };
+    server.use(
+      http.get('https://open.api.nexon.com/maplestorysea/v1/character/cashitem-equipment', () =>
+        HttpResponse.json(response),
+      ),
+    );
+    try {
+      const client = createClient();
+      await expect(client.character.getCashItemEquipment(query)).resolves.toEqual(response);
+      await expect(client.character.getCashItemEquipment(query)).resolves.toEqual(response);
+      expect(warning).toHaveBeenCalledExactlyOnceWith(expect.stringContaining('skill_info'));
+    } finally {
+      warning.mockRestore();
+    }
+  });
+
+  it('rejects a blank identifier before making a request', async () => {
+    const onRequest = vi.fn();
+    const client = new MapleStorySEAClient(
+      new HttpClient({ apiKey: TEST_API_KEY, logger: { onRequest } }),
+    );
+    await expect(client.character.getBasic({ ocid: ' ' as OCID })).rejects.toBeInstanceOf(
+      NexonBadRequestError,
+    );
+    expect(onRequest).not.toHaveBeenCalled();
+  });
+
+  it('maps HTTP 403 to NexonAuthError', async () => {
+    server.use(
+      http.get('https://open.api.nexon.com/maplestorysea/v1/id', () =>
+        HttpResponse.json(
+          { error: { name: 'OPENAPI00002', message: 'Invalid API key' } },
+          { status: 403 },
+        ),
+      ),
+    );
+    await expect(createClient().getOcid('ExampleCharacter')).rejects.toBeInstanceOf(NexonAuthError);
   });
 });

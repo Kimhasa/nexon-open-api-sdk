@@ -1,3 +1,5 @@
+import { SEA_GUILD_ID_SHAPE, SEA_GUILD_BASIC_SHAPE } from '../shapes.js';
+import { assertNonBlank } from '../validate-input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { GuildId } from '../../_base/maple-base-types.js';
 import type { GuildIdDateRequest } from '../../_base/maple-base-types.js';
@@ -28,11 +30,23 @@ export class MapleStorySEAGuildClient {
    * @param worldName - World name
    * @throws {NexonNotFoundError} Guild not found
    * @throws {NexonAuthError} Invalid API key
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.guild.getId('GuildName', 'Aquila');
+   * ```
    */
   async getId(guildName: string, worldName: string): Promise<GuildId> {
+    assertNonBlank(guildName, 'guildName');
+    assertNonBlank(worldName, 'worldName');
     const response = await this.http.get<{ oguild_id: string }>(
       `${MapleStorySEAGuildClient.BASE}/guild/id`,
       { guild_name: guildName, world_name: worldName },
+      SEA_GUILD_ID_SHAPE,
     );
     return response.oguild_id as GuildId;
   }
@@ -44,11 +58,25 @@ export class MapleStorySEAGuildClient {
    *
    * @param params.oguild_id - Guild identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const guildId = await client.maplestorySEA.guild.getId('GuildName', 'Aquila');
+   * const result = await client.maplestorySEA.guild.getBasic({ oguild_id: guildId });
+   * ```
    */
   async getBasic(params: GuildIdDateRequest): Promise<SEAGuildBasic> {
-    return this.http.get<SEAGuildBasic>(`${MapleStorySEAGuildClient.BASE}/guild/basic`, {
-      oguild_id: params.oguild_id,
-      date: params.date as string | undefined,
-    });
+    assertNonBlank(params.oguild_id, 'oguild_id');
+    return this.http.get<SEAGuildBasic>(
+      `${MapleStorySEAGuildClient.BASE}/guild/basic`,
+      {
+        oguild_id: params.oguild_id,
+        date: params.date as string | undefined,
+      },
+      SEA_GUILD_BASIC_SHAPE,
+    );
   }
 }
