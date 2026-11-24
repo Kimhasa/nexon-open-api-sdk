@@ -145,6 +145,12 @@ export class NexonClient {
 
   /**
    * 카트라이더 러쉬플러스 클라이언트.
+   *
+   * @example
+   * ```ts
+   * const { ouid_info } = await client.kartrider.getOuidInfo('라이더명');
+   * const notices = await client.kartrider.notice.getList();
+   * ```
    */
   get kartrider(): KartriderClient {
     this._kartrider ??= new KartriderClient(this.http);
@@ -153,6 +159,12 @@ export class NexonClient {
 
   /**
    * 바람의나라 클라이언트.
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.baram.getOcid('캐릭터명', '연');
+   * const basic = await client.baram.character.getBasic({ ocid });
+   * ```
    */
   get baram(): BaramClient {
     this._baram ??= new BaramClient(this.http);
@@ -169,6 +181,12 @@ export class NexonClient {
 
   /**
    * 바람의나라: 연 클라이언트.
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.baramYeon.getOcid('캐릭터명', '연');
+   * const basic = await client.baramYeon.character.getBasic({ ocid });
+   * ```
    */
   get baramYeon(): BaramYeonClient {
     this._baramYeon ??= new BaramYeonClient(this.http);
@@ -177,6 +195,12 @@ export class NexonClient {
 
   /**
    * V4 클라이언트.
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.v4.getOcid('캐릭터명');
+   * const basic = await client.v4.character.getBasic({ ocid });
+   * ```
    */
   get v4(): V4Client {
     this._v4 ??= new V4Client(this.http);
@@ -185,6 +209,12 @@ export class NexonClient {
 
   /**
    * 히트2 클라이언트.
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.hit2.getOcid('캐릭터명');
+   * const basic = await client.hit2.character.getBasic({ ocid });
+   * ```
    */
   get hit2(): Hit2Client {
     this._hit2 ??= new Hit2Client(this.http);
@@ -193,6 +223,11 @@ export class NexonClient {
 
   /**
    * 넥슨 Open API 플랫폼 (Open API 공지) 클라이언트.
+   *
+   * @example
+   * ```ts
+   * const { notice } = await client.platform.getNoticeList();
+   * ```
    */
   get platform(): PlatformClient {
     this._platform ??= new PlatformClient(this.http);
