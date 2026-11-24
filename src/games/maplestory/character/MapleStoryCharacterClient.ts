@@ -600,9 +600,16 @@ export class MapleStoryCharacterClient {
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
    * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
+   * @deprecated 넥슨 안내에 따라 2026년 3월 19일 이후 데이터는
+   * {@link MapleStoryCharacterClient.getRingReserveSkillEquipment} (예비 특수 반지)로 조회한다.
+   * 2025-08-21 ~ 2026-03-18 날짜의 기록을 볼 때만 쓴다.
+   *
    * @example
    * ```ts
-   * const ring = await client.maplestory.character.getRingExchangeSkillEquipment({ ocid });
+   * const ring = await client.maplestory.character.getRingExchangeSkillEquipment({
+   *   ocid,
+   *   date: '2026-03-18',
+   * });
    * console.log(`${ring.special_ring_exchange_name} Lv.${ring.special_ring_exchange_level}`);
    * ```
    *
