@@ -13,7 +13,9 @@ import type { PlatformNoticeList, PlatformNoticeRequest } from './notice/types.j
  * ```ts
  * import { NexonClient } from 'nexon-open-api';
  *
- * const client = new NexonClient({ apiKey: 'your-api-key' });
+ * const apiKey = process.env['NEXON_API_KEY'];
+ * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+ * const client = new NexonClient({ apiKey });
  *
  * const { notice } = await client.platform.getNoticeList();
  * for (const n of notice) {
@@ -25,11 +27,11 @@ export class PlatformClient extends AbstractGameClient {
   protected readonly pathPrefix = 'platform';
 
   /**
-   * NEXON Open API 공지 목록을 조회한다 (최근 10개).
+   * 넥슨 Open API의 최근 공지 10개와 본문을 조회한다.
    *
    * 게임 공지 API와 달리 상세 API가 없고, 목록 항목에 본문(`contents`)이 함께 온다.
    *
-   * @param params - `{ game_name }` 특정 게임 공지만 조회할 때 지정. 생략하면 전체 공지
+   * @param params - `game_name`은 공지를 볼 게임 이름. 생략하거나 비우면 전체 공지를 조회한다.
    * @throws {NexonBadRequestError} game_name이 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -38,8 +40,11 @@ export class PlatformClient extends AbstractGameClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
    *
+   * // 서비스 상태 페이지에 전체 공지와 특정 게임 공지를 표시할 때
    * const all = await client.platform.getNoticeList();
    * const maple = await client.platform.getNoticeList({ game_name: '메이플스토리' });
    * console.log(all.notice.length, maple.notice[0]?.title);

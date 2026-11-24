@@ -19,7 +19,9 @@ const OCID_HINT = 'client.v4.getOcid(characterName) 로 얻은 값을 { ocid } �
  * ```ts
  * import { NexonClient } from 'nexon-open-api';
  *
- * const client = new NexonClient({ apiKey: 'your-api-key' });
+ * const apiKey = process.env['NEXON_API_KEY'];
+ * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+ * const client = new NexonClient({ apiKey });
  * const ocid = await client.v4.getOcid('캐릭터명');
  *
  * const basic = await client.v4.character.getBasic({ ocid });
@@ -32,12 +34,12 @@ export class V4CharacterClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 기본 정보를 조회한다.
+   * 캐릭터 프로필의 서버·직업·레벨과 접속 시각을 조회한다.
    *
    * `character_date_create` 는 일 단위라 시·분·초가 항상 0이고,
    * `character_create_type` 은 문자열 코드다 (`"0"`: 일반 캐릭터, `"1"`: 점핑 캐릭터).
    *
-   * @param params - `{ ocid }` 캐릭터 식별자
+   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 고유 번호
    * @throws {NexonBadRequestError} ocid가 비어 있거나(요청 전 차단) 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -46,7 +48,11 @@ export class V4CharacterClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 캐릭터 카드에 서버와 직업을 표시할 때
    * const ocid = await client.v4.getOcid('캐릭터명');
    * const basic = await client.v4.character.getBasic({ ocid });
    * console.log(`[${basic.server_name}] ${basic.character_name} Lv.${basic.character_level}`);
@@ -62,9 +68,9 @@ export class V4CharacterClient {
   }
 
   /**
-   * 명예 보유 정보를 조회한다.
+   * 캐릭터가 보유한 명예와 만료 시각을 조회한다.
    *
-   * @param params - `{ ocid }` 캐릭터 식별자
+   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 고유 번호
    * @throws {NexonBadRequestError} ocid가 비어 있거나(요청 전 차단) 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -73,7 +79,11 @@ export class V4CharacterClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 명예 보관함에 보유한 명예와 만료 시각을 표시할 때
    * const ocid = await client.v4.getOcid('캐릭터명');
    * const { honor } = await client.v4.character.getHonor({ ocid });
    * for (const h of honor) {
@@ -91,9 +101,9 @@ export class V4CharacterClient {
   }
 
   /**
-   * 장착 명예 정보를 조회한다.
+   * 캐릭터가 장착한 명예와 만료 시각을 조회한다.
    *
-   * @param params - `{ ocid }` 캐릭터 식별자
+   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 고유 번호
    * @throws {NexonBadRequestError} ocid가 비어 있거나(요청 전 차단) 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -102,7 +112,11 @@ export class V4CharacterClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 프로필 카드에 장착 명예를 표시할 때
    * const ocid = await client.v4.getOcid('캐릭터명');
    * const { honor_equipment } = await client.v4.character.getHonorEquipment({ ocid });
    * console.log(honor_equipment.map((h) => h.honor_name));

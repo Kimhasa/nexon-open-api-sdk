@@ -23,7 +23,9 @@ import type {
  * ```ts
  * import { NexonClient } from 'nexon-open-api';
  *
- * const client = new NexonClient({ apiKey: 'your-api-key' });
+ * const apiKey = process.env['NEXON_API_KEY'];
+ * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+ * const client = new NexonClient({ apiKey });
  * const { notice } = await client.kartrider.notice.getList();
  * const first = notice[0];
  * if (first) {
@@ -38,7 +40,7 @@ export class KartriderNoticeClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 공지사항 목록을 조회한다 (최근 20개).
+   * 최근 등록된 공지사항 20개를 조회한다.
    *
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -47,7 +49,11 @@ export class KartriderNoticeClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 디스코드 알림에서 공지사항의 새 글을 찾을 때
    * const list = await client.kartrider.notice.getList();
    * for (const n of list.notice) {
    *   console.log(`[${n.date}] ${n.title}`);
@@ -63,9 +69,9 @@ export class KartriderNoticeClient {
   }
 
   /**
-   * 공지사항 상세를 조회한다.
+   * 공지사항에서 게시글 번호로 본문을 조회한다.
    *
-   * @param noticeId - 공지 식별자 (`getList()` 응답의 `notice[].notice_id`)
+   * @param noticeId - 게시글 번호 (`getList()` 응답의 `notice[].notice_id`)
    * @throws {NexonBadRequestError} noticeId가 정수가 아니거나(요청 전 차단) 존재하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
@@ -73,7 +79,11 @@ export class KartriderNoticeClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 공지사항 위젯에서 선택한 글의 본문을 표시할 때
    * const detail = await client.kartrider.notice.getDetail(12345);
    * console.log(detail.title, detail.contents);
    * ```
@@ -91,7 +101,7 @@ export class KartriderNoticeClient {
   }
 
   /**
-   * 시즌 알림판 목록을 조회한다 (최근 20개).
+   * 최근 등록된 시즌 알림판 20개를 조회한다.
    *
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -100,7 +110,11 @@ export class KartriderNoticeClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 디스코드 알림에서 시즌 알림판의 새 글을 찾을 때
    * const list = await client.kartrider.notice.getSeasonList();
    * for (const n of list.season_notice) {
    *   console.log(`[${n.date}] ${n.title}`);
@@ -116,9 +130,9 @@ export class KartriderNoticeClient {
   }
 
   /**
-   * 시즌 알림판 상세를 조회한다.
+   * 시즌 알림판에서 게시글 번호로 본문을 조회한다.
    *
-   * @param noticeId - 공지 식별자 (`getSeasonList()` 응답의 `season_notice[].notice_id`)
+   * @param noticeId - 게시글 번호 (`getSeasonList()` 응답의 `season_notice[].notice_id`)
    * @throws {NexonBadRequestError} noticeId가 정수가 아니거나(요청 전 차단) 존재하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
@@ -126,7 +140,11 @@ export class KartriderNoticeClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 시즌 알림판 위젯에서 선택한 글의 본문을 표시할 때
    * const detail = await client.kartrider.notice.getSeasonDetail(12345);
    * console.log(detail.title, detail.contents);
    * ```
@@ -144,7 +162,7 @@ export class KartriderNoticeClient {
   }
 
   /**
-   * 이벤트&대회 공지 목록을 조회한다 (최근 20개).
+   * 최근 등록된 이벤트&대회 20개를 조회한다.
    *
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -153,7 +171,11 @@ export class KartriderNoticeClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 디스코드 알림에서 이벤트&대회의 새 글을 찾을 때
    * const list = await client.kartrider.notice.getEventList();
    * for (const n of list.event_notice) {
    *   console.log(`[${n.date}] ${n.title}`);
@@ -169,9 +191,9 @@ export class KartriderNoticeClient {
   }
 
   /**
-   * 이벤트&대회 공지 상세를 조회한다.
+   * 이벤트&대회에서 게시글 번호로 본문을 조회한다.
    *
-   * @param noticeId - 공지 식별자 (`getEventList()` 응답의 `event_notice[].notice_id`)
+   * @param noticeId - 게시글 번호 (`getEventList()` 응답의 `event_notice[].notice_id`)
    * @throws {NexonBadRequestError} noticeId가 정수가 아니거나(요청 전 차단) 존재하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
@@ -179,7 +201,11 @@ export class KartriderNoticeClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 이벤트&대회 위젯에서 선택한 글의 본문을 표시할 때
    * const detail = await client.kartrider.notice.getEventDetail(12345);
    * console.log(detail.title, detail.contents);
    * ```

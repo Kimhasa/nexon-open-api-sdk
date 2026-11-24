@@ -39,7 +39,7 @@ export interface TWGuildSkill {
   readonly skill_icon: string;
 }
 
-/** GET /maplestorytw/v1/guild/basic response */
+/** 길드 기본 정보 — `client.maplestoryTW.guild.getBasic()` 의 응답. */
 export interface TWGuildBasic {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;

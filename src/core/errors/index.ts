@@ -8,4 +8,5 @@ export { NexonNotFoundError } from './NexonNotFoundError.js';
 export { NexonBadRequestError } from './NexonBadRequestError.js';
 export { NexonDataNotReadyError } from './NexonDataNotReadyError.js';
 export { NexonServerError } from './NexonServerError.js';
+export { NexonMaintenanceError } from './NexonMaintenanceError.js';
 export { classifyError } from './classify-error.js';

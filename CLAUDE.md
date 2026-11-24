@@ -25,6 +25,7 @@ const basic = await client.maplestory.character.getBasic({ ocid });
 | `yarn type-check`                   | `tsc --noEmit` (src) + `tsc -p tsconfig.test.json` (src, tests, scripts)                          |
 | `yarn lint` / `yarn lint:fix`       | ESLint (`src`, `tests`, `scripts`)                                                                |
 | `yarn check:exports`                | 빌드된 패키지의 sub-path별 CJS/ESM 타입 해석 검사 (attw, `yarn build` 후, `exports` 자동 탐색)    |
+| `yarn examples:check`               | 빌드 후 `examples/` 를 배포 타입(`dist`) 기준으로 타입 검사 (`.mjs`·`.cjs` 는 `// @ts-check`)     |
 | `yarn format` / `yarn format:check` | Prettier                                                                                          |
 | `yarn test`                         | Vitest 1회 실행                                                                                   |
 | `yarn test:watch`                   | Vitest watch                                                                                      |
@@ -43,7 +44,7 @@ const basic = await client.maplestory.character.getBasic({ ocid });
 - `yarn test:{game}` 은 구현된 게임마다 하나씩 15개다 (`test:maplestory`, `test:maplestory-m`, `test:maplestory-sea`, `test:maplestory-tw`, `test:fconline`, `test:first-descendant`, `test:mabinogi-heroes`, `test:sudden-attack`, `test:kartrider`, `test:baram`, `test:mabinogi`, `test:baram-yeon`, `test:v4`, `test:hit2`, `test:platform`). 필요한 환경변수는 `.env.example` 참고.
 - `yarn release` 는 `package.json` 의 `version` 을 바꾸지 않는다. 버전은 직접 올리고 태그(`v{version}`)를 만든다. 태그를 push하면 CI도 `npm publish` 를 실행하므로 두 경로를 같은 버전에 함께 쓰지 않는다.
 
-**코드 변경 후 반드시**: `yarn type-check` → `yarn lint` → `yarn test` → `yarn build` → `yarn check:exports` 순서로 확인. 게임 API를 추가·수정했다면 `yarn specs:coverage` 로 스펙 대비 경로도 확인한다.
+**코드 변경 후 반드시**: `yarn type-check` → `yarn lint` → `yarn test` → `yarn build` → `yarn check:exports` → `yarn examples:check` 순서로 확인. 게임 API를 추가·수정했다면 `yarn specs:coverage` 로 스펙 대비 경로도 확인한다.
 
 - 줄 끝은 `.gitattributes` 로 LF 고정이다 (Windows `core.autocrlf=true` 에서도 `format:check` 통과). `specs/openapi/*.yaml` 은 포털 원문을 바이트 그대로 보존하므로 `-text` 이고 Prettier 대상에서도 빠진다 (`.prettierignore`).
 
@@ -53,7 +54,7 @@ const basic = await client.maplestory.character.getBasic({ ocid });
 src/
 ├── core/                                    # 공유 인프라 (게임 무관)
 │   ├── http/                                # HttpClient, retry, http-types
-│   ├── errors/                              # NexonError 계층 (6개 서브클래스), classify-error, error-codes
+│   ├── errors/                              # NexonError 계층 (7개 서브클래스), classify-error, error-codes
 │   ├── metadata/api-metadata.ts             # 게임별 API 검증 메타데이터 (API_METADATA)
 │   ├── validation/response-shape.ts         # 런타임 응답 shape 검증
 │   ├── deprecation/deprecation.ts           # deprecation 경고 유틸
@@ -91,7 +92,8 @@ specs/
     └── {slug}/{categoryId}.yaml             # 포털 카테고리별 OpenAPI YAML (원천 스펙)
 
 scripts/                                     # specs:* 스크립트, 실 API E2E 스크립트(test-*.ts)
-docs/                                        # 게임별 API 레퍼런스 ({game}.md), 아이콘
+docs/                                        # 게임별 문서({game}.md), getting-started.md, faq.md, 아이콘
+examples/                                    # 창작 시나리오 예제 (`yarn examples:check` 로 타입 검사)
 
 tests/
 ├── setup.ts                                 # MSW 서버 lifecycle (listen / resetHandlers / close)
@@ -148,15 +150,16 @@ AbstractMapleBaseClient extends AbstractGameClient
 └── formatDate(date): NexonDate
 
 NexonError (base)
-├── NexonRateLimitError    (429 / OPENAPI00007)
-├── NexonAuthError         (OPENAPI00002, 00005 — 코드로 분류, status는 서버 값 그대로)
-├── NexonNotFoundError     (400 / OPENAPI00003)
-├── NexonBadRequestError   (400 / OPENAPI00004, 00006)
-├── NexonDataNotReadyError (400 / OPENAPI00009, 00010)
-└── NexonServerError       (5xx / OPENAPI00001, 00008, 00011)
+├── NexonRateLimitError    (429 / OPENAPI00007 API 호출량 초과)
+├── NexonAuthError         (OPENAPI00005 잘못된 API 키, 00002 권한 없음 — status는 서버 값 그대로)
+├── NexonNotFoundError     (400 / OPENAPI00003 유효하지 않은 식별자)
+├── NexonBadRequestError   (400 / OPENAPI00004 파라미터 누락·오류, 00006 유효하지 않은 게임·API 경로)
+├── NexonDataNotReadyError (400 / OPENAPI00009 데이터 준비 중)
+└── NexonServerError       (5xx / OPENAPI00001 서버 내부 오류, 표에 없는 00008)
+    └── NexonMaintenanceError (OPENAPI00010 게임 점검 중 400, 00011 API 점검 중 503)
 ```
 
-분류 기준은 HTTP 상태가 아니라 넥슨 에러 코드다 (`classify-error.ts`). 실제 서버는 잘못된 API 키에 403이 아니라 HTTP 400 + `OPENAPI00005` 를 돌려준다 (2026-11-24 실측).
+분류 기준은 HTTP 상태가 아니라 넥슨 에러 코드다 (`classify-error.ts`). 코드의 의미는 포털 [응답코드 표](https://openapi.nexon.com/ko/guide/request-api/)를 따른다 (2026-11-24 확인, 00008은 표에 없음). 실제 서버는 잘못된 API 키에 403이 아니라 HTTP 400 + `OPENAPI00005` 를 돌려준다 (2026-11-24 실측).
 
 ## 아키텍처 규칙
 
@@ -202,10 +205,32 @@ NexonError (base)
 
 > IntelliSense가 문서이고, 에러 메시지가 튜토리얼이다.
 
+### 독자는 게임을 잘 아는 창작자다 — 게임 용어 우선
+
+이 SDK는 넥슨 API로 팬사이트, 디스코드 봇, 전적 검색기, 시세 도구를 만드는 **창작자**가 더 쉽게 만들도록 돕는다. 이들은 게임은 잘 알지만 개발 경험은 저마다 다르다. 문서와 주석(JSDoc), 에러 메시지에 같은 원칙을 적용한다.
+
+- **게임 용어 먼저, SDK 이름은 옆에** 쓴다.
+  - 예: "유니온 공격대 배치 — `union.getRaider()`"
+  - 예: "선수 카드(시즌 포함 고유 번호) — `spid`"
+  - API 용어(endpoint, payload)를 앞세우지 않는다.
+- **용어의 근거**는 1순위가 포털 스펙 YAML의 `summary`·`description` 이고, 그다음이 게임에서 쓰는 공식 이름이다. 용어를 지어내지 않는다.
+- **코드값은 게임 속 의미로** 설명한다.
+  - 예: `liberation_quest_clear` 의 `"1"` → 제네시스 해방
+  - 예: `matchtype` `50` → 공식경기
+- **데이터 갱신 시점은 스펙 문구대로** 적는다.
+  - 예: 메이플스토리는 평균 15분 뒤 반영되고, 지난 날짜는 다음날 오전 2시부터 조회된다.
+  - 추측으로 "전일 데이터" 같은 표현을 쓰지 않는다.
+- **창작 시나리오로 설명한다.** 예: "디스코드 봇의 `!정보 캐릭터명` 에 답할 때".
+- **사용자 문서에는 관리자 용어를 넣지 않는다.** PR, Spec Drift, fixture, SEMVER 같은 말은 `README.md`, `docs/**`, `examples/**` 에서 빼고 `CONTRIBUTING.md` 에 둔다.
+- **게임 문서 형식:** `docs/{game}.md` 는 "게임 용어 ↔ SDK 대응표"를 중심에 둔다. 새 메서드를 추가하면 대응표에도 행을 추가한다.
+
 ### JSDoc 필수
 
 모든 public API에 JSDoc 작성. `@param`, `@throws`, `@example` 포함.
 `@example`은 복사-붙여넣기 가능한 실제 코드여야 한다.
+
+- 첫 줄은 게임 화면 기준으로 무엇을 조회하는지 쓴다. 예: `/** 캐릭터 정보창의 장착 장비(프리셋 포함)를 조회한다. */`
+- `@param` 은 게임 개념으로 설명한다 (월드, 서버, 매치 종류, 경매장 분류).
 
 ### Date Coercion
 
@@ -384,10 +409,12 @@ Co-Authored-By: {작업한 모델명} <noreply@anthropic.com>
 - `tests/mocks/handlers/{game}.handlers.ts` — MSW HTTP 핸들러. 새 파일은 `tests/mocks/handlers/index.ts` 에 등록해야 동작한다
 - `tests/unit/{core,games}/` — 단위 테스트 파일
 - 새로 추가하는 public 메서드는 메서드마다 성공 경로 테스트(핸들러 + fixture)를 둔다. 기존 4개 게임은 대표 메서드만 테스트되어 있다 (보강 대상)
+- `examples/` — `yarn examples:check` 가 빌드된 패키지를 자기 참조(`import 'nexon-open-api'`)로 해석해 예제를 타입 검사한다 (CI quality 매트릭스의 Examples). 공개 타입을 바꾸면 예제도 함께 맞춘다.
 
 ## 주석 원칙
 
 - **"왜(why)" 주석만 작성** — "무엇(what)"은 코드로 표현
+- 공개 API의 JSDoc과 응답 필드 주석은 게임 용어로 쓴다 ("독자는 게임을 잘 아는 창작자다" 참고)
 - API 응답 타입에서 비직관적 필드는 주석 필수:
 
 ```ts
@@ -447,7 +474,9 @@ yarn specs:fetch        포털 → specs/openapi/{slug}/{categoryId}.yaml, index
 5. **fixtures** — `tests/fixtures/{game}/{이름}.fixture.ts` (아래 "fixture 작성법")
 6. **MSW 핸들러** — `tests/mocks/handlers/{game}.handlers.ts` + `handlers/index.ts` 등록
 7. **단위 테스트** — `tests/unit/games/{game}-client.test.ts`: 메서드마다 성공 경로, 대표 에러 경로
-8. **docs** — `docs/{game}.md`: 카테고리별 메서드 목록과 개수 (개수 = public API 메서드 수)
+8. **docs** — `docs/{game}.md`: 기존 게임 문서와 같은 순서를 따른다.
+   - 순서: 머리말(`client.xxx` · API 개수) → 시작하기 → **게임 용어 ↔ SDK 대응표** → 알아두기 → 카테고리별 사용법 → 넥슨 API 경로(접기) → 만들기 예제 → 참고
+   - API 개수는 public API 메서드 수다. 용어는 "독자는 게임을 잘 아는 창작자다" 원칙을 따른다.
 9. **`API_METADATA`** — `src/core/metadata/api-metadata.ts` 에 엔트리 추가/갱신
    - 키 = path prefix, `endpointCount` = public API 메서드 수
    - `lastVerifiedAt` = 스펙(또는 실 API)과 대조한 날짜, `note` 에 검증 방식 명시. 실 API 키로 확인하지 못했으면 "포털 스펙 기준, 실 API 미검증"이라고 쓴다

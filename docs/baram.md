@@ -1,99 +1,105 @@
-# 바람의나라 API 레퍼런스
+# 바람의나라 — nexon-open-api
 
-> SDK 지원 API 7개 — `client.baram`
->
-> 개수 기준: SDK public API 메서드 수 (메서드 1개 = 넥슨 API 경로 1개). 넥슨 포털 기준 7개를 모두 지원합니다.
->
-> 스펙: `specs/openapi/baram/`
+> `client.baram` · API 7개 · [넥슨 공식 문서](https://openapi.nexon.com/ko/game/baram/)
 
-## 빠른 시작
+서버별 캐릭터 검색기를 만들거나 문파 디스코드에서 캐릭터의 장비·능력치·문파를 한 장에 보여 줄 수 있습니다.
 
-```ts
+## 시작하기
+
+처음이라면 [시작 가이드](./getting-started.md)를 따라 API 키를 발급받고 패키지를 설치하세요.
+
+```js
 import { NexonClient } from 'nexon-open-api';
 
-const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
-
-const ocid = await client.baram.getOcid('캐릭터명', '연');
-const basic = await client.baram.character.getBasic({ ocid });
-console.log(`${basic.character_name} Lv.${basic.character_level}`);
-```
-
-> - 게임 데이터 반영: 평균 10분 소요
-> - 데이터 제공 시작일: **2022-01-01**
-> - 날짜 필드는 모두 **UTC0** (`"2023-12-14T08:28:35Z"`)
-> - 게임 콘텐츠 변경으로 ocid가 바뀔 수 있습니다. ocid를 저장해 쓰면 주기적으로 다시 조회하세요.
-
-## 구조
-
-| 경로 꼴                      | SDK 위치                 |
-| ---------------------------- | ------------------------ |
-| `/baram/v1/id` (식별자 조회) | `client.baram` 루트      |
-| `/baram/v1/character/...`    | `client.baram.character` |
-
-판단 기준: 식별자 조회는 루트 메서드, 경로에 카테고리 세그먼트(`character/`)가 있으면 그 이름의 sub-client에 둡니다. 카테고리가 하나뿐이지만 메이플 계열(`client.maplestory.character.getBasic`)과 호출 모양을 맞추고, 포털에 카테고리가 추가돼도 기존 메서드 경로가 바뀌지 않도록 sub-client를 썼습니다.
-
-## OCID 조회 (1개)
-
-| 메서드                               | 경로                                          | 응답        |
-| ------------------------------------ | --------------------------------------------- | ----------- |
-| `getOcid(characterName, serverName)` | `GET /baram/v1/id?character_name&server_name` | `BaramOCID` |
-
-```ts
-const ocid = await client.baram.getOcid('캐릭터명', '연');
-```
-
-### 서버 목록
-
-연, 무휼, 유리, 진, 하자, 호동
-
-`BaramServerName` 타입이 위 값을 자동완성으로 제공합니다. 서버가 추가될 때를 대비해 다른 문자열도 받습니다.
-
-## 캐릭터 (6개)
-
-| 메서드                                  | 경로                                           | 응답                           |
-| --------------------------------------- | ---------------------------------------------- | ------------------------------ |
-| `character.getBasic({ ocid })`          | `GET /baram/v1/character/basic?ocid`           | `BaramCharacterBasic`          |
-| `character.getTitle({ ocid })`          | `GET /baram/v1/character/title?ocid`           | `BaramCharacterTitle`          |
-| `character.getTitleEquipment({ ocid })` | `GET /baram/v1/character/title-equipment?ocid` | `BaramCharacterTitleEquipment` |
-| `character.getItemEquipment({ ocid })`  | `GET /baram/v1/character/item-equipment?ocid`  | `BaramCharacterItemEquipment`  |
-| `character.getStat({ ocid })`           | `GET /baram/v1/character/stat?ocid`            | `BaramCharacterStat`           |
-| `character.getGuild({ ocid })`          | `GET /baram/v1/character/guild?ocid`           | `BaramCharacterGuild`          |
-
-```ts
-const char = client.baram.character;
-
-await char.getBasic({ ocid }); // 이름, 직업, 국가, 성별, 경험치, 레벨
-await char.getTitle({ ocid }); // 보유 칭호
-await char.getTitleEquipment({ ocid }); // 장착 칭호
-await char.getItemEquipment({ ocid }); // 장착 아이템
-await char.getStat({ ocid }); // 능력치
-await char.getGuild({ ocid }); // 가입한 문파(길드)
-```
-
-### 응답에서 주의할 필드
-
-| 필드                                           | 설명                                                                               |
-| ---------------------------------------------- | ---------------------------------------------------------------------------------- |
-| `title[].title_id`, `item_equipment[].item_id` | 이름이 `_id` 지만 스펙 설명은 "칭호 명", "장착 아이템 명"입니다.                   |
-| `stat[].stat_value`                            | 숫자가 아닌 **문자열**입니다.                                                      |
-| `title[].date_expire`, `guild_name`            | SDK 타입은 `string \| null` 입니다. 스펙에 nullable 표시는 없지만 넓게 잡았습니다. |
-| `character_exp`, `character_level`             | 버프·아이템 효과로 게임 내 값과 다를 수 있습니다.                                  |
-
-## 입력 검증과 에러
-
-빈 캐릭터 명·서버 명·`ocid` 는 요청을 보내지 않고 `NexonBadRequestError` (`code: 'OPENAPI00004'`, `nexonMessage: undefined`)를 던집니다.
-
-```ts
-import { NexonBadRequestError, NexonRateLimitError } from 'nexon-open-api';
+const apiKey = process.env['NEXON_API_KEY'];
+if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+const client = new NexonClient({ apiKey });
 
 try {
-  await client.baram.getOcid('캐릭터명', '연');
-} catch (err) {
-  if (err instanceof NexonBadRequestError) console.log('파라미터 확인:', err.message);
-  if (err instanceof NexonRateLimitError) console.log('호출 한도 초과');
+  const { baram } = client;
+  const serverName = process.argv[3] ?? '연';
+  const ocid = await baram.getOcid(process.argv[2] ?? '캐릭터명', serverName);
+  const basic = await baram.character.getBasic({ ocid });
+  console.log(
+    `[${serverName}] ${basic.character_name} Lv.${basic.character_level} ${basic.character_class_name}`,
+  );
+  // 예시 출력: [연] 캐릭터명 Lv.800 도사
+} catch (error) {
+  console.error('조회 실패', error instanceof Error ? error.message : error);
+  process.exitCode = 1;
 }
 ```
 
-## 검증 상태
+파일을 `index.mjs`(ES 모듈)로 저장하고 `.env`에 `NEXON_API_KEY`를 설정한 뒤 Node.js 20.6 이상에서 `node --env-file=.env index.mjs '캐릭터명' '연'`로 실행합니다. 예제의 이름과 서버를 실제 조회할 값으로 바꿔 실행하세요.
 
-포털 OpenAPI 스펙(2026-11-24) 기준으로 구현했고, 실 API 키로는 검증하지 않았습니다. 테스트 fixture는 스펙 스키마로 합성한 값입니다.
+## 게임 용어 ↔ SDK 대응표
+
+메서드는 `client.baram`에서 호출합니다.
+
+| 게임에서 부르는 이름                  | SDK 메서드                              | 주요 응답 필드                                                                          |
+| ------------------------------------- | --------------------------------------- | --------------------------------------------------------------------------------------- |
+| 서버와 캐릭터 이름으로 고유 번호 찾기 | `getOcid(characterName, serverName)`    | `ocid` (SDK가 돌려주는 고유 번호)                                                       |
+| 캐릭터 프로필                         | `character.getBasic({ ocid })`          | `character_class_name` (직업), `character_nation_name` (국가), `character_level` (레벨) |
+| 보유 칭호                             | `character.getTitle({ ocid })`          | `title` (보유 칭호와 만료 일시)                                                         |
+| 장착 칭호                             | `character.getTitleEquipment({ ocid })` | `title_equipment` (장착 칭호와 만료 일시)                                               |
+| 장착 장비                             | `character.getItemEquipment({ ocid })`  | `item_equipment` (장착 부위와 아이템)                                                   |
+| 캐릭터 능력치                         | `character.getStat({ ocid })`           | `stat` (능력치 이름과 값)                                                               |
+| 가입한 문파                           | `character.getGuild({ ocid })`          | `guild_name` (문파 이름)                                                                |
+
+## 알아두기
+
+- OCID는 캐릭터마다 붙는 고유 번호입니다. 캐릭터 이름과 서버 이름을 함께 입력해 받습니다. 콘텐츠 변경 후 저장한 OCID로 조회가 실패하면 이름과 서버로 다시 받습니다.
+- 서버 이름은 `연`, `무휼`, `유리`, `진`, `하자`, `호동`입니다. `BaramServerName`은 이 값을 자동완성하고 추가 서버 이름도 문자열로 받습니다.
+- 게임 데이터는 평균 10분 뒤에 볼 수 있고, 2022년 1월 1일 이후 데이터가 제공됩니다. 응답의 일시는 UTC 기준입니다.
+- 빈 캐릭터 이름, 서버 이름, OCID에는 SDK가 요청 전에 `NexonBadRequestError`(`OPENAPI00004`)를 던집니다.
+
+## 카테고리별 사용법
+
+아래 코드 조각은 시작 예제의 `try` 블록 안에 하나씩 붙여 실행합니다. 나머지 응답 필드는 에디터 자동완성에서 확인할 수 있습니다.
+
+### 캐릭터·칭호·장비·능력치·문파
+
+시작 예제에서 만든 `client`와 `ocid`를 사용합니다.
+
+```ts
+// 문파 디스코드에서 캐릭터의 문파, 장착 장비와 능력치 표시
+const { character } = client.baram;
+const [guild, gear, stats] = await Promise.all([
+  character.getGuild({ ocid }),
+  character.getItemEquipment({ ocid }),
+  character.getStat({ ocid }),
+]);
+console.log(guild.guild_name ?? '문파 정보 없음');
+for (const item of gear.item_equipment) console.log(item.item_equipment_slot_name, item.item_id);
+for (const stat of stats.stat) console.log(stat.stat_name, stat.stat_value);
+```
+
+- 장착·보유 칭호의 `title_id`와 장비의 `item_id`는 포털 설명에서 각각 칭호 이름과 아이템 이름으로 안내합니다. 칭호의 `date_expire`는 만료 시각으로 SDK 타입에서 `null`을 허용합니다.
+- `stat[].stat_value`는 문자열로 오는 능력치 값입니다.
+- `guild_name`은 가입한 문파 이름으로 SDK 타입에서 `null`을 허용합니다.
+- `character_exp`와 `character_level`은 경험치와 레벨입니다. 버프나 아이템 효과로 게임 화면의 값과 다를 수 있습니다.
+
+<details>
+<summary>넥슨 API 경로</summary>
+
+| SDK 메서드                    | 넥슨 API 경로                             |
+| ----------------------------- | ----------------------------------------- |
+| `getOcid`                     | `GET /baram/v1/id`                        |
+| `character.getBasic`          | `GET /baram/v1/character/basic`           |
+| `character.getTitle`          | `GET /baram/v1/character/title`           |
+| `character.getTitleEquipment` | `GET /baram/v1/character/title-equipment` |
+| `character.getItemEquipment`  | `GET /baram/v1/character/item-equipment`  |
+| `character.getStat`           | `GET /baram/v1/character/stat`            |
+| `character.getGuild`          | `GET /baram/v1/character/guild`           |
+
+</details>
+
+## 만들기 예제
+
+- **장비 비교 페이지** · 각 캐릭터의 서버와 이름으로 고유 번호를 받은 다음 장착 부위를 기준으로 두 장비 목록을 비교합니다.
+- **문파 디스코드 프로필** · 문파 이름, 직업, 레벨을 카드에 표시하고 보유·장착 칭호를 함께 보여 줍니다.
+
+## 참고
+
+- 에러와 문제 해결: [FAQ](./faq.md)
+- 이 문서의 API는 넥슨 포털 공식 스펙을 기준으로 구현했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)).

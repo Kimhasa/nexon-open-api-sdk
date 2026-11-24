@@ -16,7 +16,9 @@ import type { V4OCID } from './types.js';
  * ```ts
  * import { NexonClient } from 'nexon-open-api';
  *
- * const client = new NexonClient({ apiKey: 'your-api-key' });
+ * const apiKey = process.env['NEXON_API_KEY'];
+ * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+ * const client = new NexonClient({ apiKey });
  *
  * const ocid = await client.v4.getOcid('캐릭터명');
  * const basic = await client.v4.character.getBasic({ ocid });
@@ -28,18 +30,18 @@ export class V4Client extends AbstractGameClient {
 
   private _character: V4CharacterClient | undefined;
 
-  /** 캐릭터 정보 API (3개 엔드포인트) */
+  /** 캐릭터의 프로필·보유 명예·장착 명예를 조회하는 메뉴. */
   get character(): V4CharacterClient {
     this._character ??= new V4CharacterClient(this.http);
     return this._character;
   }
 
   /**
-   * 캐릭터 명으로 캐릭터 식별자(ocid)를 조회한다.
+   * 캐릭터 이름으로 고유 번호를 조회한다.
    *
    * 스펙상 서버 파라미터가 없어 캐릭터 명만 받는다.
    *
-   * @param characterName - 캐릭터 명
+   * @param characterName - 조회할 캐릭터 이름
    * @throws {NexonBadRequestError} characterName이 비어 있거나(요청 전 차단) 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -48,7 +50,11 @@ export class V4Client extends AbstractGameClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 캐릭터 검색에서 이름을 고유 번호로 바꿀 때
    * const ocid = await client.v4.getOcid('캐릭터명');
    * console.log(ocid);
    * ```

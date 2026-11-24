@@ -1,117 +1,127 @@
-# 카트라이더 러쉬플러스 API 레퍼런스
+# 카트라이더 러쉬플러스 — nexon-open-api
 
-> SDK 지원 API 9개 — `client.kartrider`
->
-> 개수 기준: SDK public API 메서드 수 (메서드 1개 = 넥슨 API 경로 1개). 넥슨 포털 기준 9개를 모두 지원합니다.
->
-> 포털 slug(path prefix)는 `kartrush` 입니다. 스펙: `specs/openapi/kartrush/`
+> `client.kartrider` · API 9개 · [넥슨 공식 문서](https://openapi.nexon.com/ko/game/kartrush/)
 
-## 빠른 시작
+라이더 레벨과 장착 칭호를 보여 주는 검색기나 시즌 알림판·이벤트&대회를 모아 보는 알림 봇을 만들 수 있습니다.
 
-```ts
+## 시작하기
+
+처음이라면 [시작 가이드](./getting-started.md)를 따라 API 키를 발급받고 패키지를 설치하세요.
+
+```js
 import { NexonClient } from 'nexon-open-api';
 
-const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
-
-const { ouid_info } = await client.kartrider.getOuidInfo('라이더명');
-const ouid = ouid_info[0]?.ouid;
-if (ouid) {
-  const basic = await client.kartrider.user.getBasic({ ouid });
-  console.log(`${basic.racer_name} Lv.${basic.racer_level}`);
-}
-```
-
-> - 게임 데이터 반영: 평균 10분 소요
-> - 데이터 제공 시작일: **2022-01-01**
-> - 날짜 필드는 모두 **UTC0** (`"2023-12-14T08:28:35Z"`)
-> - 게임 콘텐츠 변경으로 ouid가 바뀔 수 있습니다. ouid를 저장해 쓰면 주기적으로 다시 조회하세요.
-
-## 구조
-
-카테고리가 2개(계정, 공지)라서 sub-client로 나눴습니다.
-
-| 경로 꼴                             | SDK 위치                  |
-| ----------------------------------- | ------------------------- |
-| `/kartrush/v1/id` (식별자 조회)     | `client.kartrider` 루트   |
-| `/kartrush/v1/user/...`             | `client.kartrider.user`   |
-| `/kartrush/v1/notice...` (공지 3종) | `client.kartrider.notice` |
-
-판단 기준: 식별자 조회는 루트 메서드, 경로에 카테고리 세그먼트(`user/`, `notice`)가 있으면 그 이름의 sub-client에 둡니다.
-
-## 계정 식별자 조회 (1개)
-
-| 메서드                   | 경로                             | 응답                  |
-| ------------------------ | -------------------------------- | --------------------- |
-| `getOuidInfo(racerName)` | `GET /kartrush/v1/id?racer_name` | `KartriderOuidLookup` |
-
-```ts
-const { ouid_info } = await client.kartrider.getOuidInfo('라이더명');
-for (const info of ouid_info) {
-  console.log(info.ouid, info.racer_level, info.racer_date_create);
-}
-```
-
-- 응답이 배열(`ouid_info`)입니다. 다른 게임의 `getOcid()` 처럼 식별자 하나를 돌려주지 않으므로 원하는 항목의 `ouid` 를 골라 씁니다.
-- `ouid_info[].racer_level` 은 **문자열**입니다 (`user.getBasic()` 의 `racer_level` 은 숫자).
-- 라이더 명의 `|` 는 SDK가 `_` 로 바꿔 보냅니다 (넥슨 API 규칙: `|카러플라이더|` → `_카러플라이더_`).
-
-## 계정 정보 (2개)
-
-| 메서드                             | 경로                                         | 응답                          |
-| ---------------------------------- | -------------------------------------------- | ----------------------------- |
-| `user.getBasic({ ouid })`          | `GET /kartrush/v1/user/basic?ouid`           | `KartriderUserBasic`          |
-| `user.getTitleEquipment({ ouid })` | `GET /kartrush/v1/user/title-equipment?ouid` | `KartriderUserTitleEquipment` |
-
-```ts
-const user = client.kartrider.user;
-
-await user.getBasic({ ouid }); // 라이더 명, 생성·로그인·로그아웃 일시, 레벨
-await user.getTitleEquipment({ ouid }); // 장착 칭호
-```
-
-## 공지 (6개)
-
-| 메서드                             | 경로                                              | 응답                        |
-| ---------------------------------- | ------------------------------------------------- | --------------------------- |
-| `notice.getList()`                 | `GET /kartrush/v1/notice`                         | `KartriderNoticeList`       |
-| `notice.getDetail(noticeId)`       | `GET /kartrush/v1/notice/detail?notice_id`        | `KartriderNoticeDetail`     |
-| `notice.getSeasonList()`           | `GET /kartrush/v1/notice-season`                  | `KartriderSeasonNoticeList` |
-| `notice.getSeasonDetail(noticeId)` | `GET /kartrush/v1/notice-season/detail?notice_id` | `KartriderNoticeDetail`     |
-| `notice.getEventList()`            | `GET /kartrush/v1/notice-event`                   | `KartriderEventNoticeList`  |
-| `notice.getEventDetail(noticeId)`  | `GET /kartrush/v1/notice-event/detail?notice_id`  | `KartriderNoticeDetail`     |
-
-```ts
-const notice = client.kartrider.notice;
-
-const { notice: items } = await notice.getList(); // 공지사항 (최근 20개)
-const first = items[0];
-if (first) {
-  const detail = await notice.getDetail(first.notice_id);
-  console.log(detail.title, detail.contents);
-}
-
-await notice.getSeasonList(); // 시즌 알림판 → season_notice[]
-await notice.getEventList(); // 이벤트&대회 → event_notice[]
-```
-
-- 목록 응답의 배열 키가 종류마다 다릅니다: `notice`, `season_notice`, `event_notice`.
-- 공지는 수정될 수 있으므로 실시간 조회 또는 최소 일 단위 갱신을 권장합니다.
-
-## 입력 검증과 에러
-
-빈 라이더 명·빈 `ouid`·정수가 아닌 `noticeId` 는 요청을 보내지 않고 `NexonBadRequestError` (`code: 'OPENAPI00004'`, `nexonMessage: undefined`)를 던집니다.
-
-```ts
-import { NexonBadRequestError, NexonRateLimitError } from 'nexon-open-api';
+const apiKey = process.env['NEXON_API_KEY'];
+if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+const client = new NexonClient({ apiKey });
 
 try {
-  await client.kartrider.getOuidInfo('라이더명');
-} catch (err) {
-  if (err instanceof NexonBadRequestError) console.log('파라미터 확인:', err.message);
-  if (err instanceof NexonRateLimitError) console.log('호출 한도 초과');
+  const { kartrider } = client;
+  const { ouid_info } = await kartrider.getOuidInfo(process.argv[2] ?? '라이더명');
+  const rider = ouid_info[0];
+  if (ouid_info.length === 1 && rider) {
+    const basic = await kartrider.user.getBasic({ ouid: rider.ouid });
+    console.log(`${basic.racer_name} Lv.${basic.racer_level}`);
+    // 예시 출력: 라이더명 Lv.30
+  } else if (ouid_info.length > 1) {
+    console.table(ouid_info);
+  } else {
+    console.log('라이더를 찾을 수 없습니다.');
+  }
+} catch (error) {
+  console.error('조회 실패', error instanceof Error ? error.message : error);
+  process.exitCode = 1;
 }
 ```
 
-## 검증 상태
+파일을 `index.mjs`(ES 모듈)로 저장하고 `.env`에 `NEXON_API_KEY`를 설정한 뒤 Node.js 20.6 이상에서 `node --env-file=.env index.mjs '라이더명'`로 실행합니다. 예제의 이름을 실제 조회할 이름으로 바꿔 실행하세요.
 
-포털 OpenAPI 스펙(2026-11-24) 기준으로 구현했고, 실 API 키로는 검증하지 않았습니다. 테스트 fixture는 스펙 스키마로 합성한 값입니다.
+## 게임 용어 ↔ SDK 대응표
+
+메서드는 `client.kartrider`에서 호출합니다.
+
+| 게임에서 부르는 이름        | SDK 메서드                         | 주요 응답 필드                                                                         |
+| --------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------- |
+| 라이더명으로 계정 후보 찾기 | `getOuidInfo(racerName)`           | `ouid_info` (계정 후보별 번호·레벨·생성 시각)                                          |
+| 라이더 프로필               | `user.getBasic({ ouid })`          | `racer_name` (라이더명), `racer_level` (레벨), `racer_date_last_login` (마지막 로그인) |
+| 라이더의 장착 칭호          | `user.getTitleEquipment({ ouid })` | `title_equipment` (장착 칭호)                                                          |
+| 공지사항 목록               | `notice.getList()`                 | `notice` (공지 제목과 게시글 번호)                                                     |
+| 공지사항 본문               | `notice.getDetail(noticeId)`       | `contents` (공지 본문)                                                                 |
+| 시즌 알림판 목록            | `notice.getSeasonList()`           | `season_notice` (시즌 알림판 게시글)                                                   |
+| 시즌 알림판 본문            | `notice.getSeasonDetail(noticeId)` | `contents` (시즌 알림판 본문)                                                          |
+| 이벤트&대회 목록            | `notice.getEventList()`            | `event_notice` (이벤트·대회 게시글)                                                    |
+| 이벤트&대회 본문            | `notice.getEventDetail(noticeId)`  | `contents` (이벤트·대회 본문)                                                          |
+
+## 알아두기
+
+- OUID는 라이더 계정의 고유 번호입니다. 같은 라이더명에 계정이 여러 개 대응할 수 있어서 `getOuidInfo`는 `ouid_info` 배열을 돌려줍니다. 여러 건이면 레벨과 생성 시각을 비교해 조회할 계정을 고릅니다.
+- 라이더명의 `|`는 SDK가 `_`로 바꿔 보냅니다. 예를 들어 `|카러플라이더|`를 입력하면 `_카러플라이더_`로 조회합니다.
+- 게임 데이터는 평균 10분 뒤에 확인할 수 있습니다. 2022년 1월 1일 이후 데이터가 제공되며, 날짜와 시각은 UTC 기준입니다.
+- 게임 콘텐츠 변경 후 저장한 OUID로 조회가 실패하면 라이더명으로 다시 조회합니다.
+- 빈 라이더명이나 OUID, 안전한 정수 범위를 벗어나거나 정수가 아닌 공지 번호에는 SDK가 요청 전에 `NexonBadRequestError`(`OPENAPI00004`)를 던집니다.
+
+## 카테고리별 사용법
+
+아래 코드 조각은 시작 예제의 `try` 블록 안에 하나씩 붙여 실행합니다. 나머지 응답 필드는 에디터 자동완성에서 확인할 수 있습니다.
+
+### 라이더 레벨·장착 칭호
+
+시작 예제에서 만든 `client`, `ouid_info`, `rider`를 사용합니다. 후보가 하나일 때 실행합니다.
+
+```ts
+// 라이더 프로필 카드에 현재 장착한 칭호 표시
+if (ouid_info.length === 1 && rider) {
+  const { title_equipment } = await client.kartrider.user.getTitleEquipment({ ouid: rider.ouid });
+  console.log(title_equipment.map((title) => title.title_name).join(', '));
+}
+```
+
+- `racer_date_create`는 계정 생성 시각입니다. `racer_date_last_login`과 `racer_date_last_logout`은 마지막 접속과 종료 시각입니다.
+- `racer_level`은 계정 후보에서 문자열, 라이더 프로필에서는 숫자입니다.
+- `title_equipment[].title_name`은 장착 칭호 이름입니다.
+
+### 공지사항·시즌 알림판·이벤트&대회
+
+시작 예제에서 만든 `client`를 사용합니다.
+
+```ts
+// 시즌 알림판 위젯에 최근 게시글의 제목과 본문 표시
+const { notice } = client.kartrider;
+const { season_notice } = await notice.getSeasonList();
+const latest = season_notice[0];
+if (latest) {
+  const detail = await notice.getSeasonDetail(latest.notice_id);
+  console.log(detail.title, detail.contents);
+}
+```
+
+- 목록 배열은 게시판별로 `notice`(공지사항), `season_notice`(시즌 알림판), `event_notice`(이벤트&대회)입니다. 각각 최근 등록 글 20개를 제공합니다.
+- `notice_id`를 같은 게시판의 상세 메서드에 넣으면 `contents`로 본문을 받습니다. `notice_tag`는 게시글에 붙은 태그입니다.
+- 공지는 게시 뒤 수정될 수 있으므로 조회 시 새로 받거나 하루에 한 번 이상 갱신합니다.
+
+<details>
+<summary>넥슨 API 경로</summary>
+
+| SDK 메서드               | 넥슨 API 경로                           |
+| ------------------------ | --------------------------------------- |
+| `getOuidInfo`            | `GET /kartrush/v1/id`                   |
+| `user.getBasic`          | `GET /kartrush/v1/user/basic`           |
+| `user.getTitleEquipment` | `GET /kartrush/v1/user/title-equipment` |
+| `notice.getList`         | `GET /kartrush/v1/notice`               |
+| `notice.getDetail`       | `GET /kartrush/v1/notice/detail`        |
+| `notice.getSeasonList`   | `GET /kartrush/v1/notice-season`        |
+| `notice.getSeasonDetail` | `GET /kartrush/v1/notice-season/detail` |
+| `notice.getEventList`    | `GET /kartrush/v1/notice-event`         |
+| `notice.getEventDetail`  | `GET /kartrush/v1/notice-event/detail`  |
+
+</details>
+
+## 만들기 예제
+
+- **라이더 검색기** · 같은 이름으로 조회된 계정의 레벨과 생성 시각을 먼저 보여 주고, 선택한 라이더의 장착 칭호를 표시합니다.
+- **시즌 소식 봇** · 시즌 알림판과 이벤트&대회의 게시글 번호를 각각 기억하고 새 글의 제목과 링크를 표시합니다.
+
+## 참고
+
+- 에러와 문제 해결: [FAQ](./faq.md)
+- 이 문서의 API는 넥슨 포털 공식 스펙을 기준으로 구현했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)).

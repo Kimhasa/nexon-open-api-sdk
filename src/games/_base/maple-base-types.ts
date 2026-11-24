@@ -39,7 +39,12 @@ export interface OcidDateRequest {
   readonly ocid: OCID;
   /**
    * 조회 기준일 (YYYY-MM-DD).
-   * 생략 시 전일 데이터를 반환합니다.
+   *
+   * - 생략하면 가장 최근 데이터를 조회합니다. 게임에서 바뀐 내용은 평균 15분 뒤 반영됩니다.
+   * - 날짜를 넣으면 그날 0시~24시의 데이터를 조회합니다.
+   * - 지난 날짜의 데이터는 다음날 오전 2시부터 조회할 수 있습니다.
+   *
+   * 날짜와 시각의 기준은 게임 지역 시각입니다 (메이플스토리는 KST, MapleStory SEA·Taiwan은 UTC+8).
    */
   readonly date?: NexonDate | string;
 }
@@ -52,5 +57,14 @@ export interface GuildIdRequest {
 /** 길드 ID + 날짜 기반 요청 파라미터 */
 export interface GuildIdDateRequest {
   readonly oguild_id: GuildId;
+  /**
+   * 조회 기준일 (YYYY-MM-DD).
+   *
+   * - 생략하면 가장 최근 데이터를 조회합니다. 게임에서 바뀐 내용은 평균 15분 뒤 반영됩니다.
+   * - 날짜를 넣으면 그날 0시~24시의 데이터를 조회합니다.
+   * - 지난 날짜의 데이터는 다음날 오전 2시부터 조회할 수 있습니다.
+   *
+   * 날짜와 시각의 기준은 게임 지역 시각입니다 (메이플스토리는 KST, MapleStory SEA·Taiwan은 UTC+8).
+   */
   readonly date?: NexonDate | string;
 }

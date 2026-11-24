@@ -91,7 +91,7 @@ export interface MLevelRankingItem {
   readonly guild_mark_icon: string;
 }
 
-/** GET /maplestorym/v1/ranking/level 응답 */
+/** 레벨 랭킹 — `client.maplestorym.ranking.getLevel()` 의 응답. */
 export interface MLevelRanking {
   /** 랭킹 목록 */
   readonly ranking: MLevelRankingItem[];
@@ -119,7 +119,7 @@ export interface MDojangRankingItem {
   readonly guild_name: string;
 }
 
-/** GET /maplestorym/v1/ranking/dojang 응답 */
+/** 무릉도장 랭킹 — `client.maplestorym.ranking.getDojang()` 의 응답. */
 export interface MDojangRanking {
   /** 랭킹 목록 */
   readonly ranking: MDojangRankingItem[];
@@ -147,7 +147,7 @@ export interface MRootOfTimeRankingItem {
   readonly guild_name: string;
 }
 
-/** GET /maplestorym/v1/ranking/root-of-time 응답 */
+/** 시간의 근원 랭킹 — `client.maplestorym.ranking.getRootOfTime()` 의 응답. */
 export interface MRootOfTimeRanking {
   /** 랭킹 목록 */
   readonly ranking: MRootOfTimeRankingItem[];
@@ -177,7 +177,7 @@ export interface MUnionRankingItem {
   readonly guild_name: string;
 }
 
-/** GET /maplestorym/v1/ranking/union 응답 */
+/** 유니온 랭킹 — `client.maplestorym.ranking.getUnion()` 의 응답. */
 export interface MUnionRanking {
   /** 랭킹 목록 */
   readonly ranking: MUnionRankingItem[];
@@ -205,7 +205,7 @@ export interface MCombatPowerRankingItem {
   readonly guild_name: string;
 }
 
-/** GET /maplestorym/v1/ranking/combat-power 응답 */
+/** 전투력 랭킹 — `client.maplestorym.ranking.getCombatPower()` 의 응답. */
 export interface MCombatPowerRanking {
   /** 랭킹 목록 */
   readonly ranking: MCombatPowerRankingItem[];
@@ -233,7 +233,7 @@ export interface MKerningMTowerRankingItem {
   readonly guild_name: string;
 }
 
-/** GET /maplestorym/v1/ranking/kerning-m-tower 응답 */
+/** 커닝M타워 랭킹 — `client.maplestorym.ranking.getKerningMTower()` 의 응답. */
 export interface MKerningMTowerRanking {
   /** 랭킹 목록 */
   readonly ranking: MKerningMTowerRankingItem[];
@@ -273,7 +273,7 @@ export interface MAchievementRankingItem {
   readonly main_honor_badge: MHonorBadge[];
 }
 
-/** GET /maplestorym/v1/ranking/achievement 응답 */
+/** 업적 랭킹 — `client.maplestorym.ranking.getAchievement()` 의 응답. */
 export interface MAchievementRanking {
   /** 랭킹 목록 */
   readonly ranking: MAchievementRankingItem[];
@@ -301,13 +301,13 @@ export interface MSharenianRankingItem {
   readonly grade_icon: string;
 }
 
-/** GET /maplestorym/v1/ranking/sharenian-battlefield 응답 */
+/** 샤레니안의 전장 랭킹 — `client.maplestorym.ranking.getSharenianBattlefield()` 의 응답. */
 export interface MSharenianBattlefieldRanking {
   /** 랭킹 목록 */
   readonly ranking: MSharenianRankingItem[];
 }
 
-/** GET /maplestorym/v1/ranking/sharenian-waterway 응답 */
+/** 샤레니안의 지하수로 랭킹 — `client.maplestorym.ranking.getSharenianWaterway()` 의 응답. */
 export interface MSharenianWaterwayRanking {
   /** 랭킹 목록 */
   readonly ranking: MSharenianRankingItem[];

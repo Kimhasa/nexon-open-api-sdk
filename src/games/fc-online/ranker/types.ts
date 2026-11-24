@@ -2,15 +2,15 @@
 
 /** 랭커 스탯 조회 시 선수 식별 정보 */
 export interface FcRankerPlayer {
-  /** 선수 고유 식별자 (/metadata/spid API 참고) */
+  /** 선수 고유 식별자 — 선수 카드 번호 (`getSpidMeta()` 참고) */
   readonly id: number;
-  /** 선수 포지션 (/metadata/spposition API 참고) */
+  /** 선수 포지션 번호 (`getSpPositionMeta()` 참고, 예: 0 = GK) */
   readonly po: number;
 }
 
 /** 랭커 스탯 조회 요청 파라미터 */
 export interface FcRankerStatsRequest {
-  /** 매치 종류 (/metadata/matchtype API 참고) */
+  /** 매치 종류 번호 (50: 공식경기, 52: 감독모드 등. `getMatchTypeMeta()` 참고) */
   readonly matchtype: number;
   /** 조회할 선수 목록 (1회 최대 50명 권장, 초과 시 413 에러 가능) */
   readonly players: readonly FcRankerPlayer[];
@@ -44,11 +44,11 @@ export interface FcRankerPlayerStatus {
   readonly matchCount: number;
 }
 
-/** 랭커 선수 스탯 응답 */
+/** TOP 10,000 랭커가 쓴 선수 카드의 포지션별 평균 기록 — `client.fcOnline.getRankerStats()` 응답 배열의 항목. */
 export interface FcRankerStats {
-  /** 선수 고유 식별자 (/metadata/spid API 참고) */
+  /** 선수 고유 식별자 — 선수 카드 번호 (`getSpidMeta()` 참고) */
   readonly spId: number;
-  /** 선수 포지션 (/metadata/spposition API 참고) */
+  /** 선수 포지션 번호 (`getSpPositionMeta()` 참고, 예: 0 = GK) */
   readonly spPosition: number;
   /** 선수의 20경기 평균 스탯 */
   readonly status: FcRankerPlayerStatus;

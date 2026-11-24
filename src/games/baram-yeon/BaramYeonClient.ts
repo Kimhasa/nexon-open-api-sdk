@@ -16,7 +16,9 @@ import type { BaramYeonOCID, BaramYeonServerName } from './types.js';
  * ```ts
  * import { NexonClient } from 'nexon-open-api';
  *
- * const client = new NexonClient({ apiKey: 'your-api-key' });
+ * const apiKey = process.env['NEXON_API_KEY'];
+ * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+ * const client = new NexonClient({ apiKey });
  *
  * const ocid = await client.baramYeon.getOcid('캐릭터명', '연');
  * const basic = await client.baramYeon.character.getBasic({ ocid });
@@ -28,17 +30,17 @@ export class BaramYeonClient extends AbstractGameClient {
 
   private _character: BaramYeonCharacterClient | undefined;
 
-  /** 캐릭터 정보 API (3개 엔드포인트) */
+  /** 캐릭터의 프로필·보유 칭호·장착 칭호를 조회하는 메뉴. */
   get character(): BaramYeonCharacterClient {
     this._character ??= new BaramYeonCharacterClient(this.http);
     return this._character;
   }
 
   /**
-   * 캐릭터 명과 서버 명으로 캐릭터 식별자(ocid)를 조회한다.
+   * 서버 이름과 캐릭터 이름으로 캐릭터 고유 번호를 조회한다.
    *
-   * @param characterName - 캐릭터 명
-   * @param serverName - 서버 명 (`'연'`, `'무휼'`, `'세류'`, `'해명'`, `'낙랑'`, `'하백'`, `'비류'`, `'온조'`)
+   * @param characterName - 조회할 캐릭터 이름
+   * @param serverName - 캐릭터가 속한 서버 이름 (`'연'`, `'무휼'`, `'세류'`, `'해명'`, `'낙랑'`, `'하백'`, `'비류'`, `'온조'`)
    * @throws {NexonBadRequestError} characterName·serverName이 비어 있거나(요청 전 차단) 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -47,7 +49,11 @@ export class BaramYeonClient extends AbstractGameClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 서버별 캐릭터 검색에서 고유 번호를 얻을 때
    * const ocid = await client.baramYeon.getOcid('캐릭터명', '연');
    * console.log(ocid);
    * ```

@@ -16,7 +16,9 @@ import { FirstDescendantUserClient } from './user/FirstDescendantUserClient.js';
  * ```ts
  * import { NexonClient } from 'nexon-open-api';
  *
- * const client = new NexonClient({ apiKey: 'your-api-key' });
+ * const apiKey = process.env['NEXON_API_KEY'];
+ * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+ * const client = new NexonClient({ apiKey });
  *
  * const ouid = await client.firstDescendant.getOuid('닉네임#1234');
  * const basic = await client.firstDescendant.user.getBasic({ ouid });
@@ -32,12 +34,12 @@ export class FirstDescendantClient extends AbstractGameClient {
   private _leaderboard: FirstDescendantLeaderboardClient | undefined;
 
   /**
-   * 닉네임으로 계정 식별자(ouid)를 조회한다.
+   * 닉네임과 태그로 계정 고유 번호를 조회한다.
    *
    * 닉네임은 대소문자를 구분하며 `#` 뒤 태그까지 포함해야 한다.
    * 게임 콘텐츠 변경으로 ouid가 바뀔 수 있으므로 오래 보관한 값은 다시 조회한다.
    *
-   * @param userName - 닉네임 (예: `'닉네임#1234'`)
+   * @param userName - 대소문자와 태그를 포함한 닉네임(예: `'닉네임#1234'`)
    * @throws {NexonBadRequestError} userName이 비어 있을 때 (요청 전 SDK 검증)
    * @throws {NexonBadRequestError} 닉네임 형식이 잘못됐거나 계정을 찾을 수 없을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
@@ -45,6 +47,13 @@ export class FirstDescendantClient extends AbstractGameClient {
    *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 빌드 검색에서 입력한 닉네임을 계정 번호로 바꿀 때
    * const ouid = await client.firstDescendant.getOuid('닉네임#1234');
    * const basic = await client.firstDescendant.user.getBasic({ ouid });
    * ```
@@ -63,25 +72,25 @@ export class FirstDescendantClient extends AbstractGameClient {
     return response.ouid as TfdOuid;
   }
 
-  /** 계정 정보 조회 (기본 정보, 장착 계승자·무기·반응로·외장 부품, 아르케 조율) */
+  /** 프로필·장착 계승자·장비·아르케 조율을 조회하는 계정 메뉴. */
   get user(): FirstDescendantUserClient {
     this._user ??= new FirstDescendantUserClient(this.http);
     return this._user;
   }
 
-  /** 메타데이터 조회 (계승자·무기·모듈 등 각종 id의 이름·이미지·수치를 담은 정적 파일) */
+  /** 계승자·무기·모듈의 번호를 이름으로 바꾸는 게임 도감. */
   get meta(): FirstDescendantMetaClient {
     this._meta ??= new FirstDescendantMetaClient(this.http);
     return this._meta;
   }
 
-  /** 추천 모듈 조회 (계승자·무기·보이드 요격전 조합별 추천 모듈) */
+  /** 보이드 요격전 성공 기록으로 추천 모듈을 찾는 메뉴. */
   get recommendation(): FirstDescendantRecommendationClient {
     this._recommendation ??= new FirstDescendantRecommendationClient(this.http);
     return this._recommendation;
   }
 
-  /** 리더보드 조회 (보이드 요격전, 보이드 침식 정화 - 도전) */
+  /** 보이드 요격전과 보이드 침식 정화 - 도전의 순위를 보는 메뉴. */
   get leaderboard(): FirstDescendantLeaderboardClient {
     this._leaderboard ??= new FirstDescendantLeaderboardClient(this.http);
     return this._leaderboard;

@@ -213,6 +213,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "type-check": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
+    "examples:check": "yarn build && tsc -p tsconfig.examples.json",
     "check:exports": "attw --pack . --profile node16",
     "lint": "eslint src tests scripts",
     "lint:fix": "eslint src tests scripts --fix",

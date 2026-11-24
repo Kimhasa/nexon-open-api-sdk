@@ -1,6 +1,6 @@
 // ─── GET /maplestorym/v1/character/basic ─────────────────────────────────────
 
-/** GET /maplestorym/v1/character/basic 응답 */
+/** 캐릭터 기본 정보 — `client.maplestorym.character.getBasic()` 의 응답. */
 export interface MCharacterBasic {
   /** 캐릭터 명 */
   readonly character_name: string;
@@ -41,7 +41,7 @@ export interface MStat {
   readonly stat_value: string;
 }
 
-/** GET /maplestorym/v1/character/stat 응답 */
+/** 캐릭터 스탯 — `client.maplestorym.character.getStat()` 의 응답. */
 export interface MCharacterStat {
   /** 스탯 정보 */
   readonly stat: MStat[];
@@ -67,7 +67,7 @@ export interface MHyperStatPreset {
   readonly hyper_stat_info: MHyperStatInfo[];
 }
 
-/** GET /maplestorym/v1/character/hyper-stat 응답 */
+/** 하이퍼 스탯 — `client.maplestorym.character.getHyperStat()` 의 응답. */
 export interface MCharacterHyperStat {
   /** 보유 프리셋 수 */
   readonly preset_count: number;
@@ -81,7 +81,7 @@ export interface MCharacterHyperStat {
 
 // ─── GET /maplestorym/v1/character/guild ─────────────────────────────────────
 
-/** GET /maplestorym/v1/character/guild 응답 */
+/** 가입한 길드 — `client.maplestorym.character.getGuild()` 의 응답. */
 export interface MCharacterGuild {
   /** 가입한 길드 명 */
   readonly guild_name: string;
@@ -202,7 +202,7 @@ export interface MEquipmentPreset {
   readonly soul_set_option: string;
 }
 
-/** GET /maplestorym/v1/character/item-equipment 응답 */
+/** 장착 장비(캐시 아이템 제외) — `client.maplestorym.character.getItemEquipment()` 의 응답. */
 export interface MCharacterItemEquipment {
   /** 캐릭터 직업 */
   readonly character_class: string;
@@ -286,7 +286,7 @@ export interface MAdditionalCashEquipmentPreset {
   readonly additional_cash_item_equipment: MCashItemEquipmentItem[];
 }
 
-/** GET /maplestorym/v1/character/cashitem-equipment 응답 */
+/** 장착 캐시 아이템 — `client.maplestorym.character.getCashItemEquipment()` 의 응답. */
 export interface MCharacterCashItemEquipment {
   /** 캐릭터 직업 */
   readonly character_class: string;
@@ -324,7 +324,7 @@ export interface MSymbolInfo {
   readonly symbol_option: string;
 }
 
-/** GET /maplestorym/v1/character/symbol 응답 */
+/** 장착 심볼(아케인·어센틱) — `client.maplestorym.character.getSymbol()` 의 응답. */
 export interface MCharacterSymbolEquipment {
   /** 캐릭터 직업 */
   readonly character_class: string;
@@ -346,7 +346,7 @@ export interface MSetInfo {
   readonly set_option: string;
 }
 
-/** GET /maplestorym/v1/character/set-effect 응답 */
+/** 적용 중인 세트 효과 — `client.maplestorym.character.getSetEffect()` 의 응답. */
 export interface MCharacterSetEffect {
   /** 세트 정보 */
   readonly set_info: MSetInfo[];
@@ -428,7 +428,7 @@ export interface MAndroidHeartPreset {
   readonly heart_equipment: MHeartEquipment;
 }
 
-/** GET /maplestorym/v1/character/android-equipment 응답 */
+/** 장착 안드로이드 — `client.maplestorym.character.getAndroidEquipment()` 의 응답. */
 export interface MCharacterAndroidEquipment {
   /** 적용 중인 프리셋 번호 */
   readonly use_preset_no: number;
@@ -466,7 +466,7 @@ export interface MJewelEquipmentPage {
   readonly jewel_info: MJewelInfo[];
 }
 
-/** GET /maplestorym/v1/character/jewel 응답 */
+/** 장착 쥬얼 — `client.maplestorym.character.getJewel()` 의 응답. */
 export interface MCharacterJewel {
   /** 적용 중인 쥬얼 페이지 번호 */
   readonly use_jewel_page_no: number;
@@ -506,7 +506,7 @@ export interface MFaceInfo {
   readonly freestyle_coupon_flag?: string | undefined;
 }
 
-/** GET /maplestorym/v1/character/beauty-equipment 응답 */
+/** 헤어·성형·피부 — `client.maplestorym.character.getBeautyEquipment()` 의 응답. */
 export interface MCharacterBeautyEquipment {
   /** 캐릭터 성별 */
   readonly character_gender: string;
@@ -538,7 +538,7 @@ export interface MPetSetOption {
   readonly set_option: string;
 }
 
-/** GET /maplestorym/v1/character/pet-equipment 응답 */
+/** 장착 펫 — `client.maplestorym.character.getPetEquipment()` 의 응답. */
 export interface MCharacterPetEquipment {
   /** 펫1 명 */
   readonly pet_1_name: string;
@@ -646,7 +646,7 @@ export interface MSkillInfo {
   readonly stella_memorize: MStellaMemorize[];
 }
 
-/** GET /maplestorym/v1/character/skill-equipment 응답 */
+/** 장착 스킬 — `client.maplestorym.character.getSkillEquipment()` 의 응답. */
 export interface MCharacterSkillEquipment {
   /** 캐릭터 직업 */
   readonly character_class: string;
@@ -680,7 +680,7 @@ export interface MLinkSkillPreset {
   readonly link_skill_info: MLinkSkillInfo[];
 }
 
-/** GET /maplestorym/v1/character/link-skill 응답 */
+/** 장착 링크 스킬 — `client.maplestorym.character.getLinkSkill()` 의 응답. */
 export interface MCharacterLinkSkill {
   /** 적용 중인 프리셋 번호 */
   readonly use_preset_no: number;
@@ -726,7 +726,7 @@ export interface MVCoreEquipment {
   readonly vcore_equipment_flag?: string | undefined;
 }
 
-/** GET /maplestorym/v1/character/vmatrix 응답 */
+/** V매트릭스 — `client.maplestorym.character.getVMatrix()` 의 응답. */
 export interface MCharacterVMatrix {
   /** 캐릭터 직업 */
   readonly character_class: string;
@@ -756,7 +756,7 @@ export interface MHexaMatrixSkillInfo {
   readonly skill_score?: number | undefined;
 }
 
-/** GET /maplestorym/v1/character/hexamatrix-skill 응답 */
+/** HEXA매트릭스 스킬 — `client.maplestorym.character.getHexaMatrixSkill()` 의 응답. */
 export interface MCharacterHexaMatrixSkill {
   /** 캐릭터 직업 */
   readonly character_class: string;
@@ -796,7 +796,7 @@ export interface MHexaStatCore {
   readonly stat_info: MHexaStatInfo[];
 }
 
-/** GET /maplestorym/v1/character/hexamatrix-stat 응답 */
+/** HEXA매트릭스 스탯 — `client.maplestorym.character.getHexaMatrixStat()` 의 응답. */
 export interface MCharacterHexaMatrixStat {
   /** 캐릭터 직업 */
   readonly character_class: string;

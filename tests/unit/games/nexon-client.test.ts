@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { NexonClient } from '../../../src/NexonClient.js';
+import { NexonBadRequestError } from '../../../src/core/errors/NexonBadRequestError.js';
 import { MapleStoryClient } from '../../../src/games/maplestory/MapleStoryClient.js';
 import { MapleStoryMClient } from '../../../src/games/maplestory-m/MapleStoryMClient.js';
 import { MapleStorySEAClient } from '../../../src/games/maplestory-sea/MapleStorySEAClient.js';
@@ -36,7 +37,28 @@ const GAME_GETTERS = [
 
 describe('NexonClient', () => {
   it('API 키 없이 생성하면 에러를 던진다', () => {
-    expect(() => new NexonClient({ apiKey: '' })).toThrow('API 키가 필요합니다');
+    expect(() => new NexonClient({ apiKey: '' })).toThrow('API 키가 비어 있습니다');
+    expect(() => new NexonClient({ apiKey: '' })).toThrow(Error);
+  });
+
+  it.each([
+    ['누락 (undefined)', undefined],
+    ['빈 문자열', ''],
+    ['공백뿐인 문자열', '   '],
+  ])('apiKey 가 %s 이면 NexonBadRequestError(OPENAPI00004)를 던진다', (_label, apiKey) => {
+    let caught: unknown;
+    try {
+      new NexonClient({ apiKey: apiKey as string });
+    } catch (err) {
+      caught = err;
+    }
+    expect(caught).toBeInstanceOf(NexonBadRequestError);
+    expect(caught).toBeInstanceOf(Error);
+    expect((caught as NexonBadRequestError).code).toBe('OPENAPI00004');
+    // 고치는 방법을 안내한다
+    expect((caught as NexonBadRequestError).message).toContain('.env');
+    expect((caught as NexonBadRequestError).message).toContain('--env-file=.env');
+    expect((caught as NexonBadRequestError).message).toContain('https://openapi.nexon.com/');
   });
 
   it('유효한 API 키로 생성할 수 있다', () => {

@@ -1,102 +1,103 @@
-# 마비노기 영웅전 API 레퍼런스
+# 마비노기 영웅전 — nexon-open-api
 
-> SDK 지원 API 19개 — `client.mabinogiHeroes`
->
-> 개수 기준: SDK public API 메서드 수 (메서드 1개 = 넥슨 API 경로 1개). 넥슨 포털 기준 19개를 모두 지원합니다.
+> `client.mabinogiHeroes` · API 19개 · [넥슨 공식 문서](https://openapi.nexon.com/ko/game/heroes/)
 
-## 빠른 시작
+타이틀과 장착 장비를 보여 주는 캐릭터 검색기, 인챈트 시세 추적기, 명예의 전당 알림 봇을 만들 수 있습니다.
 
-```ts
+## 시작하기
+
+처음이라면 [시작 가이드](./getting-started.md)를 따라 API 키를 발급받고 패키지를 설치하세요.
+
+```js
 import { NexonClient } from 'nexon-open-api';
 
-const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
+const apiKey = process.env['NEXON_API_KEY'];
+if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+const client = new NexonClient({ apiKey });
 
-const ocid = await client.mabinogiHeroes.getOcid('캐릭터명');
-const basic = await client.mabinogiHeroes.character.getBasic({ ocid });
-console.log(`${basic.character_name} Lv.${basic.character_level} (${basic.character_class_name})`);
-```
-
-sub-path로 가져올 수도 있습니다.
-
-```ts
-import type { HeroesOCID, HeroesCharacterBasic } from 'nexon-open-api/mabinogi-heroes';
-```
-
-> - Path prefix: **`heroes`** (`mabinogiheroes` 아님)
-> - API 버전: 공지는 **V1** (`/heroes/v1/...`), 캐릭터·메타·거래소·랭킹은 **V2** (`/heroes/v2/...`)
-> - 일시 필드는 모두 **UTC0** (`2023-12-14T08:28:35Z`)
-> - 게임 데이터 반영: 평균 10분 소요
-> - 데이터 제공 범위: 2022년 1월 1일 이후
-> - 게임 콘텐츠 변경으로 ocid가 바뀔 수 있습니다. 저장해 둔 ocid로 조회가 실패하면 `getOcid()` 로 다시 받습니다.
-> - `HeroesOCID` 는 메이플스토리의 `OCID` 와 다른 브랜드 타입이라 서로 섞어 쓸 수 없습니다.
-
-## 카테고리 요약
-
-| 카테고리  | 접근자                              | 개수 | API 버전 |
-| --------- | ----------------------------------- | ---- | -------- |
-| OCID 조회 | `client.mabinogiHeroes.getOcid()`   | 1    | V2       |
-| 캐릭터    | `client.mabinogiHeroes.character`   | 6    | V2       |
-| 메타      | `client.mabinogiHeroes.meta`        | 1    | V2       |
-| 공지      | `client.mabinogiHeroes.notice`      | 6    | V1       |
-| 거래소    | `client.mabinogiHeroes.marketplace` | 3    | V2       |
-| 랭킹      | `client.mabinogiHeroes.ranking`     | 2    | V2       |
-
-## OCID 조회 (1개)
-
-| 메서드                   | 경로                | 반환                  |
-| ------------------------ | ------------------- | --------------------- |
-| `getOcid(characterName)` | `GET /heroes/v2/id` | `Promise<HeroesOCID>` |
-
-```ts
-const ocid = await client.mabinogiHeroes.getOcid('캐릭터명');
-```
-
-## 캐릭터 (6개)
-
-| 메서드                        | 경로                                       | 반환                            |
-| ----------------------------- | ------------------------------------------ | ------------------------------- |
-| `getBasic({ ocid })`          | `GET /heroes/v2/character/basic`           | `HeroesCharacterBasic`          |
-| `getTitle({ ocid })`          | `GET /heroes/v2/character/title`           | `HeroesCharacterTitle`          |
-| `getTitleEquipment({ ocid })` | `GET /heroes/v2/character/title-equipment` | `HeroesCharacterTitleEquipment` |
-| `getItemEquipment({ ocid })`  | `GET /heroes/v2/character/item-equipment`  | `HeroesCharacterItemEquipment`  |
-| `getStat({ ocid })`           | `GET /heroes/v2/character/stat`            | `HeroesCharacterStat`           |
-| `getGuild({ ocid })`          | `GET /heroes/v2/character/guild`           | `HeroesCharacterGuild`          |
-
-```ts
-const char = client.mabinogiHeroes.character;
-
-await char.getBasic({ ocid }); // 기본 정보
-await char.getTitle({ ocid }); // 타이틀/문양 보유 정보
-await char.getTitleEquipment({ ocid }); // 장착 타이틀/문양
-await char.getItemEquipment({ ocid }); // 장착 아이템
-await char.getStat({ ocid }); // 능력치
-await char.getGuild({ ocid }); // 가입/신청한 길드
-```
-
-- `access_flag` 는 `"true"` / `"false"` 문자열입니다 (boolean 아님).
-- `title_type` 은 `"title"`(타이틀) / `"pattern"`(문양)이며, 2023년 11월 23일 이후 획득·장착한 것만 조회됩니다.
-- `item_equipment_page` 는 `"Bag"`(장착소지품) / `"Cash"`(캐시소지품)입니다.
-- `item_option` 의 필드는 아이템 종류에 따라 `null` 일 수 있습니다.
-
-```ts
-const { item_equipment } = await char.getItemEquipment({ ocid });
-for (const item of item_equipment) {
-  const option = item.item_option;
+try {
+  const { mabinogiHeroes } = client;
+  const ocid = await mabinogiHeroes.getOcid(process.argv[2] ?? '캐릭터명');
+  const basic = await mabinogiHeroes.character.getBasic({ ocid });
   console.log(
-    `[${item.item_equipment_slot_name}] ${item.item_name} +${option?.enhancement_level ?? 0}`,
-    option?.prefix_enchant_preset_1,
-    option?.suffix_enchant_preset_1,
+    `${basic.character_name} Lv.${basic.character_level} (${basic.character_class_name})`,
   );
+  // 예시 출력: 캐릭터명 Lv.120 (리시타)
+} catch (error) {
+  console.error('조회 실패', error instanceof Error ? error.message : error);
+  process.exitCode = 1;
 }
 ```
 
-## 메타 (1개)
+파일을 `index.mjs`(ES 모듈)로 저장하고 `.env`에 `NEXON_API_KEY`를 설정한 뒤 Node.js 20.6 이상에서 `node --env-file=.env index.mjs '캐릭터명'`로 실행합니다. 예제의 이름을 실제 조회할 이름으로 바꿔 실행하세요.
 
-| 메서드                                       | 경로                          | 반환                |
-| -------------------------------------------- | ----------------------------- | ------------------- |
-| `getEnchant({ enchant_type, enchant_name })` | `GET /heroes/v2/meta/enchant` | `HeroesEnchantMeta` |
+## 게임 용어 ↔ SDK 대응표
+
+메서드는 `client.mabinogiHeroes`에서 호출합니다.
+
+| 게임에서 부르는 이름               | SDK 메서드                                        | 주요 응답 필드                                                                                 |
+| ---------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| 캐릭터 이름으로 고유 번호 찾기     | `getOcid(characterName)`                          | `ocid` (SDK가 돌려주는 고유 번호)                                                              |
+| 캐릭터 프로필과 타이틀 스탯        | `character.getBasic({ ocid })`                    | `character_class_name` (직업), `character_level` (레벨), `title_stat` (타이틀 능력치)          |
+| 보유 타이틀·문양                   | `character.getTitle({ ocid })`                    | `title` (보유 타이틀과 문양)                                                                   |
+| 장착 타이틀·문양                   | `character.getTitleEquipment({ ocid })`           | `title_equipment` (장착 타이틀과 문양)                                                         |
+| 장착 장비와 프리셋                 | `character.getItemEquipment({ ocid })`            | `item_equipment` (장착소지품·캐시소지품), `item_equipment[].item_option` (강화·인챈트 등 옵션) |
+| 캐릭터 능력치                      | `character.getStat({ ocid })`                     | `stat` (능력치 이름과 값)                                                                      |
+| 가입·신청한 길드                   | `character.getGuild({ ocid })`                    | `guild_name` (길드 이름)                                                                       |
+| 접두·접미 인챈트 효과              | `meta.getEnchant({ enchant_type, enchant_name })` | `enchant_grade` (등급), `enchant_available_slot_name` (적용 부위), `enchant_stat` (능력치)     |
+| 공지사항 목록                      | `notice.getList()`                                | `notice` (공지 제목과 게시글 번호)                                                             |
+| 공지사항 본문                      | `notice.getDetail(noticeId)`                      | `contents` (공지 본문)                                                                         |
+| 패치노트 목록                      | `notice.getPatchList()`                           | `patch_notice` (패치 제목과 게시글 번호)                                                       |
+| 패치노트 본문                      | `notice.getPatchDetail(noticeId)`                 | `contents` (패치 본문)                                                                         |
+| 이벤트&샵 목록                     | `notice.getEventList()`                           | `event_notice` (이벤트·샵 게시글)                                                              |
+| 이벤트&샵 본문                     | `notice.getEventDetail(noticeId)`                 | `contents` (본문), `date_event_end` (종료 시각), `ongoing_flag` (상시 판매 여부)               |
+| 거래소의 최근 1주 아이템 거래 기록 | `marketplace.listHistory({ item_name, cursor })`  | `item` (가격 기록), `next_cursor` (다음 페이지 번호표)                                         |
+| 골드 거래소 구매 상위 30명         | `marketplace.getGoldBuyTop30()`                   | `buy_gold` (카르제 이름과 누적 구매량)                                                         |
+| 골드 거래소 판매 상위 30명         | `marketplace.getGoldSellTop30()`                  | `sell_gold` (카르제 이름과 누적 판매량)                                                        |
+| 명예의 전당 순위                   | `ranking.getHallOfHonor({ ranking_type })`        | `ranking` (순위), `character_name` (캐릭터 이름), `score` (공격력 또는 마법 공격력 점수)       |
+| 실시간 랭킹                        | `ranking.getRealTime({ ranking_type, page_no })`  | `ranking` (순위), `character_name` (캐릭터 이름), `score` (공격력 또는 마법 공격력 점수)       |
+
+## 알아두기
+
+- OCID는 캐릭터마다 붙는 고유 번호입니다. 이름으로 받고 타이틀, 장비, 길드 조회에 사용합니다. 게임 콘텐츠 변경 후 저장한 OCID로 조회가 실패하면 이름으로 다시 받습니다.
+- 캐릭터·인챈트·거래소·랭킹은 v2, 공지사항·패치노트·이벤트&샵은 v1을 사용합니다. SDK가 각 버전으로 요청합니다.
+- 게임 데이터는 평균 10분 뒤에 볼 수 있고, 2022년 1월 1일 이후 데이터가 제공됩니다. 버프나 아이템 효과로 경험치와 레벨이 게임 화면의 값과 다를 수 있습니다. 응답 일시는 UTC 기준입니다. 장비 프리셋은 장비를 장착하거나 재접속할 때 갱신됩니다.
+- 캐릭터 이름, 인챈트 이름, 거래소 검색 이름은 비울 수 없습니다. 공지 번호와 실시간 랭킹 페이지는 1 이상의 정수입니다. 입력이 잘못되면 SDK가 요청 전에 `NexonBadRequestError`를 던집니다.
+
+## 카테고리별 사용법
+
+아래 코드 조각은 시작 예제의 `try` 블록 안에 하나씩 붙여 실행합니다. 나머지 응답 필드는 에디터 자동완성에서 확인할 수 있습니다.
+
+### 캐릭터·타이틀·장비·길드
+
+시작 예제에서 만든 `client`와 `ocid`를 사용합니다.
 
 ```ts
+// 길드 모집 게시판에서 장착 장비와 강화 단계를 표시
+const { character } = client.mabinogiHeroes;
+const [gear, guild] = await Promise.all([
+  character.getItemEquipment({ ocid }),
+  character.getGuild({ ocid }),
+]);
+console.log(guild.guild_name ?? '길드 정보 없음');
+for (const item of gear.item_equipment) {
+  const level = item.item_option?.enhancement_level;
+  console.log(item.item_equipment_slot_name, item.item_name, level == null ? '' : `+${level}`);
+}
+```
+
+- `access_flag`는 최근 7일 동안 캐릭터가 접속했는지 나타내며 문자열 `"true"` 또는 `"false"`입니다.
+- `title_type`은 `"title"` 타이틀 또는 `"pattern"` 문양입니다. 보유·장착 타이틀의 유형은 2023년 11월 23일 이후 획득·장착한 항목에 제공됩니다.
+- `item_equipment_page`의 `"Bag"`은 장착소지품, `"Cash"`는 캐시소지품입니다.
+- `item_option`에는 강화 단계, 인챈트와 프리셋 등이 들어옵니다. 장비 종류에 따라 비는 값은 `null`일 수 있습니다.
+- `guild_name`은 가입하거나 가입 신청한 길드 이름, `cairde_name`은 카르제 이름입니다. 값이 없으면 `null`일 수 있습니다.
+
+### 접두·접미 인챈트
+
+시작 예제에서 만든 `client`를 사용합니다.
+
+```ts
+// 장비 계산기의 인챈트 선택 화면에서 적용 부위 표시
 const enchant = await client.mabinogiHeroes.meta.getEnchant({
   enchant_type: '0',
   enchant_name: '용맹한',
@@ -104,137 +105,103 @@ const enchant = await client.mabinogiHeroes.meta.getEnchant({
 console.log(enchant.enchant_grade, enchant.enchant_available_slot_name, enchant.enchant_stat);
 ```
 
-`enchant_type` 값 (숫자가 아닌 문자열):
+- `enchant_type`의 문자열 `"0"`은 접두, `"1"`은 접미입니다.
+- `enchant_grade`는 인챈트 등급, `enchant_available_slot_name`은 적용 부위, `enchant_stat`은 인챈트 능력치입니다.
 
-| 값    | 설명        |
-| ----- | ----------- |
-| `"0"` | 접두 인챈트 |
-| `"1"` | 접미 인챈트 |
+### 아이템 거래소·골드 거래소
 
-## 공지 (6개)
-
-| 메서드                     | 경로                                 | 반환                      |
-| -------------------------- | ------------------------------------ | ------------------------- |
-| `getList()`                | `GET /heroes/v1/notice`              | `HeroesNoticeList`        |
-| `getDetail(noticeId)`      | `GET /heroes/v1/notice/detail`       | `HeroesNoticeDetail`      |
-| `getPatchList()`           | `GET /heroes/v1/notice-patch`        | `HeroesPatchNoticeList`   |
-| `getPatchDetail(noticeId)` | `GET /heroes/v1/notice-patch/detail` | `HeroesPatchNoticeDetail` |
-| `getEventList()`           | `GET /heroes/v1/notice-event`        | `HeroesEventNoticeList`   |
-| `getEventDetail(noticeId)` | `GET /heroes/v1/notice-event/detail` | `HeroesEventNoticeDetail` |
+시작 예제에서 만든 `client`를 사용합니다.
 
 ```ts
-const notice = client.mabinogiHeroes.notice;
-
-const list = await notice.getList(); // 공지사항 (최근 20개)
-const first = list.notice[0];
-if (first) {
-  const detail = await notice.getDetail(first.notice_id);
-  console.log(detail.title, detail.contents);
-}
-
-await notice.getPatchList(); // 패치노트 (최근 20개) → patch_notice[]
-await notice.getEventList(); // 이벤트&샵 (최근 20개) → event_notice[]
-```
-
-- 목록 API는 최근 등록된 게시글 20개를 반환합니다.
-- 이벤트&샵의 `ongoing_flag` 는 `"true"` 이면 상시 판매입니다 (문자열).
-- 공지는 수정될 수 있으므로 실시간 조회 또는 최소 일배치 갱신을 권장합니다.
-
-## 거래소 (3개)
-
-| 메서드                                | 경로                                                 | 반환                        |
-| ------------------------------------- | ---------------------------------------------------- | --------------------------- |
-| `listHistory({ item_name, cursor? })` | `GET /heroes/v2/marketplace/market-history`          | `HeroesMarketHistory`       |
-| `getGoldBuyTop30()`                   | `GET /heroes/v2/marketplace/gold-market-buy-top-30`  | `HeroesGoldMarketBuyTop30`  |
-| `getGoldSellTop30()`                  | `GET /heroes/v2/marketplace/gold-market-sell-top-30` | `HeroesGoldMarketSellTop30` |
-
-```ts
-const market = client.mabinogiHeroes.marketplace;
-
-// 최근 1주 거래 기록 (페이지당 500개)
-const first = await market.listHistory({ item_name: '인챈트 스크롤' });
-for (const record of first.item) {
+// 인챈트 스크롤 시세 차트에서 첫 두 페이지의 가격 기록을 모으기
+const { marketplace } = client.mabinogiHeroes;
+const first = await marketplace.listHistory({ item_name: '인챈트 스크롤' });
+const next = first.next_cursor
+  ? await marketplace.listHistory({ item_name: '인챈트 스크롤', cursor: first.next_cursor })
+  : undefined;
+for (const record of [...first.item, ...(next?.item ?? [])]) {
   console.log(record.date_update, record.average_price, record.min_price, record.max_price);
 }
-
-// 다음 페이지: next_cursor 를 cursor 로 넘긴다
-if (first.next_cursor) {
-  const next = await market.listHistory({ item_name: '인챈트 스크롤', cursor: first.next_cursor });
-  console.log(next.item.length);
-}
-
-await market.getGoldBuyTop30(); // 최근 1주 골드 구매 상위 30명 → buy_gold[]
-await market.getGoldSellTop30(); // 최근 1주 골드 판매 상위 30명 → sell_gold[]
 ```
 
-- `listHistory` 는 단일 페이지 메서드입니다. 자동 순회(`iterate`/`collect`)는 제공하지 않습니다.
-- 최근 24시간 내 10건 이상 거래된 아이템만 조회됩니다.
-- 현재 평균가는 마지막으로 갱신된 기록의 `average_price` 입니다.
-- 인챈트 스크롤은 `"인챈트 스크롤"` / `"인챈트 스크롤 (무기한)"` 으로 검색한 뒤 `item_option.prefix_enchant_preset_1` / `suffix_enchant_preset_1` 로 종류를 구분합니다.
-- 골드 거래소 내역도 포함되며 100만 골드당 가격 기준입니다.
+- `item`은 최근 1주 거래 기록입니다. 최근 24시간에 10건 이상 거래된 아이템이 대상입니다. 한 페이지에 최대 500개이므로 다음 페이지는 `next_cursor`를 같은 검색의 `cursor`에 넣습니다.
+- `date_update`는 갱신 시각입니다. 마지막으로 갱신된 기록의 `average_price`가 현재 평균가이며 `min_price`, `max_price`는 최저가와 최고가입니다.
+- `인챈트 스크롤` 또는 `인챈트 스크롤 (무기한)`을 검색하고 `item_option.prefix_enchant_preset_1`과 `item_option.suffix_enchant_preset_1`로 스크롤 종류를 구분합니다.
+- 골드 거래소의 거래가는 100만 골드 기준입니다. `buy_gold`와 `sell_gold`는 최근 1주간 구매량·판매량이 많은 상위 30명의 내역입니다.
 
-## 랭킹 (2개)
+### 명예의 전당·실시간 랭킹
 
-| 메서드                                   | 경로                                   | 반환                   |
-| ---------------------------------------- | -------------------------------------- | ---------------------- |
-| `getHallOfHonor({ ranking_type })`       | `GET /heroes/v2/ranking/hall-of-honor` | `HeroesRankingEntry[]` |
-| `getRealTime({ ranking_type, page_no })` | `GET /heroes/v2/ranking/real-time`     | `HeroesRankingEntry[]` |
+시작 예제에서 만든 `client`를 사용합니다.
 
 ```ts
-const ranking = client.mabinogiHeroes.ranking;
-
+// 명예의 전당 공격력 상위 10명과 실시간 1위 표시
+const { ranking } = client.mabinogiHeroes;
 const honor = await ranking.getHallOfHonor({ ranking_type: '0' });
-const realTime = await ranking.getRealTime({ ranking_type: '0', page_no: 1 });
-
+const live = await ranking.getRealTime({ ranking_type: '0', page_no: 1 });
 for (const entry of honor.slice(0, 10)) {
   console.log(`${entry.ranking}위 ${entry.character_name} (${entry.score})`);
 }
+console.log('실시간 1위', live[0]?.character_name);
 ```
 
-`ranking_type` 값 (숫자가 아닌 문자열):
+- `ranking_type`의 문자열 `"0"`은 공격력으로 명예의 전당 200위·실시간 4,000위(8페이지)까지, `"1"`은 마법 공격력으로 명예의 전당 100위·실시간 2,000위(4페이지)까지 조회합니다.
+- `ranking`은 순위, `character_name`은 캐릭터 이름, `score`는 선택한 공격력 기준의 점수입니다. 두 메서드 모두 순위 항목 배열을 반환합니다. SDK의 `responseValidation`을 켜면 배열의 각 항목을 검사합니다.
+- 명예의 전당은 매일 오전 9시 실시간 랭킹 순위를 기준으로 반영됩니다. 실시간 랭킹은 1시간마다 반영되며 `page_no`는 1부터 시작합니다. 한 페이지당 최대 500개입니다.
 
-| 값    | 설명             | 명예의 전당 | 실시간               |
-| ----- | ---------------- | ----------- | -------------------- |
-| `"0"` | 공격력 기준 순위 | 200위까지   | 4000위까지 (8페이지) |
-| `"1"` | 마법 공격력 기준 | 100위까지   | 2000위까지 (4페이지) |
+### 공지사항·패치노트·이벤트&샵
 
-- 두 API 모두 랭킹 항목의 배열을 반환합니다. `responseValidation` 을 켜면 각 항목의 필드와 타입을 검사합니다.
-- 명예의 전당은 매일 오전 9시 실시간 랭킹 순위를 기준으로 반영됩니다.
-- 실시간 랭킹은 1시간마다 반영되며 `page_no` 는 1부터, 한 페이지당 최대 500개입니다.
-
-## 입력 검증과 에러
-
-SDK는 서버 400 응답을 기다리지 않고 요청 전에 `NexonBadRequestError` 를 던집니다.
-
-| 대상                                             | 조건                                                                     |
-| ------------------------------------------------ | ------------------------------------------------------------------------ |
-| `getOcid(characterName)`                         | 빈 문자열·공백                                                           |
-| `character.*({ ocid })`                          | 빈 `ocid`                                                                |
-| `meta.getEnchant`                                | `enchant_type` 이 `'0'`/`'1'` 이 아님, 빈 `enchant_name`                 |
-| `notice.get*Detail(noticeId)`                    | 1 이상의 정수가 아님                                                     |
-| `marketplace.listHistory`                        | 빈 `item_name`                                                           |
-| `ranking.getHallOfHonor` / `ranking.getRealTime` | `ranking_type` 이 `'0'`/`'1'` 이 아님, `page_no` 가 1 이상의 정수가 아님 |
+시작 예제에서 만든 `client`를 사용합니다.
 
 ```ts
-import { NexonBadRequestError, NexonNotFoundError, NexonRateLimitError } from 'nexon-open-api';
-
-try {
-  const ocid = await client.mabinogiHeroes.getOcid('캐릭터명');
-  await client.mabinogiHeroes.character.getBasic({ ocid });
-} catch (err) {
-  if (err instanceof NexonNotFoundError) {
-    console.log('캐릭터를 찾을 수 없습니다.');
-  } else if (err instanceof NexonBadRequestError) {
-    console.log('요청 파라미터를 확인하세요:', err.message);
-  } else if (err instanceof NexonRateLimitError) {
-    console.log('호출 한도를 초과했습니다.');
-  } else {
-    throw err;
-  }
+// 디스코드 공지 채널에 최신 패치노트 본문과 링크 표시
+const { notice } = client.mabinogiHeroes;
+const { patch_notice } = await notice.getPatchList();
+const latest = patch_notice[0];
+if (latest) {
+  const patch = await notice.getPatchDetail(latest.notice_id);
+  console.log(patch.title, patch.url, patch.contents);
 }
 ```
 
-## 검증 상태
+- `notice`, `patch_notice`, `event_notice`는 각 게시판의 최근 등록 글 20개를 담습니다. 게시글이 수정될 수 있으므로 조회 시 가져오거나 하루에 한 번 이상 갱신합니다.
+- `notice_id`는 같은 게시판에서 본문(`contents`)을 읽을 때 사용하는 게시글 번호입니다.
+- `date_event_start`와 `date_event_end`는 이벤트 기간입니다. `ongoing_flag`의 문자열 `"true"`는 상시 판매를 뜻합니다. 기간이나 상시 판매 표시가 없는 글에는 `null`이 올 수 있습니다.
 
-타입과 fixture는 포털 OpenAPI 스펙(`specs/openapi/heroes/`, 2026-11-24)을 기준으로 만들었고 **실 API 키로는 검증하지 않았습니다.**
-스펙에는 nullable 표기가 없지만, 값이 없을 수 있는 필드(`guild_name`, `cairde_name`, `title_type`, `item_option` 하위 필드, 이벤트 기간, `next_cursor` 등)는 SDK 타입에서 `| null` 로 열어 두었습니다.
+<details>
+<summary>넥슨 API 경로</summary>
+
+| SDK 메서드                     | 넥슨 API 경로                                        |
+| ------------------------------ | ---------------------------------------------------- |
+| `getOcid`                      | `GET /heroes/v2/id`                                  |
+| `character.getBasic`           | `GET /heroes/v2/character/basic`                     |
+| `character.getTitle`           | `GET /heroes/v2/character/title`                     |
+| `character.getTitleEquipment`  | `GET /heroes/v2/character/title-equipment`           |
+| `character.getItemEquipment`   | `GET /heroes/v2/character/item-equipment`            |
+| `character.getStat`            | `GET /heroes/v2/character/stat`                      |
+| `character.getGuild`           | `GET /heroes/v2/character/guild`                     |
+| `meta.getEnchant`              | `GET /heroes/v2/meta/enchant`                        |
+| `notice.getList`               | `GET /heroes/v1/notice`                              |
+| `notice.getDetail`             | `GET /heroes/v1/notice/detail`                       |
+| `notice.getPatchList`          | `GET /heroes/v1/notice-patch`                        |
+| `notice.getPatchDetail`        | `GET /heroes/v1/notice-patch/detail`                 |
+| `notice.getEventList`          | `GET /heroes/v1/notice-event`                        |
+| `notice.getEventDetail`        | `GET /heroes/v1/notice-event/detail`                 |
+| `marketplace.listHistory`      | `GET /heroes/v2/marketplace/market-history`          |
+| `marketplace.getGoldBuyTop30`  | `GET /heroes/v2/marketplace/gold-market-buy-top-30`  |
+| `marketplace.getGoldSellTop30` | `GET /heroes/v2/marketplace/gold-market-sell-top-30` |
+| `ranking.getHallOfHonor`       | `GET /heroes/v2/ranking/hall-of-honor`               |
+| `ranking.getRealTime`          | `GET /heroes/v2/ranking/real-time`                   |
+
+</details>
+
+## 만들기 예제
+
+- **길드 모집 카드** · 캐릭터의 직업·레벨과 현재 장착한 장비의 강화 단계를 표시하고, 가입하거나 신청한 길드를 함께 보여 줍니다.
+- **인챈트 시세 추적기** · 스크롤 거래 기록에 접두·접미 이름을 붙이고 갱신 시각별 평균가를 그립니다.
+- **명예의 전당 알림** · 매일 명예의 전당 상위 10명의 순위와 점수를 읽어 디스코드에 표시합니다.
+
+## 참고
+
+- 마비노기 영웅전 타입만 가져올 때는 `nexon-open-api/mabinogi-heroes`를 사용합니다. `HeroesOCID`는 마비노기 영웅전 전용입니다.
+- 에러와 문제 해결: [FAQ](./faq.md)
+- 이 문서의 API는 넥슨 포털 공식 스펙을 기준으로 구현했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)).

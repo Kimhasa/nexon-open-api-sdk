@@ -14,9 +14,9 @@ export class SuddenAttackMatchClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 유저의 최근 매치를 최대 1,000개 조회합니다.
+   * 최근 매치 목록을 모드와 유형으로 골라 조회한다.
    *
-   * @param params - 계정 식별자, 게임 모드, 선택 매치 유형
+   * @param params - `getOuid()`로 찾은 계정 고유 번호, 폭파미션 등 모드, 일반전·클랜전 등 선택 매치 유형
    * @throws {NexonBadRequestError} ouid가 비어 있거나 모드 또는 유형이 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
@@ -24,7 +24,11 @@ export class SuddenAttackMatchClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 폭파미션 일반전 전적을 모아 볼 때
    * const ouid = await client.suddenAttack.getOuid('닉네임');
    * const page = await client.suddenAttack.match.getList({ ouid, match_mode: '폭파미션' });
    * console.log(page.match);
@@ -53,9 +57,9 @@ export class SuddenAttackMatchClient {
   }
 
   /**
-   * 매치 식별자로 맵과 참여 유저의 기록을 조회합니다.
+   * 한 매치의 맵과 참가 유저의 킬·데스 등 전적을 조회한다.
    *
-   * @param matchId - 매치 목록의 match_id
+   * @param matchId - `match.getList()`로 조회한 매치의 고유 번호(`match_id`)
    * @throws {NexonBadRequestError} 매치 식별자가 비어 있을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
@@ -63,7 +67,11 @@ export class SuddenAttackMatchClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 전적표에서 선택한 매치의 참가자 기록을 표시할 때
    * const ouid = await client.suddenAttack.getOuid('닉네임');
    * const { match } = await client.suddenAttack.match.getList({ ouid, match_mode: '폭파미션' });
    * const firstMatch = match[0];

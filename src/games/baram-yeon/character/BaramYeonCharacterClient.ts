@@ -24,7 +24,9 @@ const OCID_HINT =
  * ```ts
  * import { NexonClient } from 'nexon-open-api';
  *
- * const client = new NexonClient({ apiKey: 'your-api-key' });
+ * const apiKey = process.env['NEXON_API_KEY'];
+ * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+ * const client = new NexonClient({ apiKey });
  * const ocid = await client.baramYeon.getOcid('캐릭터명', '연');
  *
  * const basic = await client.baramYeon.character.getBasic({ ocid });
@@ -37,9 +39,9 @@ export class BaramYeonCharacterClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 기본 정보를 조회한다.
+   * 캐릭터 프로필의 서버·직업군·국적·경험치·레벨을 조회한다.
    *
-   * @param params - `{ ocid }` 캐릭터 식별자
+   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 고유 번호
    * @throws {NexonBadRequestError} ocid가 비어 있거나(요청 전 차단) 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -48,7 +50,11 @@ export class BaramYeonCharacterClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 서버별 프로필 카드에 직업과 레벨을 표시할 때
    * const ocid = await client.baramYeon.getOcid('캐릭터명', '연');
    * const basic = await client.baramYeon.character.getBasic({ ocid });
    * console.log(`[${basic.server_name}] ${basic.character_name} Lv.${basic.character_level}`);
@@ -64,11 +70,11 @@ export class BaramYeonCharacterClient {
   }
 
   /**
-   * 칭호 보유 정보를 조회한다.
+   * 캐릭터가 보유한 칭호와 종류를 조회한다.
    *
    * 칭호 타입(`title_type_name`)은 2022년 3월 18일 이후 획득한 칭호에 한해 제공된다.
    *
-   * @param params - `{ ocid }` 캐릭터 식별자
+   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 고유 번호
    * @throws {NexonBadRequestError} ocid가 비어 있거나(요청 전 차단) 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -77,7 +83,11 @@ export class BaramYeonCharacterClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 칭호 모음에서 캐릭터가 보유한 칭호를 표시할 때
    * const ocid = await client.baramYeon.getOcid('캐릭터명', '연');
    * const { title } = await client.baramYeon.character.getTitle({ ocid });
    * for (const t of title) {
@@ -95,11 +105,11 @@ export class BaramYeonCharacterClient {
   }
 
   /**
-   * 장착 칭호 정보를 조회한다.
+   * 캐릭터가 장착한 칭호와 표시 중인 칭호를 조회한다.
    *
    * `title_equipment_type` 은 문자열 코드다 (`"1"`: 장착 칭호, `"2"`: 표시 칭호).
    *
-   * @param params - `{ ocid }` 캐릭터 식별자
+   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 고유 번호
    * @throws {NexonBadRequestError} ocid가 비어 있거나(요청 전 차단) 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -108,7 +118,11 @@ export class BaramYeonCharacterClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 프로필 카드에 장착 칭호와 표시 칭호를 함께 표시할 때
    * const ocid = await client.baramYeon.getOcid('캐릭터명', '연');
    * const { title_equipment } = await client.baramYeon.character.getTitleEquipment({ ocid });
    * const equipped = title_equipment.find((t) => t.title_equipment_type === '1');

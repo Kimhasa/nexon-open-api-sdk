@@ -13,7 +13,7 @@ export interface TWOcidResponse {
 export interface TWOcidDateRequest {
   /** Character identifier returned by `getOcid()`. */
   readonly ocid: OCID;
-  /** Taiwan calendar date. Omit to use the API's default. */
+  /** 조회 기준일 (대만 시간 UTC+8). 생략하면 가장 최근 데이터(약 15분 뒤 반영). */
   readonly date?: TWDate | undefined;
 }
 
@@ -21,6 +21,6 @@ export interface TWOcidDateRequest {
 export interface TWGuildIdDateRequest {
   /** Guild identifier returned by `guild.getId()`. */
   readonly oguild_id: GuildId;
-  /** Taiwan calendar date. Omit to use the API's default. */
+  /** 조회 기준일 (대만 시간 UTC+8). 생략하면 가장 최근 데이터(약 15분 뒤 반영). */
   readonly date?: TWDate | undefined;
 }

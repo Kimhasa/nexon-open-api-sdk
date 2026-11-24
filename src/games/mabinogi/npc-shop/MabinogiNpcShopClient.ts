@@ -12,9 +12,9 @@ export class MabinogiNpcShopClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 서버와 채널을 지정해 NPC 상점의 판매 목록을 조회합니다.
+   * 서버와 채널을 골라 NPC 상점의 탭별 판매 목록을 조회한다.
    *
-   * @param params - NPC 이름, 서버 이름, 채널 번호
+   * @param params - 상점을 열 NPC 이름과 서버 이름, 채널 번호
    * @throws {NexonBadRequestError} 지원되지 않는 NPC나 서버를 지정했거나 채널 번호가 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
@@ -22,7 +22,11 @@ export class MabinogiNpcShopClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 류트 1채널의 델 상점 목록을 알림으로 보여 줄 때
    * const result = await client.mabinogi.npcShop.getList({ npc_name: '델', server_name: '류트', channel: 1 });
    * console.log(result.shop);
    * ```

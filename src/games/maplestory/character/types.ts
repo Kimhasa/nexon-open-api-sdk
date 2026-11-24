@@ -24,7 +24,7 @@ export interface AccountCharacterList {
   readonly character_list: CharacterSummary[];
 }
 
-/** GET /maplestory/v1/character/list 응답 */
+/** 내 계정의 캐릭터 목록 — `client.maplestory.character.getList()` 의 응답. */
 export interface CharacterList {
   /** 메이플스토리 계정 목록 */
   readonly account_list: AccountCharacterList[];
@@ -32,7 +32,7 @@ export interface CharacterList {
 
 // ─── GET /maplestory/v1/character/basic ──────────────────────────────────────
 
-/** GET /maplestory/v1/character/basic 응답 */
+/** 캐릭터 기본 정보 — `client.maplestory.character.getBasic()` 의 응답. */
 export interface CharacterBasic {
   /** 조회 기준일 (KST, 일 단위 데이터로 시, 분은 일괄 0으로 표기) */
   readonly date: string;
@@ -50,11 +50,11 @@ export interface CharacterBasic {
   readonly character_level: number;
   /** 현재 레벨에서 보유한 경험치 */
   readonly character_exp: number;
-  /** 현재 레벨에서 경험치 퍼센트 */
+  /** 현재 레벨의 경험치 퍼센트 (문자열, 예: "43.75") */
   readonly character_exp_rate: string;
   /** 캐릭터 소속 길드 명 */
   readonly character_guild_name: string;
-  /** 캐릭터 외형 이미지 URL */
+  /** 캐릭터 외형 이미지 URL. 주소 뒤에 쿼리 파라미터를 붙이면 동작·감정표현을 바꿀 수 있다 (넥슨 안내) */
   readonly character_image: string;
   /** 캐릭터 생성일 (KST) */
   readonly character_date_create: string;
@@ -66,7 +66,7 @@ export interface CharacterBasic {
 
 // ─── GET /maplestory/v1/character/popularity ─────────────────────────────────
 
-/** GET /maplestory/v1/character/popularity 응답 */
+/** 캐릭터 인기도 — `client.maplestory.character.getPopularity()` 의 응답. */
 export interface CharacterPopularity {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -84,7 +84,7 @@ export interface FinalStat {
   readonly stat_value: string;
 }
 
-/** GET /maplestory/v1/character/stat 응답 */
+/** 캐릭터 정보창의 스탯(종합 능력치) — `client.maplestory.character.getStat()` 의 응답. */
 export interface CharacterStat {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -110,7 +110,7 @@ export interface HyperStatPreset {
   readonly stat_increase: string;
 }
 
-/** GET /maplestory/v1/character/hyper-stat 응답 */
+/** 하이퍼 스탯 — `client.maplestory.character.getHyperStat()` 의 응답. */
 export interface CharacterHyperStat {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -136,7 +136,7 @@ export interface CharacterHyperStat {
 
 // ─── GET /maplestory/v1/character/propensity ─────────────────────────────────
 
-/** GET /maplestory/v1/character/propensity 응답 */
+/** 성향 — `client.maplestory.character.getPropensity()` 의 응답. */
 export interface CharacterPropensity {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -174,7 +174,7 @@ export interface AbilityPreset {
   readonly ability_info: AbilityInfo[];
 }
 
-/** GET /maplestory/v1/character/ability 응답 */
+/** 어빌리티 — `client.maplestory.character.getAbility()` 의 응답. */
 export interface CharacterAbility {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -196,95 +196,163 @@ export interface CharacterAbility {
 
 // ─── GET /maplestory/v1/character/item-equipment ─────────────────────────────
 
-/** 장비 최종 옵션 (total/base 공용) */
+/** 장비 최종 옵션: 기본 옵션 + 추가 옵션 + 주문서·스타포스 등을 모두 더한 값. 값은 문자열 숫자다. */
 export interface ItemTotalOption {
+  /** STR */
   readonly str: string;
+  /** DEX */
   readonly dex: string;
+  /** INT */
   readonly int: string;
+  /** LUK */
   readonly luk: string;
+  /** 최대 HP */
   readonly max_hp: string;
+  /** 최대 MP */
   readonly max_mp: string;
+  /** 공격력 */
   readonly attack_power: string;
+  /** 마력 */
   readonly magic_power: string;
+  /** 방어력 */
   readonly armor: string;
+  /** 이동속도 */
   readonly speed: string;
+  /** 점프력 */
   readonly jump: string;
+  /** 보스 몬스터 공격 시 데미지 증가 (%) */
   readonly boss_damage: string;
+  /** 몬스터 방어율 무시 (%) */
   readonly ignore_monster_armor: string;
+  /** 올스탯 (%) */
   readonly all_stat: string;
+  /** 데미지 (%) */
   readonly damage: string;
+  /** 착용 레벨 감소 */
   readonly equipment_level_decrease: number;
+  /** 최대 HP (%) */
   readonly max_hp_rate: string;
+  /** 최대 MP (%) */
   readonly max_mp_rate: string;
 }
 
-/** 장비 기본 옵션 */
+/** 장비 기본 옵션: 아무 강화도 하지 않은 상태의 값. */
 export interface ItemBaseOption {
+  /** STR */
   readonly str: string;
+  /** DEX */
   readonly dex: string;
+  /** INT */
   readonly int: string;
+  /** LUK */
   readonly luk: string;
+  /** 최대 HP */
   readonly max_hp: string;
+  /** 최대 MP */
   readonly max_mp: string;
+  /** 공격력 */
   readonly attack_power: string;
+  /** 마력 */
   readonly magic_power: string;
+  /** 방어력 */
   readonly armor: string;
+  /** 이동속도 */
   readonly speed: string;
+  /** 점프력 */
   readonly jump: string;
+  /** 보스 몬스터 공격 시 데미지 증가 (%) */
   readonly boss_damage: string;
+  /** 몬스터 방어율 무시 (%) */
   readonly ignore_monster_armor: string;
+  /** 올스탯 (%) */
   readonly all_stat: string;
+  /** 최대 HP (%) */
   readonly max_hp_rate: string;
+  /** 최대 MP (%) */
   readonly max_mp_rate: string;
   /** 기본 착용 레벨 */
   readonly base_equipment_level: number;
 }
 
-/** 장비 특별(익셉셔널) 옵션 */
+/** 익셉셔널 강화로 붙은 옵션. */
 export interface ItemExceptionalOption {
+  /** STR */
   readonly str: string;
+  /** DEX */
   readonly dex: string;
+  /** INT */
   readonly int: string;
+  /** LUK */
   readonly luk: string;
+  /** 최대 HP */
   readonly max_hp: string;
+  /** 최대 MP */
   readonly max_mp: string;
+  /** 공격력 */
   readonly attack_power: string;
+  /** 마력 */
   readonly magic_power: string;
   /** 익셉셔널 강화 적용 횟수 */
   readonly exceptional_upgrade?: number | undefined;
 }
 
-/** 장비 추가 옵션 */
+/** 추가 옵션(환생의 불꽃으로 붙는 옵션). */
 export interface ItemAddOption {
+  /** STR */
   readonly str: string;
+  /** DEX */
   readonly dex: string;
+  /** INT */
   readonly int: string;
+  /** LUK */
   readonly luk: string;
+  /** 최대 HP */
   readonly max_hp: string;
+  /** 최대 MP */
   readonly max_mp: string;
+  /** 공격력 */
   readonly attack_power: string;
+  /** 마력 */
   readonly magic_power: string;
+  /** 방어력 */
   readonly armor: string;
+  /** 이동속도 */
   readonly speed: string;
+  /** 점프력 */
   readonly jump: string;
+  /** 보스 몬스터 공격 시 데미지 증가 (%) */
   readonly boss_damage: string;
+  /** 데미지 (%) */
   readonly damage: string;
+  /** 올스탯 (%) */
   readonly all_stat: string;
+  /** 착용 레벨 감소 */
   readonly equipment_level_decrease: number;
 }
 
-/** 장비 기타 옵션 (주문서/스타포스 등) */
+/** 주문서 강화 옵션 또는 스타포스 강화 옵션. */
 export interface ItemEtcOption {
+  /** STR */
   readonly str: string;
+  /** DEX */
   readonly dex: string;
+  /** INT */
   readonly int: string;
+  /** LUK */
   readonly luk: string;
+  /** 최대 HP */
   readonly max_hp: string;
+  /** 최대 MP */
   readonly max_mp: string;
+  /** 공격력 */
   readonly attack_power: string;
+  /** 마력 */
   readonly magic_power: string;
+  /** 방어력 */
   readonly armor: string;
+  /** 이동속도 */
   readonly speed: string;
+  /** 점프력 */
   readonly jump: string;
 }
 
@@ -314,9 +382,9 @@ export interface ItemEquipment {
   readonly potential_option_flag: string;
   /** 에디셔널 잠재능력 봉인 여부 */
   readonly additional_potential_option_flag: string;
-  /** 잠재능력 등급 */
+  /** 잠재능력 등급 (예: 레어, 에픽, 유니크, 레전드리) */
   readonly potential_option_grade: string;
-  /** 에디셔널 잠재능력 등급 */
+  /** 에디셔널 잠재능력 등급 (예: 레어, 에픽, 유니크, 레전드리) */
   readonly additional_potential_option_grade: string;
   /** 잠재능력 첫 번째 옵션 */
   readonly potential_option_1: string;
@@ -332,31 +400,31 @@ export interface ItemEquipment {
   readonly additional_potential_option_3: string;
   /** 착용 레벨 증가 */
   readonly equipment_level_increase: number;
-  /** 장비 특별 옵션 */
+  /** 익셉셔널 강화 옵션 */
   readonly item_exceptional_option: ItemExceptionalOption;
-  /** 장비 추가 옵션 */
+  /** 추가 옵션 */
   readonly item_add_option: ItemAddOption;
   /** 성장 경험치 */
   readonly growth_exp: number;
   /** 성장 레벨 */
   readonly growth_level: number;
-  /** 주문서 횟수 */
+  /** 주문서 강화 횟수 (업그레이드한 횟수) */
   readonly scroll_upgrade: string;
   /** 가위 사용 가능 횟수 (교환 불가 장비는 255) */
   readonly cuttable_count: string;
   /** 황금 망치 재련 적용 ("1": 적용) */
   readonly golden_hammer_flag: string;
-  /** 복구 가능 횟수 */
+  /** 복구 가능 횟수 (실패로 줄어든 업그레이드 횟수 중 되돌릴 수 있는 수) */
   readonly scroll_resilience_count: string;
-  /** 주문서 잔여 횟수 */
+  /** 남은 업그레이드 가능 횟수 */
   readonly scroll_upgradable_count: string;
   /** 소울 명 */
   readonly soul_name: string;
   /** 소울 옵션 */
   readonly soul_option: string;
-  /** 장비 기타 옵션 */
+  /** 주문서 등으로 붙은 기타 옵션 */
   readonly item_etc_option: ItemEtcOption;
-  /** 스타포스 강화 단계 */
+  /** 스타포스 강화 단계 (별 개수, 문자열 숫자) */
   readonly starforce: string;
   /** 놀장강 사용 여부 ("0": 미사용, "1": 사용) */
   readonly starforce_scroll_flag: string;
@@ -563,7 +631,7 @@ export interface MedalShape {
   readonly medal_shape_changed_description: string;
 }
 
-/** GET /maplestory/v1/character/item-equipment 응답 */
+/** 장착 장비(캐시 장비 제외) — `client.maplestory.character.getItemEquipment()` 의 응답. */
 export interface CharacterItemEquipment {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -706,7 +774,7 @@ export interface WorldShareMasterLabelItem {
   readonly freestyle_flag: string;
 }
 
-/** GET /maplestory/v1/character/cashitem-equipment 응답 */
+/** 장착 캐시 장비 — `client.maplestory.character.getCashItemEquipment()` 의 응답. */
 export interface CharacterCashItemEquipment {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -778,7 +846,7 @@ export interface SymbolInfo {
   readonly symbol_other_effect_description?: string | null | undefined;
 }
 
-/** GET /maplestory/v1/character/symbol-equipment 응답 */
+/** 장착 심볼 — `client.maplestory.character.getSymbolEquipment()` 의 응답. */
 export interface CharacterSymbolEquipment {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -810,7 +878,7 @@ export interface SetEffectInfo {
   readonly set_option_full: SetEffectOption[];
 }
 
-/** GET /maplestory/v1/character/set-effect 응답 */
+/** 적용 중인 세트 효과 — `client.maplestory.character.getSetEffect()` 의 응답. */
 export interface CharacterSetEffect {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -862,7 +930,7 @@ export interface SkinInfo {
   readonly brightness: number;
 }
 
-/** GET /maplestory/v1/character/beauty-equipment 응답 */
+/** 헤어·성형·피부 — `client.maplestory.character.getBeautyEquipment()` 의 응답. */
 export interface CharacterBeautyEquipment {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -948,7 +1016,7 @@ export interface AndroidPresetInfo {
   readonly android_shop_usable_flag: string;
 }
 
-/** GET /maplestory/v1/character/android-equipment 응답 */
+/** 장착 안드로이드 — `client.maplestory.character.getAndroidEquipment()` 의 응답. */
 export interface CharacterAndroidEquipment {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -1070,7 +1138,7 @@ export interface PetAutoSkill {
   readonly skill_2_icon: string;
 }
 
-/** GET /maplestory/v1/character/pet-equipment 응답 */
+/** 장착 펫과 펫 장비·펫 스킬 — `client.maplestory.character.getPetEquipment()` 의 응답. */
 export interface CharacterPetEquipment {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -1269,13 +1337,13 @@ export type SkillGrade =
 export interface SkillRequest {
   /** 캐릭터 식별자 */
   readonly ocid: OCID;
-  /** 조회 기준일 (YYYY-MM-DD). 생략 시 전일 */
+  /** 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터 */
   readonly date?: NexonDate | string;
   /** 조회하고자 하는 전직 차수 */
   readonly character_skill_grade: SkillGrade;
 }
 
-/** GET /maplestory/v1/character/skill 응답 */
+/** 전직 차수별 스킬 — `client.maplestory.character.getSkill()` 의 응답. */
 export interface CharacterSkill {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -1313,7 +1381,7 @@ export interface LinkSkillInfo {
   readonly skill_icon: string;
 }
 
-/** GET /maplestory/v1/character/link-skill 응답 */
+/** 링크 스킬 — `client.maplestory.character.getLinkSkill()` 의 응답. */
 export interface CharacterLinkSkill {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -1371,7 +1439,7 @@ export interface VCoreEquipment {
   readonly v_core_skill_3: string | null;
 }
 
-/** GET /maplestory/v1/character/vmatrix 응답 */
+/** V매트릭스(5차) — `client.maplestory.character.getVMatrix()` 의 응답. */
 export interface CharacterVMatrix {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -1425,7 +1493,7 @@ export interface HexaCoreEquipment {
   readonly hexa_core_event_level?: number | undefined;
 }
 
-/** GET /maplestory/v1/character/hexamatrix 응답 */
+/** HEXA 매트릭스(6차)의 HEXA 코어 — `client.maplestory.character.getHexaMatrix()` 의 응답. */
 export interface CharacterHexaMatrix {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -1455,7 +1523,7 @@ export interface HexaStatCore {
   readonly stat_grade: number;
 }
 
-/** GET /maplestory/v1/character/hexamatrix-stat 응답 */
+/** HEXA 스탯 — `client.maplestory.character.getHexaMatrixStat()` 의 응답. */
 export interface CharacterHexaMatrixStat {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -1477,7 +1545,7 @@ export interface CharacterHexaMatrixStat {
 
 // ─── GET /maplestory/v1/character/dojang ─────────────────────────────────────
 
-/** GET /maplestory/v1/character/dojang 응답 */
+/** 무릉도장 최고 기록 — `client.maplestory.character.getDojang()` 의 응답. */
 export interface CharacterDojang {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -1489,7 +1557,7 @@ export interface CharacterDojang {
   readonly dojang_best_floor: number;
   /** 무릉도장 최고 기록 달성 일 (KST) */
   readonly date_dojang_record: string;
-  /** 무릉도장 최고 층수 클리어에 걸린 시간 (초) */
+  /** 무릉도장 최고 층수를 클리어하는 데 걸린 시간 (초) */
   readonly dojang_best_time: number;
 }
 
@@ -1511,7 +1579,7 @@ export interface OtherStatEntry {
   readonly stat_info: OtherStatInfo[];
 }
 
-/** GET /maplestory/v1/character/other-stat 응답 */
+/** 능력치에 영향을 주는 기타 요소 — `client.maplestory.character.getOtherStat()` 의 응답. */
 export interface CharacterOtherStat {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -1521,7 +1589,7 @@ export interface CharacterOtherStat {
 
 // ─── GET /maplestory/v1/character/ring-exchange-skill-equipment ──────────────
 
-/** GET /maplestory/v1/character/ring-exchange-skill-equipment 응답 */
+/** 링 익스체인지에 등록한 특수 반지 — `client.maplestory.character.getRingExchangeSkillEquipment()` 의 응답. */
 export interface CharacterRingExchangeSkillEquipment {
   /** 조회 기준일 (KST) */
   readonly date: string;
@@ -1539,7 +1607,7 @@ export interface CharacterRingExchangeSkillEquipment {
 
 // ─── GET /maplestory/v1/character/ring-reserve-skill-equipment ───────────────
 
-/** GET /maplestory/v1/character/ring-reserve-skill-equipment 응답 */
+/** 예비 특수 반지 슬롯의 특수 반지 — `client.maplestory.character.getRingReserveSkillEquipment()` 의 응답. */
 export interface CharacterRingReserveSkillEquipment {
   /** 조회 기준일 (KST, 일 단위 데이터로 시, 분은 일괄 0으로 표기) */
   readonly date: string | null;

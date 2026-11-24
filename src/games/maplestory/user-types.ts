@@ -16,7 +16,7 @@ export interface AccountAchievement {
   readonly achievement_achieve: AchievementInfo[];
 }
 
-/** GET /maplestory/v1/user/achievement 응답 */
+/** 내 계정이 달성한 업적 — `client.maplestory.getAchievement()` 의 응답. */
 export interface Achievement {
   /** 메이플스토리 계정 목록 */
   readonly account_list: AccountAchievement[];

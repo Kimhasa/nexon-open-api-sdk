@@ -6,7 +6,7 @@ import type { GuildId } from '../../_base/maple-base-types.js';
 import type { MGuildIdResponse, MGuildBasic, MWorldName } from './types.js';
 
 /**
- * 메이플스토리M 길드 API 클라이언트.
+ * 메이플스토리M 길드: 월드 이름과 길드 이름으로 길드 고유 번호를 받아 길드 정보를 조회합니다.
  *
  * @example
  * ```ts
@@ -20,10 +20,10 @@ export class MapleStoryMGuildClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 길드 식별자(oguild_id)를 조회한다.
+   * 월드 이름과 길드 이름으로 길드 고유 번호(oguild_id)를 받아 온다.
    *
-   * @param worldName - 월드 명
-   * @param guildName - 길드 명
+   * @param worldName - 길드가 있는 월드 이름 (예: '스카니아')
+   * @param guildName - 길드 이름
    *
    * @throws {NexonBadRequestError} 월드명이나 길드명이 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
@@ -48,9 +48,9 @@ export class MapleStoryMGuildClient {
   }
 
   /**
-   * 길드 기본 정보를 조회한다.
+   * 길드 기본 정보(레벨·길드 마스터·길드원별 레벨과 활동량·길드 스킬·시설물)를 조회한다.
    *
-   * @param params - 길드 식별자(`oguild_id`)
+   * @param params.oguild_id - 길드 고유 번호. `client.maplestorym.guild.getId()` 로 얻는다
    * @throws {NexonBadRequestError} 길드 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *

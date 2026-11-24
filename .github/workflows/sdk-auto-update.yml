@@ -119,10 +119,11 @@ jobs:
               allow: [
                 "Read", "Glob", "Grep", "Edit(./src/games/**)",
                 "Edit(./src/core/metadata/api-metadata.ts)", "Edit(./tests/**)", "Edit(./docs/**)",
-                "Edit(./CHANGELOG.md)", $summary,
+                "Edit(./examples/**)", "Edit(./CHANGELOG.md)", $summary,
                 "Bash(corepack yarn type-check)", "Bash(corepack yarn lint)", "Bash(corepack yarn lint:fix)",
                 "Bash(corepack yarn format:check)", "Bash(corepack yarn format)", "Bash(corepack yarn test)",
                 "Bash(corepack yarn build)", "Bash(corepack yarn check:exports)",
+                "Bash(corepack yarn examples:check)",
                 "Bash(corepack yarn specs:coverage)", "Bash(corepack yarn specs:drift)",
                 "Bash(corepack yarn specs:diff)", "Bash(git status)", "Bash(git status --short)",
                 "Bash(git diff)", "Bash(git diff --stat)", "Bash(git log)", "Bash(git log -5)", "Bash(git show)"
@@ -192,7 +193,7 @@ jobs:
         run: |
           failed=0
           printf '| 명령 | 결과 |\n| --- | --- |\n' > "$RUNNER_TEMP/sdk-gates.md"
-          for gate in type-check lint format:check test build check:exports specs:drift; do
+          for gate in type-check lint format:check test build check:exports examples:check specs:drift; do
             log="$RUNNER_TEMP/sdk-${gate//:/-}.log"
             if corepack yarn "$gate" > "$log" 2>&1; then
               printf '| `%s` | 통과 |\n' "$gate" >> "$RUNNER_TEMP/sdk-gates.md"
@@ -300,7 +301,7 @@ jobs:
             git diff --cached --raw --no-renames -z > "$RUNNER_TEMP/sdk-paths"
             while IFS= read -r -d '' meta && IFS= read -r -d '' file; do
               case "$file" in
-                src/games/*|src/core/metadata/api-metadata.ts|tests/*|docs/*|CHANGELOG.md) ;;
+                src/games/*|src/core/metadata/api-metadata.ts|tests/*|docs/*|examples/*|CHANGELOG.md) ;;
                 *) echo "::error::SDK 패치에 허용하지 않은 파일이 있습니다."; exit 1 ;;
               esac
               # 일반 파일만 받는다. 심볼릭 링크, 실행 파일, 서브모듈은 허용하지 않는다.

@@ -17,7 +17,9 @@ import type { KartriderOuidLookup } from './user/types.js';
  * ```ts
  * import { NexonClient } from 'nexon-open-api';
  *
- * const client = new NexonClient({ apiKey: 'your-api-key' });
+ * const apiKey = process.env['NEXON_API_KEY'];
+ * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+ * const client = new NexonClient({ apiKey });
  *
  * const { ouid_info } = await client.kartrider.getOuidInfo('라이더명');
  * const ouid = ouid_info[0]?.ouid;
@@ -34,28 +36,28 @@ export class KartriderClient extends AbstractGameClient {
   private _user: KartriderUserClient | undefined;
   private _notice: KartriderNoticeClient | undefined;
 
-  /** 계정 정보 API (2개 엔드포인트) */
+  /** 라이더 레벨과 장착 칭호를 조회하는 메뉴. */
   get user(): KartriderUserClient {
     this._user ??= new KartriderUserClient(this.http);
     return this._user;
   }
 
-  /** 공지사항 API (6개 엔드포인트) */
+  /** 공지사항·시즌 알림판·이벤트&대회 게시판. */
   get notice(): KartriderNoticeClient {
     this._notice ??= new KartriderNoticeClient(this.http);
     return this._notice;
   }
 
   /**
-   * 라이더(계정) 명으로 계정 식별자(ouid) 정보를 조회한다.
+   * 라이더명으로 계정 후보의 고유 번호·레벨·생성 시각을 조회한다.
    *
-   * 다른 게임의 `getOcid()` 와 달리 응답이 배열(`ouid_info`)이라 식별자 하나로 줄이지 않고
-   * 응답을 그대로 돌려준다. 항목이 여러 개면 `racer_date_create`·`racer_level` 로 골라 쓴다.
+   * 같은 라이더명에 계정이 여러 개 대응할 수 있어 `ouid_info` 배열을 반환한다.
+   * 후보가 여러 건이면 생성 시각과 레벨을 비교해 조회할 계정을 고른다.
    *
    * 라이더 명의 `|` 는 넥슨 API 규칙에 따라 SDK가 `_` 로 바꿔 보낸다
    * (예: `|카러플라이더|` → `_카러플라이더_`).
    *
-   * @param racerName - 라이더(계정) 명
+   * @param racerName - 조회할 라이더명. SDK가 `|`를 `_`로 바꿔 조회한다.
    * @throws {NexonBadRequestError} racerName이 비어 있거나(요청 전 차단) 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -64,7 +66,11 @@ export class KartriderClient extends AbstractGameClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 라이더 검색에서 동명이인 계정 후보를 보여 줄 때
    * const { ouid_info } = await client.kartrider.getOuidInfo('라이더명');
    * for (const info of ouid_info) {
    *   console.log(info.ouid, info.racer_level, info.racer_date_create);

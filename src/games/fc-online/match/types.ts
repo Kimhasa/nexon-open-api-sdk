@@ -2,7 +2,7 @@
 
 /** 매치 기록 조회 요청 파라미터 */
 export interface FcMatchListRequest {
-  /** 매치 종류 (/metadata/matchtype API 참고) */
+  /** 매치 종류 번호 (50: 공식경기, 52: 감독모드 등. `getMatchTypeMeta()` 참고) */
   readonly matchtype: number;
   /** 리스트에서 가져올 시작 위치 (기본값: 0) */
   readonly offset?: number | undefined;
@@ -14,25 +14,25 @@ export interface FcMatchListRequest {
 
 // ─── GET /fconline/v1/match-detail ──────────────────────────────────────────
 
-/** 매치 상세 기록 응답 */
+/** 경기 한 판의 상세 기록 — `client.fcOnline.getMatchDetail()` 의 응답. */
 export interface FcMatchDetail {
   /** 매치 고유 식별자 */
   readonly matchId: string;
   /** 매치 일자 (UTC0) */
   readonly matchDate: string;
-  /** 매치 종류 (/metadata/matchtype API 참고) */
+  /** 매치 종류 번호 (50: 공식경기, 52: 감독모드 등. `getMatchTypeMeta()` 참고) */
   readonly matchType: number;
   /** 매치 참여 플레이어별 매치 상세 */
   readonly matchInfo: readonly FcMatchInfo[];
 }
 
-/** 매치 참여 플레이어 정보 */
+/** 경기에 참여한 구단주 한 명의 기록 */
 export interface FcMatchInfo {
   /** 계정 식별자 */
   readonly ouid: string;
   /** 유저 닉네임 */
   readonly nickname: string;
-  /** 등급 식별자 */
+  /** 경기 당시 등급(디비전) 번호. `getDivisionMeta()` 로 이름을 찾는다. 없을 수 있다 */
   readonly division?: number | undefined;
   /** 매치 결과 상세 */
   readonly matchDetail: FcMatchDetailInfo;
@@ -50,7 +50,7 @@ export interface FcMatchInfo {
 
 /** 매치 결과 상세 정보 */
 export interface FcMatchDetailInfo {
-  /** 시즌 ID */
+  /** 공식경기 시즌 번호. `getSeasonMeta()` 의 최신 시즌과 비교할 수 있다 */
   readonly seasonId: number;
   /** 매치 결과 (`"승"` | `"무"` | `"패"`) */
   readonly matchResult: string;
@@ -142,7 +142,7 @@ export interface FcMatchShootDetail {
   readonly type: number;
   /** 슛 결과 (1: on target, 2: off target, 3: goal) */
   readonly result: number;
-  /** 슈팅 선수 고유 식별자 (/metadata/spid API 참고) */
+  /** 슈팅 선수 고유 식별자 — 선수 카드 번호 (`getSpidMeta()` 참고) */
   readonly spId: number;
   /** 슈팅 선수 강화 등급 */
   readonly spGrade: number;
@@ -258,11 +258,11 @@ export interface FcPlayerStatus {
 
 /** 경기 사용 선수 정보 */
 export interface FcMatchPlayer {
-  /** 선수 고유 식별자 (/metadata/spid API 참고) */
+  /** 선수 고유 식별자 — 선수 카드 번호 (`getSpidMeta()` 참고) */
   readonly spId: number;
-  /** 선수 포지션 (/metadata/spposition API 참고) */
+  /** 선수 포지션 번호 (`getSpPositionMeta()` 참고, 예: 0 = GK) */
   readonly spPosition: number;
-  /** 선수 강화 등급 */
+  /** 선수 카드 강화 등급 (강화 단계) */
   readonly spGrade: number;
   /** 선수 경기 스탯 */
   readonly status: FcPlayerStatus;

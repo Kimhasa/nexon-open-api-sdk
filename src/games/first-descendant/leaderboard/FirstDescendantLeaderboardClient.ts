@@ -74,7 +74,9 @@ function toFilterQuery(params: {
  * ```ts
  * import { NexonClient } from 'nexon-open-api';
  *
- * const client = new NexonClient({ apiKey: 'your-api-key' });
+ * const apiKey = process.env['NEXON_API_KEY'];
+ * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+ * const client = new NexonClient({ apiKey });
  *
  * const solo = await client.firstDescendant.leaderboard.getVoidInterceptBattle({
  *   leaderboard_type: 'Solo',
@@ -93,9 +95,9 @@ export class FirstDescendantLeaderboardClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 보이드 요격전 리더보드를 조회한다.
+   * 보이드 요격전 리더보드의 클리어 타임과 참가 멤버를 조회한다.
    *
-   * @param params - `leaderboard_type` (`'Solo'` | `'Squad'`), 솔로면 `descendant_id`, 스쿼드면 `squad_user_count` (2 | 3 | 4),
+   * @param params - `leaderboard_type` (`'Solo'` | `'Squad'`), 솔로는 도감의 계승자 번호(`descendant_id`), 스쿼드는 인원수(`squad_user_count`, 2·3·4명)로 필터링,
    *   `platform_type` (기본값 `'All'`), `contents_type` (기본값 `'RiskMode'`)
    * @throws {NexonBadRequestError} 조건 조합이나 값이 올바르지 않을 때 (요청 전 SDK 검증)
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
@@ -103,6 +105,13 @@ export class FirstDescendantLeaderboardClient {
    *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 공략 페이지에 계승자별 솔로 기록을 표시할 때
    * const result = await client.firstDescendant.leaderboard.getVoidInterceptBattle({
    *   leaderboard_type: 'Solo',
    *   descendant_id: '101000001',
@@ -133,9 +142,9 @@ export class FirstDescendantLeaderboardClient {
   }
 
   /**
-   * 보이드 침식 정화 - 도전 리더보드를 조회한다.
+   * 보이드 침식 정화 - 도전의 리더보드 순위·단계·클리어 타임을 조회한다.
    *
-   * @param params - `leaderboard_type` (`'Solo'` | `'Squad'`), 솔로면 `descendant_id`, 스쿼드면 `squad_user_count` (2 | 3 | 4),
+   * @param params - `leaderboard_type` (`'Solo'` | `'Squad'`), 솔로는 도감의 계승자 번호(`descendant_id`), 스쿼드는 인원수(`squad_user_count`, 2·3·4명)로 필터링,
    *   `platform_type` (기본값 `'All'`)
    * @throws {NexonBadRequestError} 조건 조합이나 값이 올바르지 않을 때 (요청 전 SDK 검증)
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
@@ -143,6 +152,13 @@ export class FirstDescendantLeaderboardClient {
    *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 4인 파티 디스코드에 도전 기록을 표시할 때
    * const result = await client.firstDescendant.leaderboard.getVoidErosionPurgeChallenge({
    *   leaderboard_type: 'Squad',
    *   squad_user_count: 4,

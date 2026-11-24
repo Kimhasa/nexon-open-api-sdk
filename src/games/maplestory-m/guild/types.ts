@@ -84,7 +84,7 @@ export interface MGuildAbility {
   readonly ability_icon: string;
 }
 
-/** GET /maplestorym/v1/guild/basic 응답 */
+/** 길드 기본 정보 — `client.maplestorym.guild.getBasic()` 의 응답. */
 export interface MGuildBasic {
   /** 길드 명 */
   readonly guild_name: string;

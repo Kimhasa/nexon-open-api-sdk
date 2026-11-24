@@ -2,7 +2,7 @@ import type { TWOcidDateRequest } from '../types.js';
 
 // ─── GET /maplestorytw/v1/character/basic ────────────────────────────────────
 
-/** GET /maplestorytw/v1/character/basic response */
+/** 캐릭터 기본 정보 — `client.maplestoryTW.character.getBasic()` 의 응답. */
 export interface TWCharacterBasic {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -49,7 +49,7 @@ export interface TWCharacterBasic {
 
 // ─── GET /maplestorytw/v1/character/popularity ───────────────────────────────
 
-/** GET /maplestorytw/v1/character/popularity response */
+/** 캐릭터 인기도 — `client.maplestoryTW.character.getPopularity()` 의 응답. */
 export interface TWCharacterPopularity {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -59,7 +59,7 @@ export interface TWCharacterPopularity {
 
 // ─── GET /maplestorytw/v1/character/stat ─────────────────────────────────────
 
-/** GET /maplestorytw/v1/character/stat response */
+/** 캐릭터 정보창의 스탯(종합 능력치) — `client.maplestoryTW.character.getStat()` 의 응답. */
 export interface TWCharacterStat {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -91,7 +91,7 @@ export interface TWMentorshipStat {
 
 // ─── GET /maplestorytw/v1/character/hyper-stat ───────────────────────────────
 
-/** GET /maplestorytw/v1/character/hyper-stat response */
+/** 하이퍼 스탯 — `client.maplestoryTW.character.getHyperStat()` 의 응답. */
 export interface TWCharacterHyperStat {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -129,7 +129,7 @@ export interface TWHyperStatPreset {
 
 // ─── GET /maplestorytw/v1/character/propensity ───────────────────────────────
 
-/** GET /maplestorytw/v1/character/propensity response */
+/** 성향 — `client.maplestoryTW.character.getPropensity()` 의 응답. */
 export interface TWCharacterPropensity {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -149,7 +149,7 @@ export interface TWCharacterPropensity {
 
 // ─── GET /maplestorytw/v1/character/ability ──────────────────────────────────
 
-/** GET /maplestorytw/v1/character/ability response */
+/** 어빌리티 — `client.maplestoryTW.character.getAbility()` 의 응답. */
 export interface TWCharacterAbility {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -429,7 +429,7 @@ export interface TWMedalShape {
   readonly medal_shape_changed_description: string;
 }
 
-/** GET /maplestorytw/v1/character/item-equipment response */
+/** 장착 장비(캐시 장비 제외) — `client.maplestoryTW.character.getItemEquipment()` 의 응답. */
 export interface TWCharacterItemEquipment {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -519,7 +519,7 @@ export interface TWCashItemEquipmentItem {
   readonly freestyle_flag: string;
 }
 
-/** GET /maplestorytw/v1/character/cashitem-equipment response */
+/** 장착 캐시 장비 — `client.maplestoryTW.character.getCashItemEquipment()` 의 응답. */
 export interface TWCharacterCashItemEquipment {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -585,7 +585,7 @@ export interface TWSymbolInfo {
   readonly symbol_require_growth_count: number;
 }
 
-/** GET /maplestorytw/v1/character/symbol-equipment response */
+/** 장착 심볼 — `client.maplestoryTW.character.getSymbolEquipment()` 의 응답. */
 export interface TWCharacterSymbolEquipment {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -617,7 +617,7 @@ export interface TWSetEffectDetail {
   readonly set_option_full: readonly TWSetEffectInfo[];
 }
 
-/** GET /maplestorytw/v1/character/set-effect response */
+/** 적용 중인 세트 효과 — `client.maplestoryTW.character.getSetEffect()` 의 응답. */
 export interface TWCharacterSetEffect {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -669,7 +669,7 @@ export interface TWSkinInfo {
   readonly brightness: number;
 }
 
-/** GET /maplestorytw/v1/character/beauty-equipment response */
+/** 헤어·성형·피부 — `client.maplestoryTW.character.getBeautyEquipment()` 의 응답. */
 export interface TWCharacterBeautyEquipment {
   /** Reference date for query (TST) */
   readonly date: string;
@@ -749,7 +749,7 @@ export interface TWAndroidPreset {
   readonly android_shop_usable_flag: string;
 }
 
-/** GET /maplestorytw/v1/character/android-equipment response */
+/** 장착 안드로이드 — `client.maplestoryTW.character.getAndroidEquipment()` 의 응답. */
 export interface TWCharacterAndroidEquipment {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -843,7 +843,7 @@ export interface TWPetPotential {
   readonly potential_increase_2: string;
 }
 
-/** GET /maplestorytw/v1/character/pet-equipment response */
+/** 장착 펫과 펫 장비·펫 스킬 — `client.maplestoryTW.character.getPetEquipment()` 의 응답. */
 export interface TWCharacterPetEquipment {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -962,7 +962,7 @@ export interface TWSkillInfo {
   readonly skill_icon: string;
 }
 
-/** GET /maplestorytw/v1/character/skill response */
+/** 전직 차수별 스킬 — `client.maplestoryTW.character.getSkill()` 의 응답. */
 export interface TWCharacterSkill {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -1006,7 +1006,7 @@ export interface TWLinkSkillPresetInfo {
   readonly skill_icon: string;
 }
 
-/** GET /maplestorytw/v1/character/link-skill response */
+/** 링크 스킬 — `client.maplestoryTW.character.getLinkSkill()` 의 응답. */
 export interface TWCharacterLinkSkill {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -1052,7 +1052,7 @@ export interface TWVCoreInfo {
   readonly v_core_skill_3: string;
 }
 
-/** GET /maplestorytw/v1/character/vmatrix response */
+/** V매트릭스(5차) — `client.maplestoryTW.character.getVMatrix()` 의 응답. */
 export interface TWCharacterVMatrix {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -1084,7 +1084,7 @@ export interface TWHexaCoreInfo {
   readonly linked_skill: readonly TWHexaLinkedSkill[];
 }
 
-/** GET /maplestorytw/v1/character/hexamatrix response */
+/** HEXA 매트릭스(6차)의 HEXA 코어 — `client.maplestoryTW.character.getHexaMatrix()` 의 응답. */
 export interface TWCharacterHexaMatrix {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -1114,7 +1114,7 @@ export interface TWHexaStatCoreInfo {
   readonly stat_grade: number;
 }
 
-/** GET /maplestorytw/v1/character/hexamatrix-stat response */
+/** HEXA 스탯 — `client.maplestoryTW.character.getHexaMatrixStat()` 의 응답. */
 export interface TWCharacterHexaMatrixStat {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -1136,7 +1136,7 @@ export interface TWCharacterHexaMatrixStat {
 
 // ─── GET /maplestorytw/v1/character/dojang ───────────────────────────────────
 
-/** GET /maplestorytw/v1/character/dojang response */
+/** 무릉도장 최고 기록 — `client.maplestoryTW.character.getDojang()` 의 응답. */
 export interface TWCharacterDojang {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -1206,7 +1206,7 @@ export interface TWFamiliarInfo {
   readonly slot_id: string;
 }
 
-/** GET /maplestorytw/v1/character/familiar response. */
+/** 패밀리어(萌獸) — `client.maplestoryTW.character.getFamiliar()` 의 응답. */
 export interface TWCharacterFamiliar {
   /** Reference date for the snapshot (TST, with daily timestamps at midnight). */
   readonly date: string;
