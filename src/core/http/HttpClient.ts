@@ -4,6 +4,7 @@ import { NexonError } from '../errors/NexonError.js';
 import { invalidInput } from '../validation/input.js';
 import { validateShape } from '../validation/response-shape.js';
 import type { ShapeDescriptor, ShapeMismatch } from '../validation/response-shape.js';
+import { maskIdentifiers } from './mask.js';
 import { computeRetryDelay, isRetryableStatus, sleep } from './retry.js';
 import type {
   HttpClientConfig,
@@ -24,7 +25,7 @@ const DEFAULT_RETRY_BASE_DELAY_MS = 500;
  *
  * - 네이티브 `fetch` 사용 (Node.js 18+)
  * - `AbortSignal.timeout()` 기반 타임아웃
- * - 429/503 응답에 대한 지수 백오프 자동 재시도
+ * - 429 및 5xx 응답에 대한 지수 백오프 자동 재시도
  * - Request / Response / Retry 인터셉터 지원
  *
  * @internal SDK 내부용. 직접 생성하지 말고 `NexonClient`를 사용하세요.
@@ -230,7 +231,7 @@ export class HttpClient {
       return this.executeWithRetry<T>(requestInfo, shape, attempt + 1);
     }
 
-    throw classifyError(response.status, payload, retryAfterMs);
+    throw classifyError(response.status, payload, retryAfterMs, { url: requestInfo.url });
   }
 }
 
@@ -281,7 +282,7 @@ function cleanParams(
 /** `debug: true` 시 사용하는 기본 콘솔 로거 */
 const defaultDebugLogger: Partial<HttpLogger> = {
   onRequest: (info) => {
-    console.debug(`[nexon-sdk] → ${info.method} ${info.url}`);
+    console.debug(`[nexon-sdk] → ${info.method} ${maskIdentifiers(info.url)}`);
   },
   onResponse: (info) => {
     console.debug(`[nexon-sdk] ← ${info.status} (${info.durationMs}ms)`);
@@ -307,7 +308,7 @@ const defaultDebugLogger: Partial<HttpLogger> = {
       );
     }
     console.warn(
-      `[nexon-sdk] ⚠ Response shape mismatch for ${mismatch.url}\n  ${parts.join('\n  ')}`,
+      `[nexon-sdk] ⚠ Response shape mismatch for ${maskIdentifiers(mismatch.url)}\n  ${parts.join('\n  ')}`,
     );
   },
 };

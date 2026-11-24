@@ -6,7 +6,7 @@
  *   2. yarn test:baram 실행
  */
 import 'dotenv/config';
-import { NexonClient } from '../src/index.js';
+import { maskIdentifier, NexonClient } from '../src/index.js';
 import type { BaramOCID } from '../src/games/baram/types.js';
 
 const apiKey = process.env['NEXON_BARAM_API_KEY'];
@@ -41,7 +41,7 @@ let ocid: BaramOCID | undefined;
 await test('getOcid', async () => {
   ocid = await client.baram.getOcid(characterName, serverName);
   if (!ocid) throw new Error('ocid가 비어있음');
-  console.log(`    ocid: ${ocid}`);
+  console.log(`    ocid: ${maskIdentifier(ocid)}`);
 });
 
 // ─── 2. Character ────────────────────────────────────────────────────────────

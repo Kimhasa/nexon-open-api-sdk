@@ -22,6 +22,7 @@ export {
   classifyError,
 } from './core/errors/index.js';
 export type { NexonErrorCode, NexonErrorPayload } from './core/errors/index.js';
+export { maskIdentifier, maskIdentifiers } from './core/http/mask.js';
 
 // Types
 export type { OCID, NexonDate, GuildId } from './games/_base/maple-base-types.js';

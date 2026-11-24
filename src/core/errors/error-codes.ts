@@ -22,7 +22,7 @@ export const NEXON_ERROR_CODES = {
    * `NEXON_ERROR_CODES.INVALID_API_KEY` 를 사용하세요.
    */
   FORBIDDEN: 'OPENAPI00005',
-  /** 유효하지 않은 게임 또는 API PATH (HTTP 400) */
+  /** 유효하지 않은 게임 또는 API PATH (HTTP 400). 다른 게임용 키로 불러도 이 코드가 온다 */
   INVALID_GAME_OR_PATH: 'OPENAPI00006',
   /**
    * @deprecated 포털 표에서 `OPENAPI00006` 은 "파라미터 오류"가 아니라 "유효하지 않은 게임 또는 API PATH"입니다.

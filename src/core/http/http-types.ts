@@ -14,7 +14,7 @@ export interface HttpClientConfig {
   readonly timeoutMs?: number;
 
   /**
-   * 최대 재시도 횟수. 429(Rate Limit)와 503(Maintenance) 응답에만 적용됩니다.
+   * 최대 재시도 횟수. 429(호출량 초과)와 5xx(서버 오류) 응답에 적용됩니다.
    * @default 3
    */
   readonly maxRetries?: number;
@@ -31,11 +31,18 @@ export interface HttpClientConfig {
    *
    * @example
    * ```ts
+   * import { maskIdentifiers, NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = '발급받은-메이플스토리-키';
+   *
    * // 간단 디버그
    * new NexonClient({ apiKey, debug: true });
    *
-   * // 커스텀 로거
-   * new NexonClient({ apiKey, logger: { onRequest: (req) => console.log(req) } });
+   * // 커스텀 로거에서 요청 URL을 출력할 때는 maskIdentifiers()로 고유 번호를 가린다
+   * new NexonClient({
+   *   apiKey,
+   *   logger: { onRequest: ({ url }) => console.debug(maskIdentifiers(url)) },
+   * });
    * ```
    */
   readonly debug?: boolean;

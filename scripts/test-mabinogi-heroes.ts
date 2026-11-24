@@ -7,7 +7,7 @@
  *   2. yarn test:mabinogi-heroes 실행 (= tsx scripts/test-mabinogi-heroes.ts)
  */
 import 'dotenv/config';
-import { NexonClient } from '../src/index.js';
+import { maskIdentifier, NexonClient } from '../src/index.js';
 import type { HeroesOCID } from '../src/games/mabinogi-heroes/types.js';
 
 const apiKey = process.env['NEXON_HEROES_API_KEY'];
@@ -43,7 +43,7 @@ let ocid: HeroesOCID | undefined;
 await test('getOcid', async () => {
   ocid = await heroes.getOcid(characterName);
   if (!ocid) throw new Error('ocid가 비어있음');
-  console.log(`    ocid: ${ocid}`);
+  console.log(`    ocid: ${maskIdentifier(ocid)}`);
 });
 
 // ─── 2. Character ────────────────────────────────────────────────────────────
