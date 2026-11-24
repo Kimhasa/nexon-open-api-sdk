@@ -71,7 +71,7 @@ export class MapleStorySEAClient extends AbstractMapleBaseClient {
    * ```
    */
   async getOcid(characterName: string): Promise<OCID> {
-    assertNonEmptyString(characterName, 'characterName');
+    assertNonEmptyString(characterName, 'characterName', undefined, 'trim-truthy');
     const url = this.buildUrl('id');
     const response = await this.http.get<{ ocid: string }>(
       url,

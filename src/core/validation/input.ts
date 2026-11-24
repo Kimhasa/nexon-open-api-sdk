@@ -12,13 +12,21 @@ export function assertNonEmptyString(
   value: unknown,
   name: string,
   hint?: string,
-): asserts value is string {
-  if (typeof value !== 'string' || value.trim() === '') {
-    invalidInput(
-      `${name} 값이 비어 있거나 문자열이 아닙니다.`,
-      hint ?? '비어 있지 않은 문자열을 입력하세요.',
-    );
+  trimMode: 'string' | 'trim-truthy' | 'trim-not-empty' = 'string',
+): void {
+  // Some existing endpoints call trim() directly. Preserve their checks for JavaScript callers.
+  if (trimMode !== 'string' || typeof value === 'string') {
+    try {
+      const trimmed = (value as string).trim();
+      if (trimMode === 'trim-truthy' ? Boolean(trimmed) : trimmed !== '') return;
+    } catch {
+      // Unsupported JavaScript input is reported with the same public error as a blank value.
+    }
   }
+  invalidInput(
+    `${name} 값이 비어 있거나 문자열이 아닙니다.`,
+    hint ?? '비어 있지 않은 문자열을 입력하세요.',
+  );
 }
 
 export function assertOneOf<T extends string | number>(

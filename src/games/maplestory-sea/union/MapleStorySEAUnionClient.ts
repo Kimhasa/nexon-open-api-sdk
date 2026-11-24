@@ -44,7 +44,7 @@ export class MapleStorySEAUnionClient {
    * ```
    */
   async getUnion(params: OcidDateRequest): Promise<SEAUnion> {
-    assertNonEmptyString(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     return this.http.get<SEAUnion>(
       `${MapleStorySEAUnionClient.BASE}/user/union`,
       {
@@ -73,7 +73,7 @@ export class MapleStorySEAUnionClient {
    * ```
    */
   async getRaider(params: OcidDateRequest): Promise<SEAUnionRaider> {
-    assertNonEmptyString(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     return this.http.get<SEAUnionRaider>(
       `${MapleStorySEAUnionClient.BASE}/user/union-raider`,
       {
@@ -102,7 +102,7 @@ export class MapleStorySEAUnionClient {
    * ```
    */
   async getArtifact(params: OcidDateRequest): Promise<SEAUnionArtifact> {
-    assertNonEmptyString(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     return this.http.get<SEAUnionArtifact>(
       `${MapleStorySEAUnionClient.BASE}/user/union-artifact`,
       {
@@ -131,7 +131,7 @@ export class MapleStorySEAUnionClient {
    * ```
    */
   async getChampion(params: OcidDateRequest): Promise<SEAUnionChampion> {
-    assertNonEmptyString(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     return this.http.get<SEAUnionChampion>(
       `${MapleStorySEAUnionClient.BASE}/user/union-champion`,
       {

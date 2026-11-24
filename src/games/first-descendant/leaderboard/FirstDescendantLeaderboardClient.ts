@@ -58,6 +58,7 @@ function toFilterQuery(params: {
       descendant_id,
       'descendant_id',
       'client.firstDescendant.meta.getDescendant() 응답의 descendant_id를 넘기거나 필드를 빼세요.',
+      'trim-not-empty',
     );
   }
 

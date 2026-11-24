@@ -41,8 +41,8 @@ export class MapleStorySEAGuildClient {
    * ```
    */
   async getId(guildName: string, worldName: string): Promise<GuildId> {
-    assertNonEmptyString(guildName, 'guildName');
-    assertNonEmptyString(worldName, 'worldName');
+    assertNonEmptyString(guildName, 'guildName', undefined, 'trim-truthy');
+    assertNonEmptyString(worldName, 'worldName', undefined, 'trim-truthy');
     const response = await this.http.get<{ oguild_id: string }>(
       `${MapleStorySEAGuildClient.BASE}/guild/id`,
       { guild_name: guildName, world_name: worldName },
@@ -69,7 +69,7 @@ export class MapleStorySEAGuildClient {
    * ```
    */
   async getBasic(params: GuildIdDateRequest): Promise<SEAGuildBasic> {
-    assertNonEmptyString(params.oguild_id, 'oguild_id');
+    assertNonEmptyString(params.oguild_id, 'oguild_id', undefined, 'trim-truthy');
     return this.http.get<SEAGuildBasic>(
       `${MapleStorySEAGuildClient.BASE}/guild/basic`,
       {

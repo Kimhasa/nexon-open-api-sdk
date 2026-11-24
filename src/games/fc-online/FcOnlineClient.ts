@@ -83,7 +83,7 @@ export class FcOnlineClient extends AbstractGameClient {
    * ```
    */
   async getOuid(nickname: string): Promise<OUID> {
-    assertNonEmptyString(nickname, 'nickname');
+    assertNonEmptyString(nickname, 'nickname', undefined, 'trim-truthy');
     const url = this.buildUrl('id');
     const response = await this.http.get<{ ouid: string }>(url, { nickname }, FC_OUID_SHAPE);
     return response.ouid as OUID;
@@ -104,7 +104,7 @@ export class FcOnlineClient extends AbstractGameClient {
    * ```
    */
   async getBasic(ouid: OUID): Promise<FcUserBasic> {
-    assertNonEmptyString(ouid, 'ouid');
+    assertNonEmptyString(ouid, 'ouid', undefined, 'trim-truthy');
     const url = this.buildUrl('user/basic');
     return this.http.get<FcUserBasic>(url, { ouid: ouid as string }, FC_USER_BASIC_SHAPE);
   }
@@ -127,7 +127,7 @@ export class FcOnlineClient extends AbstractGameClient {
    * ```
    */
   async getMaxDivision(ouid: OUID): Promise<readonly FcMaxDivision[]> {
-    assertNonEmptyString(ouid, 'ouid');
+    assertNonEmptyString(ouid, 'ouid', undefined, 'trim-truthy');
     const url = this.buildUrl('user/maxdivision');
     const response = await this.http.get<FcMaxDivision | FcMaxDivision[]>(
       url,
@@ -162,7 +162,7 @@ export class FcOnlineClient extends AbstractGameClient {
    * ```
    */
   async getMatchList(params: FcUserMatchRequest): Promise<string[]> {
-    assertNonEmptyString(params.ouid, 'ouid');
+    assertNonEmptyString(params.ouid, 'ouid', undefined, 'trim-truthy');
     const url = this.buildUrl('user/match');
     return this.http.get<string[]>(
       url,
@@ -266,7 +266,7 @@ export class FcOnlineClient extends AbstractGameClient {
    * ```
    */
   async getMatchDetail(matchId: string): Promise<FcMatchDetail> {
-    assertNonEmptyString(matchId, 'matchid');
+    assertNonEmptyString(matchId, 'matchid', undefined, 'trim-truthy');
     const url = this.buildUrl('match-detail');
     return this.http.get<FcMatchDetail>(url, { matchid: matchId }, FC_MATCH_DETAIL_SHAPE);
   }

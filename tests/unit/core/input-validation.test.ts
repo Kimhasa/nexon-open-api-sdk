@@ -23,6 +23,22 @@ describe('SDK input validation', () => {
     expect(() => assertNonEmptyString(' name ', 'characterName')).not.toThrow();
   });
 
+  it('preserves existing trim checks for JavaScript inputs where requested', () => {
+    const stringLike = { trim: (): string => 'character' };
+    expectBadRequest(() => assertNonEmptyString(stringLike, 'ocid'), /ocid/);
+    expect(() => assertNonEmptyString(stringLike, 'ocid', undefined, 'trim-truthy')).not.toThrow();
+    expectBadRequest(() => assertNonEmptyString(null, 'ocid', undefined, 'trim-truthy'), /ocid/);
+
+    const falsyTrim = { trim: (): undefined => undefined };
+    expectBadRequest(
+      () => assertNonEmptyString(falsyTrim, 'ocid', undefined, 'trim-truthy'),
+      /ocid/,
+    );
+    expect(() =>
+      assertNonEmptyString(falsyTrim, 'ocid', undefined, 'trim-not-empty'),
+    ).not.toThrow();
+  });
+
   it('compares allowed values without case folding or coercion', () => {
     expect(() => assertOneOf('ko', ['ko', 'en'], 'language')).not.toThrow();
     expectBadRequest(() => assertOneOf('KO', ['ko', 'en'], 'language'), /language.*ko.*en/);
