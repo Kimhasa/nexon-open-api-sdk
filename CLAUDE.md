@@ -12,24 +12,32 @@ import { NexonClient } from 'nexon-open-api';
 
 const client = new NexonClient({ apiKey: 'your-api-key' });
 
-const { ocid } = await client.maplestory.getOcid('캐릭터명');
+const ocid = await client.maplestory.getOcid('캐릭터명');
 const basic = await client.maplestory.character.getBasic({ ocid });
 ```
 
 ## 개발 명령어
 
-| 명령어                        | 설명                    |
-| ----------------------------- | ----------------------- |
-| `yarn dev`                    | tsup watch 모드         |
-| `yarn build`                  | 프로덕션 빌드 (`dist/`) |
-| `yarn type-check`             | `tsc --noEmit`          |
-| `yarn lint` / `yarn lint:fix` | ESLint                  |
-| `yarn format`                 | Prettier                |
-| `yarn test`                   | Vitest 1회 실행         |
-| `yarn test:watch`             | Vitest watch            |
-| `yarn release`                | 버전 범프 + npm publish |
+| 명령어                              | 설명                                                            |
+| ----------------------------------- | --------------------------------------------------------------- |
+| `yarn dev`                          | tsup watch 모드                                                 |
+| `yarn build`                        | 프로덕션 빌드 (`dist/`)                                         |
+| `yarn type-check`                   | `tsc --noEmit`                                                  |
+| `yarn lint` / `yarn lint:fix`       | ESLint (`src`, `tests`)                                         |
+| `yarn format` / `yarn format:check` | Prettier                                                        |
+| `yarn test`                         | Vitest 1회 실행                                                 |
+| `yarn test:watch`                   | Vitest watch                                                    |
+| `yarn test:coverage`                | Vitest + 커버리지                                               |
+| `yarn test:{game}`                  | 실 API E2E 스크립트 (`scripts/test-*.ts`, `.env`에 API 키 필요) |
+| `yarn specs:fetch`                  | 넥슨 포털의 OpenAPI YAML을 `specs/openapi/`로 수집              |
+| `yarn specs:check`                  | 포털 변경 감지 (저장된 스펙과 포털 비교)                        |
+| `yarn specs:coverage`               | SDK가 구현한 경로 vs 스펙 경로 커버리지 대조                    |
+| `yarn release`                      | 빌드 + 테스트 + `npm publish` (**버전 범프 없음** — 아래 참고)  |
 
-**코드 변경 후 반드시**: `yarn type-check` → `yarn test` → `yarn build` 순서로 확인.
+- `yarn test:{game}` 은 `test:maplestory`, `test:maplestory-m`, `test:maplestory-sea`, `test:fconline` 4개다. 필요한 환경변수는 `.env.example` 참고.
+- `yarn release` 는 `package.json` 의 `version` 을 바꾸지 않는다. 버전은 직접 올리고 태그(`v{version}`)를 만든다. 태그를 push하면 CI도 `npm publish` 를 실행하므로 두 경로를 같은 버전에 함께 쓰지 않는다.
+
+**코드 변경 후 반드시**: `yarn type-check` → `yarn lint` → `yarn test` → `yarn build` 순서로 확인.
 
 ## 디렉토리 구조
 
@@ -37,8 +45,8 @@ const basic = await client.maplestory.character.getBasic({ ocid });
 src/
 ├── core/                                    # 공유 인프라 (게임 무관)
 │   ├── http/                                # HttpClient, retry, http-types
-│   ├── errors/                              # NexonError 계층 (6개 서브클래스)
-│   ├── metadata/api-metadata.ts             # 게임별 API 검증 메타데이터
+│   ├── errors/                              # NexonError 계층 (6개 서브클래스), classify-error, error-codes
+│   ├── metadata/api-metadata.ts             # 게임별 API 검증 메타데이터 (API_METADATA)
 │   ├── validation/response-shape.ts         # 런타임 응답 shape 검증
 │   ├── deprecation/deprecation.ts           # deprecation 경고 유틸
 │   └── types/
@@ -47,46 +55,66 @@ src/
 ├── games/
 │   ├── _base/                               # 공유 추상 기반
 │   │   ├── AbstractGameClient.ts            # 최상위 기반 (pathPrefix, buildUrl)
-│   │   ├── AbstractMapleStoryBaseClient.ts  # 메이플 패밀리 (timezoneOffset, formatDate)
+│   │   ├── AbstractMapleStoryBaseClient.ts  # class AbstractMapleBaseClient (파일명과 클래스명이 다름)
 │   │   ├── maple-base-types.ts              # OCID, GuildId, NexonDate + 공유 요청 타입
 │   │   └── maple-date.ts                    # toNexonDate(), DateRange
-│   ├── maplestory/                          # KMS (구현 완료)
-│   ├── maplestory-m/                        # 메이플스토리M (구현 완료)
-│   ├── maplestory-sea/                      # MapleStorySEA (진행 중)
-│   ├── fc-online/                           # FC Online (구현 완료)
-│   └── ...                                  # 기타 게임 (예정)
+│   ├── maplestory/                          # KMS (구현됨)
+│   ├── maplestory-m/                        # 메이플스토리M (구현됨)
+│   ├── maplestory-sea/                      # MapleStorySEA (구현됨)
+│   └── fc-online/                           # FC Online (구현됨)
 ├── NexonClient.ts                           # 메인 진입점
 └── index.ts                                 # root public exports
 
-specs/                                       # API 스펙 파일 (npm 배포 제외)
-├── _template.md                             # 변환 포맷 정의
-└── {game}.md                                # 게임별 스펙
+specs/
+├── README.md                                # 스펙 수집·갱신 설명서
+└── openapi/
+    ├── index.json                           # 게임·카테고리·오퍼레이션 색인
+    └── {slug}/{categoryId}.yaml             # 포털 카테고리별 OpenAPI YAML (원천 스펙)
+
+scripts/                                     # specs:* 스크립트, 실 API E2E 스크립트(test-*.ts)
+docs/                                        # 게임별 API 레퍼런스 ({game}.md), 아이콘
 
 tests/
-├── fixtures/                                # 응답 fixture 고정 데이터
-├── mocks/handlers/                          # MSW HTTP 핸들러
-└── unit/                                    # 단위 테스트
+├── setup.ts                                 # MSW 서버 lifecycle (listen / resetHandlers / close)
+├── fixtures/{game}/*.fixture.ts             # 응답 fixture 고정 데이터
+├── mocks/server.ts                          # MSW 서버
+├── mocks/handlers/{game}.handlers.ts        # 게임별 MSW HTTP 핸들러
+├── mocks/handlers/index.ts                  # 전체 핸들러 등록
+└── unit/{core,games}/                       # 단위 테스트
 ```
+
+게임 디렉토리 내부 구조 (하위 카테고리가 있는 게임 기준):
+
+```
+src/games/{game}/
+├── {Game}Client.ts                          # 게임 진입 클라이언트 (lazy getter로 sub-client 보유)
+├── index.ts                                 # sub-path export entry (tsup entry)
+├── shapes.ts                                # 응답 shape descriptor
+├── types.ts                                 # 게임 공통 요청 타입 (필요 시)
+└── {category}/
+    ├── {Game}{Category}Client.ts            # 카테고리 sub-client
+    └── types.ts                             # 요청/응답 타입
+```
+
+FC Online처럼 API 수가 적은 게임은 sub-client 없이 `{Game}Client.ts` 하나에 메서드를 두고, 타입만 `{category}/types.ts` 로 나눈다.
 
 ## 클래스 계층 구조
 
 ```
 NexonClient
 ├── .maplestory    → MapleStoryClient    (UTC+9, prefix: maplestory)
-├── .maplestoryM   → MapleStoryMClient   (UTC+9, prefix: maplestorym)
+├── .maplestorym   → MapleStoryMClient   (prefix: maplestorym)
 ├── .maplestorySEA → MapleStorySEAClient (UTC+8, prefix: maplestorysea)
-├── .maplestoryTW  → MapleStoryTWClient  (UTC+8, prefix: maplestorytw)
-├── .fcOnline      → FcOnlineClient      (prefix: fconline)
-├── .dnf           → DnfClient           (예정)
-├── .mabinogi      → MabinogiClient      (예정)
-└── ...                                  (17개 게임)
+└── .fcOnline      → FcOnlineClient      (prefix: fconline)
+    (미구현 게임은 "지원 게임" 표 참고)
 
 AbstractGameClient (abstract — 모든 게임의 최상위 기반)
 ├── abstract pathPrefix: string
 ├── constructor(http: HttpClient)
-└── buildUrl(path, version?): string
+└── buildUrl(path, version = 'v1'): string   // https://open.api.nexon.com/{pathPrefix}/{version}/{path}
 
-AbstractMapleBaseClient extends AbstractGameClient (메이플 패밀리 전용)
+AbstractMapleBaseClient extends AbstractGameClient
+│   (파일: _base/AbstractMapleStoryBaseClient.ts)
 ├── abstract timezoneOffset: number       // 540 (KST) | 480 (SGT/TST)
 └── formatDate(date): NexonDate
 
@@ -101,14 +129,17 @@ NexonError (base)
 
 ## 아키텍처 규칙
 
-- **메이플 패밀리** (KMS, M, SEA, TW) → `AbstractMapleBaseClient` 상속 (timezoneOffset + formatDate)
-- **비메이플 게임** → `AbstractGameClient` 직접 상속
-- **Sub-client** → lazy getter (`??=` 패턴)로 초기화, 미사용 시 할당 비용 0
+- **날짜 기준 조회가 있는 메이플 게임** (KMS, SEA, TW) → `AbstractMapleBaseClient` 상속 (timezoneOffset + formatDate)
+- **그 외 게임** → `AbstractGameClient` 직접 상속
+  - **메이플스토리M도 여기에 속한다.** M의 캐릭터·유니온·길드 API는 `date` 파라미터가 없어서(`MOcidRequest` 는 `ocid` 만 가짐) timezone 기반 날짜 변환이 필요 없고, 요청 타입도 KMS 공유 타입(`OcidDateRequest`)과 다르다. PR #2에서 의도적으로 `AbstractMapleBaseClient` 의존을 제거했다. 랭킹의 `date` 는 문자열 그대로 전달한다.
+- **Sub-client** → lazy getter (`??=` 패턴)로 초기화, 미사용 시 할당 비용 0. sub-client는 기반 클래스를 상속하지 않고 `constructor(private readonly http: HttpClient)` 만 받는다
 - **Branded Types** → OCID, GuildId, NexonDate는 `_base/maple-base-types.ts`, OUID는 `fc-online/user/types.ts`에 정의. `core/types/branded.ts`는 `Brand<T,B>` 유틸리티만 보유
 - **HttpClient** → 429/503만 재시도, 나머지 즉시 throw. `x-nxopen-api-key` 헤더 자동 주입
 - **에러 분류** → OPENAPI 에러 코드 기반 서브클래스 분류 (`classify-error.ts`)
-- **엔드포인트** → 게임별 `endpoints.ts`에 `as const` 객체로 관리
-- **새 게임 추가 시** → `API_METADATA`에 엔트리 추가 필수
+- **엔드포인트 URL** → 두 방식이 공존한다. 한 게임 안에서는 한 방식만 쓴다
+  - 메이플 계열(KMS, M, SEA): sub-client마다 `private static readonly BASE = 'https://open.api.nexon.com/{prefix}/v1'` 상수를 두고 `` `${Xxx.BASE}/character/basic` `` 로 조립. 게임 진입 클라이언트는 `this.buildUrl('id')` 사용
+  - FC Online: `fc-online/endpoints.ts` 에 `as const` 객체로 모아 관리 (`/static/...`, CDN처럼 host 경로가 여러 갈래일 때 적합)
+- **새 게임 추가 시** → `API_METADATA`에 엔트리 추가 필수. 키는 path prefix와 같게 한다 (`maplestory`, `maplestorym`, `maplestorysea`, `fconline`)
 
 ## API 버전 관리
 
@@ -118,11 +149,15 @@ NexonError (base)
 - 넥슨 응답 필드 삭제 → `@deprecated` + optional → **MINOR** (다음 MAJOR에서 삭제)
 - 넥슨 필드 타입 변경 → SDK 타입 변경 → **MAJOR**
 - public 메서드 제거/이름 변경 → **MAJOR**
+- 새 게임 클라이언트·메서드 추가 → **MINOR**
+
+게시된 버전: `0.1.0` (2026-03-04, KMS), `0.1.1` (2026-03-18, + M·SEA·FC). 상세는 `CHANGELOG.md`.
 
 ### 런타임 응답 Shape 검증
 
 - `responseValidation: true` 옵션으로 활성화 (warn-only, opt-in)
 - `shapes.ts`에 shape descriptor 정의 → `HttpClient.get()` 3번째 param으로 전달
+- 현황: KMS·M·FC에 적용됨. **SEA는 `shapes.ts` 가 아직 없다** (보강 대상)
 
 ## DX 원칙
 
@@ -135,14 +170,18 @@ NexonError (base)
 
 ### Date Coercion
 
-`date` 파라미터는 `Date | NexonDate | 'today' | string` 모두 수용.
-SDK 내부에서 지역 타임존 기준 `YYYY-MM-DD` 변환.
+`date` 파라미터는 `Date | NexonDate | 'today' | string` 모두 수용하고,
+SDK 내부에서 지역 타임존 기준 `YYYY-MM-DD` 로 변환하는 것이 목표다 (`toNexonDate()` / `formatDate()`).
+
+현황: 변환 유틸은 있지만 기존 sub-client는 `date?: NexonDate | string` 을 받아 그대로 전달한다. 새 코드에서 `Date` 를 받으려면 `toNexonDate(date, timezoneOffset)` 를 거친다.
 
 ### Auto-pagination 네이밍
 
-- `getXxx()` → 단일 페이지 (`CursorPage<T>`)
+- `getXxx()` / `listXxx()` → 단일 페이지
 - `iterateXxx()` → `AsyncGenerator<T>` (자동 페이지네이션)
 - `collectXxx()` → `Promise<T[]>` (전체 수집)
+
+현황: `iterateXxx` / `collectXxx` 구현 사례는 아직 없다. 추가할 때 이 이름을 따른다.
 
 ### 에러 메시지 = 미니 튜토리얼
 
@@ -153,7 +192,7 @@ throw new NexonRateLimitError(
   'API 호출 한도를 초과했습니다. ' +
     'SDK가 자동으로 3회 재시도했으나 실패했습니다. ' +
     'new NexonClient({ maxRetries: 5 })로 재시도 횟수를 늘리거나 요청 빈도를 줄여주세요.',
-  { code: 'OPENAPI00007', retryAfter: 1000 },
+  { retryAfterMs: 1000 },
 );
 ```
 
@@ -176,14 +215,30 @@ API 서버 400 응답에 의존하지 않고 SDK에서 즉시 throw (빈 ocid, �
 
 ## 파일 네이밍 규칙
 
-| 종류        | 패턴               | 예시                        |
-| ----------- | ------------------ | --------------------------- |
-| 클래스 파일 | `PascalCase.ts`    | `NexonClient.ts`            |
-| 타입 파일   | `types.ts`         | `character/types.ts`        |
-| 유틸/인프라 | `kebab-case.ts`    | `maple-date.ts`             |
-| 테스트      | `[파일명].test.ts` | `maplestory-client.test.ts` |
+| 종류        | 패턴                 | 예시                         |
+| ----------- | -------------------- | ---------------------------- |
+| 클래스 파일 | `PascalCase.ts`      | `NexonClient.ts`             |
+| 타입 파일   | `types.ts`           | `character/types.ts`         |
+| 유틸/인프라 | `kebab-case.ts`      | `maple-date.ts`              |
+| 테스트      | `{대상}.test.ts`     | `maplestory-client.test.ts`  |
+| fixture     | `{이름}.fixture.ts`  | `character-basic.fixture.ts` |
+| MSW 핸들러  | `{game}.handlers.ts` | `maplestory-sea.handlers.ts` |
 
-**barrel file (index.ts) 사용 안 함** — `src/index.ts` 단 하나만 허용 (public exports 전용).
+클래스 파일명은 클래스명과 같게 짓는다. 예외는 `_base/AbstractMapleStoryBaseClient.ts` (클래스명 `AbstractMapleBaseClient`) 하나이며, 기존 import 경로를 유지하려고 그대로 둔 것이다. 새 파일에서는 따라 하지 않는다.
+
+### `index.ts` 규칙
+
+`index.ts` 는 **패키지의 공개 진입점에만** 만든다.
+
+| 위치                                    | 역할                                                                   | 새로 만들어도 되는가     |
+| --------------------------------------- | ---------------------------------------------------------------------- | ------------------------ |
+| `src/index.ts`                          | root public exports (`nexon-open-api`)                                 | 이미 있음 (하나뿐)       |
+| `src/games/{game}/index.ts`             | 게임별 sub-path entry (`nexon-open-api/{subpath}`, tsup entry와 1:1)   | 게임당 1개 필수          |
+| `src/core/{errors,http,types}/index.ts` | core 내부 모듈 묶음. `src/index.ts` 가 errors·types를 여기서 re-export | 아니오 (기존 3개만 유지) |
+| `tests/mocks/handlers/index.ts`         | 전체 MSW 핸들러 등록                                                   | 이미 있음                |
+
+- 그 밖의 위치(카테고리 디렉토리 등)에는 `index.ts` 를 만들지 않는다. `src/games/maplestory/character/index.ts` 는 어디서도 import하지 않는 초기 잔재이므로 본뜨지 않는다.
+- SDK 내부 코드는 `index.ts` 를 거치지 않고 실제 파일을 직접 import한다 (`'./character/types.js'`).
 
 ## TypeScript 스타일
 
@@ -192,34 +247,75 @@ API 서버 400 응답에 의존하지 않고 SDK에서 즉시 throw (빈 ocid, �
 - `class` — Client 계층
 - `as const` — 엔드포인트 상수 객체
 - `import type { ... }` — 타입 전용 import 분리 (`verbatimModuleSyntax`)
+- import 경로는 `.js` 확장자 포함 (ESM)
 - `any` 금지 → `unknown` + 타입 가드
 - 모든 response 필드는 `readonly`
 - 필드명 API 응답 그대로 (snake_case 유지)
 - `exactOptionalPropertyTypes: true` → optional 타입에 `| undefined` 명시
+- 게임별 타입 prefix: KMS=없음, M=`M`, SEA=`SEA`, TW=`TW`, FC=`Fc`. 새 게임도 root export에서 이름이 겹치지 않게 게임 prefix를 붙인다
 
 ## 지원 게임
 
 Base URL: `https://open.api.nexon.com/`
 
-| 게임                  | Client 프로퍼티          | Client 클래스           | Path Prefix      | Base Class                | 상태          |
-| --------------------- | ------------------------ | ----------------------- | ---------------- | ------------------------- | ------------- |
-| 메이플스토리 (KMS)    | `client.maplestory`      | `MapleStoryClient`      | `maplestory`     | `AbstractMapleBaseClient` | **구현 완료** |
-| 메이플스토리M         | `client.maplestoryM`     | `MapleStoryMClient`     | `maplestorym`    | `AbstractMapleBaseClient` | **구현 완료** |
-| MapleStory SEA        | `client.maplestorySEA`   | `MapleStorySEAClient`   | `maplestorysea`  | `AbstractMapleBaseClient` | 진행 중       |
-| MapleStory Taiwan     | `client.maplestoryTW`    | `MapleStoryTWClient`    | `maplestorytw`   | `AbstractMapleBaseClient` | 예정          |
-| EA SPORTS FC 온라인   | `client.fcOnline`        | `FcOnlineClient`        | `fconline`       | `AbstractGameClient`      | **구현 완료** |
-| 던전앤파이터          | `client.dnf`             | `DnfClient`             | `dnf`            | `AbstractGameClient`      | 예정          |
-| 마비노기              | `client.mabinogi`        | `MabinogiClient`        | `mabinogi`       | `AbstractGameClient`      | 예정          |
-| 마비노기 영웅전       | `client.mabinogiHeroes`  | `MabinogiHeroesClient`  | `mabinogiheroes` | `AbstractGameClient`      | 예정          |
-| 서든어택              | `client.suddenAttack`    | `SuddenAttackClient`    | `suddenattack`   | `AbstractGameClient`      | 예정          |
-| 퍼스트 디센던트       | `client.firstDescendant` | `FirstDescendantClient` | `tfd`            | `AbstractGameClient`      | 예정          |
-| 카트라이더 러쉬플러스 | `client.kartrider`       | `KartriderClient`       | `kartrider`      | `AbstractGameClient`      | 예정          |
-| 바람의나라            | `client.baram`           | `BaramClient`           | `baramnara`      | `AbstractGameClient`      | 예정          |
-| 바람의나라: 연        | `client.baramYeon`       | `BaramYeonClient`       | `baramyeon`      | `AbstractGameClient`      | 예정          |
-| 히트2                 | `client.hit2`            | `Hit2Client`            | `hit2`           | `AbstractGameClient`      | 예정          |
-| 크레이지 아케이드     | `client.crazyArcade`     | `CrazyArcadeClient`     | `crazyarcade`    | `AbstractGameClient`      | 예정          |
-| V4                    | `client.v4`              | `V4Client`              | `v4`             | `AbstractGameClient`      | 예정          |
-| 사이퍼즈              | `client.cyphers`         | `CyphersClient`         | `cyphers`        | `AbstractGameClient`      | 예정          |
+범위는 넥슨 Open API 포털(`https://openapi.nexon.com`)이 제공하는 **14개 게임 + `platform`** 이다 (2026-11-24 포털 기준).
+"포털 API 수"는 포털 OpenAPI YAML의 경로 수, "SDK"는 게임 클라이언트의 public API 메서드 수다.
+
+### 구현된 게임
+
+| 게임                | Client 프로퍼티        | Client 클래스         | Path Prefix     | 디렉토리 / sub-path                 | Base Class                | SDK / 포털 | 상태                        |
+| ------------------- | ---------------------- | --------------------- | --------------- | ----------------------------------- | ------------------------- | ---------- | --------------------------- |
+| 메이플스토리 (KMS)  | `client.maplestory`    | `MapleStoryClient`    | `maplestory`    | `maplestory` / `maplestory`         | `AbstractMapleBaseClient` | 48 / 56    | 구현됨 — 포털 대비 8개 누락 |
+| 메이플스토리M       | `client.maplestorym`   | `MapleStoryMClient`   | `maplestorym`   | `maplestory-m` / `maplestory-m`     | `AbstractGameClient`      | 37 / 38    | 구현됨 — 포털 대비 1개 누락 |
+| MapleStory SEA      | `client.maplestorySEA` | `MapleStorySEAClient` | `maplestorysea` | `maplestory-sea` / `maplestory-sea` | `AbstractMapleBaseClient` | 26 / 26    | 구현 완료 (shapes.ts 없음)  |
+| EA SPORTS FC 온라인 | `client.fcOnline`      | `FcOnlineClient`      | `fconline`      | `fc-online` / `fconline`            | `AbstractGameClient`      | 16 / 19    | 구현됨 — 포털 대비 2개 누락 |
+
+- `client.maplestorym` 은 소문자 `m` 이다 (`maplestoryM` 아님). 문서를 코드에 맞춘다.
+- FC는 디렉토리(`fc-online`)와 sub-path(`fconline`)가 다르다. 나머지는 같다.
+- FC의 16은 HTTP 메서드 14 + 이미지 URL 헬퍼 2. 포털 19경로 중 17경로를 덮는다(이미지 4경로를 헬퍼 2개가 담당). `getAllMatchList` (`/fconline/v1/match`)는 현재 포털 스펙에 없다.
+
+### 미구현 게임 (이름은 기존 패턴을 따른 예정값)
+
+| 게임                   | Client 프로퍼티 (예정)   | Client 클래스 (예정)    | Path Prefix (포털 실제) | 디렉토리 (예정)    | Base Class                | 포털 API 수 |
+| ---------------------- | ------------------------ | ----------------------- | ----------------------- | ------------------ | ------------------------- | ----------- |
+| MapleStory Taiwan      | `client.maplestoryTW`    | `MapleStoryTWClient`    | `maplestorytw`          | `maplestory-tw`    | `AbstractMapleBaseClient` | 27          |
+| 퍼스트 디센던트        | `client.firstDescendant` | `FirstDescendantClient` | `tfd`                   | `first-descendant` | `AbstractGameClient`      | 42          |
+| 마비노기 영웅전        | `client.mabinogiHeroes`  | `MabinogiHeroesClient`  | `heroes`                | `mabinogi-heroes`  | `AbstractGameClient`      | 19          |
+| 서든어택               | `client.suddenAttack`    | `SuddenAttackClient`    | `suddenattack`          | `sudden-attack`    | `AbstractGameClient`      | 11          |
+| 카트라이더 러쉬플러스  | `client.kartrider`       | `KartriderClient`       | `kartrush`              | `kartrider`        | `AbstractGameClient`      | 9           |
+| 바람의나라             | `client.baram`           | `BaramClient`           | `baram`                 | `baram`            | `AbstractGameClient`      | 7           |
+| 마비노기               | `client.mabinogi`        | `MabinogiClient`        | `mabinogi`              | `mabinogi`         | `AbstractGameClient`      | 5           |
+| 바람의나라: 연         | `client.baramYeon`       | `BaramYeonClient`       | `baramy`                | `baram-yeon`       | `AbstractGameClient`      | 4           |
+| V4                     | `client.v4`              | `V4Client`              | `v4`                    | `v4`               | `AbstractGameClient`      | 4           |
+| 히트2                  | `client.hit2`            | `Hit2Client`            | `hit2`                  | `hit2`             | `AbstractGameClient`      | 2           |
+| 플랫폼 (Open API 공지) | `client.platform`        | `PlatformClient`        | `platform`              | `platform`         | `AbstractGameClient`      | 1           |
+
+- **Path prefix는 포털 slug와 같다.** `mabinogiheroes`, `kartrider`, `baramnara`, `baramyeon` 은 틀린 값이다 (포털이 모르는 slug에도 200을 돌려줘서 생긴 오해).
+- `platform` 의 경로는 `/platform/openapi/v1/notice` 로, `{prefix}/v1/{path}` 꼴이 아니다. `buildUrl('notice', 'openapi/v1')` 처럼 version 인자로 맞추거나 전용 상수를 쓴다.
+- 일부 경로는 `v1` 이 아니다 (예: 영웅전 V2 캐릭터 API, KMS `/maplestory/legacy/ouid`, 정적 메타 `/static/{prefix}/meta/...`). 경로는 항상 스펙 YAML에서 그대로 가져온다.
+- 크레이지 아케이드는 포털에서 제거되어 로드맵에서 뺐다.
+
+### 범위 외: 네오플 API
+
+던전앤파이터와 사이퍼즈는 넥슨 Open API가 아니라 네오플 API(`https://developers.neople.co.kr`)다. host와 API 키가 달라 이 SDK의 범위에 넣지 않는다. `HttpClient` 의 `x-nxopen-api-key` 인증으로는 호출할 수 없다.
+
+## 남은 작업
+
+2026-11-24 포털 대조 기준. 포털 14개 게임 + platform 합계 270개 중 SDK가 덮는 것은 128개다.
+
+**우선순위**
+
+1. **기존 4개 게임 보강** (포털 대비 누락 11개 + 응답 필드 드리프트)
+   - KMS 8개: `battle-practice/{replay-id,result,skill-timeline,character-info}`, `scheduler/character-state`, `history/soul-potential`, `character/ring-reserve-skill-equipment`, `/maplestory/legacy/ouid`
+   - M 1개: `user/union-stat`
+   - FC 2개: `/static/fconline/meta/season.json`, `/static/fconline/meta/class.json`. `getAllMatchList` 는 포털에서 빠졌으므로 폐지 여부 확인 후 SEMVER 정책대로 deprecate
+   - SEA: 누락 경로 없음. `shapes.ts` 신설
+   - 공통: 3월 이후 포털에 추가된 응답 필드를 optional로 반영 (KMS 캐릭터가 가장 큼)
+2. **MapleStory Taiwan** (27) — SEA와 거의 같고 `character/familiar` 가 추가됨
+3. **중대형 게임**: 퍼스트 디센던트 (42), 마비노기 영웅전 (19), 서든어택 (11), 마비노기 (5)
+4. **소형 게임**: 카트라이더 러쉬플러스 (9), 바람의나라 (7), 바람의나라: 연 (4), V4 (4), 히트2 (2), platform (1)
+
+현재 수치는 `yarn specs:coverage` 로 다시 확인한다. 이 섹션의 숫자와 다르면 명령 결과가 맞다.
 
 ## 커밋 컨벤션
 
@@ -229,8 +325,10 @@ prefix(scope): 주요 메시지 (한글 OK, 50자 이내)
 * 상세 변경 내용 1
 * 상세 변경 내용 2
 
-Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+Co-Authored-By: {작업한 모델명} <noreply@anthropic.com>
 ```
+
+`Co-Authored-By` 에는 실제로 작업한 모델명을 쓴다.
 
 | prefix     | 용도                       |
 | ---------- | -------------------------- |
@@ -245,10 +343,11 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 ## 테스트 전략
 
 - **MSW (Mock Service Worker)** 사용 — `vi.fn(fetch)` 대신 네트워크 레이어 인터셉트
-- `tests/fixtures/` — 게임별 응답 fixture (실제 API 응답 구조와 동일)
-- `tests/mocks/handlers/` — MSW HTTP 핸들러 (URL 미매칭 시 테스트 실패 → API 계약 검증)
-- `tests/unit/[core|games]/` — 단위 테스트 파일
-- `vitest.config.ts`에 MSW 서버 lifecycle 설정
+- `tests/setup.ts` — MSW 서버 lifecycle 관리 (`vitest.config.ts` 의 `setupFiles` 로 연결). `onUnhandledRequest: 'error'` 이므로 핸들러에 없는 URL을 호출하면 테스트가 실패한다 → API 계약 검증
+- `tests/fixtures/{game}/` — 게임별 응답 fixture (스펙의 응답 구조와 동일)
+- `tests/mocks/handlers/{game}.handlers.ts` — MSW HTTP 핸들러. 새 파일은 `tests/mocks/handlers/index.ts` 에 등록해야 동작한다
+- `tests/unit/{core,games}/` — 단위 테스트 파일
+- 새로 추가하는 public 메서드는 메서드마다 성공 경로 테스트(핸들러 + fixture)를 둔다. 기존 4개 게임은 대표 메서드만 테스트되어 있다 (보강 대상)
 
 ## 주석 원칙
 
@@ -264,65 +363,90 @@ liberation_quest_clear: string; // "0": 미완료, "1": 제네시스 해방, "2"
 
 ## Spec-Driven 게임 추가 워크플로우
 
-새 게임을 추가할 때 `specs/` 디렉토리의 구조화된 스펙 파일을 기반으로 코드를 생성한다.
+SDK 코드는 `specs/openapi/` 에 저장된 **넥슨 포털 OpenAPI YAML** 을 원천으로 만든다.
+포털은 카테고리마다 OpenAPI 3.0 YAML을 로그인·API 키 없이 공개하므로, 사람이 포털 화면을 복사해 붙여 넣는 단계는 없다.
 
 ### 전체 흐름
 
 ```
-유저: 넥슨 API 포털에서 raw 복붙 (엔드포인트, 스키마, example value)
+yarn specs:fetch        포털 → specs/openapi/{slug}/{categoryId}.yaml, index.json 갱신
   ↓
-Claude: specs/{game}.md 로 구조화해서 저장 (없으면 생성, 있으면 추가)
+스펙 읽기               대상 게임의 YAML (paths, parameters, components.schemas)
   ↓
-유저: "{game}의 {category} 카테고리 구현해줘"
+구현                    types → shapes → client → lazy getter → fixtures → MSW → tests → docs → API_METADATA
   ↓
-Claude: spec 읽기 → types.ts → shapes.ts → Client.ts → tests → 검증
+최초 와이어링           (게임당 1회) NexonClient, src/index.ts, 게임 index.ts, tsup entry, package.json exports
   ↓
-Claude: spec의 Implementation Status 업데이트
+검증                    yarn type-check && yarn lint && yarn test && yarn build, yarn specs:coverage
 ```
 
-### Phase A: Raw Paste → Spec 변환
+### 스펙 원천
 
-유저가 넥슨 포털에서 복붙하면, `specs/_template.md` 포맷에 맞춰 `specs/{game}.md`로 변환:
+| 경로                                     | 내용                                                                  |
+| ---------------------------------------- | --------------------------------------------------------------------- |
+| `specs/openapi/{slug}/{categoryId}.yaml` | 포털 카테고리 1개 = YAML 1개. `{slug}` 는 path prefix와 같다          |
+| `specs/openapi/index.json`               | 게임 → 카테고리 → 오퍼레이션(method, path, operationId, summary) 색인 |
+| `specs/README.md`                        | 수집 방식, 갱신 절차, 파일 형식 설명                                  |
 
-1. **Meta 섹션** — gameId, pathPrefix, clientClass, baseClass, timezoneOffset 등
-2. **Implementation Status** — 카테고리별 진행 상황 테이블
-3. **Category 섹션** — 엔드포인트별:
-   - sdkMethod, params, paramType
-   - Response 필드 테이블 (Field | Type | Required | Description)
-   - 중첩 객체는 서브테이블로 분리
-   - Example Response JSON (fixture 생성 근거)
+- 스펙은 git으로 추적하고 npm에는 배포하지 않는다 (`package.json` 의 `files`).
+- YAML을 손으로 고치지 않는다. 포털과 다르면 `yarn specs:fetch` 로 다시 받는다.
+- YAML은 파일마다 들여쓰기가 다르다(2칸/4칸). 정규식이 아니라 YAML 파서로 읽는다.
+- 포털 변경은 `yarn specs:check` 로 감지한다. 변경이 있으면 스펙을 갱신하고 SEMVER 정책에 따라 타입을 고친다.
+- 예전의 "포털 화면 복붙 → `specs/{game}.md`" 방식은 폐기했다. `specs/{game}.md` 를 새로 만들지 않는다.
 
-### Phase B: 카테고리 구현
+### 구현 순서
 
-`specs/{game}.md`를 읽고 아래 순서로 아티팩트 생성:
+대상 게임의 YAML을 읽고 아래 순서로 만든다.
 
-1. `src/games/{game}/{category}/types.ts` — Response 테이블 → TypeScript interface
-   - 모든 필드 `readonly`, 필드명 API 응답 그대로 (snake_case)
-   - 게임별 prefix: KMS=없음, M=M, SEA=SEA, TW=TW
-2. `src/games/{game}/shapes.ts` — 응답 shape descriptor (responseValidation용)
-3. `src/games/{game}/{category}/{Game}{Category}Client.ts` — HTTP 메서드
-4. `src/games/{game}/{Game}Client.ts` — lazy getter 추가
-5. `tests/fixtures/{game}/` — Example Response → fixture 파일
-6. `tests/mocks/handlers/{game}.handlers.ts` — MSW 핸들러
-7. `tests/unit/games/{game}-client.test.ts` — 단위 테스트
+1. **types** — `src/games/{game}/{category}/types.ts`
+   - `components.schemas` → TypeScript `interface`. 모든 필드 `readonly`, 필드명은 스펙 그대로(snake_case)
+   - 중첩 객체/배열 원소는 별도 interface로 분리, nullable은 `T | null`
+   - 스펙의 `description` 을 JSDoc으로 옮기고, 비직관적 값(문자열 boolean, 코드값)은 주석으로 설명
+   - 게임 prefix를 붙인다 (TypeScript 스타일 참고)
+2. **shapes** — `src/games/{game}/shapes.ts`: 응답 top-level 키와 타입의 shape descriptor
+3. **client** — `src/games/{game}/{category}/{Game}{Category}Client.ts`: 경로당 메서드 1개, `http.get(url, params, SHAPE)`
+   - 경로·쿼리 파라미터 이름은 스펙에서 그대로 가져온다. 메서드명은 "메서드 네이밍" 규칙을 따른다
+   - 모든 public 메서드에 JSDoc (`@param`, `@throws`, `@example`)
+4. **게임 client** — `src/games/{game}/{Game}Client.ts`: sub-client lazy getter 추가, 식별자 조회 메서드(`getOcid` 등)
+5. **fixtures** — `tests/fixtures/{game}/{이름}.fixture.ts` (아래 "fixture 작성법")
+6. **MSW 핸들러** — `tests/mocks/handlers/{game}.handlers.ts` + `handlers/index.ts` 등록
+7. **단위 테스트** — `tests/unit/games/{game}-client.test.ts`: 메서드마다 성공 경로, 대표 에러 경로
+8. **docs** — `docs/{game}.md`: 카테고리별 메서드 목록과 개수 (개수 = public API 메서드 수)
+9. **`API_METADATA`** — `src/core/metadata/api-metadata.ts` 에 엔트리 추가/갱신
+   - 키 = path prefix, `endpointCount` = public API 메서드 수
+   - `lastVerifiedAt` = 스펙(또는 실 API)과 대조한 날짜, `note` 에 검증 방식 명시. 실 API 키로 확인하지 못했으면 "포털 스펙 기준, 실 API 미검증"이라고 쓴다
+   - `tests/unit/core/api-metadata.test.ts` 의 게임 목록·개수 단언도 함께 고친다
+10. **최초 와이어링** (게임당 1회, 아래)
 
-### Phase C: 최초 와이어링 (게임당 1회)
+기존 게임에 카테고리나 메서드를 추가할 때는 1~9만 수행한다.
 
-- `src/NexonClient.ts` — lazy getter 추가
-- `src/index.ts` — 게임 Client + 타입 re-export
-- `src/games/{game}/index.ts` — sub-path export barrel
-- `tsup.config.ts` — entry 추가
-- `package.json` — exports 추가
-- `src/core/metadata/api-metadata.ts` — 게임 엔트리 추가
+### fixture 작성법
 
-### Phase D: 검증
+- 포털 YAML에는 **완성된 예시 응답 JSON이 없다.** 스키마와 필드별 `example` 값으로 fixture를 합성한다.
+  - 스키마의 모든 필드를 채운다. `example` 이 있으면 그 값을, 없으면 타입에 맞는 그럴듯한 값을 쓴다
+  - 배열은 원소 1~2개, nullable 필드는 한 fixture에서 `null` 인 경우도 다룬다
+  - fixture에 응답 타입을 명시(`const x: Xxx = {...}`)해 타입과 어긋나면 컴파일 에러가 나게 한다
+- **정적 메타데이터는 키 없이 실데이터를 쓸 수 있다.** `https://open.api.nexon.com/static/...` 경로(예: `/static/fconline/meta/class.json`, `/static/suddenattack/meta/tier`, `/static/tfd/meta/core-slot.json`)는 API 키 없이 실제 응답이 내려온다. 이런 API는 실제 응답 일부를 잘라 fixture로 쓴다.
+- 그 밖의 API는 게임별 API 키가 있어야 실응답을 볼 수 있다. 키 없이 만든 fixture는 스펙 기반 합성값이며, 그 사실을 `API_METADATA.note` 에 남긴다.
+- 실제 캐릭터명·계정 식별자 같은 개인 데이터를 fixture에 넣지 않는다.
+
+### 최초 와이어링 (게임당 1회)
+
+| 파일                            | 할 일                                                          |
+| ------------------------------- | -------------------------------------------------------------- |
+| `src/games/{game}/index.ts`     | 게임 Client + 타입 export (sub-path entry)                     |
+| `src/NexonClient.ts`            | private 필드 + lazy getter 추가                                |
+| `src/index.ts`                  | 게임 Client + 타입 re-export                                   |
+| `tsup.config.ts`                | `entry` 에 `'{subpath}': 'src/games/{game}/index.ts'` 추가     |
+| `package.json`                  | `exports` 에 `./{subpath}` 추가 (기존 엔트리와 같은 조건 구성) |
+| `tests/mocks/handlers/index.ts` | 게임 핸들러 등록                                               |
+| `README.md`, `CLAUDE.md`        | 지원 게임 표·그리드 갱신                                       |
+
+이 파일들은 모든 게임 작업이 함께 건드리는 **공용 파일**이다. 여러 게임을 병렬로 작업할 때는 게임 디렉토리(`src/games/{game}/`, `tests/fixtures/{game}/`, `{game}.handlers.ts`, `{game}-client.test.ts`, `docs/{game}.md`)를 먼저 완성하고, 공용 파일 변경은 추가 전용으로 최소화한다. 작업 지시에 공용 파일 담당이 따로 정해져 있으면 그 지시를 따른다.
+
+### 검증
 
 ```bash
-yarn type-check && yarn test && yarn build
+yarn type-check && yarn lint && yarn test && yarn build
+yarn specs:coverage   # 대상 게임의 SDK 경로 = 스펙 경로인지 확인
 ```
-
-### Spec 파일 관리
-
-- git 추적 O (대화 간 정보 보존)
-- npm 배포 X (`"files": ["dist"]`로 이미 제외)
-- 구현 완료 게임 포함 전 게임 spec 관리 (API DB 역할)
