@@ -1,59 +1,68 @@
 /**
  * 게임별 API 검증 메타데이터.
  *
- * SDK 타입이 실제 넥슨 API 응답과 일치하는지 마지막으로 확인한 시점을 기록합니다.
+ * SDK 타입을 넥슨 API(실응답 또는 포털 스펙)와 마지막으로 대조한 시점을 기록합니다.
+ * 대조 방식(실 API E2E인지, 포털 스펙 기준인지)은 `note`에 적습니다.
  */
 export interface GameApiMetadata {
   /** 게임 이름 */
   readonly game: string;
   /** API URL path prefix */
   readonly pathPrefix: string;
-  /** SDK 타입을 실제 API와 마지막으로 검증한 날짜 (YYYY-MM-DD) */
+  /** SDK 타입을 넥슨 API(실응답 또는 포털 스펙)와 마지막으로 대조한 날짜 (YYYY-MM-DD) */
   readonly lastVerifiedAt: string;
-  /** 검증 시점의 SDK 버전 */
+  /** 그 대조 결과가 처음 포함된 SDK 릴리즈 버전 (npm에 게시된 버전) */
   readonly sdkVersionAtVerification: string;
-  /** 지원하는 엔드포인트 수 */
+  /** SDK가 지원하는 API 수 = 게임 클라이언트의 public API 메서드 수 (메서드 1개 = API 경로 1개) */
   readonly endpointCount: number;
-  /** 검증 관련 비고 */
+  /** 검증 방식·범위에 대한 비고 */
   readonly note?: string | undefined;
 }
 
 /**
  * 게임별 API 메타데이터 레지스트리.
  *
- * 새 게임 추가 시 이 객체에 엔트리를 추가합니다.
+ * 새 게임 추가 시 이 객체에 엔트리를 추가합니다. 키는 API path prefix와 같습니다.
  */
 export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
   maplestory: {
     game: 'MapleStory KMS',
     pathPrefix: 'maplestory',
-    lastVerifiedAt: '2025-06-01',
+    lastVerifiedAt: '2026-03-05',
     sdkVersionAtVerification: '0.1.0',
-    endpointCount: 45,
-    note: '43/43 E2E tests passed with real API key',
+    endpointCount: 48,
+    note: 'E2E script (yarn test:maplestory) passed 43/43 with a real API key (PR #2). Not re-verified since.',
   },
   maplestorym: {
     game: 'MapleStory M',
     pathPrefix: 'maplestorym',
-    lastVerifiedAt: '2026-03-04',
-    sdkVersionAtVerification: '0.2.0',
+    lastVerifiedAt: '2026-03-05',
+    sdkVersionAtVerification: '0.1.1',
     endpointCount: 37,
-    note: 'Types based on KMS patterns, API verification pending',
+    note: 'E2E script (yarn test:maplestory-m) passed 37/37 with a real API key (PR #2). Not re-verified since.',
   },
   maplestorysea: {
     game: 'MapleStory SEA',
     pathPrefix: 'maplestorysea',
     lastVerifiedAt: '2026-03-09',
-    sdkVersionAtVerification: '0.2.0',
+    sdkVersionAtVerification: '0.1.1',
     endpointCount: 26,
-    note: 'Character(20) + Union(4) + Guild(2). Types from Nexon OpenAPI spec.',
+    note: 'OCID(1) + Character(19) + Union(4) + Guild(2). Types from the Nexon portal spec; no real-API E2E run on record.',
+  },
+  fconline: {
+    game: 'EA SPORTS FC Online',
+    pathPrefix: 'fconline',
+    lastVerifiedAt: '2026-03-05',
+    sdkVersionAtVerification: '0.1.1',
+    endpointCount: 16,
+    note: '14 HTTP methods + 2 image URL helpers. E2E script (yarn test:fconline) passed 14/15 with a real API key (PR #2); the failing check was not recorded.',
   },
 };
 
 /**
  * 특정 게임의 API 메타데이터를 조회한다.
  *
- * @param gameId - 게임 식별자 (예: `'maplestory'`)
+ * @param gameId - 게임 식별자 = API path prefix (예: `'maplestory'`, `'fconline'`)
  * @returns 해당 게임의 메타데이터, 없으면 `undefined`
  *
  * @example
