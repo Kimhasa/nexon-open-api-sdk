@@ -106,7 +106,14 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     note: 'OCID(1) + Character(3). Portal OpenAPI spec (specs/openapi/v4/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
   },
 
-  // [slot:hit2] 히트2
+  hit2: {
+    game: 'HIT2',
+    pathPrefix: 'hit2',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 2,
+    note: 'OCID(1) + Character(1). Portal OpenAPI spec (specs/openapi/hit2/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+  },
 
   // [slot:platform] 넥슨 Open API 플랫폼 (Open API 공지)
 };
