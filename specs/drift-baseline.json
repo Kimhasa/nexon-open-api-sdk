@@ -10,5 +10,23 @@
     "path": "response",
     "kind": "type-mismatch",
     "reason": "SDK는 포털에 명세된 단일 역대 최고 등급 객체를 길이 1의 배열로 정규화하고 배열 실응답은 그대로 반환한다."
+  },
+  {
+    "operation": "GET /static/tfd/meta/mastery-rank-level-detail.json",
+    "path": "response[].mastery_level",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 정적 JSON에서 마스터리 레벨은 mastery_level로 제공된다. 포털의 mastery_rank_level은 SDK에서 선택 필드로 유지한다."
+  },
+  {
+    "operation": "GET /static/tfd/meta/{language_code}/core-type.json",
+    "path": "response[].core_option[].available_item_option",
+    "kind": "missing-sdk-field",
+    "reason": "2026-11-24 정적 JSON에서 available_item_option은 각 core_option의 직속 필드가 아니라 detail 배열 원소의 필드다."
+  },
+  {
+    "operation": "GET /static/tfd/meta/{language_code}/core-type.json",
+    "path": "response[].core_option[].detail[].available_item_option",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 정적 JSON에 있는 경로다. 이 경로의 option_grade는 포털에 적힌 string과 달리 number로 제공된다."
   }
 ]
