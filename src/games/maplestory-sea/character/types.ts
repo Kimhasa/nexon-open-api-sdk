@@ -240,7 +240,7 @@ export interface SEAItemExceptionalOption {
   readonly max_mp: string;
   readonly attack_power: string;
   readonly magic_power: string;
-  /** Exceptional upgrade count (not present on dragon/mechanic equipment) */
+  /** Exceptional upgrade count */
   readonly exceptional_upgrade?: number | undefined;
 }
 
@@ -402,6 +402,12 @@ export interface SEAPresetItemEquipment {
   readonly freestyle_flag: string;
 }
 
+/** Exceptional options on Evan dragon or Mechanic equipment. */
+interface SEAClassItemExceptionalOption extends SEAItemExceptionalOption {
+  /** @deprecated The portal omits the upgrade count for class equipment. */
+  readonly exceptional_upgrade?: number | undefined;
+}
+
 /** Evan dragon or Mechanic equipment. */
 export interface SEAClassItemEquipment extends Omit<
   SEAPresetItemEquipment,
@@ -430,6 +436,7 @@ export interface SEAClassItemEquipment extends Omit<
   readonly additional_potential_option_2?: string | undefined;
   /** @deprecated The portal omits potential options for class equipment. */
   readonly additional_potential_option_3?: string | undefined;
+  readonly item_exceptional_option: SEAClassItemExceptionalOption;
 }
 
 /** Title info */

@@ -129,7 +129,8 @@ describe('FcOnlineClient', () => {
 
   describe('getMatchDetail', () => {
     it('매치 상세 기록을 반환한다', async () => {
-      const client = createClient();
+      const onResponseShapeMismatch = vi.fn();
+      const client = createClient({ onResponseShapeMismatch });
       const result = await client.getMatchDetail('6572d9bbc7331d2a45f3d755');
 
       expect(result.matchId).toBe(fcMatchDetailFixture.matchId);
@@ -137,7 +138,24 @@ describe('FcOnlineClient', () => {
       expect(result.matchType).toBe(fcMatchDetailFixture.matchType);
       expect(result.matchInfo).toHaveLength(1);
       expect(result.matchInfo[0]?.nickname).toBe('테스트유저FC');
+      expect(result.matchInfo[0]?.division).toBe(800);
       expect(result.matchInfo[0]?.matchDetail.matchResult).toBe('승');
+      expect(onResponseShapeMismatch).not.toHaveBeenCalled();
+    });
+
+    it('참가자 등급이 생략된 매치 상세 기록도 반환한다', async () => {
+      const fixture = {
+        ...fcMatchDetailFixture,
+        matchInfo: fcMatchDetailFixture.matchInfo.map((info) => ({ ...info, division: undefined })),
+      };
+      server.use(http.get(`${BASE}/match-detail`, () => HttpResponse.json(fixture)));
+      const onResponseShapeMismatch = vi.fn();
+      const result = await createClient({ onResponseShapeMismatch }).getMatchDetail(
+        fixture.matchId,
+      );
+
+      expect(result.matchInfo[0]).not.toHaveProperty('division');
+      expect(onResponseShapeMismatch).not.toHaveBeenCalled();
     });
   });
 

@@ -47,6 +47,8 @@ const trades = await fc.getTradeList({ tradetype: 'buy', limit: 10 });
 
 넥슨은 2026년 7월 7일 전체 매치 목록 제공을 종료했습니다. `getAllMatchList`는 호출 시 폐지 경고를 표시합니다. 개별 계정의 매치 ID는 `getMatchList`로 가져올 수 있습니다. [넥슨 공지](https://openapi.nexon.com/support/notice/3495136/)
 
+`getMatchDetail`의 `matchInfo[].division`은 포털이 함께 제공하는 선택적 참가자 등급 ID입니다.
+
 ```ts
 const matchId = matchIds[0];
 if (matchId !== undefined) {

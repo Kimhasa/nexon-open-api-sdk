@@ -54,6 +54,7 @@ export const fcMatchDetailFixture: FcMatchDetail = {
     {
       ouid: 'fc-ouid-aabb1122334455667788',
       nickname: '테스트유저FC',
+      division: 800,
       matchDetail: {
         seasonId: 1,
         matchResult: '승',

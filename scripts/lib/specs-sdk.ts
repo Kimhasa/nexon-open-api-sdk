@@ -9,8 +9,21 @@ export interface SdkMethod {
   readonly name: string;
   readonly operation: string | undefined;
   readonly limitation: string | undefined;
-  readonly response: Shape | undefined;
-  readonly query: ReadonlyMap<string, boolean> | undefined;
+  readonly response: SdkShape | undefined;
+  readonly responseField: string | undefined;
+  readonly query: ReadonlyMap<string, SdkQueryParameter> | undefined;
+  readonly deprecatedInputs: readonly string[];
+  readonly deprecated: boolean;
+}
+
+export interface SdkShape extends Omit<Shape, 'properties' | 'items'> {
+  properties: Map<string, { readonly shape: SdkShape; readonly deprecated: boolean }>;
+  items: SdkShape | undefined;
+}
+
+export interface SdkQueryParameter {
+  readonly required: boolean;
+  readonly deprecated: boolean;
 }
 
 function hasFlag(type: ts.Type, flags: ts.TypeFlags): boolean {
@@ -51,9 +64,13 @@ function isConst(declaration: ts.VariableDeclaration): boolean {
 }
 
 class Analyzer {
-  private readonly shapes = new Map<ts.Type, Shape>();
+  private readonly shapes = new Map<ts.Type, SdkShape>();
 
   constructor(private readonly checker: ts.TypeChecker) {}
+
+  private isDeprecated(symbol: ts.Symbol | undefined): boolean {
+    return symbol?.getJsDocTags(this.checker).some(({ name }) => name === 'deprecated') ?? false;
+  }
 
   private staticString(node: ts.Expression, seen = new Set<ts.Expression>()): string | undefined {
     const expression = unwrap(node);
@@ -149,10 +166,10 @@ class Analyzer {
     return this.staticString(expression);
   }
 
-  private shape(type: ts.Type, at: ts.Node): Shape {
+  private shape(type: ts.Type, at: ts.Node): SdkShape {
     const cached = this.shapes.get(type);
     if (cached) return cached;
-    const shape = emptyShape();
+    const shape: SdkShape = { ...emptyShape(), properties: new Map(), items: undefined };
     this.shapes.set(type, shape);
     const parts = type.isUnion() ? type.types : [type];
     shape.nullable = parts.some((part) => hasFlag(part, ts.TypeFlags.Null));
@@ -196,14 +213,14 @@ class Analyzer {
         );
         shape.properties.set(name, {
           shape: this.shape(value, at),
-          required: (property.flags & ts.SymbolFlags.Optional) === 0,
+          deprecated: this.isDeprecated(property),
         });
       }
     }
     return shape;
   }
 
-  private query(expression: ts.Expression | undefined): Map<string, boolean> | undefined {
+  private query(expression: ts.Expression | undefined): Map<string, SdkQueryParameter> | undefined {
     if (!expression) return new Map();
     const type = this.checker.getTypeAtLocation(expression);
     if (hasFlag(type, ts.TypeFlags.Undefined)) return new Map();
@@ -221,9 +238,56 @@ class Analyzer {
         const required =
           (property.flags & ts.SymbolFlags.Optional) === 0 &&
           parts.every((part) => !hasFlag(part, ts.TypeFlags.Undefined | ts.TypeFlags.Null));
-        return [property.getName(), required];
+        return [
+          property.getName(),
+          {
+            required,
+            deprecated: this.isDeprecated(property) || this.deprecatedQuerySource(property),
+          },
+        ];
       }),
     );
+  }
+
+  private deprecatedQuerySource(property: ts.Symbol): boolean {
+    const declaration = property.valueDeclaration;
+    if (!declaration || !ts.isPropertyAssignment(declaration)) return false;
+    const source = unwrap(declaration.initializer);
+    if (ts.isPropertyAccessExpression(source)) {
+      return this.isDeprecated(this.checker.getSymbolAtLocation(source.name));
+    }
+    if (ts.isElementAccessExpression(source) && ts.isStringLiteralLike(source.argumentExpression)) {
+      return this.isDeprecated(
+        this.checker
+          .getTypeAtLocation(source.expression)
+          .getProperty(source.argumentExpression.text),
+      );
+    }
+    return false;
+  }
+
+  private responseField(body: ts.Block, call: ts.CallExpression): string | undefined {
+    const returns: ts.ReturnStatement[] = [];
+    const visit = (node: ts.Node): void => {
+      if (ts.isFunctionLike(node) || ts.isClassLike(node)) return;
+      if (ts.isReturnStatement(node)) returns.push(node);
+      ts.forEachChild(node, visit);
+    };
+    visit(body);
+    const statement = returns[0];
+    if (returns.length !== 1 || !statement?.expression || statement.parent !== body)
+      return undefined;
+    const result = unwrap(statement.expression);
+    if (!ts.isPropertyAccessExpression(result) || result.questionDotToken) return undefined;
+    const value = unwrap(result.expression);
+    if (!ts.isIdentifier(value)) return undefined;
+    const source = this.checker.getSymbolAtLocation(value)?.valueDeclaration;
+    if (!source || !ts.isVariableDeclaration(source) || !isConst(source) || !source.initializer)
+      return undefined;
+    const initializer = unwrap(source.initializer);
+    return ts.isAwaitExpression(initializer) && unwrap(initializer.expression) === call
+      ? result.name.text
+      : undefined;
   }
 
   private calls(body: ts.Block): { method: string; call: ts.CallExpression }[] {
@@ -257,7 +321,29 @@ class Analyzer {
     const calls = this.calls(node.body);
     if (calls.length === 0) return undefined;
     const key = `${className}.${name}`;
-    const record = { game, name: key, operation: undefined, response: undefined, query: undefined };
+    const record = {
+      game,
+      name: key,
+      operation: undefined,
+      response: undefined,
+      query: undefined,
+      responseField: undefined,
+      deprecated: this.isDeprecated(this.checker.getSymbolAtLocation(node.name)),
+      deprecatedInputs: node.parameters.flatMap((parameter) => {
+        const type = this.checker.getTypeAtLocation(parameter).getNonNullableType();
+        if (
+          !hasFlag(type, ts.TypeFlags.Object) ||
+          this.checker.isArrayType(type) ||
+          this.checker.isTupleType(type) ||
+          type.getCallSignatures().length > 0
+        )
+          return [];
+        return type
+          .getProperties()
+          .filter((property) => this.isDeprecated(property))
+          .map((property) => property.getName());
+      }),
+    };
     const first = calls[0];
     if (!first || calls.length !== 1) return { ...record, limitation: 'HTTP 호출이 여러 개입니다' };
     const { method, call } = first;
@@ -283,6 +369,10 @@ class Analyzer {
       operation,
       query,
       limitation,
+      responseField:
+        response && primitive(response) === 'string'
+          ? this.responseField(node.body, call)
+          : undefined,
       response: response && !limitation ? this.shape(response, node) : undefined,
     };
   }

@@ -386,13 +386,7 @@ export interface ItemEquipment {
   readonly soul_active?: string | null | undefined;
 }
 
-/**
- * 프리셋 장비 정보 (item_equipment_slot 대신 equipment_slot 사용).
- *
- * `dragon_equipment`·`mechanic_equipment` 도 이 타입을 쓴다. 포털 스펙상 두 목록에는
- * 잠재능력(`potential_option_*`, `additional_potential_option_*`)·소울 잠재능력 필드와
- * `item_exceptional_option.exceptional_upgrade` 가 없으므로, 해당 목록에서는 값이 없을 수 있다.
- */
+/** 프리셋 장비 정보 (item_equipment_slot 대신 equipment_slot 사용). */
 export interface PresetItemEquipment {
   readonly item_equipment_part: string;
   /** 프리셋에서는 equipment_slot 사용 */
@@ -447,6 +441,59 @@ export interface PresetItemEquipment {
   /** 소울 마력 증가 옵션 */
   readonly soul_mad?: string | null | undefined;
   /** 소울 활성 여부 ("0": 비활성, "1": 활성) */
+  readonly soul_active?: string | null | undefined;
+}
+
+/** 직업 전용 장비의 익셉셔널 옵션. */
+export interface ClassItemExceptionalOption extends ItemExceptionalOption {
+  /** @deprecated 드래곤·메카닉 장비에는 강화 적용 횟수가 명세되어 있지 않습니다. */
+  readonly exceptional_upgrade?: number | undefined;
+}
+
+/** 에반 드래곤·메카닉 전용 장비 정보. */
+interface ClassItemEquipment extends Omit<
+  PresetItemEquipment,
+  | 'potential_option_grade'
+  | 'additional_potential_option_grade'
+  | 'potential_option_1'
+  | 'potential_option_2'
+  | 'potential_option_3'
+  | 'additional_potential_option_1'
+  | 'additional_potential_option_2'
+  | 'additional_potential_option_3'
+> {
+  /** @deprecated 직업 전용 장비에는 잠재능력 등급이 명세되어 있지 않습니다. */
+  readonly potential_option_grade?: string | undefined;
+  /** @deprecated 직업 전용 장비에는 에디셔널 잠재능력 등급이 명세되어 있지 않습니다. */
+  readonly additional_potential_option_grade?: string | undefined;
+  /** @deprecated 직업 전용 장비에는 잠재능력 옵션이 명세되어 있지 않습니다. */
+  readonly potential_option_1?: string | undefined;
+  /** @deprecated 직업 전용 장비에는 잠재능력 옵션이 명세되어 있지 않습니다. */
+  readonly potential_option_2?: string | undefined;
+  /** @deprecated 직업 전용 장비에는 잠재능력 옵션이 명세되어 있지 않습니다. */
+  readonly potential_option_3?: string | undefined;
+  /** @deprecated 직업 전용 장비에는 에디셔널 잠재능력 옵션이 명세되어 있지 않습니다. */
+  readonly additional_potential_option_1?: string | undefined;
+  /** @deprecated 직업 전용 장비에는 에디셔널 잠재능력 옵션이 명세되어 있지 않습니다. */
+  readonly additional_potential_option_2?: string | undefined;
+  /** @deprecated 직업 전용 장비에는 에디셔널 잠재능력 옵션이 명세되어 있지 않습니다. */
+  readonly additional_potential_option_3?: string | undefined;
+  readonly item_exceptional_option: ClassItemExceptionalOption;
+  /** @deprecated 직업 전용 장비에는 소울 잠재능력 등급이 명세되어 있지 않습니다. */
+  readonly soul_potential_grade?: string | null | undefined;
+  /** @deprecated 직업 전용 장비에는 소울 증폭 단계가 명세되어 있지 않습니다. */
+  readonly soul_potential_amplified_grade?: number | null | undefined;
+  /** @deprecated 직업 전용 장비에는 소울 잠재능력 옵션이 명세되어 있지 않습니다. */
+  readonly soul_potential_option_1?: string | null | undefined;
+  /** @deprecated 직업 전용 장비에는 소울 잠재능력 옵션이 명세되어 있지 않습니다. */
+  readonly soul_potential_option_2?: string | null | undefined;
+  /** @deprecated 직업 전용 장비에는 소울 잠재능력 옵션이 명세되어 있지 않습니다. */
+  readonly soul_potential_option_3?: string | null | undefined;
+  /** @deprecated 직업 전용 장비에는 소울 공격력 증가 옵션이 명세되어 있지 않습니다. */
+  readonly soul_pad?: string | null | undefined;
+  /** @deprecated 직업 전용 장비에는 소울 마력 증가 옵션이 명세되어 있지 않습니다. */
+  readonly soul_mad?: string | null | undefined;
+  /** @deprecated 직업 전용 장비에는 소울 활성 여부가 명세되어 있지 않습니다. */
   readonly soul_active?: string | null | undefined;
 }
 
@@ -539,9 +586,9 @@ export interface CharacterItemEquipment {
   /** 훈장 외형 정보 */
   readonly medal_shape: MedalShape;
   /** 에반 드래곤 장비 정보 (에반인 경우 응답) */
-  readonly dragon_equipment: PresetItemEquipment[];
+  readonly dragon_equipment: ClassItemEquipment[];
   /** 메카닉 장비 정보 (메카닉인 경우 응답) */
-  readonly mechanic_equipment: PresetItemEquipment[];
+  readonly mechanic_equipment: ClassItemEquipment[];
 }
 
 // ─── GET /maplestory/v1/character/cashitem-equipment ─────────────────────────
@@ -839,6 +886,12 @@ export interface CharacterBeautyEquipment {
 
 // ─── GET /maplestory/v1/character/android-equipment ─────────────────────────
 
+/** 안드로이드 캐시 장비의 컬러링프리즘. */
+interface AndroidCashItemColoringPrism extends CashItemColoringPrism {
+  /** @deprecated 안드로이드 응답에는 순수한 검은색 포함 여부가 명세되어 있지 않습니다. */
+  readonly black_inclusive_flag?: string | undefined;
+}
+
 /** 안드로이드 캐시 장비 개별 정보 */
 export interface AndroidCashItem {
   /** 캐시 아이템 부위 명 */
@@ -860,7 +913,7 @@ export interface AndroidCashItem {
   /** 캐시 아이템 라벨 정보 */
   readonly cash_item_label: string;
   /** 캐시 아이템 컬러링프리즘 정보 (null: 미적용) */
-  readonly cash_item_coloring_prism: CashItemColoringPrism | null;
+  readonly cash_item_coloring_prism: AndroidCashItemColoringPrism | null;
   /** 아이템 장착 가능 성별 */
   readonly android_item_gender: string;
   /** 프리스타일 쿠폰 적용 여부 ("0": 미적용, "1": 적용) */
@@ -1236,6 +1289,16 @@ export interface CharacterSkill {
 
 // ─── GET /maplestory/v1/character/link-skill ─────────────────────────────────
 
+/** 장착 링크 스킬 정보. */
+interface EquippedLinkSkillInfo extends SkillInfo {
+  /** @deprecated 장착 링크 스킬 응답에는 컷인 이펙트 명이 명세되어 있지 않습니다. */
+  readonly cutin_name?: string | null | undefined;
+  /** @deprecated 장착 링크 스킬 응답에는 컷인 이펙트 설명이 명세되어 있지 않습니다. */
+  readonly cutin_description?: string | null | undefined;
+  /** @deprecated 장착 링크 스킬 응답에는 컷인 이펙트 아이콘이 명세되어 있지 않습니다. */
+  readonly cutin_icon?: string | null | undefined;
+}
+
 /** 링크 스킬 정보 (프리셋/owned 공용, skill_effect_next 없음) */
 export interface LinkSkillInfo {
   /** 스킬 명 */
@@ -1257,7 +1320,7 @@ export interface CharacterLinkSkill {
   /** 캐릭터 직업 */
   readonly character_class: string;
   /** 장착 링크 스킬 정보 */
-  readonly character_link_skill: SkillInfo[];
+  readonly character_link_skill: EquippedLinkSkillInfo[];
   /** 1번 프리셋 링크 스킬 정보 */
   readonly character_link_skill_preset_1: LinkSkillInfo[];
   /** 2번 프리셋 링크 스킬 정보 */

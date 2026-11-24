@@ -29,6 +29,7 @@ jobs:
           - { name: Type Check, command: type-check } # SDK와 테스트 소스
           - { name: Lint, command: lint }
           - { name: Format, command: 'format:check' }
+          - { name: Spec Drift, command: 'specs:drift --strict' }
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup

@@ -1,3 +1,4 @@
+import { emitDeprecation } from '../../../core/deprecation/deprecation.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import { RANKING_SHAPE } from '../shapes.js';
 import type {
@@ -102,6 +103,7 @@ export class MapleStoryRankingClient {
    * @param params.world_name - 월드 명 (선택)
    * @param params.ranking_type - 랭킹 타입 (0: 주간 명성치, 1: 플래그 레이스, 2: 지하 수로)
    * @param params.guild_name - 길드 명 (선택)
+   * @param params.ocid - 지원 종료된 파라미터로, 입력 시 기존 호출 호환을 위해 경고만 출력합니다.
    * @param params.page - 페이지 번호 (선택)
    *
    * @example
@@ -114,6 +116,12 @@ export class MapleStoryRankingClient {
    *
    */
   async getGuild(params: GuildRankingRequest): Promise<GuildRanking> {
+    if (params.ocid !== undefined) {
+      emitDeprecation(
+        'GuildRankingRequest.ocid',
+        '길드 랭킹에서 ocid 지원이 종료되었습니다. 특정 길드는 guild_name으로 조회하세요.',
+      );
+    }
     return this.http.get<GuildRanking>(
       `${MapleStoryRankingClient.BASE}/ranking/guild`,
       {
@@ -121,7 +129,6 @@ export class MapleStoryRankingClient {
         world_name: params.world_name,
         ranking_type: params.ranking_type,
         guild_name: params.guild_name,
-        ocid: params.ocid,
         page: params.page,
       },
       RANKING_SHAPE,

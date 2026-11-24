@@ -232,6 +232,6 @@ for (const boss of state.boss_contents) {
 
 ## 포털 스펙 대비 알려진 차이
 
-- `dragon_equipment`·`mechanic_equipment` (`character.getItemEquipment`) 는 프리셋 장비와 같은 `PresetItemEquipment` 타입을 씁니다. 포털 스펙상 두 목록에는 잠재능력·소울 잠재능력 필드가 없으므로 해당 필드는 값이 없을 수 있습니다.
+- `character.getItemEquipment`의 `dragon_equipment`·`mechanic_equipment`는 직업 전용 장비 타입을 사용합니다. 잠재능력 등급·옵션, 소울 잠재능력 필드와 `item_exceptional_option.exceptional_upgrade`는 optional이며 deprecated로 표시합니다. 연무장 드래곤·메카닉 장비의 `exceptional_upgrade`도 같은 규칙을 따릅니다.
 - `CashItemEquipmentItem.cash_item_skills` 는 포털 스펙에서 사라져 `@deprecated` + optional 이 됐습니다. `skills` 를 사용하세요.
-- `GuildRankingRequest.ocid` 는 포털 스펙에 없는 파라미터라 `@deprecated` 입니다. `guild_name` 으로 조회하세요.
+- `ranking.getGuild`에서 지원이 종료된 `ocid`를 넘기면 한 번 경고하고 해당 값을 요청에서 제외합니다. 특정 길드는 `guild_name`으로 조회하세요.

@@ -1,7 +1,8 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { http, HttpResponse } from 'msw';
 import type { JsonBodyType } from 'msw';
 import { server } from '../../mocks/server.js';
+import { _resetDeprecationWarnings } from '../../../src/core/deprecation/deprecation.js';
 import { HttpClient } from '../../../src/core/http/HttpClient.js';
 import type { HttpClientConfig } from '../../../src/core/http/http-types.js';
 import type { ShapeMismatch } from '../../../src/core/validation/response-shape.js';
@@ -512,6 +513,27 @@ describe('MapleStoryClient', () => {
         guild_name: '테스트길드',
         page: '3',
       });
+    });
+
+    it('ranking.getGuild — 폐지된 ocid는 서버로 보내지 않고 한 번만 경고한다', async () => {
+      const captured = captureRequest('/v1/ranking/guild', rankingGuildFixture);
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      _resetDeprecationWarnings();
+      try {
+        const ranking = createMapleStoryClient().ranking;
+        const params = { date: DATE, ranking_type: 2 as const, guild_name: '테스트길드' };
+        await ranking.getGuild(params);
+        expect(warn).not.toHaveBeenCalled();
+        for (let attempt = 0; attempt < 2; attempt += 1) {
+          await ranking.getGuild({ ...params, ocid: TEST_OCID });
+          expect(captured.url().searchParams.has('ocid')).toBe(false);
+          expect(captured.url().searchParams.get('guild_name')).toBe('테스트길드');
+        }
+        expect(warn).toHaveBeenCalledExactlyOnceWith(expect.stringContaining('guild_name'));
+      } finally {
+        warn.mockRestore();
+        _resetDeprecationWarnings();
+      }
     });
 
     it('ranking.getDojang — difficulty 0 도 누락 없이 전달한다', async () => {
