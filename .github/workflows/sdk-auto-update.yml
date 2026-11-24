@@ -133,6 +133,9 @@ jobs:
               network: {allowedDomains: [], strictAllowlist: true}
             }
           }' > "$RUNNER_TEMP/claude-settings.json"
+          # CLAUDE_CODE_SUBPROCESS_ENV_SCRUB가 켜지면 권한 모드가 default로 강제되므로
+          # settings의 허용 목록을 --allowedTools로도 명시한다.
+          allowed=$(jq -r '.permissions.allow | join(",")' "$RUNNER_TEMP/claude-settings.json")
 
           # 신뢰하는 기본 브랜치의 프롬프트에 보고서 경로만 넘긴다.
           {
@@ -144,6 +147,7 @@ jobs:
             echo "model=$CLAUDE_MODEL"
             echo "turns=$CLAUDE_MAX_TURNS"
             echo "settings=$RUNNER_TEMP/claude-settings.json"
+            echo "allowed=$allowed"
             echo 'prompt<<SDK_AUTO_UPDATE_PROMPT'
             cat "$RUNNER_TEMP/sdk-prompt.md"
             echo 'SDK_AUTO_UPDATE_PROMPT'
@@ -169,7 +173,8 @@ jobs:
             --max-turns ${{ steps.prepare.outputs.turns }}
             --permission-mode dontAsk
             --tools "Read,Glob,Grep,Edit,Write,Bash"
-            --strict-mcp-config --mcp-config '{}'
+            --allowedTools "${{ steps.prepare.outputs.allowed }}"
+            --strict-mcp-config --mcp-config '{"mcpServers":{}}'
             --disallowedTools "Bash(git push:*),Bash(git commit:*),Bash(git checkout:*),Bash(git reset:*),Bash(git rebase:*),Bash(yarn add:*),Bash(yarn dlx:*),Bash(npx:*),Bash(curl:*),WebFetch,WebSearch"
 
       - name: Independently verify Claude's changes
