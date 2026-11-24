@@ -7,13 +7,17 @@
  *   3. yarn test:api 실행
  */
 import 'dotenv/config';
-import { NexonClient } from '../src/index.js';
+import { NexonClient, toNexonDate } from '../src/index.js';
 import type { OCID, GuildId } from '../src/games/_base/maple-base-types.js';
 
 const apiKey = process.env['NEXON_MAPLESTORY_API_KEY'];
 const characterName = process.env['MAPLESTORY_CHARACTER'];
 const guildName = process.env['MAPLESTORY_GUILD'];
 const worldName = process.env['MAPLESTORY_WORLD'] ?? '스카니아';
+// 선택: 구 개발자센터 API 키. 없으면 getLegacyOuid 검증을 건너뛴다.
+const legacyApiKey = process.env['NEXON_MAPLESTORY_LEGACY_API_KEY'];
+// 소울 잠재능력 이력은 최근 2년만 조회되므로 고정 날짜 대신 어제(KST)를 쓴다.
+const historyDate = toNexonDate(new Date(Date.now() - 24 * 60 * 60 * 1000), 540);
 if (!apiKey || !characterName) {
   console.error('❌ .env 파일에 NEXON_MAPLESTORY_API_KEY, MAPLESTORY_CHARACTER 를 설정해주세요.');
   console.error('   .env.example 파일을 참고하세요.');
@@ -140,6 +144,63 @@ if (ocid) {
     await client.maplestory.character.getDojang({ ocid: ocid! });
   });
 
+  await test('character.getOtherStat', async () => {
+    const r = await client.maplestory.character.getOtherStat({ ocid: ocid! });
+    if (!r.other_stat) throw new Error('other_stat 없음');
+  });
+
+  await test('character.getRingExchangeSkillEquipment', async () => {
+    await client.maplestory.character.getRingExchangeSkillEquipment({ ocid: ocid! });
+  });
+
+  await test('character.getRingReserveSkillEquipment', async () => {
+    const r = await client.maplestory.character.getRingReserveSkillEquipment({ ocid: ocid! });
+    if (r.special_ring_reserve_level === undefined) {
+      throw new Error('special_ring_reserve_level 없음');
+    }
+  });
+
+  // ─── Scheduler (자신의 계정 캐릭터만 조회 가능) ──────────────────────────────
+  console.log('\n📋 Scheduler API');
+
+  await test('scheduler.getCharacterState', async () => {
+    const r = await client.maplestory.scheduler.getCharacterState({ ocid: ocid! });
+    if (!r.boss_contents) throw new Error('boss_contents 없음');
+  });
+
+  // ─── Battle Practice (리플레이를 등록한 캐릭터만 조회 가능) ──────────────────
+  console.log('\n📋 Battle Practice API');
+
+  let replayId: string | undefined;
+
+  await test('battlePractice.getReplayId', async () => {
+    const r = await client.maplestory.battlePractice.getReplayId({ ocid: ocid! });
+    if (!r.replay_list) throw new Error('replay_list 없음');
+    replayId = r.replay_list[0]?.replay_id;
+  });
+
+  if (replayId) {
+    await test('battlePractice.getResult', async () => {
+      const r = await client.maplestory.battlePractice.getResult({ replay_id: replayId! });
+      if (r.total_damage === undefined) throw new Error('total_damage 없음');
+    });
+
+    await test('battlePractice.getSkillTimeline', async () => {
+      const r = await client.maplestory.battlePractice.getSkillTimeline({
+        replay_id: replayId!,
+        page_no: 1,
+      });
+      if (!r.skill_timeline) throw new Error('skill_timeline 없음');
+    });
+
+    await test('battlePractice.getCharacterInfo', async () => {
+      const r = await client.maplestory.battlePractice.getCharacterInfo({ replay_id: replayId! });
+      if (!r.basic_object) throw new Error('basic_object 없음');
+    });
+  } else {
+    console.log('  ⏭️  등록된 연무장 리플레이가 없어 result/skill-timeline/character-info 생략');
+  }
+
   // ─── 2. Union ──────────────────────────────────────────────────────────────
   console.log('\n📋 Union API');
 
@@ -198,6 +259,38 @@ await test('history.getCube', async () => {
   const r = await client.maplestory.history.getCube({ count: 10, date: '2024-06-01' });
   if (r.count === undefined) throw new Error('count 없음');
 });
+
+await test('history.getSoulPotential', async () => {
+  const r = await client.maplestory.history.getSoulPotential({ count: 10, date: historyDate });
+  if (r.count === undefined) throw new Error('count 없음');
+});
+
+// ─── Account ─────────────────────────────────────────────────────────────────
+console.log('\n📋 Account API');
+
+await test('getOuid', async () => {
+  const ouid = await client.maplestory.getOuid();
+  if (!ouid) throw new Error('ouid가 비어있음');
+});
+
+await test('getAchievement', async () => {
+  const r = await client.maplestory.getAchievement();
+  if (!r.account_list) throw new Error('account_list 없음');
+});
+
+await test('character.getList', async () => {
+  const r = await client.maplestory.character.getList();
+  if (!r.account_list) throw new Error('account_list 없음');
+});
+
+if (legacyApiKey) {
+  await test('getLegacyOuid', async () => {
+    const ouid = await client.maplestory.getLegacyOuid(legacyApiKey);
+    if (!ouid) throw new Error('ouid가 비어있음');
+  });
+} else {
+  console.log('  ⏭️  NEXON_MAPLESTORY_LEGACY_API_KEY 가 없어 getLegacyOuid 생략');
+}
 
 // ─── 5. Ranking ──────────────────────────────────────────────────────────────
 console.log('\n📋 Ranking API');

@@ -58,11 +58,14 @@ export type {
   ItemAddOption,
   ItemEtcOption,
   TitleInfo,
+  TitlePresetInfo,
   MedalShape,
   CharacterCashItemEquipment,
   CashItemEquipmentItem,
   CashItemOption,
   CashItemColoringPrism,
+  CashItemCustomOrigin,
+  WorldShareMasterLabelItem,
   CharacterSymbolEquipment,
   SymbolInfo,
   CharacterSetEffect,
@@ -79,6 +82,8 @@ export type {
   PetEquipmentItem,
   PetAutoSkill,
   PetItemOption,
+  WorldSharePetEquipmentPreset,
+  PetiteLunaPetSkill,
   CharacterSkill,
   SkillInfo,
   SkillGrade,
@@ -87,6 +92,7 @@ export type {
   LinkSkillInfo,
   CharacterVMatrix,
   VCoreEquipment,
+  VCorePresetEquipment,
   CharacterHexaMatrix,
   HexaCoreEquipment,
   HexaLinkedSkill,
@@ -97,6 +103,7 @@ export type {
   OtherStatEntry,
   OtherStatInfo,
   CharacterRingExchangeSkillEquipment,
+  CharacterRingReserveSkillEquipment,
 } from './games/maplestory/character/types.js';
 
 // MapleStory union types
@@ -107,6 +114,7 @@ export type {
   UnionBlock,
   UnionRaiderPreset,
   UnionRaider,
+  UnionStateStatPreset,
   UnionArtifactEffect,
   UnionArtifactCrystal,
   UnionArtifact,
@@ -134,6 +142,8 @@ export type {
   PotentialHistory,
   CubeHistoryItem,
   CubeHistory,
+  SoulPotentialHistoryItem,
+  SoulPotentialHistory,
 } from './games/maplestory/history/types.js';
 
 // MapleStory ranking types
@@ -171,6 +181,47 @@ export type {
   CashshopNoticeList,
   CashshopNoticeDetail,
 } from './games/maplestory/notice/types.js';
+
+// MapleStory battle practice types
+export type {
+  BattlePracticeReplayIdRequest,
+  BattlePracticeReplayRequest,
+  BattlePracticeSkillTimelineRequest,
+  BattlePracticeReplay,
+  BattlePracticeReplayId,
+  BattlePracticeSkillStatistic,
+  BattlePracticeResult,
+  BattlePracticeSkillTimelineItem,
+  BattlePracticeSkillTimeline,
+  BattlePracticeBasic,
+  BattlePracticeStat,
+  BattlePracticeHyperStatInfo,
+  BattlePracticePropensity,
+  BattlePracticeSubItemEquipment,
+  BattlePracticeItemEquipment,
+  BattlePracticeTitle,
+  BattlePracticeSetEffect,
+  BattlePracticeItem,
+  BattlePracticeCashItemEquipment,
+  BattlePracticeWorldShareMasterLabelItem,
+  BattlePracticeCashItem,
+  BattlePracticePet,
+  BattlePracticeHexaCore,
+  BattlePracticeHexaMatrix,
+  BattlePracticeRingReserveSkill,
+  BattlePracticeUnionRaider,
+  BattlePracticeUnionArtifactEffect,
+  BattlePracticeChampionBadge,
+  BattlePracticeCharacterInfo,
+} from './games/maplestory/battle-practice/types.js';
+
+// MapleStory scheduler types
+export type {
+  SchedulerCharacterStateRequest,
+  SchedulerContent,
+  SchedulerBossContent,
+  SchedulerCharacterState,
+} from './games/maplestory/scheduler/types.js';
 
 // FC Online types
 export type {
@@ -402,6 +453,7 @@ export type {
 export { HttpClient } from './core/http/HttpClient.js';
 export type {
   HttpClientConfig,
+  HttpRequestOptions,
   RequestInterceptor,
   ResponseInterceptor,
   RetryInterceptor,

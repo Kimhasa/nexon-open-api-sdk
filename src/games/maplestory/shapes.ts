@@ -75,7 +75,7 @@ export const CHARACTER_HYPER_STAT_SHAPE: ShapeDescriptor = {
     date: 'string',
     character_class: 'string',
     use_preset_no: 'string',
-    use_available_hyper_stat_point: 'number',
+    use_available_hyper_stat: 'number',
     hyper_stat_preset_1: 'array',
     hyper_stat_preset_1_remain_point: 'number',
     hyper_stat_preset_2: 'array',
@@ -132,6 +132,7 @@ export const CHARACTER_CASHITEM_EQUIPMENT_SHAPE: ShapeDescriptor = {
     date: 'string',
     character_gender: 'string',
     character_class: 'string',
+    character_look_mode: 'optional',
     preset_no: 'number',
     cash_item_equipment_base: 'array',
     cash_item_equipment_preset_1: 'array',
@@ -141,6 +142,8 @@ export const CHARACTER_CASHITEM_EQUIPMENT_SHAPE: ShapeDescriptor = {
     additional_cash_item_equipment_preset_1: 'array',
     additional_cash_item_equipment_preset_2: 'array',
     additional_cash_item_equipment_preset_3: 'array',
+    world_share_master_label_activate_flag: 'optional',
+    world_share_master_label_base: 'optional',
   },
 };
 
@@ -166,10 +169,10 @@ export const CHARACTER_BEAUTY_EQUIPMENT_SHAPE: ShapeDescriptor = {
     character_class: 'string',
     character_hair: 'object',
     character_face: 'object',
-    character_skin_name: 'string',
+    character_skin: 'object',
     additional_character_hair: 'optional',
     additional_character_face: 'optional',
-    additional_character_skin_name: 'optional',
+    additional_character_skin: 'optional',
   },
 };
 
@@ -182,7 +185,7 @@ export const CHARACTER_ANDROID_EQUIPMENT_SHAPE: ShapeDescriptor = {
     android_description: 'string',
     android_hair: 'object',
     android_face: 'object',
-    android_skin_name: 'string',
+    android_skin: 'object',
     android_cash_item_equipment: 'array',
     android_ear_sensor_clip_flag: 'string',
     android_gender: 'optional',
@@ -208,7 +211,7 @@ export const CHARACTER_PET_EQUIPMENT_SHAPE: ShapeDescriptor = {
     pet_1_pet_type: 'string',
     pet_1_skill: 'array',
     pet_1_date_expire: 'string',
-    pet_1_appearance: 'object',
+    pet_1_appearance: 'any',
     pet_1_appearance_icon: 'string',
     pet_2_name: 'optional',
     pet_2_nickname: 'optional',
@@ -232,6 +235,45 @@ export const CHARACTER_PET_EQUIPMENT_SHAPE: ShapeDescriptor = {
     pet_3_date_expire: 'optional',
     pet_3_appearance: 'optional',
     pet_3_appearance_icon: 'optional',
+    pet_activate_flag: 'optional',
+    world_share_pet_1_name: 'optional',
+    world_share_pet_1_nickname: 'optional',
+    world_share_pet_1_icon: 'optional',
+    world_share_pet_1_description: 'optional',
+    world_share_pet_1_pet_type: 'optional',
+    world_share_pet_1_equipment_preset_no: 'optional',
+    world_share_pet_1_equipment: 'optional',
+    world_share_pet_1_auto_skill: 'optional',
+    world_share_pet_1_skill: 'optional',
+    world_share_pet_1_date_expire: 'optional',
+    world_share_pet_1_appearance: 'optional',
+    world_share_pet_1_appearance_icon: 'optional',
+    world_share_pet_2_name: 'optional',
+    world_share_pet_2_nickname: 'optional',
+    world_share_pet_2_icon: 'optional',
+    world_share_pet_2_description: 'optional',
+    world_share_pet_2_pet_type: 'optional',
+    world_share_pet_2_equipment_preset_no: 'optional',
+    world_share_pet_2_equipment: 'optional',
+    world_share_pet_2_auto_skill: 'optional',
+    world_share_pet_2_skill: 'optional',
+    world_share_pet_2_date_expire: 'optional',
+    world_share_pet_2_appearance: 'optional',
+    world_share_pet_2_appearance_icon: 'optional',
+    world_share_pet_3_name: 'optional',
+    world_share_pet_3_nickname: 'optional',
+    world_share_pet_3_icon: 'optional',
+    world_share_pet_3_description: 'optional',
+    world_share_pet_3_pet_type: 'optional',
+    world_share_pet_3_equipment_preset_no: 'optional',
+    world_share_pet_3_equipment: 'optional',
+    world_share_pet_3_auto_skill: 'optional',
+    world_share_pet_3_skill: 'optional',
+    world_share_pet_3_date_expire: 'optional',
+    world_share_pet_3_appearance: 'optional',
+    world_share_pet_3_appearance_icon: 'optional',
+    world_share_pet_equipment_preset: 'optional',
+    petite_luna_pet_skill: 'optional',
   },
 };
 
@@ -265,6 +307,11 @@ export const CHARACTER_VMATRIX_SHAPE: ShapeDescriptor = {
     character_class: 'string',
     character_v_core_equipment: 'array',
     character_v_matrix_remain_slot_upgrade_point: 'number',
+    character_v_core_equipment_preset_1: 'optional',
+    character_v_core_equipment_preset_2: 'optional',
+    character_v_core_equipment_preset_3: 'optional',
+    character_v_core_equipment_preset_4: 'optional',
+    character_v_core_equipment_preset_5: 'optional',
   },
 };
 
@@ -278,8 +325,13 @@ export const CHARACTER_HEXAMATRIX_SHAPE: ShapeDescriptor = {
 export const CHARACTER_HEXAMATRIX_STAT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     date: 'string',
+    character_class: 'string',
     character_hexa_stat_core: 'array',
+    character_hexa_stat_core_2: 'array',
+    character_hexa_stat_core_3: 'array',
     preset_hexa_stat_core: 'array',
+    preset_hexa_stat_core_2: 'array',
+    preset_hexa_stat_core_3: 'array',
   },
 };
 
@@ -312,6 +364,18 @@ export const CHARACTER_RING_EXCHANGE_SKILL_EQUIPMENT_SHAPE: ShapeDescriptor = {
   },
 };
 
+export const CHARACTER_RING_RESERVE_SKILL_EQUIPMENT_SHAPE: ShapeDescriptor = {
+  expectedKeys: {
+    // 반지 미장착 시 null이 올 수 있어 문자열 필드는 타입을 강제하지 않는다
+    date: 'any',
+    character_class: 'string',
+    special_ring_reserve_name: 'any',
+    special_ring_reserve_level: 'number',
+    special_ring_reserve_icon: 'any',
+    special_ring_reserve_description: 'any',
+  },
+};
+
 // ─── Union ──────────────────────────────────────────────────────────────────
 
 export const UNION_SHAPE: ShapeDescriptor = {
@@ -338,6 +402,9 @@ export const UNION_RAIDER_SHAPE: ShapeDescriptor = {
     union_raider_preset_3: 'optional',
     union_raider_preset_4: 'optional',
     union_raider_preset_5: 'optional',
+    union_state_stat: 'optional',
+    union_state_stat_preset: 'optional',
+    union_max_point: 'optional',
   },
 };
 
@@ -353,7 +420,8 @@ export const UNION_ARTIFACT_SHAPE: ShapeDescriptor = {
 export const UNION_CHAMPION_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     date: 'string',
-    union_champion_info: 'array',
+    union_champion: 'array',
+    champion_badge_total_info: 'array',
   },
 };
 
@@ -375,6 +443,7 @@ export const GUILD_BASIC_SHAPE: ShapeDescriptor = {
     guild_point: 'number',
     guild_master_name: 'string',
     guild_member_count: 'number',
+    guild_user_count: 'optional',
     guild_member: 'array',
     guild_skill: 'array',
     guild_noblesse_skill: 'array',
@@ -414,6 +483,15 @@ export const CUBE_HISTORY_SHAPE: ShapeDescriptor = {
     count: 'number',
     cube_history: 'array',
     next_cursor: 'string',
+  },
+};
+
+export const SOUL_POTENTIAL_HISTORY_SHAPE: ShapeDescriptor = {
+  expectedKeys: {
+    count: 'number',
+    soul_potential_history: 'array',
+    // 마지막 페이지에서는 null이 온다
+    next_cursor: 'any',
   },
 };
 
@@ -472,5 +550,73 @@ export const CASHSHOP_NOTICE_DETAIL_SHAPE: ShapeDescriptor = {
     date_sale_start: 'string',
     date_sale_end: 'string',
     ongoing_flag: 'string',
+  },
+};
+
+// ─── Battle Practice ────────────────────────────────────────────────────────
+
+export const BATTLE_PRACTICE_REPLAY_ID_SHAPE: ShapeDescriptor = {
+  expectedKeys: {
+    replay_list: 'array',
+  },
+};
+
+export const BATTLE_PRACTICE_RESULT_SHAPE: ShapeDescriptor = {
+  expectedKeys: {
+    register_date: 'string',
+    total_play_time: 'number',
+    total_damage: 'number',
+    total_dps: 'number',
+    end_type: 'string',
+    like_count: 'number',
+    skill_statistic: 'array',
+  },
+};
+
+export const BATTLE_PRACTICE_SKILL_TIMELINE_SHAPE: ShapeDescriptor = {
+  expectedKeys: {
+    page_no: 'number',
+    total_page_no: 'number',
+    skill_timeline: 'array',
+  },
+};
+
+export const BATTLE_PRACTICE_CHARACTER_INFO_SHAPE: ShapeDescriptor = {
+  expectedKeys: {
+    basic_object: 'object',
+    stat_object: 'object',
+    hyper_stat_object: 'object',
+    propensity_object: 'object',
+    ability_object: 'object',
+    item_object: 'object',
+    cash_item_object: 'object',
+    pet_object: 'object',
+    skill_object: 'object',
+    link_skill_object: 'object',
+    v_matrix_object: 'object',
+    hexa_matrix_object: 'object',
+    ring_reserve_skill_object: 'object',
+    union_raider_object: 'object',
+    union_artifact_object: 'object',
+    union_champion_object: 'object',
+    guild_object: 'object',
+  },
+};
+
+// ─── Scheduler ──────────────────────────────────────────────────────────────
+
+export const SCHEDULER_CHARACTER_STATE_SHAPE: ShapeDescriptor = {
+  expectedKeys: {
+    // 기준일에 접속하지 않은 캐릭터는 값이 비어 올 수 있다
+    date: 'any',
+    character_name: 'string',
+    world_name: 'string',
+    character_level: 'number',
+    character_class: 'string',
+    daily_contents: 'array',
+    weekly_contents: 'array',
+    boss_contents: 'array',
+    weekly_boss_clear_count: 'number',
+    weekly_boss_clear_limit_count: 'number',
   },
 };

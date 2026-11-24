@@ -1,6 +1,20 @@
+import { NexonBadRequestError } from '../../../core/errors/NexonBadRequestError.js';
+import { NEXON_ERROR_CODES } from '../../../core/errors/error-codes.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
-import { STARFORCE_HISTORY_SHAPE, POTENTIAL_HISTORY_SHAPE, CUBE_HISTORY_SHAPE } from '../shapes.js';
-import type { CubeHistory, HistoryRequest, PotentialHistory, StarforceHistory } from './types.js';
+import {
+  STARFORCE_HISTORY_SHAPE,
+  POTENTIAL_HISTORY_SHAPE,
+  CUBE_HISTORY_SHAPE,
+  SOUL_POTENTIAL_HISTORY_SHAPE,
+} from '../shapes.js';
+import { assertIntegerInRange } from '../validation.js';
+import type {
+  CubeHistory,
+  HistoryRequest,
+  PotentialHistory,
+  SoulPotentialHistory,
+  StarforceHistory,
+} from './types.js';
 
 /**
  * 메이플스토리 확률/이력 API 클라이언트.
@@ -111,6 +125,52 @@ export class MapleStoryHistoryClient {
         cursor: params.cursor,
       },
       CUBE_HISTORY_SHAPE,
+    );
+  }
+
+  /**
+   * 소울 잠재능력 재설정 이용 결과를 조회한다 (단일 페이지).
+   *
+   * 최근 2년 데이터만 조회 가능합니다.
+   * 소울 잠재능력 재설정 이용 정보는 최대 30분 후 확인 가능합니다.
+   *
+   * @param params.count - 한번에 가져올 결과 수 (최소 10, 최대 1000)
+   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). date와 cursor 중 1개 이상 필수
+   * @param params.cursor - 페이징 cursor. date와 cursor 중 1개 이상 필수
+   *
+   * @throws {NexonBadRequestError} count가 10~1000 사이의 정수가 아니거나 date·cursor가 모두 없을 때 (요청 전 즉시 throw)
+   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 요청 한도 초과 시
+   *
+   * @example
+   * ```ts
+   * const soul = await client.maplestory.history.getSoulPotential({ count: 100, date: '2026-11-01' });
+   * for (const item of soul.soul_potential_history) {
+   *   console.log(`${item.target_item}: ${item.soul_potential_grade} (${item.item_upgrade_result})`);
+   * }
+   * // 다음 페이지
+   * if (soul.next_cursor) {
+   *   await client.maplestory.history.getSoulPotential({ count: 100, cursor: soul.next_cursor });
+   * }
+   * ```
+   */
+  async getSoulPotential(params: HistoryRequest): Promise<SoulPotentialHistory> {
+    assertIntegerInRange(params.count, 'count', 10, 1000);
+    if (params.date === undefined && params.cursor === undefined) {
+      throw new NexonBadRequestError(
+        'date와 cursor 중 1개 이상을 입력해야 합니다. 요청을 보내지 않았습니다.\n' +
+          "→ 첫 페이지는 { count: 100, date: 'YYYY-MM-DD' }, 다음 페이지는 { count: 100, cursor: next_cursor } 로 조회하세요.",
+        { code: NEXON_ERROR_CODES.BAD_REQUEST },
+      );
+    }
+    return this.http.get<SoulPotentialHistory>(
+      `${MapleStoryHistoryClient.BASE}/history/soul-potential`,
+      {
+        count: params.count,
+        date: params.date as string | undefined,
+        cursor: params.cursor,
+      },
+      SOUL_POTENTIAL_HISTORY_SHAPE,
     );
   }
 }

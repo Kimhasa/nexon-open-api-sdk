@@ -368,9 +368,31 @@ export interface ItemEquipment {
   readonly date_expire: string | null;
   /** 프리스타일 쿠폰 적용 여부 ("0": 미적용, "1": 적용) */
   readonly freestyle_flag: string;
+  /** 소울 잠재능력 등급 */
+  readonly soul_potential_grade?: string | null | undefined;
+  /** 소울 증폭 단계 */
+  readonly soul_potential_amplified_grade?: number | null | undefined;
+  /** 소울 잠재능력 첫 번째 옵션 */
+  readonly soul_potential_option_1?: string | null | undefined;
+  /** 소울 잠재능력 두 번째 옵션 */
+  readonly soul_potential_option_2?: string | null | undefined;
+  /** 소울 잠재능력 세 번째 옵션 */
+  readonly soul_potential_option_3?: string | null | undefined;
+  /** 소울 공격력 증가 옵션 */
+  readonly soul_pad?: string | null | undefined;
+  /** 소울 마력 증가 옵션 */
+  readonly soul_mad?: string | null | undefined;
+  /** 소울 활성 여부 ("0": 비활성, "1": 활성) */
+  readonly soul_active?: string | null | undefined;
 }
 
-/** 프리셋 장비 정보 (item_equipment_slot 대신 equipment_slot 사용) */
+/**
+ * 프리셋 장비 정보 (item_equipment_slot 대신 equipment_slot 사용).
+ *
+ * `dragon_equipment`·`mechanic_equipment` 도 이 타입을 쓴다. 포털 스펙상 두 목록에는
+ * 잠재능력(`potential_option_*`, `additional_potential_option_*`)·소울 잠재능력 필드와
+ * `item_exceptional_option.exceptional_upgrade` 가 없으므로, 해당 목록에서는 값이 없을 수 있다.
+ */
 export interface PresetItemEquipment {
   readonly item_equipment_part: string;
   /** 프리셋에서는 equipment_slot 사용 */
@@ -410,6 +432,22 @@ export interface PresetItemEquipment {
   readonly special_ring_level: number;
   readonly date_expire: string | null;
   readonly freestyle_flag: string;
+  /** 소울 잠재능력 등급 */
+  readonly soul_potential_grade?: string | null | undefined;
+  /** 소울 증폭 단계 */
+  readonly soul_potential_amplified_grade?: number | null | undefined;
+  /** 소울 잠재능력 첫 번째 옵션 */
+  readonly soul_potential_option_1?: string | null | undefined;
+  /** 소울 잠재능력 두 번째 옵션 */
+  readonly soul_potential_option_2?: string | null | undefined;
+  /** 소울 잠재능력 세 번째 옵션 */
+  readonly soul_potential_option_3?: string | null | undefined;
+  /** 소울 공격력 증가 옵션 */
+  readonly soul_pad?: string | null | undefined;
+  /** 소울 마력 증가 옵션 */
+  readonly soul_mad?: string | null | undefined;
+  /** 소울 활성 여부 ("0": 비활성, "1": 활성) */
+  readonly soul_active?: string | null | undefined;
 }
 
 /** 칭호 정보 */
@@ -430,6 +468,36 @@ export interface TitleInfo {
   readonly title_shape_icon: string;
   /** 외형 설정 칭호 설명 */
   readonly title_shape_description: string;
+  /** 적용 중인 칭호 프리셋 번호 */
+  readonly preset_no?: number | null | undefined;
+  /** 프리셋 1번 칭호 정보 */
+  readonly title_preset_1?: TitlePresetInfo | null | undefined;
+  /** 프리셋 2번 칭호 정보 */
+  readonly title_preset_2?: TitlePresetInfo | null | undefined;
+  /** 프리셋 3번 칭호 정보 */
+  readonly title_preset_3?: TitlePresetInfo | null | undefined;
+}
+
+/** 칭호 프리셋 개별 정보 */
+export interface TitlePresetInfo {
+  /** 칭호 장비 명 */
+  readonly title_name: string;
+  /** 칭호 아이콘 */
+  readonly title_icon: string;
+  /** 칭호 설명 */
+  readonly title_description: string;
+  /** 칭호 유효 기간 (KST) */
+  readonly date_expire: string | null;
+  /** 칭호 옵션 유효 기간 (KST, "expired": 만료, null: 무제한) */
+  readonly date_option_expire: string | null;
+  /** 외형 설정에 등록한 칭호 장비 명 */
+  readonly title_shape_name: string | null;
+  /** 외형 설정에 등록한 칭호 아이콘 */
+  readonly title_shape_icon: string | null;
+  /** 외형 설정에 등록한 칭호 설명 */
+  readonly title_shape_description: string | null;
+  /** 비활성화 여부 */
+  readonly disable_flag: string;
 }
 
 /** 훈장 외형 정보 */
@@ -488,6 +556,18 @@ export interface CashItemColoringPrism {
   readonly saturation: number;
   /** 컬러링프리즘 명도 */
   readonly value: number;
+  /** 순수한 검은색도 명도 조절에 포함 여부 ("0": 미포함, "1": 포함) */
+  readonly black_inclusive_flag?: string | undefined;
+}
+
+/** 캐시 장비 커스텀 오리진 정보 */
+export interface CashItemCustomOrigin {
+  /** 커스텀 오리진 번호 */
+  readonly custom_origin_no: number;
+  /** x축 위치 */
+  readonly x: string;
+  /** y축 위치 */
+  readonly y: string;
 }
 
 /** 캐시 장비 옵션 정보 */
@@ -524,12 +604,59 @@ export interface CashItemEquipmentItem {
   readonly cash_item_effect_prism: CashItemColoringPrism | null;
   /** 아이템 장착 가능 성별 */
   readonly item_gender: string;
-  /** 캐시 장비 스킬 (예: 스킬 리스트) */
-  readonly cash_item_skills: string[];
+  /**
+   * 캐시 장비 스킬
+   * @deprecated 포털 스펙에서 사라진 필드. `skills` 를 사용하세요. 다음 MAJOR에서 삭제됩니다.
+   */
+  readonly cash_item_skills?: string[] | undefined;
   /** 프리스타일 쿠폰 적용 여부 ("0": 미적용, "1": 적용) */
   readonly freestyle_flag: string;
   /** 감정 표현 이름 */
   readonly emotion_name: string;
+  /** 컬러링 프리즘 적용 여부 ("0": 미적용, "1": 적용) */
+  readonly coloring_prism_flag?: string | undefined;
+  /** 이펙트 프리즘 적용 여부 ("0": 미적용, "1": 적용) */
+  readonly effect_prism_flag?: string | undefined;
+  /** 스킬명 */
+  readonly skills?: string[] | undefined;
+  /** 커스텀 오리진 정보 */
+  readonly custom_origin?: CashItemCustomOrigin[] | undefined;
+}
+
+/** 월드 공유 마스터라벨 장착 장비 정보 */
+export interface WorldShareMasterLabelItem {
+  /** 캐시 장비 부위 명 */
+  readonly cash_item_equipment_part: string;
+  /** 캐시 장비 슬롯 위치 */
+  readonly cash_item_equipment_slot: string;
+  /** 캐시 장비 명 */
+  readonly cash_item_name: string;
+  /** 캐시 장비 아이콘 */
+  readonly cash_item_icon: string;
+  /** 캐시 장비 설명 */
+  readonly cash_item_description: string | null;
+  /** 캐시 장비의 옵션 */
+  readonly cash_item_option: CashItemOption[];
+  /** 캐시 장비 유효 기간 (KST, "expired": 만료, null: 무제한) */
+  readonly date_expire: string | null;
+  /** 캐시 장비 옵션 유효 기간 (KST, 분은 일괄 0, "expired": 만료, null: 무제한) */
+  readonly date_option_expire: string | null;
+  /** 캐시 장비 라벨 정보 */
+  readonly cash_item_label: string | null;
+  /** 컬러링 프리즘 적용 여부 ("0": 미적용, "1": 적용) */
+  readonly coloring_prism_flag: string;
+  /** 캐시 장비 컬러링 프리즘 정보 (null: 미적용) */
+  readonly cash_item_coloring_prism: CashItemColoringPrism | null;
+  /** 이펙트 프리즘 적용 여부 ("0": 미적용, "1": 적용) */
+  readonly effect_prism_flag: string;
+  /** 캐시 장비(무기) 이펙트 프리즘 정보. 2025년 11월 20일 데이터부터 조회할 수 있습니다. */
+  readonly cash_item_effect_prism: CashItemColoringPrism | null;
+  /** 아이템 장착 가능 성별 */
+  readonly item_gender: string | null;
+  /** 스킬명 */
+  readonly skills: string[];
+  /** 프리스타일 쿠폰 적용 여부 ("0": 미적용, "1": 적용) */
+  readonly freestyle_flag: string;
 }
 
 /** GET /maplestory/v1/character/cashitem-equipment 응답 */
@@ -560,6 +687,10 @@ export interface CharacterCashItemEquipment {
   readonly additional_cash_item_equipment_preset_2: CashItemEquipmentItem[];
   /** 제로/엔젤릭버스터 3번 프리셋 추가 캐시 장비 정보 */
   readonly additional_cash_item_equipment_preset_3: CashItemEquipmentItem[];
+  /** 월드 공유 마스터라벨 슬롯 활성화 여부 ("0": 비활성, "1": 활성) */
+  readonly world_share_master_label_activate_flag?: string | undefined;
+  /** 월드 공유 마스터라벨 장착 장비 */
+  readonly world_share_master_label_base?: WorldShareMasterLabelItem[] | undefined;
 }
 
 // ─── GET /maplestory/v1/character/symbol-equipment ──────────────────────────
@@ -596,6 +727,8 @@ export interface SymbolInfo {
   readonly symbol_growth_count: number;
   /** 다음 레벨까지 필요 성장치 */
   readonly symbol_require_growth_count: number;
+  /** 심볼 부가 효과 설명 */
+  readonly symbol_other_effect_description?: string | null | undefined;
 }
 
 /** GET /maplestory/v1/character/symbol-equipment 응답 */
@@ -830,6 +963,46 @@ export interface PetEquipmentItem {
   readonly item_shape: string;
   /** 아이템 외형 아이콘 */
   readonly item_shape_icon: string;
+  /** 아이템 만료시간 (KST, 분은 일괄 0. null: 무제한, "-1": 미착용) */
+  readonly item_date_expire?: string | null | undefined;
+}
+
+/** 월드 공유 펫 장착 아이템 프리셋 정보 */
+export interface WorldSharePetEquipmentPreset {
+  /** 프리셋 번호 */
+  readonly preset_no: number;
+  /** 장착 슬롯 번호 */
+  readonly slot_no: number;
+  /** 아이템 명 */
+  readonly item_name: string;
+  /** 아이템 아이콘 */
+  readonly item_icon: string;
+  /** 아이템 설명 */
+  readonly item_description: string | null;
+  /** 아이템의 표기상 옵션 */
+  readonly item_option: PetItemOption[];
+  /** 주문서 횟수 */
+  readonly scroll_upgrade: number;
+  /** 주문서 잔여 횟수 */
+  readonly scroll_upgradable: number;
+  /** 아이템 외형 명 */
+  readonly item_shape: string | null;
+  /** 아이템 외형 아이콘 */
+  readonly item_shape_icon: string | null;
+  /** 아이템 만료시간 (KST, 분은 일괄 0. null: 무제한, "-1": 미착용) */
+  readonly item_date_expire: string | null;
+}
+
+/** 루나 쁘띠 펫 스킬 정보 */
+export interface PetiteLunaPetSkill {
+  /** 스킬 명 */
+  readonly skill_name: string;
+  /** 스킬 설명 */
+  readonly skill_description: string;
+  /** 스킬 효과 설명 */
+  readonly skill_effect: string;
+  /** 스킬 아이콘 */
+  readonly skill_icon: string;
 }
 
 /** 펫 버프 자동스킬 정보 */
@@ -914,6 +1087,84 @@ export interface CharacterPetEquipment {
   readonly pet_3_appearance: string;
   /** 펫3 외형 아이콘 */
   readonly pet_3_appearance_icon: string;
+  /** 활성화된 펫 유형 ("0": 캐릭터 펫, "1": 월드 공유 펫) */
+  readonly pet_activate_flag?: string | undefined;
+  /** 월드 공유 펫1 명 */
+  readonly world_share_pet_1_name?: string | null | undefined;
+  /** 월드 공유 펫1 닉네임 */
+  readonly world_share_pet_1_nickname?: string | null | undefined;
+  /** 월드 공유 펫1 아이콘 */
+  readonly world_share_pet_1_icon?: string | null | undefined;
+  /** 월드 공유 펫1 설명 */
+  readonly world_share_pet_1_description?: string | null | undefined;
+  /** 월드 공유 펫1 원더 펫 종류 */
+  readonly world_share_pet_1_pet_type?: string | null | undefined;
+  /** 월드 공유 펫1 장착 프리셋 번호 */
+  readonly world_share_pet_1_equipment_preset_no?: number | null | undefined;
+  /** 월드 공유 펫1 장착 정보 */
+  readonly world_share_pet_1_equipment?: PetEquipmentItem | null | undefined;
+  /** 월드 공유 펫1 버프 자동스킬 정보 */
+  readonly world_share_pet_1_auto_skill?: PetAutoSkill | null | undefined;
+  /** 월드 공유 펫1 펫 보유 스킬 */
+  readonly world_share_pet_1_skill?: string[] | undefined;
+  /** 월드 공유 펫1 마법의 시간 (KST, 분은 일괄 0) */
+  readonly world_share_pet_1_date_expire?: string | null | undefined;
+  /** 월드 공유 펫1 외형 명 */
+  readonly world_share_pet_1_appearance?: string | null | undefined;
+  /** 월드 공유 펫1 외형 아이콘 */
+  readonly world_share_pet_1_appearance_icon?: string | null | undefined;
+  /** 월드 공유 펫2 명 */
+  readonly world_share_pet_2_name?: string | null | undefined;
+  /** 월드 공유 펫2 닉네임 */
+  readonly world_share_pet_2_nickname?: string | null | undefined;
+  /** 월드 공유 펫2 아이콘 */
+  readonly world_share_pet_2_icon?: string | null | undefined;
+  /** 월드 공유 펫2 설명 */
+  readonly world_share_pet_2_description?: string | null | undefined;
+  /** 월드 공유 펫2 원더 펫 종류 */
+  readonly world_share_pet_2_pet_type?: string | null | undefined;
+  /** 월드 공유 펫2 장착 프리셋 번호 */
+  readonly world_share_pet_2_equipment_preset_no?: number | null | undefined;
+  /** 월드 공유 펫2 장착 정보 */
+  readonly world_share_pet_2_equipment?: PetEquipmentItem | null | undefined;
+  /** 월드 공유 펫2 버프 자동스킬 정보 */
+  readonly world_share_pet_2_auto_skill?: PetAutoSkill | null | undefined;
+  /** 월드 공유 펫2 펫 보유 스킬 */
+  readonly world_share_pet_2_skill?: string[] | undefined;
+  /** 월드 공유 펫2 마법의 시간 (KST, 분은 일괄 0) */
+  readonly world_share_pet_2_date_expire?: string | null | undefined;
+  /** 월드 공유 펫2 외형 명 */
+  readonly world_share_pet_2_appearance?: string | null | undefined;
+  /** 월드 공유 펫2 외형 아이콘 */
+  readonly world_share_pet_2_appearance_icon?: string | null | undefined;
+  /** 월드 공유 펫3 명 */
+  readonly world_share_pet_3_name?: string | null | undefined;
+  /** 월드 공유 펫3 닉네임 */
+  readonly world_share_pet_3_nickname?: string | null | undefined;
+  /** 월드 공유 펫3 아이콘 */
+  readonly world_share_pet_3_icon?: string | null | undefined;
+  /** 월드 공유 펫3 설명 */
+  readonly world_share_pet_3_description?: string | null | undefined;
+  /** 월드 공유 펫3 원더 펫 종류 */
+  readonly world_share_pet_3_pet_type?: string | null | undefined;
+  /** 월드 공유 펫3 장착 프리셋 번호 */
+  readonly world_share_pet_3_equipment_preset_no?: number | null | undefined;
+  /** 월드 공유 펫3 장착 정보 */
+  readonly world_share_pet_3_equipment?: PetEquipmentItem | null | undefined;
+  /** 월드 공유 펫3 버프 자동스킬 정보 */
+  readonly world_share_pet_3_auto_skill?: PetAutoSkill | null | undefined;
+  /** 월드 공유 펫3 펫 보유 스킬 */
+  readonly world_share_pet_3_skill?: string[] | undefined;
+  /** 월드 공유 펫3 마법의 시간 (KST, 분은 일괄 0) */
+  readonly world_share_pet_3_date_expire?: string | null | undefined;
+  /** 월드 공유 펫3 외형 명 */
+  readonly world_share_pet_3_appearance?: string | null | undefined;
+  /** 월드 공유 펫3 외형 아이콘 */
+  readonly world_share_pet_3_appearance_icon?: string | null | undefined;
+  /** 월드 공유 펫 장착 아이템 프리셋 정보 */
+  readonly world_share_pet_equipment_preset?: WorldSharePetEquipmentPreset | null | undefined;
+  /** 루나 쁘띠 펫 스킬 정보 */
+  readonly petite_luna_pet_skill?: PetiteLunaPetSkill[] | undefined;
 }
 
 // ─── GET /maplestory/v1/character/skill ──────────────────────────────────────
@@ -932,6 +1183,12 @@ export interface SkillInfo {
   readonly skill_effect_next: string;
   /** 스킬 아이콘 */
   readonly skill_icon: string;
+  /** 컷인 이펙트 명 */
+  readonly cutin_name?: string | null | undefined;
+  /** 컷인 이펙트 설명 */
+  readonly cutin_description?: string | null | undefined;
+  /** 컷인 이펙트 아이콘 */
+  readonly cutin_icon?: string | null | undefined;
 }
 
 /**
@@ -1061,6 +1318,26 @@ export interface CharacterVMatrix {
   readonly character_v_core_equipment: VCoreEquipment[];
   /** 잔여 매트릭스 강화 포인트 */
   readonly character_v_matrix_remain_slot_upgrade_point: number;
+  /** 프리셋 1의 V코어 정보 */
+  readonly character_v_core_equipment_preset_1?: VCorePresetEquipment[] | undefined;
+  /** 프리셋 2의 V코어 정보 */
+  readonly character_v_core_equipment_preset_2?: VCorePresetEquipment[] | undefined;
+  /** 프리셋 3의 V코어 정보 */
+  readonly character_v_core_equipment_preset_3?: VCorePresetEquipment[] | undefined;
+  /** 프리셋 4의 V코어 정보 */
+  readonly character_v_core_equipment_preset_4?: VCorePresetEquipment[] | undefined;
+  /** 프리셋 5의 V코어 정보 */
+  readonly character_v_core_equipment_preset_5?: VCorePresetEquipment[] | undefined;
+}
+
+/** V코어 프리셋 개별 정보 */
+export interface VCorePresetEquipment {
+  /** 코어 명 */
+  readonly v_core_name: string;
+  /** 코어 타입 */
+  readonly v_core_type: string;
+  /** 코어의 레벨 */
+  readonly v_core_level: number;
 }
 
 // ─── GET /maplestory/v1/character/hexamatrix ─────────────────────────────────
@@ -1081,6 +1358,8 @@ export interface HexaCoreEquipment {
   readonly hexa_core_type: string;
   /** 연결된 스킬 */
   readonly linked_skill: HexaLinkedSkill[];
+  /** 코어 이벤트 레벨 */
+  readonly hexa_core_event_level?: number | undefined;
 }
 
 /** GET /maplestory/v1/character/hexamatrix 응답 */
@@ -1193,4 +1472,22 @@ export interface CharacterRingExchangeSkillEquipment {
   readonly special_ring_exchange_icon: string;
   /** 링 익스체인지에 등록된 특수 반지 설명 */
   readonly special_ring_exchange_description: string;
+}
+
+// ─── GET /maplestory/v1/character/ring-reserve-skill-equipment ───────────────
+
+/** GET /maplestory/v1/character/ring-reserve-skill-equipment 응답 */
+export interface CharacterRingReserveSkillEquipment {
+  /** 조회 기준일 (KST, 일 단위 데이터로 시, 분은 일괄 0으로 표기) */
+  readonly date: string | null;
+  /** 캐릭터 직업 */
+  readonly character_class: string;
+  /** 예비 특수 반지 슬롯에 장착한 특수 반지 (null: 미장착) */
+  readonly special_ring_reserve_name: string | null;
+  /** 예비 특수 반지 슬롯에 장착한 특수 반지 레벨 */
+  readonly special_ring_reserve_level: number;
+  /** 예비 특수 반지 슬롯에 장착한 특수 반지 아이콘 */
+  readonly special_ring_reserve_icon: string | null;
+  /** 예비 특수 반지 슬롯에 장착한 특수 반지 설명 */
+  readonly special_ring_reserve_description: string | null;
 }
