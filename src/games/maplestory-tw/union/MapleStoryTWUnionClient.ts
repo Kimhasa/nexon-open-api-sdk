@@ -25,8 +25,8 @@ export class MapleStoryTWUnionClient {
    * 유니온 레벨·등급과 아티팩트 레벨·포인트를 조회한다. 대만 명칭: 戰地.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestoryTW.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (대만 시간 UTC+8). 'YYYY-MM-DD' 문자열, Date, 'today' 를 받는다. 2025-10-14 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
-   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
+   * @param params.date - 조회 기준일 (대만 시간 UTC+8). 2025-10-14부터 어제까지 YYYY-MM-DD 문자열이나 Date를 받는다. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside 2025-10-14 through yesterday in Taiwan time.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -50,8 +50,8 @@ export class MapleStoryTWUnionClient {
    * 유니온 공격대 배치(블록 위치, 공격대원 효과, 공격대 점령 효과, 프리셋)를 조회한다. 대만 명칭: 戰地攻擊隊.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestoryTW.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (대만 시간 UTC+8). 'YYYY-MM-DD' 문자열, Date, 'today' 를 받는다. 2025-10-14 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
-   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
+   * @param params.date - 조회 기준일 (대만 시간 UTC+8). 2025-10-14부터 어제까지 YYYY-MM-DD 문자열이나 Date를 받는다. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside 2025-10-14 through yesterday in Taiwan time.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -78,8 +78,8 @@ export class MapleStoryTWUnionClient {
    * 유니온 아티팩트(효과 레벨과 크리스탈 옵션)를 조회한다. 대만 명칭: 戰地神器.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestoryTW.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (대만 시간 UTC+8). 'YYYY-MM-DD' 문자열, Date, 'today' 를 받는다. 2025-10-14 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
-   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
+   * @param params.date - 조회 기준일 (대만 시간 UTC+8). 2025-10-14부터 어제까지 YYYY-MM-DD 문자열이나 Date를 받는다. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside 2025-10-14 through yesterday in Taiwan time.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -105,8 +105,8 @@ export class MapleStoryTWUnionClient {
    * 유니온 챔피언(챔피언 캐릭터·등급·휘장 효과)을 조회한다. 대만 명칭: 聯盟冠軍.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestoryTW.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (대만 시간 UTC+8). 'YYYY-MM-DD' 문자열, Date, 'today' 를 받는다. 2025-12-18 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
-   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
+   * @param params.date - 조회 기준일 (대만 시간 UTC+8). 2025-12-18부터 어제까지 YYYY-MM-DD 문자열이나 Date를 받는다. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside 2025-12-18 through yesterday in Taiwan time.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts

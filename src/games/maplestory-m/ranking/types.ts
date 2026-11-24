@@ -5,7 +5,7 @@ import type { MWorldName } from '../guild/types.js';
 
 /** 랭킹 기본 요청 파라미터 */
 export interface MRankingBaseRequest {
-  /** 조회 기준일 (KST, YYYY-MM-DD) */
+  /** 랭킹 기준일 (KST, YYYY-MM-DD, 필수). 2025-11-27부터 오늘까지의 날짜 중 최근 2년 이내. */
   readonly date: NexonDate | string;
   /** 캐릭터 식별자 (특정 캐릭터 랭킹 조회 시, 샤레니안 랭킹은 길드 마스터의 캐릭터 식별자) */
   readonly ocid?: OCID | undefined;

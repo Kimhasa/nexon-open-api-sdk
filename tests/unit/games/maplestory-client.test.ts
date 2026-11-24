@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 import { http, HttpResponse } from 'msw';
 import type { JsonBodyType } from 'msw';
 import { server } from '../../mocks/server.js';
@@ -332,6 +332,12 @@ const METHOD_CASES: readonly MethodCase[] = [
 ];
 
 describe('MapleStoryClient', () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2026-11-02T00:00:00Z'));
+  });
+  afterEach(() => vi.useRealTimers());
+
   describe('lazy getters', () => {
     it('character getter는 MapleStoryCharacterClient를 반환한다', () => {
       const client = createMapleStoryClient();
@@ -800,6 +806,69 @@ describe('MapleStoryClient', () => {
     });
   });
 
+  describe('조회 기준일', () => {
+    it('KST 자정에 어제가 된 날짜를 캐릭터 조회에 보낸다', async () => {
+      const onRequest = vi.fn();
+      const { character } = createMapleStoryClient({ logger: { onRequest } });
+      vi.setSystemTime(new Date('2026-11-01T14:59:59.999Z'));
+      await expect(character.getBasic({ ocid: TEST_OCID, date: DATE })).rejects.toMatchObject({
+        code: 'OPENAPI00004',
+      });
+      expect(onRequest).not.toHaveBeenCalled();
+      vi.setSystemTime(new Date('2026-11-01T15:00:00Z'));
+      await character.getBasic({ ocid: TEST_OCID, date: DATE });
+      expect(onRequest).toHaveBeenCalledExactlyOnceWith(
+        expect.objectContaining({ params: { ocid: TEST_OCID, date: DATE } }),
+      );
+    });
+
+    it('캐릭터 정보의 첫날은 받고 하루 전의 빈 스냅숏 요청은 막는다', async () => {
+      const onRequest = vi.fn();
+      const { character } = createMapleStoryClient({ logger: { onRequest } });
+      const ocid = TEST_OCID;
+      const result = character.getBasic({ ocid, date: '2023-12-20' });
+      await expect(result).rejects.toThrow(NexonBadRequestError);
+      await expect(result).rejects.toMatchObject({
+        code: 'OPENAPI00004',
+        message: expect.stringContaining('2023-12-21'),
+      });
+      expect(onRequest).not.toHaveBeenCalled();
+      await character.getBasic({ ocid, date: '2023-12-21' });
+      expect(onRequest).toHaveBeenCalledExactlyOnceWith(
+        expect.objectContaining({ params: { ocid, date: '2023-12-21' } }),
+      );
+    });
+
+    it('랭킹 기준일 없이 호출하면 요청 전에 입력 오류를 던진다', async () => {
+      const onRequest = vi.fn();
+      const { ranking } = createMapleStoryClient({ logger: { onRequest } });
+      // @ts-expect-error JavaScript callers can omit the entire request.
+      const result = ranking.getOverall();
+      await expect(result).rejects.toThrow(NexonBadRequestError);
+      await expect(result).rejects.toMatchObject({
+        code: 'OPENAPI00004',
+        message: expect.stringContaining('YYYY-MM-DD'),
+      });
+      expect(onRequest).not.toHaveBeenCalled();
+    });
+
+    it('링 익스체인지 마지막 날과 예비 특수 반지 첫날의 경계를 확인한다', async () => {
+      const onRequest = vi.fn();
+      const { character } = createMapleStoryClient({ logger: { onRequest } });
+      const ocid = TEST_OCID;
+      await expect(
+        character.getRingExchangeSkillEquipment({ ocid, date: '2026-03-19' }),
+      ).rejects.toThrow(/2026-03-18/);
+      await expect(
+        character.getRingReserveSkillEquipment({ ocid, date: '2026-03-18' }),
+      ).rejects.toThrow(/2026-03-19/);
+      expect(onRequest).not.toHaveBeenCalled();
+      await character.getRingExchangeSkillEquipment({ ocid, date: '2026-03-18' });
+      await character.getRingReserveSkillEquipment({ ocid, date: '2026-03-19' });
+      expect(onRequest).toHaveBeenCalledTimes(2);
+    });
+  });
+
   describe('SDK 입력 검증 — 요청 전에 즉시 throw', () => {
     /** 요청이 실제로 나가면 실패하도록, 대상 경로에 500을 돌려주는 핸들러를 건다 */
     const failIfRequested = (path: string): void => {
@@ -842,11 +911,19 @@ describe('MapleStoryClient', () => {
       ).rejects.toThrow(/count.*10 이상 1000 이하/s);
     });
 
-    it('history.getSoulPotential — date 와 cursor 가 모두 없음', async () => {
-      failIfRequested('/v1/history/soul-potential');
-      await expect(
-        createMapleStoryClient().history.getSoulPotential({ count: 100 }),
-      ).rejects.toThrow(/date와 cursor/);
+    it.each([
+      ['getStarforce', 'starforce'],
+      ['getPotential', 'potential'],
+      ['getCube', 'cube'],
+      ['getSoulPotential', 'soul-potential'],
+    ] as const)('history.%s — date와 cursor가 모두 없음', async (method, path) => {
+      failIfRequested('/v1/history/' + path);
+      const result = createMapleStoryClient().history[method]({ count: 100 });
+      await expect(result).rejects.toThrow(NexonBadRequestError);
+      await expect(result).rejects.toMatchObject({
+        code: 'OPENAPI00004',
+        message: expect.stringContaining('next_cursor'),
+      });
     });
 
     it('battlePractice.getReplayId — 빈 ocid', async () => {

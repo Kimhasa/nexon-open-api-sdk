@@ -10,10 +10,12 @@ import type {
   MSharenianWaterwayRanking,
 } from '../../../src/games/maplestory-m/ranking/types.js';
 
+export const M_RANKING_DATE = '2025-11-27';
+
 export const mLevelRankingFixture: MLevelRanking = {
   ranking: [
     {
-      date: '2024-01-01T00:00+09:00',
+      date: `${M_RANKING_DATE}T00:00+09:00`,
       ranking: 1,
       world_ranking: 1,
       character_name: '랭커1M',
@@ -29,7 +31,7 @@ export const mLevelRankingFixture: MLevelRanking = {
 export const mDojangRankingFixture: MDojangRanking = {
   ranking: [
     {
-      date: '2024-01-01T00:00+09:00',
+      date: `${M_RANKING_DATE}T00:00+09:00`,
       ranking: 1,
       world_ranking: 1,
       character_name: '테스트캐릭터M',
@@ -45,7 +47,7 @@ export const mDojangRankingFixture: MDojangRanking = {
 export const mRootOfTimeRankingFixture: MRootOfTimeRanking = {
   ranking: [
     {
-      date: '2024-01-01T00:00+09:00',
+      date: `${M_RANKING_DATE}T00:00+09:00`,
       ranking: 1,
       world_ranking: 1,
       character_name: '테스트캐릭터M',
@@ -61,7 +63,7 @@ export const mRootOfTimeRankingFixture: MRootOfTimeRanking = {
 export const mUnionRankingFixture: MUnionRanking = {
   ranking: [
     {
-      date: '2024-01-01T00:00+09:00',
+      date: `${M_RANKING_DATE}T00:00+09:00`,
       ranking: 1,
       world_ranking: 1,
       character_name: '테스트캐릭터M',
@@ -78,7 +80,7 @@ export const mUnionRankingFixture: MUnionRanking = {
 export const mCombatPowerRankingFixture: MCombatPowerRanking = {
   ranking: [
     {
-      date: '2024-01-01T00:00+09:00',
+      date: `${M_RANKING_DATE}T00:00+09:00`,
       ranking: 1,
       world_ranking: 1,
       character_name: '테스트캐릭터M',
@@ -94,7 +96,7 @@ export const mCombatPowerRankingFixture: MCombatPowerRanking = {
 export const mKerningMTowerRankingFixture: MKerningMTowerRanking = {
   ranking: [
     {
-      date: '2024-01-01T00:00+09:00',
+      date: `${M_RANKING_DATE}T00:00+09:00`,
       ranking: 1,
       world_ranking: 1,
       character_name: '테스트캐릭터M',
@@ -110,7 +112,7 @@ export const mKerningMTowerRankingFixture: MKerningMTowerRanking = {
 export const mAchievementRankingFixture: MAchievementRanking = {
   ranking: [
     {
-      date: '2024-01-01T00:00+09:00',
+      date: `${M_RANKING_DATE}T00:00+09:00`,
       ranking: 1,
       world_ranking: 1,
       character_name: '테스트캐릭터M',
@@ -133,7 +135,7 @@ export const mAchievementRankingFixture: MAchievementRanking = {
 export const mSharenianBattlefieldRankingFixture: MSharenianBattlefieldRanking = {
   ranking: [
     {
-      date: '2024-01-01T00:00+09:00',
+      date: `${M_RANKING_DATE}T00:00+09:00`,
       ranking: 1,
       world_ranking: 1,
       guild_name: '테스트길드M',
@@ -149,7 +151,7 @@ export const mSharenianBattlefieldRankingFixture: MSharenianBattlefieldRanking =
 export const mSharenianWaterwayRankingFixture: MSharenianWaterwayRanking = {
   ranking: [
     {
-      date: '2024-01-01T00:00+09:00',
+      date: `${M_RANKING_DATE}T00:00+09:00`,
       ranking: 1,
       world_ranking: 1,
       guild_name: '테스트길드M',

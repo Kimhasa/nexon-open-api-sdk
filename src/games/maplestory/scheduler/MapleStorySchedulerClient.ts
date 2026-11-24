@@ -1,3 +1,4 @@
+import { schedulerDate } from '../../_base/maple-date.js';
 import { assertNonEmptyString } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import { SCHEDULER_CHARACTER_STATE_SHAPE } from '../shapes.js';
@@ -31,9 +32,9 @@ export class MapleStorySchedulerClient {
    * - 캐릭터가 기준일에 접속하지 않았다면 응답 결과가 없을 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). 내 계정(API 키를 발급받은 계정)의 캐릭터만 조회할 수 있다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 오늘. 조회일 기준 14일 전까지만 볼 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 조회일 기준 14일 전부터 오늘까지. 생략하면 오늘의 수행 현황을 조회한다
    *
-   * @throws {NexonBadRequestError} ocid가 비어 있을 때 (요청 전 즉시 throw)
+   * @throws {NexonBadRequestError} ocid가 비어 있거나 날짜 형식이 잘못되었거나 14일 전부터 오늘까지의 범위를 벗어났을 때
    * @throws {NexonAuthError} API 키가 유효하지 않거나 다른 계정의 캐릭터일 때
    * @throws {NexonRateLimitError} 요청 한도 초과 시
    *
@@ -56,7 +57,7 @@ export class MapleStorySchedulerClient {
     );
     return this.http.get<SchedulerCharacterState>(
       `${MapleStorySchedulerClient.BASE}/scheduler/character-state`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: schedulerDate(params.date) },
       SCHEDULER_CHARACTER_STATE_SHAPE,
     );
   }
