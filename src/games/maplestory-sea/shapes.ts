@@ -19,7 +19,7 @@ export const SEA_CHARACTER_BASIC_SHAPE: ShapeDescriptor = {
     character_level: 'number',
     character_exp: 'number',
     character_exp_rate: 'string',
-    character_guild_name: 'string',
+    character_guild_name: 'any',
     character_image: 'string',
     character_date_create: 'string',
     access_flag: 'string',
@@ -108,7 +108,7 @@ export const SEA_CHARACTER_CASHITEM_EQUIPMENT_SHAPE: ShapeDescriptor = {
     character_gender: 'string',
     character_class: 'string',
     character_look_mode: 'string',
-    preset_no: 'number',
+    preset_no: 'any',
     cash_item_equipment_base: 'array',
     cash_item_equipment_preset_1: 'array',
     cash_item_equipment_preset_2: 'array',
@@ -163,8 +163,8 @@ export const SEA_CHARACTER_ANDROID_EQUIPMENT_SHAPE: ShapeDescriptor = {
     android_ear_sensor_clip_flag: 'string',
     android_gender: 'any',
     android_grade: 'any',
-    android_non_humanoid_flag: 'string',
-    android_shop_usable_flag: 'string',
+    android_non_humanoid_flag: 'any',
+    android_shop_usable_flag: 'any',
     preset_no: 'number',
     android_preset_1: 'object',
     android_preset_2: 'object',
@@ -215,7 +215,7 @@ export const SEA_CHARACTER_SKILL_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     date: 'any',
     character_class: 'string',
-    character_skill_grade: 'string',
+    character_skill_grade: 'any',
     character_skill: 'array',
   },
 };
@@ -223,7 +223,7 @@ export const SEA_CHARACTER_SKILL_SHAPE: ShapeDescriptor = {
 export const SEA_CHARACTER_LINK_SKILL_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     date: 'any',
-    character_class: 'string',
+    character_class: 'any',
     character_link_skill: 'array',
     character_link_skill_preset_1: 'array',
     character_link_skill_preset_2: 'array',
@@ -238,29 +238,29 @@ export const SEA_CHARACTER_LINK_SKILL_SHAPE: ShapeDescriptor = {
 export const SEA_CHARACTER_VMATRIX_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     date: 'any',
-    character_class: 'string',
+    character_class: 'any',
     character_v_core_equipment: 'array',
-    character_v_matrix_remain_slot_upgrade_point: 'number',
+    character_v_matrix_remain_slot_upgrade_point: 'any',
   },
 };
 
 export const SEA_CHARACTER_HEXAMATRIX_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     date: 'any',
-    character_hexa_core_equipment: 'array',
+    character_hexa_core_equipment: 'any',
   },
 };
 
 export const SEA_CHARACTER_HEXAMATRIX_STAT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     date: 'any',
-    character_class: 'string',
+    character_class: 'any',
     character_hexa_stat_core: 'array',
-    character_hexa_stat_core_2: 'array',
-    character_hexa_stat_core_3: 'array',
+    character_hexa_stat_core_2: 'any',
+    character_hexa_stat_core_3: 'any',
     preset_hexa_stat_core: 'array',
-    preset_hexa_stat_core_2: 'array',
-    preset_hexa_stat_core_3: 'array',
+    preset_hexa_stat_core_2: 'any',
+    preset_hexa_stat_core_3: 'any',
   },
 };
 
@@ -284,7 +284,7 @@ export const SEA_GUILD_ID_SHAPE: ShapeDescriptor = {
 
 export const SEA_GUILD_BASIC_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     world_name: 'string',
     guild_name: 'string',
     guild_level: 'number',
@@ -330,7 +330,7 @@ export const SEA_UNION_ARTIFACT_SHAPE: ShapeDescriptor = {
     date: 'any',
     union_artifact_effect: 'array',
     union_artifact_crystal: 'array',
-    union_artifact_remain_ap: 'number',
+    union_artifact_remain_ap: 'any',
   },
 };
 

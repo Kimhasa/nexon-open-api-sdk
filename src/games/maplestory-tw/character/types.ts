@@ -444,10 +444,12 @@ export interface TWTitleInfo {
 export interface TWMedalShape {
   readonly medal_shape_name: string;
   readonly medal_shape_icon: string;
-  readonly medal_shape_description: string;
+  /** 훈장 외형 설명. 설명이 없으면 null. */
+  readonly medal_shape_description: string | null;
   readonly medal_shape_changed_name: string;
   readonly medal_shape_changed_icon: string;
-  readonly medal_shape_changed_description: string;
+  /** 모루로 바꾼 훈장 외형의 설명. 설명이 없으면 null. */
+  readonly medal_shape_changed_description: string | null;
 }
 
 /** 장착 장비(캐시 장비 제외) — `client.maplestoryTW.character.getItemEquipment()` 의 응답. */
@@ -468,8 +470,8 @@ export interface TWCharacterItemEquipment {
   readonly item_equipment_preset_2: readonly TWPresetItemEquipment[];
   /** Preset 3 equipment */
   readonly item_equipment_preset_3: readonly TWPresetItemEquipment[];
-  /** Title info */
-  readonly title: TWTitleInfo;
+  /** 장착한 칭호 정보. 장착한 칭호가 없으면 null. */
+  readonly title: TWTitleInfo | null;
   /** 훈장 외형 정보. 값이 없으면 null. */
   readonly medal_shape: TWMedalShape | null;
   /** Evan dragon equipment (only for Evan class) */
@@ -704,12 +706,12 @@ export interface TWCharacterBeautyEquipment {
   readonly character_face: TWFaceInfo;
   /** Character skin info (Normal mode / Alpha mode for Zero) */
   readonly character_skin: TWSkinInfo;
-  /** Additional hair info (Beta mode for Zero / Dress-up mode for Angelic Buster) */
-  readonly additional_character_hair: TWHairInfo;
-  /** Additional face info (Beta mode for Zero / Dress-up mode for Angelic Buster) */
-  readonly additional_character_face: TWFaceInfo;
-  /** Additional skin info (Beta mode for Zero / Dress-up mode for Angelic Buster) */
-  readonly additional_character_skin: TWSkinInfo;
+  /** 제로 베타 모드 또는 엔젤릭버스터 드레스업 모드의 헤어. 해당 외형이 없으면 null. */
+  readonly additional_character_hair: TWHairInfo | null;
+  /** 제로 베타 모드 또는 엔젤릭버스터 드레스업 모드의 성형. 해당 외형이 없으면 null. */
+  readonly additional_character_face: TWFaceInfo | null;
+  /** 제로 베타 모드 또는 엔젤릭버스터 드레스업 모드의 피부. 해당 외형이 없으면 null. */
+  readonly additional_character_skin: TWSkinInfo | null;
 }
 
 // ─── GET /maplestorytw/v1/character/android-equipment ────────────────────────
@@ -724,20 +726,20 @@ export interface TWAndroidCashItem {
   readonly cash_item_name: string;
   /** Cash item icon */
   readonly cash_item_icon: string;
-  /** Cash item description */
-  readonly cash_item_description: string;
+  /** 캐시 장비 설명. 설명이 없으면 null. */
+  readonly cash_item_description: string | null;
   /** Cash item options */
   readonly cash_item_option: readonly TWCashItemOption[];
   /** Cash item expiry date (TST) */
   readonly date_expire: string | null;
   /** Cash item option expiry date (TST) */
   readonly date_option_expire: string | null;
-  /** Cash item label info */
-  readonly cash_item_label: string;
+  /** 캐시 장비 라벨. 라벨이 없으면 null. */
+  readonly cash_item_label: string | null;
   /** Cash item coloring prism info (null = not applied) */
   readonly cash_item_coloring_prism: TWCashItemColoringPrism | null;
-  /** Gender compatibility for android item */
-  readonly android_item_gender: string;
+  /** 안드로이드 캐시 장비 착용 성별 제한. 제한이 없으면 null. */
+  readonly android_item_gender: string | null;
   /** Freestyle Coupon application status ("0": not applied, "1": applied) */
   readonly freestyle_flag: string;
 }
@@ -796,10 +798,10 @@ export interface TWCharacterAndroidEquipment {
   readonly android_gender: string | null;
   /** Android grade */
   readonly android_grade: string | null;
-  /** Whether the Android is non-humanoid, encoded as a string flag. */
-  readonly android_non_humanoid_flag: string;
-  /** Whether the Android can use the general store, encoded as a string flag. */
-  readonly android_shop_usable_flag: string;
+  /** 비인간형 안드로이드 여부. 값이 없으면 null. */
+  readonly android_non_humanoid_flag: string | null;
+  /** 안드로이드 잡화상점 이용 가능 여부. 값이 없으면 null. */
+  readonly android_shop_usable_flag: string | null;
   /** Active equipment preset number */
   readonly preset_no: number;
   /** Android preset 1 info */
@@ -822,22 +824,22 @@ export interface TWPetItemOption {
 
 /** Pet equipment info */
 export interface TWPetEquipmentInfo {
-  /** Item name */
-  readonly item_name: string;
-  /** Item icon */
-  readonly item_icon: string;
-  /** Item description */
-  readonly item_description: string;
+  /** 펫 장비 이름. 값이 없으면 null. */
+  readonly item_name: string | null;
+  /** 펫 장비 아이콘. 값이 없으면 null. */
+  readonly item_icon: string | null;
+  /** 펫 장비 설명. 설명이 없으면 null. */
+  readonly item_description: string | null;
   /** Displayed item options */
   readonly item_option: readonly TWPetItemOption[];
   /** Number of upgrades */
   readonly scroll_upgrade: number;
   /** Number of upgrades available */
   readonly scroll_upgradable: number;
-  /** Item appearance */
-  readonly item_shape: string;
-  /** Item appearance icon */
-  readonly item_shape_icon: string;
+  /** 펫 장비 외형 이름. 값이 없으면 null. */
+  readonly item_shape: string | null;
+  /** 펫 장비 외형 아이콘. 값이 없으면 null. */
+  readonly item_shape_icon: string | null;
 }
 
 /** Pet auto buff skill info */
@@ -856,12 +858,16 @@ export interface TWPetAutoSkill {
 export interface TWPetPotential {
   /** Potential tier ("1" to "3", or "0" when inactive). */
   readonly potential_step: string;
-  /** Potential category. */
-  readonly potential_type: string;
-  /** Primary increase. For paired stats, holds attack power or maximum HP. */
-  readonly potential_increase_1: string;
-  /** Secondary increase for paired stats, holding magic attack or maximum MP. */
-  readonly potential_increase_2: string;
+  /** 펫 잠재능력 종류. 값이 없으면 null. */
+  readonly potential_type: string | null;
+  /** 펫 잠재능력 1번 증가량. 포털 스펙의 이름. 2026-11-24 실제 응답에는 없고 potential_increase1로 온다. */
+  readonly potential_increase_1?: string | undefined;
+  /** 펫 잠재능력 1번 증가량. 값이 없으면 null. 실제 응답의 필드. 포털 스펙에는 potential_increase_1로 적혀 있다. */
+  readonly potential_increase1?: string | null | undefined;
+  /** 펫 잠재능력 2번 증가량. 포털 스펙의 이름. 2026-11-24 실제 응답에는 없고 potential_increase2로 온다. */
+  readonly potential_increase_2?: string | undefined;
+  /** 펫 잠재능력 2번 증가량. 값이 없으면 null. 실제 응답의 필드. 포털 스펙에는 potential_increase_2로 적혀 있다. */
+  readonly potential_increase2?: string | null | undefined;
 }
 
 /** 장착 펫과 펫 장비·펫 스킬 — `client.maplestoryTW.character.getPetEquipment()` 의 응답. */
@@ -1007,8 +1013,8 @@ export interface TWLinkSkillInfo {
   readonly skill_level: number;
   /** Skill effect */
   readonly skill_effect: string;
-  /** Effect for the next skill level */
-  readonly skill_effect_next: string;
+  /** 다음 레벨 링크 스킬 효과. 다음 레벨 효과가 없으면 null. */
+  readonly skill_effect_next: string | null;
   /** Skill icon */
   readonly skill_icon: string;
 }
@@ -1119,12 +1125,12 @@ export interface TWCharacterHexaMatrix {
 export interface TWHexaStatCoreInfo {
   /** Slot index */
   readonly slot_id: string;
-  /** Main Stat name */
-  readonly main_stat_name: string;
-  /** First sub stat name */
-  readonly sub_stat_name_1: string;
-  /** Second sub stat name */
-  readonly sub_stat_name_2: string;
+  /** HEXA 스탯 코어의 메인 스탯 이름. 선택한 스탯이 없으면 null. */
+  readonly main_stat_name: string | null;
+  /** HEXA 스탯 코어의 첫 번째 추가 스탯 이름. 선택한 스탯이 없으면 null. */
+  readonly sub_stat_name_1: string | null;
+  /** HEXA 스탯 코어의 두 번째 추가 스탯 이름. 선택한 스탯이 없으면 null. */
+  readonly sub_stat_name_2: string | null;
   /** Main Stat level */
   readonly main_stat_level: number;
   /** First sub stat level */
@@ -1183,8 +1189,8 @@ export interface TWFamiliarLinkSlot {
   readonly familiar_name: string | null;
   /** Whether the link slot is active ("true" or "false"). */
   readonly active_flag: string;
-  /** Link expiration date. */
-  readonly expire_date: string;
+  /** 패밀리어 연결 슬롯의 만료 날짜. 만료 정보가 없으면 null. */
+  readonly expire_date: string | null;
 }
 
 /** Familiar option. */
@@ -1211,16 +1217,16 @@ export interface TWFamiliarInfo {
   readonly familiar_level: number;
   /** Familiar experience. */
   readonly familiar_exp: number;
-  /** Learned skill name. */
-  readonly skill_name: string;
+  /** 패밀리어가 배운 스킬 이름. 배운 스킬이 없으면 null. */
+  readonly skill_name: string | null;
   /** Level of the Familiar's options. */
   readonly option_level: number;
   /** Familiar options. */
   readonly option: readonly TWFamiliarOption[];
-  /** Familiar grade. */
-  readonly familiar_grade: string;
-  /** Familiar appearance name. */
-  readonly look_name: string;
+  /** 패밀리어 등급. 값이 없으면 null. */
+  readonly familiar_grade: string | null;
+  /** 패밀리어 외형 이름. 값이 없으면 null. */
+  readonly look_name: string | null;
   /** Whether the Familiar is summoned, encoded as a string flag. */
   readonly summoned_flag: string;
   /** Link slot identifier ("1", "2", "3", "vip", or "not link"). */

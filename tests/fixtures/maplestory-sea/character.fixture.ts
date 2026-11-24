@@ -159,6 +159,7 @@ const presetEquipment: SEAPresetItemEquipment = {
     magic_power: 'magic power',
     exceptional_upgrade: 1,
   },
+  freestyle_flag: null,
 };
 
 const classEquipment: SEAClassItemEquipment = {
@@ -446,7 +447,7 @@ export const seaCharacterItemEquipmentFixture: SEACharacterItemEquipment = {
       },
       special_ring_level: 1,
       date_expire: null,
-      freestyle_flag: '0',
+      freestyle_flag: null,
     },
   ],
   item_equipment_preset_1: [presetEquipment],
@@ -458,14 +459,14 @@ export const seaCharacterItemEquipmentFixture: SEACharacterItemEquipment = {
     title_description: 'title description',
     date_expire: null,
     date_option_expire: null,
-    title_shape_name: 'title shape name',
-    title_shape_icon: 'https://example.test/icon.png',
-    title_shape_description: 'title shape description',
+    title_shape_name: null,
+    title_shape_icon: null,
+    title_shape_description: null,
   },
   medal_shape: {
     medal_shape_name: 'medal shape name',
     medal_shape_icon: 'https://example.test/icon.png',
-    medal_shape_description: 'medal shape description',
+    medal_shape_description: null,
     medal_shape_changed_name: 'medal shape changed name',
     medal_shape_changed_icon: 'https://example.test/icon.png',
     medal_shape_changed_description: 'medal shape changed description',
@@ -479,7 +480,7 @@ export const seaCharacterCashItemEquipmentFixture: SEACharacterCashItemEquipment
   character_gender: 'Male',
   character_class: 'Night Lord',
   character_look_mode: 'character look mode',
-  preset_no: 1,
+  preset_no: null,
   cash_item_equipment_base: [cashEquipment],
   cash_item_equipment_preset_1: [cashEquipment],
   cash_item_equipment_preset_2: [cashEquipment],
@@ -545,14 +546,14 @@ export const seaCharacterBeautyEquipmentFixture: SEACharacterBeautyEquipment = {
     base_color: 'base color',
     mix_color: 'mix color',
     mix_rate: 'mix rate',
-    freestyle_flag: '0',
+    freestyle_flag: null,
   },
   character_face: {
     face_name: 'face name',
     base_color: 'base color',
     mix_color: 'mix color',
     mix_rate: 'mix rate',
-    freestyle_flag: '0',
+    freestyle_flag: null,
   },
   character_skin: {
     skin_name: 'skin name',
@@ -577,22 +578,16 @@ export const seaCharacterAndroidEquipmentFixture: SEACharacterAndroidEquipment =
     base_color: 'base color',
     mix_color: null,
     mix_rate: 'mix rate',
-    freestyle_flag: '0',
+    freestyle_flag: null,
   },
   android_face: {
     face_name: 'face name',
     base_color: 'base color',
     mix_color: null,
     mix_rate: 'mix rate',
-    freestyle_flag: '0',
+    freestyle_flag: null,
   },
-  android_skin: {
-    skin_name: 'skin name',
-    color_style: null,
-    hue: null,
-    saturation: null,
-    brightness: null,
-  },
+  android_skin: null,
   android_cash_item_equipment: [
     {
       cash_item_equipment_part: 'cash item equipment part',
@@ -617,8 +612,8 @@ export const seaCharacterAndroidEquipmentFixture: SEACharacterAndroidEquipment =
   android_ear_sensor_clip_flag: '0',
   android_gender: 'android gender',
   android_grade: 'android grade',
-  android_non_humanoid_flag: '0',
-  android_shop_usable_flag: '0',
+  android_non_humanoid_flag: null,
+  android_shop_usable_flag: null,
   preset_no: 1,
   android_preset_1: {
     android_name: 'Example Android',
@@ -680,8 +675,8 @@ export const seaCharacterPetEquipmentFixture: SEACharacterPetEquipment = {
   pet_1_auto_skill: {
     skill_1: null,
     skill_1_icon: null,
-    skill_2: 'skill 2',
-    skill_2_icon: 'https://example.test/icon.png',
+    skill_2: null,
+    skill_2_icon: null,
   },
   pet_1_pet_type: 'pet 1 pet type',
   pet_1_skill: ['pet 1 skill'],
@@ -715,7 +710,7 @@ export const seaCharacterPetEquipmentFixture: SEACharacterPetEquipment = {
 export const seaCharacterSkillFixture: SEACharacterSkill = {
   date: '2025-04-21T00:00+08:00',
   character_class: 'Night Lord',
-  character_skill_grade: '6',
+  character_skill_grade: null,
   character_skill: [
     {
       skill_name: 'skill name',
@@ -730,7 +725,7 @@ export const seaCharacterSkillFixture: SEACharacterSkill = {
 
 export const seaCharacterLinkSkillFixture: SEACharacterLinkSkill = {
   date: '2025-04-21T00:00+08:00',
-  character_class: 'Night Lord',
+  character_class: null,
   character_link_skill: [
     {
       skill_name: 'skill name',
@@ -800,20 +795,20 @@ export const seaCharacterLinkSkillFixture: SEACharacterLinkSkill = {
 
 export const seaCharacterVMatrixFixture: SEACharacterVMatrix = {
   date: '2025-04-21T00:00+08:00',
-  character_class: 'Night Lord',
+  character_class: null,
   character_v_core_equipment: [
     {
       slot_id: 'slot id',
       slot_level: 1,
-      v_core_name: 'v core name',
-      v_core_type: 'v core type',
+      v_core_name: null,
+      v_core_type: null,
       v_core_level: 1,
       v_core_skill_1: null,
       v_core_skill_2: null,
       v_core_skill_3: null,
     },
   ],
-  character_v_matrix_remain_slot_upgrade_point: 1,
+  character_v_matrix_remain_slot_upgrade_point: null,
 };
 
 export const seaCharacterHexaMatrixFixture: SEACharacterHexaMatrix = {
@@ -834,7 +829,7 @@ export const seaCharacterHexaMatrixFixture: SEACharacterHexaMatrix = {
 
 export const seaCharacterHexaMatrixStatFixture: SEACharacterHexaMatrixStat = {
   date: '2025-04-21T00:00+08:00',
-  character_class: 'Night Lord',
+  character_class: null,
   character_hexa_stat_core: [
     {
       slot_id: 'slot id',
@@ -847,66 +842,22 @@ export const seaCharacterHexaMatrixStatFixture: SEACharacterHexaMatrixStat = {
       stat_grade: 1,
     },
   ],
-  character_hexa_stat_core_2: [
-    {
-      slot_id: 'slot id',
-      main_stat_name: 'main stat name',
-      sub_stat_name_1: 'sub stat name 1',
-      sub_stat_name_2: 'sub stat name 2',
-      main_stat_level: 1,
-      sub_stat_level_1: 1,
-      sub_stat_level_2: 1,
-      stat_grade: 1,
-    },
-  ],
-  character_hexa_stat_core_3: [
-    {
-      slot_id: 'slot id',
-      main_stat_name: 'main stat name',
-      sub_stat_name_1: 'sub stat name 1',
-      sub_stat_name_2: 'sub stat name 2',
-      main_stat_level: 1,
-      sub_stat_level_1: 1,
-      sub_stat_level_2: 1,
-      stat_grade: 1,
-    },
-  ],
+  character_hexa_stat_core_2: null,
+  character_hexa_stat_core_3: null,
   preset_hexa_stat_core: [
     {
       slot_id: 'slot id',
-      main_stat_name: 'main stat name',
-      sub_stat_name_1: 'sub stat name 1',
-      sub_stat_name_2: 'sub stat name 2',
-      main_stat_level: 1,
-      sub_stat_level_1: 1,
-      sub_stat_level_2: 1,
-      stat_grade: 1,
+      main_stat_name: null,
+      sub_stat_name_1: null,
+      sub_stat_name_2: null,
+      main_stat_level: 0,
+      sub_stat_level_1: 0,
+      sub_stat_level_2: 0,
+      stat_grade: 0,
     },
   ],
-  preset_hexa_stat_core_2: [
-    {
-      slot_id: 'slot id',
-      main_stat_name: 'main stat name',
-      sub_stat_name_1: 'sub stat name 1',
-      sub_stat_name_2: 'sub stat name 2',
-      main_stat_level: 1,
-      sub_stat_level_1: 1,
-      sub_stat_level_2: 1,
-      stat_grade: 1,
-    },
-  ],
-  preset_hexa_stat_core_3: [
-    {
-      slot_id: 'slot id',
-      main_stat_name: 'main stat name',
-      sub_stat_name_1: 'sub stat name 1',
-      sub_stat_name_2: 'sub stat name 2',
-      main_stat_level: 1,
-      sub_stat_level_1: 1,
-      sub_stat_level_2: 1,
-      stat_grade: 1,
-    },
-  ],
+  preset_hexa_stat_core_2: null,
+  preset_hexa_stat_core_3: null,
 };
 
 export const seaCharacterDojangFixture: SEACharacterDojang = {

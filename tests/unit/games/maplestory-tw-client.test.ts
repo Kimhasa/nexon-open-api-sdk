@@ -300,6 +300,15 @@ describe('MapleStoryTWClient', () => {
     );
   });
 
+  it('accepts a null response date for the latest guild data', async () => {
+    const { client, onResponseShapeMismatch } = createClient();
+    await expect(client.guild.getBasic({ oguild_id: TEST_GUILD_ID })).resolves.toEqual({
+      ...twGuildBasicFixture,
+      date: null,
+    });
+    expect(onResponseShapeMismatch).not.toHaveBeenCalled();
+  });
+
   it('formats timestamps at the Taiwan day boundary', async () => {
     const { client, onRequest } = createClient();
     await client.character.getBasic({ ocid: TEST_OCID, date: new Date('2025-10-14T16:00:00Z') });

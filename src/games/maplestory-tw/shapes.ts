@@ -161,8 +161,8 @@ export const CHARACTER_ANDROID_EQUIPMENT_SHAPE: ShapeDescriptor = {
     android_ear_sensor_clip_flag: 'string',
     android_gender: 'any',
     android_grade: 'any',
-    android_non_humanoid_flag: 'string',
-    android_shop_usable_flag: 'string',
+    android_non_humanoid_flag: 'any',
+    android_shop_usable_flag: 'any',
     preset_no: 'number',
     android_preset_1: 'object',
     android_preset_2: 'object',
@@ -337,7 +337,7 @@ export const GUILD_ID_SHAPE: ShapeDescriptor = {
 
 export const GUILD_BASIC_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     world_name: 'string',
     guild_name: 'string',
     guild_level: 'number',

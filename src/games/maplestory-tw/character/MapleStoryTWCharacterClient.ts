@@ -504,7 +504,7 @@ export class MapleStoryTWCharacterClient {
    * const client = new NexonClient({ apiKey: 'your-api-key' });
    * const ocid = await client.maplestoryTW.getOcid('CharacterName');
    * const hexa = await client.maplestoryTW.character.getHexaMatrix({ ocid });
-   * for (const core of hexa.character_hexa_core_equipment) {
+   * for (const core of hexa.character_hexa_core_equipment ?? []) {
    *   console.log(`${core.hexa_core_name} Lv.${core.hexa_core_level} (${core.hexa_core_type})`);
    * }
    * ```

@@ -116,7 +116,7 @@ API 키는 게임마다 따로 발급받습니다. 한국 메이플스토리 키
 - **길드 고유 번호(`oguild_id`).** 길드 이름과 월드 이름으로 `guild.getId()` 에서 받습니다.
 - **날짜는 싱가포르 시간(UTC+8) 기준** `'YYYY-MM-DD'` 문자열입니다. `Date` 객체로 만들려면 `toNexonDate(new Date(), 480)` 처럼 480분(UTC+8)을 넣습니다.
 - **데이터 반영:** 게임에서 바뀐 내용은 약 15분 뒤에 조회됩니다. `date` 를 생략하면 가장 최근 데이터를 받습니다. 날짜를 넣으면 그날 하루(0시~24시)의 데이터이고, 지난 날짜의 데이터는 다음날 오전 2시(SGT)부터 조회됩니다.
-- **응답의 기준일:** 캐릭터와 유니온의 최신 데이터에서 `date` 는 `null` 일 수 있습니다.
+- **응답의 기준일:** 캐릭터·유니온·길드의 최신 데이터에서 `date` 는 `null` 일 수 있습니다.
 - **2025년 4월 20일 이전 날짜는 조회할 수 없습니다.** 유니온 챔피언은 2025년 12월 18일 데이터부터 있습니다.
 - **월드 이름:** Aquila, Bootes, Cassiopeia, Draco, Burning (넥슨 공식 문서 기준). `guild.getId()` 의 두 번째 인자로 넣습니다.
 - **스킬 차수(`character_skill_grade`):** `'0'`, `'1'`, `'1.5'`, `'2'`, `'2.5'`, `'3'`, `'4'`, `'hyperpassive'`, `'hyperactive'`, `'5'`, `'6'`
@@ -147,10 +147,11 @@ for (const s of stat.final_stat) console.log(`${s.stat_name}: ${s.stat_value}`);
 ```
 
 - `item_equipment[]` — `starforce` 스타포스, `potential_option_1`~`3` 잠재능력, `additional_potential_option_1`~`3` 에디셔널 잠재능력, `item_total_option` 최종 옵션. 잠재능력 줄에 값이 없으면 `null` 입니다.
+- 장착한 칭호가 없으면 `title` 값은 `null` 입니다. 훈장 외형 정보가 없으면 `medal_shape` 값도 `null` 일 수 있습니다.
 - 업그레이드 가능 횟수 — `scroll_upgradeable_count` (`string | undefined`). 장착 장비와 프리셋 장비에 쓰입니다.
 - 프리셋 장비 슬롯 — `item_equipment_slot` (`string | undefined`). 프리셋 장비에는 잠재능력 봉인 상태 `potential_option_flag`, `additional_potential_option_flag` (`string | undefined`)도 올 수 있습니다.
 - `final_stat[]` — `{ stat_name, stat_value }` 목록. 원하는 스탯은 이름으로 찾습니다.
-- 6차 스킬은 `character.getSkill({ ocid, character_skill_grade: '6' })`, HEXA 코어는 `character.getHexaMatrix({ ocid })` 로 조회합니다.
+- 6차 스킬은 `character.getSkill({ ocid, character_skill_grade: '6' })`, HEXA 코어는 `character.getHexaMatrix({ ocid })` 로 조회합니다. 6차 전직 전처럼 HEXA 매트릭스 정보가 없으면 `character_hexa_core_equipment` 값은 `null` 입니다.
 
 ### 유니온
 
@@ -238,7 +239,7 @@ async function summarize(characterName) {
     return [
       `**${basic.character_name}** (${basic.world_name})`,
       `Lv.${basic.character_level} ${basic.character_class}`,
-      `Guild: ${basic.character_guild_name || '-'}`,
+      `Guild: ${basic.character_guild_name ?? '-'}`,
       `Union Lv.${union.union_level} (${union.union_grade})`,
       `Mu Lung Garden: ${dojang.dojang_best_floor}F`,
     ].join('\n');

@@ -10,7 +10,7 @@ export const seaCharacterBasicFixture: SEACharacterBasic = {
   character_level: 295,
   character_exp: 12345678,
   character_exp_rate: '45.67',
-  character_guild_name: 'TestGuild',
+  character_guild_name: null,
   character_image: 'https://open.api.nexon.com/static/maplestorysea/Character/test.png',
   character_date_create: '2023-01-01T00:00+08:00',
   access_flag: 'true',
