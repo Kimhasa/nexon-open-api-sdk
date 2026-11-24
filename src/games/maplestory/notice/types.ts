@@ -56,6 +56,8 @@ export interface EventNoticeItem {
   readonly date_event_start: string;
   /** 이벤트 종료일(시) (KST) */
   readonly date_event_end: string;
+  /** 공지 목록에 보이는 썸네일 이미지 URL. 포털 스펙에는 없고 실제 응답에 있는 필드 (2026-11-24 실측) */
+  readonly thumbnail_url?: string | undefined;
 }
 
 /** 이벤트 공지 목록 응답 */
@@ -92,12 +94,14 @@ export interface CashshopNoticeItem {
   readonly notice_id: number;
   /** 공지 등록일(시) (KST) */
   readonly date: string;
-  /** 판매 시작일(시) (KST) */
-  readonly date_sale_start: string;
-  /** 판매 종료일(시) (KST) */
-  readonly date_sale_end: string;
+  /** 판매 시작일(시) (KST) (상시 판매면 null) */
+  readonly date_sale_start: string | null;
+  /** 판매 종료일(시) (KST) (상시 판매면 null) */
+  readonly date_sale_end: string | null;
   /** 상시 판매 여부 ("true": 상시) */
   readonly ongoing_flag: string;
+  /** 공지 목록에 보이는 썸네일 이미지 URL. 포털 스펙에는 없고 실제 응답에 있는 필드 (2026-11-24 실측) */
+  readonly thumbnail_url?: string | undefined;
 }
 
 /** 캐시샵 공지 목록 응답 */

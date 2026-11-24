@@ -81,7 +81,7 @@ export const historyPotentialFixture: PotentialHistory = {
 /** GET /maplestory/v1/history/cube — 포털 스펙 스키마로 합성한 응답 */
 export const historyCubeFixture: CubeHistory = {
   count: 1,
-  next_cursor: 'next_cursor_abc123',
+  next_cursor: null,
   cube_history: [
     {
       id: 'history_0001',

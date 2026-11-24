@@ -26,8 +26,10 @@ import type {
  * for (const item of sf.starforce_history) {
  *   console.log(`${item.target_item}: ${item.before_starforce_count}→${item.after_starforce_count}`);
  * }
- * // 다음 페이지
- * const next = await client.maplestory.history.getStarforce({ count: 100, cursor: sf.next_cursor });
+ * // 다음 페이지 (마지막 페이지면 next_cursor 가 null)
+ * if (sf.next_cursor) {
+ *   await client.maplestory.history.getStarforce({ count: 100, cursor: sf.next_cursor });
+ * }
  * ```
  */
 export class MapleStoryHistoryClient {

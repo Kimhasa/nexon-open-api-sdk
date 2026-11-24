@@ -37,7 +37,8 @@ export const CHARACTER_LIST_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_BASIC_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     character_name: 'string',
     world_name: 'string',
     character_gender: 'string',
@@ -56,14 +57,16 @@ export const CHARACTER_BASIC_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_POPULARITY_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     popularity: 'number',
   },
 };
 
 export const CHARACTER_STAT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     character_class: 'string',
     final_stat: 'array',
     remain_ap: 'number',
@@ -72,7 +75,8 @@ export const CHARACTER_STAT_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_HYPER_STAT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     character_class: 'string',
     use_preset_no: 'string',
     use_available_hyper_stat: 'number',
@@ -87,7 +91,8 @@ export const CHARACTER_HYPER_STAT_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_PROPENSITY_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     charisma_level: 'number',
     sensibility_level: 'number',
     insight_level: 'number',
@@ -99,7 +104,8 @@ export const CHARACTER_PROPENSITY_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_ABILITY_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     ability_grade: 'string',
     ability_info: 'array',
     remain_fame: 'number',
@@ -112,7 +118,8 @@ export const CHARACTER_ABILITY_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_ITEM_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     character_gender: 'string',
     character_class: 'string',
     preset_no: 'number',
@@ -121,6 +128,10 @@ export const CHARACTER_ITEM_EQUIPMENT_SHAPE: ShapeDescriptor = {
     item_equipment_preset_2: 'array',
     item_equipment_preset_3: 'array',
     title: 'object',
+    // 포털 스펙에는 없고 실제 응답에 있는 칭호 프리셋 (2026-11-24 실측)
+    title_preset1: 'optional',
+    title_preset2: 'optional',
+    title_preset3: 'optional',
     dragon_equipment: 'array',
     mechanic_equipment: 'array',
     medal_shape: 'optional',
@@ -129,7 +140,8 @@ export const CHARACTER_ITEM_EQUIPMENT_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_CASHITEM_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     character_gender: 'string',
     character_class: 'string',
     character_look_mode: 'optional',
@@ -149,7 +161,8 @@ export const CHARACTER_CASHITEM_EQUIPMENT_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_SYMBOL_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     character_class: 'string',
     symbol: 'array',
   },
@@ -157,14 +170,16 @@ export const CHARACTER_SYMBOL_EQUIPMENT_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_SET_EFFECT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     set_effect: 'array',
   },
 };
 
 export const CHARACTER_BEAUTY_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     character_gender: 'string',
     character_class: 'string',
     character_hair: 'object',
@@ -178,7 +193,8 @@ export const CHARACTER_BEAUTY_EQUIPMENT_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_ANDROID_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     android_name: 'string',
     android_nickname: 'string',
     android_icon: 'string',
@@ -201,7 +217,8 @@ export const CHARACTER_ANDROID_EQUIPMENT_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_PET_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     pet_1_name: 'string',
     pet_1_nickname: 'string',
     pet_1_icon: 'string',
@@ -279,7 +296,8 @@ export const CHARACTER_PET_EQUIPMENT_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_SKILL_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     character_class: 'string',
     character_skill_grade: 'string',
     character_skill: 'array',
@@ -288,7 +306,8 @@ export const CHARACTER_SKILL_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_LINK_SKILL_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     character_class: 'string',
     character_link_skill: 'array',
     character_link_skill_preset_1: 'optional',
@@ -303,7 +322,8 @@ export const CHARACTER_LINK_SKILL_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_VMATRIX_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     character_class: 'string',
     character_v_core_equipment: 'array',
     character_v_matrix_remain_slot_upgrade_point: 'number',
@@ -317,14 +337,16 @@ export const CHARACTER_VMATRIX_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_HEXAMATRIX_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     character_hexa_core_equipment: 'array',
   },
 };
 
 export const CHARACTER_HEXAMATRIX_STAT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     character_class: 'string',
     character_hexa_stat_core: 'array',
     character_hexa_stat_core_2: 'array',
@@ -337,7 +359,8 @@ export const CHARACTER_HEXAMATRIX_STAT_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_DOJANG_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     character_class: 'string',
     world_name: 'string',
     dojang_best_floor: 'number',
@@ -348,8 +371,10 @@ export const CHARACTER_DOJANG_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_OTHER_STAT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
-    other_stat: 'array',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
+    // 기타 능력치가 없는 캐릭터는 null이 온다
+    other_stat: 'any',
   },
 };
 
@@ -357,10 +382,11 @@ export const CHARACTER_RING_EXCHANGE_SKILL_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     date: 'string',
     character_class: 'string',
-    special_ring_exchange_name: 'string',
-    special_ring_exchange_level: 'number',
-    special_ring_exchange_icon: 'string',
-    special_ring_exchange_description: 'string',
+    // 등록한 반지가 없으면 null이 온다
+    special_ring_exchange_name: 'any',
+    special_ring_exchange_level: 'any',
+    special_ring_exchange_icon: 'any',
+    special_ring_exchange_description: 'any',
   },
 };
 
@@ -370,7 +396,7 @@ export const CHARACTER_RING_RESERVE_SKILL_EQUIPMENT_SHAPE: ShapeDescriptor = {
     date: 'any',
     character_class: 'string',
     special_ring_reserve_name: 'any',
-    special_ring_reserve_level: 'number',
+    special_ring_reserve_level: 'any',
     special_ring_reserve_icon: 'any',
     special_ring_reserve_description: 'any',
   },
@@ -380,7 +406,8 @@ export const CHARACTER_RING_RESERVE_SKILL_EQUIPMENT_SHAPE: ShapeDescriptor = {
 
 export const UNION_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     union_level: 'number',
     union_grade: 'string',
     union_artifact_level: 'optional',
@@ -391,7 +418,8 @@ export const UNION_SHAPE: ShapeDescriptor = {
 
 export const UNION_RAIDER_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     union_raider_stat: 'array',
     union_occupied_stat: 'array',
     union_inner_stat: 'array',
@@ -410,7 +438,8 @@ export const UNION_RAIDER_SHAPE: ShapeDescriptor = {
 
 export const UNION_ARTIFACT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     union_artifact_effect: 'array',
     union_artifact_crystal: 'array',
     union_artifact_remain_ap: 'number',
@@ -419,7 +448,8 @@ export const UNION_ARTIFACT_SHAPE: ShapeDescriptor = {
 
 export const UNION_CHAMPION_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     union_champion: 'array',
     champion_badge_total_info: 'array',
   },
@@ -435,7 +465,8 @@ export const GUILD_ID_SHAPE: ShapeDescriptor = {
 
 export const GUILD_BASIC_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    // 최근 데이터 조회(date 생략)에서는 null이 온다
+    date: 'any',
     world_name: 'string',
     guild_name: 'string',
     guild_level: 'number',
@@ -466,7 +497,8 @@ export const STARFORCE_HISTORY_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     count: 'number',
     starforce_history: 'array',
-    next_cursor: 'string',
+    // 마지막 페이지에서는 null이 온다
+    next_cursor: 'any',
   },
 };
 
@@ -474,7 +506,8 @@ export const POTENTIAL_HISTORY_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     count: 'number',
     potential_history: 'array',
-    next_cursor: 'string',
+    // 마지막 페이지에서는 null이 온다
+    next_cursor: 'any',
   },
 };
 
@@ -482,7 +515,8 @@ export const CUBE_HISTORY_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     count: 'number',
     cube_history: 'array',
-    next_cursor: 'string',
+    // 마지막 페이지에서는 null이 온다
+    next_cursor: 'any',
   },
 };
 

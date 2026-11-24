@@ -33,6 +33,7 @@ import {
   characterHyperStatFixture,
   characterItemEquipmentFixture,
   characterLinkSkillFixture,
+  characterOtherStatEmptyFixture,
   characterOtherStatFixture,
   characterPetEquipmentFixture,
   characterPopularityFixture,
@@ -707,6 +708,38 @@ describe('MapleStoryClient', () => {
 
       expect(result.special_ring_reserve_name).toBeNull();
       expect(result.special_ring_reserve_level).toBe(0);
+    });
+
+    it('character.getOtherStat — 기타 능력치가 없는 캐릭터는 null을 shape 경고 없이 반환한다', async () => {
+      server.use(
+        http.get(`${ROOT}/v1/character/other-stat`, () =>
+          HttpResponse.json(characterOtherStatEmptyFixture),
+        ),
+      );
+      const mismatches: ShapeMismatch[] = [];
+      const result = await createMapleStoryClient({
+        responseValidation: true,
+        logger: { onResponseShapeMismatch: (m) => mismatches.push(m) },
+      }).character.getOtherStat({ ocid: TEST_OCID });
+
+      expect(result).toEqual({ date: null, other_stat: null });
+      expect(mismatches).toEqual([]);
+    });
+
+    it('character.getItemEquipment — 실제 응답의 필드 이름과 칭호 프리셋을 그대로 반환한다', async () => {
+      const result = await createMapleStoryClient().character.getItemEquipment({ ocid: TEST_OCID });
+
+      expect(result.item_equipment[0]?.scroll_upgradeable_count).toBe('10');
+      expect(result.item_equipment_preset_1[0]?.item_equipment_slot).toBe('10');
+      expect(result.item_equipment_preset_2[0]?.potential_option_grade).toBeNull();
+      expect(result.title_preset1?.title_name).toBe('샘플 칭호 장비');
+      expect(result.title_preset2?.title_name).toBeNull();
+    });
+
+    it('character.getPetEquipment — 월드 공유 펫 장비 프리셋은 배열이다', async () => {
+      const result = await createMapleStoryClient().character.getPetEquipment({ ocid: TEST_OCID });
+
+      expect(result.world_share_pet_equipment_preset?.[0]?.preset_no).toBe(1);
     });
   });
 

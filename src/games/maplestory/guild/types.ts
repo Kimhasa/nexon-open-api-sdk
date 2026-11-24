@@ -51,8 +51,8 @@ export interface GuildSkill {
 
 /** 길드 기본 정보 */
 export interface GuildBasic {
-  /** 조회 기준일 (KST, YYYY-MM-DDT00:00+09:00) */
-  readonly date: string;
+  /** 조회 기준일 (KST, YYYY-MM-DDT00:00+09:00). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 월드 명 */
   readonly world_name: string;
   /** 길드 명 */
