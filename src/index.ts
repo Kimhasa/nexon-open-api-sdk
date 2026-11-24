@@ -4,6 +4,8 @@ export type { NexonClientOptions } from './NexonClient.js';
 
 // Game clients (also available via sub-path imports)
 export { MapleStoryClient } from './games/maplestory/MapleStoryClient.js';
+export * from './games/maplestory/helpers/character-image.js';
+export * from './games/maplestory/helpers/item-options.js';
 export { FcOnlineClient } from './games/fc-online/FcOnlineClient.js';
 export { MapleStoryMClient } from './games/maplestory-m/MapleStoryMClient.js';
 export { MapleStorySEAClient } from './games/maplestory-sea/MapleStorySEAClient.js';

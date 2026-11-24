@@ -236,7 +236,7 @@ if (basic.liberation_quest_clear === '1') console.log('제네시스 해방 완�
 - `character_level`, `character_exp_rate` — 레벨과 현재 레벨의 경험치 퍼센트(문자열)
 - `character_class`, `character_class_level` — 직업과 전직 차수
 - `character_guild_name` — 소속 길드 이름
-- `character_image` — 캐릭터 외형 이미지 주소. 넥슨 안내에 따르면 주소 뒤에 쿼리 파라미터를 붙여 동작·감정표현을 바꿀 수 있습니다.
+- `character_image` — 캐릭터 외형 이미지 주소. `characterImageUrl(basic.character_image, { action: 'A06', emotion: 'E02' })` 로 동작·감정표현·무기 모션을 바꾼 주소를 만들 수 있습니다 ([코디 카드 레시피](./recipes/maplestory-coordi-card.md)).
 - `access_flag` — 최근 7일 안에 접속했는지 (`"true"` / `"false"`)
 - `liberation_quest_clear` — 해방 퀘스트. `"0"` 미완료, `"1"` 제네시스 해방, `"2"` 데스티니 1차 해방
 
@@ -273,6 +273,32 @@ for (const item of equip.item_equipment) {
 - `item_total_option` — 모든 강화를 더한 최종 옵션. 세부 내역은 `item_base_option`(기본), `item_add_option`(추가 옵션), `item_etc_option`(주문서), `item_starforce_option`(스타포스)
 - `scroll_upgrade`, `scroll_upgradeable_count` — 주문서 강화 횟수와 남은 업그레이드 가능 횟수 (문자열 숫자)
 - `soul_name`, `soul_option` — 무기에 장착한 소울. 소울이 없으면 `null`
+
+장비 옵션을 계산에 쓰려면 도우미 함수로 숫자로 바꿉니다. 서버를 다시 부르지 않고 받은 응답만으로 계산합니다.
+
+```js
+import { getItemStarforce, summarizeItemOptions, sumItemTotalOptions } from 'nexon-open-api';
+
+// 스타포스("22")와 장비 옵션("150")은 문자열로 온다 — 숫자로 바꿔 합산
+const stars = equip.item_equipment.reduce((sum, item) => sum + getItemStarforce(item), 0);
+const total = sumItemTotalOptions(equip.item_equipment);
+console.log(`스타포스 합계 ${stars}성 · 장비 STR ${total.str} · 공격력 ${total.attack_power}`);
+
+// 잠재능력("STR +12%")과 에디셔널 잠재능력을 같은 옵션끼리 합산
+const { potential, additional } = summarizeItemOptions(equip.item_equipment);
+const boss = potential.find((o) => o.name === '보스 몬스터 데미지' && o.unit === '%');
+console.log(`잠재능력 보스 데미지 ${boss?.total ?? 0}% · 에디셔널 옵션 ${additional.length}종`);
+```
+
+| 하려는 것                                  | 도우미 함수                                       |
+| ------------------------------------------ | ------------------------------------------------- |
+| 잠재능력 한 줄을 옵션명·수치·단위로 나누기 | `parseItemOption('STR +12%')`                     |
+| 잠재능력·에디셔널 잠재능력 합계            | `summarizeItemOptions(equip.item_equipment)`      |
+| 장비 옵션(최종·추가 옵션·스타포스 등) 합계 | `sumItemTotalOptions(equip.item_equipment)`       |
+| 스타포스 별 개수를 숫자로                  | `getItemStarforce(item)`                          |
+| 외형 이미지의 동작·감정표현·무기 모션 변경 | `characterImageUrl(basic.character_image, { … })` |
+
+환산 계산기처럼 장비를 분석하는 도구는 [장비 분석 도구 레시피](./recipes/maplestory-equipment-calculator.md)를, 코디를 보여 주는 도구는 [코디 카드 레시피](./recipes/maplestory-coordi-card.md)를 보세요.
 
 `preset_no` 는 지금 쓰는 장비 프리셋 번호이고, `item_equipment_preset_1`~`3` 에 프리셋별 장비가 들어 있습니다. 프리셋 장비의 장착 슬롯도 `item_equipment_slot` 입니다. 칭호는 `title`, 칭호 프리셋 1~3번은 `title_preset1`~`3` (빈 프리셋은 `title_name` 이 `null`), 에반의 드래곤 장비는 `dragon_equipment`, 메카닉 장비는 `mechanic_equipment` 입니다.
 
@@ -624,6 +650,7 @@ for (const r of ranking.slice(0, 10)) {
 
 ## 참고
 
+- 앱 유형별 만들기: [레시피](./recipes/README.md) — 장비 분석 도구, 코디 카드
 - 에러와 문제 해결: [FAQ](./faq.md)
 - 해외 서버와 모바일: [메이플스토리M](./maplestory-m.md), [MapleStory SEA](./maplestory-sea.md), [MapleStory Taiwan](./maplestory-tw.md)
 - 이 문서의 API는 넥슨 포털 공식 스펙을 기준으로 구현했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)).
