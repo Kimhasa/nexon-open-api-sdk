@@ -154,8 +154,9 @@ await test('getActionShotUrl', async () => {
 });
 
 await test('getPlayerImageUrl', async () => {
+  // 선수 번호(pid)로 만든 주소. spid 주소에 이미지가 없을 때 쓰는 대체 주소다
   const url = client.fcOnline.getPlayerImageUrl(167680);
-  if (!url.includes('272167135')) throw new Error('URL에 spid가 포함되지 않음');
+  if (!url.includes('167680')) throw new Error('URL에 선수 번호가 포함되지 않음');
 });
 
 // ─── Summary ─────────────────────────────────────────────────────────────────

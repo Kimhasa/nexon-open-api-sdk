@@ -3,11 +3,14 @@
  *
  * 사용법:
  *   1. .env.example 을 복사해서 .env 파일 생성
- *   2. .env 에 NEXON_API_KEY 값 입력
- *   3. yarn test:api 실행
+ *   2. .env 에 NEXON_MAPLESTORY_API_KEY, MAPLESTORY_CHARACTER 값 입력
+ *   3. yarn test:maplestory 실행
+ *
+ * 스케줄러와 강화 기록은 API 키를 발급한 계정의 캐릭터만 조회된다.
+ * 그래서 스케줄러는 `character.getList()` 의 첫 캐릭터로 확인한다.
  */
 import 'dotenv/config';
-import { NexonClient, toNexonDate } from '../src/index.js';
+import { NexonBadRequestError, NexonClient, toNexonDate } from '../src/index.js';
 import type { OCID, GuildId } from '../src/games/_base/maple-base-types.js';
 
 const apiKey = process.env['NEXON_MAPLESTORY_API_KEY'];
@@ -16,8 +19,10 @@ const guildName = process.env['MAPLESTORY_GUILD'];
 const worldName = process.env['MAPLESTORY_WORLD'] ?? '스카니아';
 // 선택: 구 개발자센터 API 키. 없으면 getLegacyOuid 검증을 건너뛴다.
 const legacyApiKey = process.env['NEXON_MAPLESTORY_LEGACY_API_KEY'];
-// 소울 잠재능력 이력은 최근 2년만 조회되므로 고정 날짜 대신 어제(KST)를 쓴다.
+// 강화 기록과 랭킹은 최근 2년만 조회되므로 고정 날짜 대신 어제(KST)를 쓴다.
 const historyDate = toNexonDate(new Date(Date.now() - 24 * 60 * 60 * 1000), 540);
+// 링 익스체인지는 2025-08-21 ~ 2026-03-18 데이터만 있다 (포털 안내)
+const ringExchangeDate = '2026-03-18';
 if (!apiKey || !characterName) {
   console.error('❌ .env 파일에 NEXON_MAPLESTORY_API_KEY, MAPLESTORY_CHARACTER 를 설정해주세요.');
   console.error('   .env.example 파일을 참고하세요.');
@@ -146,11 +151,15 @@ if (ocid) {
 
   await test('character.getOtherStat', async () => {
     const r = await client.maplestory.character.getOtherStat({ ocid: ocid! });
-    if (!r.other_stat) throw new Error('other_stat 없음');
+    // 기타 능력치가 없는 캐릭터는 null 이 온다
+    if (!('other_stat' in r)) throw new Error('other_stat 없음');
   });
 
   await test('character.getRingExchangeSkillEquipment', async () => {
-    await client.maplestory.character.getRingExchangeSkillEquipment({ ocid: ocid! });
+    await client.maplestory.character.getRingExchangeSkillEquipment({
+      ocid: ocid!,
+      date: ringExchangeDate,
+    });
   });
 
   await test('character.getRingReserveSkillEquipment', async () => {
@@ -163,21 +172,36 @@ if (ocid) {
   // ─── Scheduler (자신의 계정 캐릭터만 조회 가능) ──────────────────────────────
   console.log('\n📋 Scheduler API');
 
-  await test('scheduler.getCharacterState', async () => {
-    const r = await client.maplestory.scheduler.getCharacterState({ ocid: ocid! });
-    if (!r.boss_contents) throw new Error('boss_contents 없음');
-  });
+  const ownList = await client.maplestory.character.getList().catch(() => undefined);
+  const ownOcid = ownList?.account_list[0]?.character_list[0]?.ocid;
+  if (ownOcid) {
+    await test('scheduler.getCharacterState', async () => {
+      const r = await client.maplestory.scheduler.getCharacterState({ ocid: ownOcid });
+      if (!('boss_contents' in r)) throw new Error('boss_contents 없음');
+    });
+  } else {
+    console.log('  ⏭️  API 키 계정에 캐릭터가 없어 scheduler.getCharacterState 생략');
+  }
 
   // ─── Battle Practice (리플레이를 등록한 캐릭터만 조회 가능) ──────────────────
   console.log('\n📋 Battle Practice API');
 
   let replayId: string | undefined;
+  let hasReplay = true;
 
   await test('battlePractice.getReplayId', async () => {
-    const r = await client.maplestory.battlePractice.getReplayId({ ocid: ocid! });
-    if (!r.replay_list) throw new Error('replay_list 없음');
-    replayId = r.replay_list[0]?.replay_id;
+    try {
+      const r = await client.maplestory.battlePractice.getReplayId({ ocid: ocid! });
+      if (!r.replay_list) throw new Error('replay_list 없음');
+      replayId = r.replay_list[0]?.replay_id;
+    } catch (err) {
+      // 리플레이를 등록하지 않은 캐릭터는 넥슨이 OPENAPI00004 를 돌려준다
+      if (!(err instanceof NexonBadRequestError)) throw err;
+      hasReplay = false;
+    }
   });
+  if (!hasReplay)
+    console.log('  ⏭️  연무장 리플레이를 등록하지 않은 캐릭터라 getReplayId 응답 대조 생략');
 
   if (replayId) {
     await test('battlePractice.getResult', async () => {
@@ -246,17 +270,17 @@ if (guildId) {
 console.log('\n📋 History API');
 
 await test('history.getStarforce', async () => {
-  const r = await client.maplestory.history.getStarforce({ count: 10, date: '2024-06-01' });
+  const r = await client.maplestory.history.getStarforce({ count: 10, date: historyDate });
   if (r.count === undefined) throw new Error('count 없음');
 });
 
 await test('history.getPotential', async () => {
-  const r = await client.maplestory.history.getPotential({ count: 10, date: '2024-06-01' });
+  const r = await client.maplestory.history.getPotential({ count: 10, date: historyDate });
   if (r.count === undefined) throw new Error('count 없음');
 });
 
 await test('history.getCube', async () => {
-  const r = await client.maplestory.history.getCube({ count: 10, date: '2024-06-01' });
+  const r = await client.maplestory.history.getCube({ count: 10, date: historyDate });
   if (r.count === undefined) throw new Error('count 없음');
 });
 
@@ -296,32 +320,32 @@ if (legacyApiKey) {
 console.log('\n📋 Ranking API');
 
 await test('ranking.getOverall', async () => {
-  const r = await client.maplestory.ranking.getOverall({ date: '2024-06-01' });
+  const r = await client.maplestory.ranking.getOverall({ date: historyDate });
   if (!r.ranking) throw new Error('ranking 없음');
 });
 
 await test('ranking.getUnion', async () => {
-  const r = await client.maplestory.ranking.getUnion({ date: '2024-06-01' });
+  const r = await client.maplestory.ranking.getUnion({ date: historyDate });
   if (!r.ranking) throw new Error('ranking 없음');
 });
 
 await test('ranking.getGuild', async () => {
-  const r = await client.maplestory.ranking.getGuild({ date: '2024-06-01', ranking_type: 0 });
+  const r = await client.maplestory.ranking.getGuild({ date: historyDate, ranking_type: 0 });
   if (!r.ranking) throw new Error('ranking 없음');
 });
 
 await test('ranking.getDojang', async () => {
-  const r = await client.maplestory.ranking.getDojang({ date: '2024-06-01', difficulty: 0 });
+  const r = await client.maplestory.ranking.getDojang({ date: historyDate, difficulty: 0 });
   if (!r.ranking) throw new Error('ranking 없음');
 });
 
 await test('ranking.getTheSeed', async () => {
-  const r = await client.maplestory.ranking.getTheSeed({ date: '2024-06-01' });
+  const r = await client.maplestory.ranking.getTheSeed({ date: historyDate });
   if (!r.ranking) throw new Error('ranking 없음');
 });
 
 await test('ranking.getAchievement', async () => {
-  const r = await client.maplestory.ranking.getAchievement({ date: '2024-06-01' });
+  const r = await client.maplestory.ranking.getAchievement({ date: historyDate });
   if (!r.ranking) throw new Error('ranking 없음');
 });
 
