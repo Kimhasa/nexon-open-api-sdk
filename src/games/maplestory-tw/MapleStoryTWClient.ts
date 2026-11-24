@@ -1,8 +1,4 @@
-import {
-  assertDateInRange,
-  assertNonEmptyString,
-  invalidInput,
-} from '../../core/validation/input.js';
+import { assertDateInRange, assertNonEmptyString } from '../../core/validation/input.js';
 import { AbstractMapleBaseClient } from '../_base/AbstractMapleStoryBaseClient.js';
 import type { OCID } from '../_base/maple-base-types.js';
 import { MapleStoryTWCharacterClient } from './character/MapleStoryTWCharacterClient.js';
@@ -10,8 +6,6 @@ import { MapleStoryTWGuildClient } from './guild/MapleStoryTWGuildClient.js';
 import { OCID_SHAPE } from './shapes.js';
 import type { TWDate, TWOcidResponse } from './types.js';
 import { MapleStoryTWUnionClient } from './union/MapleStoryTWUnionClient.js';
-
-const INVALID_DATE = "date must be a valid YYYY-MM-DD, Date, or 'today'.";
 
 /**
  * MapleStory Taiwan API client.
@@ -97,22 +91,7 @@ export class MapleStoryTWClient extends AbstractMapleBaseClient {
   private formatQueryDate(date: TWDate | undefined, availableFrom: string): string | undefined {
     if (date === undefined) return undefined;
 
-    let formatted: string;
-    try {
-      formatted = this.formatDate(date);
-    } catch {
-      invalidInput(INVALID_DATE);
-    }
-
-    // formatDate preserves calendar strings verbatim and Date can roll over invalid ISO days.
-    const inputDay =
-      typeof date === 'string' ? /^\s*(\d{4}-\d{2}-\d{2})(?!\d)/.exec(date)?.[1] : undefined;
-    const day = inputDay ?? formatted;
-    const parsed = new Date(`${day}T00:00:00Z`);
-    if (!Number.isFinite(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== day) {
-      invalidInput(INVALID_DATE);
-    }
-
+    const formatted = this.formatDate(date);
     const today = this.formatDate('today');
     assertDateInRange(formatted, availableFrom, today, 'Use a date in Taiwan time.');
     return formatted;
