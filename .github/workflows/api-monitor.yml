@@ -158,7 +158,8 @@ jobs:
               same_snapshot=true
             fi
           fi
-          pr=$(gh pr list --base main --head "$UPDATE_BRANCH" --state open --json number --jq '.[0].number // empty')
+          pr=$(gh pr list --base main --head "$UPDATE_BRANCH" --state open \
+            --json number,isCrossRepository --jq 'map(select(.isCrossRepository | not)) | .[0].number // empty')
           if [ "$same_snapshot" = true ] && [ -n "$pr" ]; then
             current=$(gh pr view "$pr" --json body --jq .body)
             if grep -qF "$marker" <<< "$current"; then
