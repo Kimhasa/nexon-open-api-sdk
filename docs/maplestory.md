@@ -419,7 +419,7 @@ if (replayId) {
 - `total_play_time`, `elapse_time` 은 밀리초(ms)입니다.
 - `end_type` — `"1"` 자동 종료, `"2"` 수동 종료, `"3"` 시간 초과, `"9"` 기타
 - `period_no` — 연무장이 초기화될 때마다 1씩 늘어나는 기간 번호
-- `getCharacterInfo()` 는 연무장 입장 당시의 스탯·장비·스킬·유니온 정보를 한 번에 줍니다. 최상위 키는 모두 `basic_object`, `stat_object`, `item_object` 처럼 `_object` 로 끝납니다. 여기서는 장비의 남은 업그레이드 횟수 필드 이름이 `scroll_upgrade_able_count` 입니다 (캐릭터 장비 조회에서는 `scroll_upgradeable_count`).
+- `getCharacterInfo()` 는 연무장 입장 당시의 스탯·장비·스킬·유니온 정보를 한 번에 줍니다. 최상위 키는 모두 `basic_object`, `stat_object`, `item_object` 처럼 `_object` 로 끝납니다. 여기서는 장비의 남은 업그레이드 횟수 필드 이름이 `scroll_upgrade_able_count` 입니다 (캐릭터 장비 조회에서는 `scroll_upgradeable_count`). 리플레이에는 장비의 소울 잠재능력(`soul_potential_*`, `soul_pad`, `soul_mad`, `soul_active`), 월드 공유 펫(`world_share_pet_*`), 월드 공유 마스터라벨, `union_state_stat` 이 들어 있지 않을 수 있으니 값이 있는지 확인하고 씁니다.
 
 ### 스케줄러 (일일·주간·보스)
 

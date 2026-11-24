@@ -692,8 +692,8 @@ export interface CharacterItemEquipment {
   readonly title_preset2?: TitlePresetInfo | null | undefined;
   /** 칭호 프리셋 3번에 넣어 둔 칭호. 포털 스펙에는 없고 실제 응답에 있는 필드 (2026-11-24 실측) */
   readonly title_preset3?: TitlePresetInfo | null | undefined;
-  /** 훈장 외형 정보 */
-  readonly medal_shape: MedalShape;
+  /** 훈장 외형 정보 (훈장 외형을 설정하지 않았으면 null) */
+  readonly medal_shape: MedalShape | null;
   /** 에반 드래곤 장비 정보 (에반인 경우 응답) */
   readonly dragon_equipment: ClassItemEquipment[];
   /** 메카닉 장비 정보 (메카닉인 경우 응답) */
@@ -961,14 +961,14 @@ export interface FaceInfo {
 export interface SkinInfo {
   /** 피부 명 */
   readonly skin_name: string;
-  /** 색상 계열 */
-  readonly color_style: string;
-  /** 피부 색조 */
-  readonly hue: number;
-  /** 피부 채도 */
-  readonly saturation: number;
-  /** 피부 명도 */
-  readonly brightness: number;
+  /** 색상 계열 (피부 색상을 따로 조정하지 않았으면 null) */
+  readonly color_style: string | null;
+  /** 피부 색조 (피부 색상을 따로 조정하지 않았으면 null) */
+  readonly hue: number | null;
+  /** 피부 채도 (피부 색상을 따로 조정하지 않았으면 null) */
+  readonly saturation: number | null;
+  /** 피부 명도 (피부 색상을 따로 조정하지 않았으면 null) */
+  readonly brightness: number | null;
 }
 
 /** 헤어·성형·피부 — `client.maplestory.character.getBeautyEquipment()` 의 응답. */
@@ -1109,22 +1109,22 @@ export interface PetItemOption {
 
 /** 펫 장착 장비 정보 */
 export interface PetEquipmentItem {
-  /** 아이템 명 */
-  readonly item_name: string;
-  /** 아이템 아이콘 */
-  readonly item_icon: string;
-  /** 아이템 설명 */
-  readonly item_description: string;
+  /** 아이템 명 (펫 장비를 착용하지 않았으면 null) */
+  readonly item_name: string | null;
+  /** 아이템 아이콘 (펫 장비를 착용하지 않았으면 null) */
+  readonly item_icon: string | null;
+  /** 아이템 설명 (펫 장비를 착용하지 않았으면 null) */
+  readonly item_description: string | null;
   /** 아이템 표기상 옵션 */
   readonly item_option: PetItemOption[];
   /** 주문서 횟수 */
   readonly scroll_upgrade: number;
   /** 주문서 잔여 횟수 */
   readonly scroll_upgradable: number;
-  /** 아이템 외형 */
-  readonly item_shape: string;
-  /** 아이템 외형 아이콘 */
-  readonly item_shape_icon: string;
+  /** 아이템 외형 (펫 장비를 착용하지 않았으면 null) */
+  readonly item_shape: string | null;
+  /** 아이템 외형 아이콘 (펫 장비를 착용하지 않았으면 null) */
+  readonly item_shape_icon: string | null;
   /** 아이템 만료시간 (KST, 분은 일괄 0. null: 무제한, "-1": 미착용) */
   readonly item_date_expire?: string | null | undefined;
 }
@@ -1169,14 +1169,14 @@ export interface PetiteLunaPetSkill {
 
 /** 펫 버프 자동스킬 정보 */
 export interface PetAutoSkill {
-  /** 첫 번째 슬롯에 등록된 자동 스킬 */
-  readonly skill_1: string;
-  /** 첫 번째 슬롯에 등록된 자동 스킬 아이콘 */
-  readonly skill_1_icon: string;
-  /** 두 번째 슬롯에 등록된 자동 스킬 */
-  readonly skill_2: string;
-  /** 두 번째 슬롯에 등록된 자동 스킬 아이콘 */
-  readonly skill_2_icon: string;
+  /** 첫 번째 슬롯에 등록된 자동 스킬 (슬롯에 등록한 스킬이 없으면 null) */
+  readonly skill_1: string | null;
+  /** 첫 번째 슬롯에 등록된 자동 스킬 아이콘 (슬롯에 등록한 스킬이 없으면 null) */
+  readonly skill_1_icon: string | null;
+  /** 두 번째 슬롯에 등록된 자동 스킬 (슬롯에 등록한 스킬이 없으면 null) */
+  readonly skill_2: string | null;
+  /** 두 번째 슬롯에 등록된 자동 스킬 아이콘 (슬롯에 등록한 스킬이 없으면 null) */
+  readonly skill_2_icon: string | null;
 }
 
 /** 장착 펫과 펫 장비·펫 스킬 — `client.maplestory.character.getPetEquipment()` 의 응답. */
@@ -1193,8 +1193,8 @@ export interface CharacterPetEquipment {
   readonly pet_1_description: string;
   /** 펫1 장착 정보 */
   readonly pet_1_equipment: PetEquipmentItem;
-  /** 펫1 펫 버프 자동스킬 정보 */
-  readonly pet_1_auto_skill: PetAutoSkill;
+  /** 펫1 펫 버프 자동스킬 정보 (값이 없으면 null) */
+  readonly pet_1_auto_skill: PetAutoSkill | null;
   /** 펫1 원더 펫 종류 */
   readonly pet_1_pet_type: string;
   /** 펫1 펫 보유 스킬 */
@@ -1215,8 +1215,8 @@ export interface CharacterPetEquipment {
   readonly pet_2_description: string;
   /** 펫2 장착 정보 */
   readonly pet_2_equipment: PetEquipmentItem;
-  /** 펫2 펫 버프 자동스킬 정보 */
-  readonly pet_2_auto_skill: PetAutoSkill;
+  /** 펫2 펫 버프 자동스킬 정보 (값이 없으면 null) */
+  readonly pet_2_auto_skill: PetAutoSkill | null;
   /** 펫2 원더 펫 종류 */
   readonly pet_2_pet_type: string;
   /** 펫2 펫 보유 스킬 */
@@ -1237,8 +1237,8 @@ export interface CharacterPetEquipment {
   readonly pet_3_description: string;
   /** 펫3 장착 정보 */
   readonly pet_3_equipment: PetEquipmentItem;
-  /** 펫3 펫 버프 자동스킬 정보 */
-  readonly pet_3_auto_skill: PetAutoSkill;
+  /** 펫3 펫 버프 자동스킬 정보 (값이 없으면 null) */
+  readonly pet_3_auto_skill: PetAutoSkill | null;
   /** 펫3 원더 펫 종류 */
   readonly pet_3_pet_type: string;
   /** 펫3 펫 보유 스킬 */
