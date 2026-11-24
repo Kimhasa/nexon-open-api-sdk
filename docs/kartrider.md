@@ -77,8 +77,8 @@ if (ouid_info.length === 1 && rider) {
 ```
 
 - `racer_date_create`는 계정 생성 시각입니다. `racer_date_last_login`과 `racer_date_last_logout`은 마지막 접속과 종료 시각입니다.
-- `racer_level`은 계정 후보에서 문자열, 라이더 프로필에서는 숫자입니다.
-- `title_equipment[].title_name`은 장착 칭호 이름입니다.
+- `racer_level`은 계정 후보와 라이더 프로필 모두 숫자입니다.
+- `title_equipment[].title_name`은 장착 칭호 이름입니다. 칭호를 장착하지 않았으면 `null`일 수 있습니다.
 
 ### 공지사항·시즌 알림판·이벤트&대회
 
@@ -96,7 +96,7 @@ if (latest) {
 ```
 
 - 목록 배열은 게시판별로 `notice`(공지사항), `season_notice`(시즌 알림판), `event_notice`(이벤트&대회)입니다. 각각 최근 등록 글 20개를 제공합니다.
-- `notice_id`를 같은 게시판의 상세 메서드에 넣으면 `contents`로 본문을 받습니다. `notice_tag`는 게시글에 붙은 태그입니다.
+- `notice_id`를 같은 게시판의 상세 메서드에 넣으면 `contents`로 본문을 받습니다. `notice_tag`는 게시글에 붙은 태그입니다. 태그가 없는 글은 `null`입니다.
 - 공지는 게시 뒤 수정될 수 있으므로 조회 시 새로 받거나 하루에 한 번 이상 갱신합니다.
 
 <details>

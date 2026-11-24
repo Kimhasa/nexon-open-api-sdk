@@ -42,6 +42,7 @@ export const baramCharacterItemEquipmentFixture: BaramCharacterItemEquipment = {
   item_equipment: [
     { item_id: '테스트 검', item_equipment_slot_name: '무기' },
     { item_id: '테스트 갑옷', item_equipment_slot_name: '갑옷' },
+    { item_id: null, item_equipment_slot_name: '투구' },
   ],
 };
 

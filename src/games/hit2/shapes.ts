@@ -22,8 +22,11 @@ export const HIT2_CHARACTER_BASIC_SHAPE: ShapeDescriptor = {
     server_name: 'string',
     character_name: 'string',
     character_date_create: 'string',
-    character_last_login: 'string',
-    character_last_logout: 'string',
+    // 실제 응답은 date_ 가 붙은 이름으로 온다. 포털 스펙의 이름은 와도, 안 와도 경고하지 않는다 (2026-11-24 실측)
+    character_date_last_login: 'optional',
+    character_date_last_logout: 'optional',
+    character_last_login: 'optional',
+    character_last_logout: 'optional',
     character_class_group_name: 'string',
     character_class_name: 'string',
     character_level: 'number',

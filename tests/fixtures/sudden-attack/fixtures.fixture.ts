@@ -36,9 +36,9 @@ export const suddenAttackUserRankFixture: SuddenAttackUserRank = {
 
 export const suddenAttackUserTierFixture: SuddenAttackUserTier = {
   user_name: userName,
-  solo_rank_match_tier: 2,
+  solo_rank_match_tier: 'SILVER I',
   solo_rank_match_score: 1200,
-  party_rank_match_tier: 3,
+  party_rank_match_tier: 'GOLD I',
   party_rank_match_score: 1500,
 };
 
@@ -79,6 +79,7 @@ export const suddenAttackMatchDetailFixture: SuddenAttackMatchDetail = {
       user_name: userName,
       season_grade: '특등이병',
       clan_name: '합성테스트클랜',
+      guild_name: null,
       kill: 10,
       death: 4,
       headshot: 3,

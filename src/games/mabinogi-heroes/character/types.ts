@@ -32,8 +32,8 @@ export interface HeroesDressPoint {
 export interface HeroesCharacterBasic {
   /** 영웅(캐릭터) 명 */
   readonly character_name: string;
-  /** 영웅(캐릭터) 생성 일(시) (UTC0, 예: `"2023-12-14T08:28:35Z"`) */
-  readonly character_date_create: string;
+  /** 영웅(캐릭터) 생성 일(시) (UTC0, 예: `"2023-12-14T08:28:35Z"`). 값이 없으면 null */
+  readonly character_date_create: string | null;
   /** 최근 7일 동안 접속했으면 문자열 "true", 접속 기록이 없으면 "false"다. */
   readonly access_flag: string;
   /** 영웅(캐릭터) 직업 명 */
@@ -126,7 +126,7 @@ export interface HeroesInnerArmorColor extends HeroesItemColor {
  * 장착 아이템 옵션 정보.
  *
  * 스펙에는 nullable 표기가 없지만 아이템 종류(장비/캐시/아바타)에 따라 해당하지 않는 옵션이 많아
- * 모든 필드를 null 허용으로 둔다. 실 API 키로 검증되지 않았다.
+ * 모든 필드를 null 허용으로 둔다.
  */
 export interface HeroesItemEquipmentOption {
   /** 강화 단계 */
@@ -149,10 +149,16 @@ export interface HeroesItemEquipmentOption {
   readonly suffix_enchant_preset_2: string | null;
   /** 활성화된 정령합성 프리셋 번호. 장비를 장착하거나 게임에 재접속할 때 갱신된다 */
   readonly power_infusion_use_preset_no: number | null;
-  /** 1번 프리셋 정령합성 능력치 */
-  readonly power_infusion_preset_1: readonly HeroesStatValue[] | null;
-  /** 2번 프리셋 정령합성 능력치 */
-  readonly power_infusion_preset_2: readonly HeroesStatValue[] | null;
+  /**
+   * 1번 프리셋 정령합성 능력치. 정령합성을 하지 않은 장착 아이템이면 null.
+   * 포털 스펙은 배열로 적지만 실제 응답은 능력치 하나를 담은 객체다 (2026-11-24 실측).
+   */
+  readonly power_infusion_preset_1: HeroesStatValue | null;
+  /**
+   * 2번 프리셋 정령합성 능력치. 정령합성을 하지 않은 장착 아이템이면 null.
+   * 포털 스펙은 배열로 적지만 실제 응답은 능력치 하나를 담은 객체다 (2026-11-24 실측).
+   */
+  readonly power_infusion_preset_2: HeroesStatValue | null;
   /** 캐시 아이템 및 이너아머 색상 정보 */
   readonly cash_item_color: HeroesItemColor | null;
   /** 사용 중인 아바타 및 아바타 하의 이너아머 아이템 색상 정보 프리셋 번호 */

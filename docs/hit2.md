@@ -57,12 +57,12 @@ try {
 ```ts
 // 커뮤니티 프로필 카드에 직업군과 마지막 접속 시각 표시
 const profile = await client.hit2.character.getBasic({ ocid });
-console.log(profile.character_class_group_name, profile.character_last_login);
+console.log(profile.character_class_group_name, profile.character_date_last_login);
 ```
 
 - `character_class_group_name`은 직업군, `character_class_name`은 직업, `character_level`은 레벨입니다.
 - `character_date_create`는 UTC 날짜 단위 데이터로 시·분·초가 모두 0입니다.
-- `character_last_login`과 `character_last_logout`은 마지막 접속과 종료 시각입니다.
+- `character_date_last_login`과 `character_date_last_logout`은 마지막 접속과 종료 시각입니다.
 
 <details>
 <summary>넥슨 API 경로</summary>

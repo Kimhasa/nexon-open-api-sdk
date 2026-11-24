@@ -9,10 +9,24 @@ import type {
 
 const RANKING_TYPE_HINT = "'0' 은 공격력, '1' 은 마법 공격력 기준 순위입니다.";
 
+/** 서버가 실제로 돌려주는 형태. 포털 스펙은 최상위를 배열로 적지만 실제 응답은 `ranking` 에 담겨 온다 (2026-11-24 실측) */
+interface HeroesRankingEnvelope {
+  readonly ranking: HeroesRankingEntry[];
+}
+
+/** 실제 응답(`{ ranking: [...] }`)과 스펙 형태(배열) 어느 쪽이 와도 순위 항목 배열로 맞춘다. */
+function toRankingEntries(
+  response: HeroesRankingEnvelope | HeroesRankingEntry[],
+): HeroesRankingEntry[] {
+  if (Array.isArray(response)) return response;
+  // 사용자가 받은 값에서 .length, [0] 을 바로 쓰므로 ranking 이 빠진 응답도 배열로 돌려준다
+  return Array.isArray(response.ranking) ? response.ranking : [];
+}
+
 /**
  * 마비노기 영웅전 랭킹 API 클라이언트 (V2).
  *
- * 두 API 모두 랭킹 항목의 배열을 반환합니다.
+ * 두 메서드 모두 순위 항목의 배열을 반환합니다. 서버 응답은 `{ ranking: [...] }` 객체지만 SDK가 `ranking` 배열만 꺼내 돌려줍니다.
  *
  * @example
  * ```ts
@@ -35,6 +49,7 @@ export class MabinogiHeroesRankingClient {
    *
    * 매일 오전 9시(KST)의 실시간 랭킹 순위를 기준으로 반영됩니다.
    * 공격력은 200위, 마법 공격력은 100위까지 조회됩니다.
+   * 서버 응답의 `ranking` 배열을 꺼내 순위 항목 배열로 돌려줍니다.
    *
    * @param params.ranking_type - 랭킹 유형. `'0'`: 공격력, `'1'`: 마법 공격력 (문자열)
    * @throws {NexonBadRequestError} ranking_type이 `'0'`/`'1'` 이 아닐 때 (요청 전에 SDK가 throw)
@@ -63,17 +78,19 @@ export class MabinogiHeroesRankingClient {
       'ranking_type',
       RANKING_TYPE_HINT,
     );
-    return this.http.get<HeroesRankingEntry[]>(
+    const response = await this.http.get<HeroesRankingEnvelope | HeroesRankingEntry[]>(
       `${MabinogiHeroesRankingClient.BASE}/ranking/hall-of-honor`,
       { ranking_type: params.ranking_type },
       HEROES_RANKING_SHAPE,
     );
+    return toRankingEntries(response);
   }
 
   /**
    * 실시간 랭킹에서 공격력 또는 마법 공격력 순위를 한 페이지 조회한다.
    *
    * 1시간마다 반영됩니다. 공격력은 4000위(8페이지), 마법 공격력은 2000위(4페이지)까지 조회됩니다.
+   * 서버 응답의 `ranking` 배열을 꺼내 순위 항목 배열로 돌려줍니다.
    *
    * @param params.ranking_type - 랭킹 유형. `'0'`: 공격력, `'1'`: 마법 공격력 (문자열)
    * @param params.page_no - 실시간 랭킹 페이지 번호. 1부터 시작한다.
@@ -104,10 +121,11 @@ export class MabinogiHeroesRankingClient {
       min: 1,
       hint: "첫 페이지는 1입니다 (예: { ranking_type: '0', page_no: 1 }).",
     });
-    return this.http.get<HeroesRankingEntry[]>(
+    const response = await this.http.get<HeroesRankingEnvelope | HeroesRankingEntry[]>(
       `${MabinogiHeroesRankingClient.BASE}/ranking/real-time`,
       { ranking_type: params.ranking_type, page_no: params.page_no },
       HEROES_RANKING_SHAPE,
     );
+    return toRankingEntries(response);
   }
 }

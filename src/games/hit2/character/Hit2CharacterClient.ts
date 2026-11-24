@@ -27,7 +27,7 @@ export class Hit2CharacterClient {
    * 캐릭터 프로필의 서버·직업군·레벨과 접속 시각을 조회한다.
    *
    * `character_date_create` 는 일 단위라 시·분·초가 항상 0이다.
-   * 로그인·로그아웃 필드명은 `character_last_login` / `character_last_logout` 이다 (`date_` 없음).
+   * 로그인·로그아웃 시각은 `character_date_last_login` / `character_date_last_logout` 으로 온다 (포털 스펙에는 `date_` 없이 적혀 있다).
    *
    * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 고유 번호
    * @throws {NexonBadRequestError} ocid가 비어 있거나(요청 전 차단) 유효하지 않을 때

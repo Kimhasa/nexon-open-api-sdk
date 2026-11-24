@@ -75,7 +75,7 @@ console.log('다음 갱신', date_shop_next_update);
 ```
 
 - `shop[].tab_name`은 상점 탭 이름이고 `shop[].item`은 해당 탭의 판매 목록입니다.
-- 아이템의 `price`에는 화폐 종류와 가격이, `limit_type`과 `limit_value`에는 판매 제한 종류와 수량이 들어 있습니다.
+- 아이템의 `price`에는 화폐 종류와 가격이, `limit_type`과 `limit_value`에는 판매 제한 종류와 수량이 들어 있습니다. 판매 제한이 없는 상품은 둘 다 `null`입니다.
 - `date_shop_next_update`는 다음 상점 갱신 시각입니다.
 
 ### 경매장 매물·거래 내역

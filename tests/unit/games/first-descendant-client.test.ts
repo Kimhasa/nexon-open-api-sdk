@@ -521,7 +521,10 @@ describe('FirstDescendantClient', () => {
         ),
       );
       const { client } = createClient();
-      const result = await client.leaderboard.getVoidInterceptBattle({ leaderboard_type: 'Solo' });
+      const result = await client.leaderboard.getVoidInterceptBattle({
+        leaderboard_type: 'Solo',
+        descendant_id: '101000001',
+      });
 
       expect(result.leaderboard).toBeNull();
     });
@@ -547,11 +550,15 @@ describe('FirstDescendantClient', () => {
 
     it('getVoidErosionPurgeChallenge — Solo는 contents_type 없이 보낸다', async () => {
       const { client, urls } = createClient();
-      await client.leaderboard.getVoidErosionPurgeChallenge({ leaderboard_type: 'Solo' });
+      await client.leaderboard.getVoidErosionPurgeChallenge({
+        leaderboard_type: 'Solo',
+        descendant_id: '101000001',
+      });
 
       expect(urls).toEqual([
         `${BASE}/leaderboard/void-erosion-purge-challenge?${query({
           leaderboard_type: 'Solo',
+          descendant_id: '101000001',
           platform_type: 'All',
         })}`,
       ]);
@@ -589,18 +596,50 @@ describe('FirstDescendantClient', () => {
       await expect(
         loose.getVoidInterceptBattle({
           leaderboard_type: 'Solo',
+          descendant_id: '101000001',
           platform_type: 'Switch',
         }),
       ).rejects.toThrow(/"All", "Pc", "PlayStation", "Xbox"/);
       await expect(
         loose.getVoidInterceptBattle({
           leaderboard_type: 'Solo',
+          descendant_id: '101000001',
           contents_type: 'Normal',
         }),
       ).rejects.toThrow(/contents_type.*RiskMode/);
       await expect(
         loose.getVoidInterceptBattle({ leaderboard_type: 'Solo', descendant_id: '' }),
       ).rejects.toThrow(/descendant_id 값이 비어 있거나 문자열이 아닙니다/);
+      expect(urls).toEqual([]);
+    });
+
+    it('Solo에 descendant_id, Squad에 squad_user_count가 없으면 요청 없이 NexonBadRequestError를 던진다', async () => {
+      const { client, urls } = createClient();
+      // 타입이 필수로 막는 누락을 JavaScript 호출처럼 그대로 넘겨 런타임 검증을 확인한다
+      const loose = client.leaderboard as unknown as Record<
+        'getVoidInterceptBattle' | 'getVoidErosionPurgeChallenge',
+        (params: unknown) => Promise<unknown>
+      >;
+
+      for (const method of ['getVoidInterceptBattle', 'getVoidErosionPurgeChallenge'] as const) {
+        const solo = await loose[method]({ leaderboard_type: 'Solo' }).catch(
+          (error: unknown) => error,
+        );
+        expect(solo).toBeInstanceOf(NexonBadRequestError);
+        expect((solo as NexonBadRequestError).code).toBe('OPENAPI00004');
+        expect((solo as NexonBadRequestError).message).toMatch(
+          /'Solo' 인데 descendant_id가 없습니다.*meta\.getDescendant\(\)/,
+        );
+
+        const squad = await loose[method]({ leaderboard_type: 'Squad' }).catch(
+          (error: unknown) => error,
+        );
+        expect(squad).toBeInstanceOf(NexonBadRequestError);
+        expect((squad as NexonBadRequestError).code).toBe('OPENAPI00004');
+        expect((squad as NexonBadRequestError).message).toMatch(
+          /'Squad' 인데 squad_user_count가 없습니다.*2·3·4 중 하나/,
+        );
+      }
       expect(urls).toEqual([]);
     });
 
@@ -616,7 +655,10 @@ describe('FirstDescendantClient', () => {
       const { client } = createClient();
 
       await expect(
-        client.leaderboard.getVoidErosionPurgeChallenge({ leaderboard_type: 'Solo' }),
+        client.leaderboard.getVoidErosionPurgeChallenge({
+          leaderboard_type: 'Solo',
+          descendant_id: '101000001',
+        }),
       ).rejects.toBeInstanceOf(NexonRateLimitError);
     });
   });
