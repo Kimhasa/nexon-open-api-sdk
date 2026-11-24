@@ -60,7 +60,14 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
 
   // ── 아래 자리는 게임 구현 워커가 채운다: 자기 게임의 [slot] 주석 한 줄을 엔트리로 교체 ──
 
-  // [slot:maplestorytw] MapleStory Taiwan (메이플스토리 대만)
+  maplestorytw: {
+    game: 'MapleStory Taiwan',
+    pathPrefix: 'maplestorytw',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 27,
+    note: 'Portal OpenAPI spec (specs/openapi/maplestorytw/, 2026-11-24). Not verified with a real API key.',
+  },
 
   // [slot:tfd] 퍼스트 디센던트 (The First Descendant)
 
