@@ -64,7 +64,14 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
 
   // [slot:tfd] 퍼스트 디센던트 (The First Descendant)
 
-  // [slot:heroes] 마비노기 영웅전
+  heroes: {
+    game: 'Mabinogi Heroes',
+    pathPrefix: 'heroes',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 19,
+    note: 'OCID(1) + Character V2(6) + Meta(1) + Notice V1(6) + Marketplace(3) + Ranking(2). Portal OpenAPI spec (specs/openapi/heroes/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec, and nullable fields are an SDK-side assumption (the spec marks none).',
+  },
 
   // [slot:suddenattack] 서든어택
 

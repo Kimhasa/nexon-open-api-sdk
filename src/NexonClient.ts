@@ -129,6 +129,13 @@ export class NexonClient {
 
   /**
    * 마비노기 영웅전 클라이언트.
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.mabinogiHeroes.getOcid('캐릭터명');
+   * const basic = await client.mabinogiHeroes.character.getBasic({ ocid });
+   * const ranking = await client.mabinogiHeroes.ranking.getHallOfHonor({ ranking_type: '0' });
+   * ```
    */
   get mabinogiHeroes(): MabinogiHeroesClient {
     this._mabinogiHeroes ??= new MabinogiHeroesClient(this.http);
