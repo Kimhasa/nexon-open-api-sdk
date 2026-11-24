@@ -95,7 +95,7 @@ corepack yarn test:deep         # 15개 게임 전부, 또는 test:deep maplesto
 
 `yarn test:deep` 은 E2E가 대표 필드 몇 개만 보는 한계를 메웁니다. 응답에 예상하지 못한 `null`, 타입에 없는 필드, 응답에 없는 필수 필드, 타입 차이가 있으면 메서드와 경로를 출력합니다. 캐릭터마다 장비·펫·스킬 구성이 달라 드러나는 차이도 달라지므로, 직업·레벨·월드가 다른 캐릭터 몇 명으로 돌려 보는 것이 좋습니다 (`.env` 의 캐릭터 변수를 바꾸거나 같은 이름의 환경변수로 덮어씁니다). 포털 스펙과 다르게 실제 응답에 맞춘 필드는 `specs/drift-baseline.json` 에 근거를 남깁니다.
 
-API 키는 게임마다 따로 발급됩니다. 실 키로 확인한 뒤에는 `src/core/metadata/api-metadata.ts` 의 `lastVerifiedAt` 과 `note` 를 갱신하고, README의 "실서버 검증 현황" 수치도 맞춥니다. 실제 캐릭터명·계정 식별자는 fixture와 문서에 넣지 않습니다.
+API 키는 게임마다 따로 발급됩니다. 실 키로 확인한 뒤에는 `src/core/metadata/api-metadata.ts` 의 `lastVerifiedAt` 과 `note` 를 갱신하고, README의 "실서버 검증 현황"과 `docs/why.md` 의 "실서버 검증 내용" 수치도 맞춥니다. 실제 캐릭터명·계정 식별자는 fixture와 문서에 넣지 않습니다.
 
 ## 릴리즈 절차
 
