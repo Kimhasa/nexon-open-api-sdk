@@ -51,7 +51,11 @@ interface FcSeasonMetaWire {
 }
 
 /**
- * EA SPORTS FC Online 클라이언트.
+ * EA SPORTS FC 온라인 클라이언트.
+ *
+ * 구단주 닉네임으로 계정 고유 번호(ouid)를 먼저 받고, 그 값으로 구단주 정보와 경기 기록을 조회합니다.
+ * 매치 종류·등급·선수·포지션은 숫자로 오므로 `get...Meta()` 로 이름을 찾아 바꿉니다.
+ * 경기 데이터는 매시 정각에 두 시간 전까지의 내용이 갱신됩니다.
  *
  * @example
  * ```ts
@@ -70,9 +74,9 @@ export class FcOnlineClient extends AbstractGameClient {
   // ─── 계정 정보 조회 (User) ──────────────────────────────────────────────
 
   /**
-   * 닉네임으로 계정 식별자(ouid)를 조회한다.
+   * 구단주 닉네임으로 계정 고유 번호(ouid)를 받아 온다. 구단주 정보와 경기 기록을 조회할 때 이 값을 넣는다.
    *
-   * @param nickname - 조회할 유저 닉네임
+   * @param nickname - 게임에서 쓰는 구단주 닉네임
    * @throws {NexonBadRequestError} 닉네임이 비어 있을 때
    * @throws {NexonNotFoundError} 유저를 찾을 수 없을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
@@ -90,9 +94,9 @@ export class FcOnlineClient extends AbstractGameClient {
   }
 
   /**
-   * 유저 기본 정보를 조회한다.
+   * 구단주 기본 정보(닉네임과 레벨)를 조회한다.
    *
-   * @param ouid - {@link FcOnlineClient.getOuid}로 얻은 계정 식별자
+   * @param ouid - 계정 고유 번호. {@link FcOnlineClient.getOuid} 로 얻는다
    * @throws {NexonBadRequestError} ouid가 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
@@ -110,18 +114,21 @@ export class FcOnlineClient extends AbstractGameClient {
   }
 
   /**
-   * 매치 종류별 역대 최고 등급과 달성일자를 배열로 조회한다.
+   * 역대 최고 등급(디비전)과 달성 일자를 매치 종류별로 조회한다.
    *
-   * 포털은 단일 객체를 명세합니다. 단일 객체 응답도 한 항목의 배열로 반환합니다.
-   * 기존 객체 반환 계약에서 배열로 변경되었습니다.
+   * 최고 등급은 공식경기·감독모드·볼타 공식처럼 매치 종류마다 따로 있어서 항상 배열로 돌려준다.
+   * 한 종류만 있어도 길이 1인 배열이다. `matchType` 은 {@link FcOnlineClient.getMatchTypeMeta},
+   * `division` 은 {@link FcOnlineClient.getDivisionMeta} (볼타는 {@link FcOnlineClient.getDivisionVoltaMeta}) 로
+   * 이름을 찾는다.
    *
-   * @param ouid - 계정 식별자
+   * @param ouid - 계정 고유 번호. {@link FcOnlineClient.getOuid} 로 얻는다
    * @throws {NexonBadRequestError} ouid가 유효하지 않을 때
    *
    * @example
    * ```ts
    * const divisions = await client.fcOnline.getMaxDivision(ouid);
    * for (const division of divisions) {
+   *   // matchType 50 = 공식경기, 52 = 감독모드. division 은 등급 번호 (예: 800 = 슈퍼 챔피언스)
    *   console.log(`매치 ${division.matchType} — 등급 ${division.division}`);
    * }
    * ```
@@ -138,19 +145,20 @@ export class FcOnlineClient extends AbstractGameClient {
   }
 
   /**
-   * 유저의 매치 종류별 기록(매치 ID 목록)을 조회한다.
+   * 구단주가 치른 경기의 매치 번호 목록을 매치 종류별로 조회한다 (최근 경기부터).
    *
-   * 가장 최근 매치부터 내림차순으로 반환됩니다.
-   * `offset`/`limit`으로 페이지네이션 가능합니다.
+   * 경기 내용은 받은 매치 번호를 {@link FcOnlineClient.getMatchDetail} 에 넣어 조회합니다.
+   * 더 예전 경기는 `offset` 을 늘려 이어서 조회합니다.
    *
-   * @param params.ouid - 계정 식별자
-   * @param params.matchtype - 매치 종류 (/metadata/matchtype 참고)
-   * @param params.offset - 시작 위치 (기본값: 0)
-   * @param params.limit - 가져올 갯수 (최대 100, 기본값: 100)
+   * @param params.ouid - 계정 고유 번호. {@link FcOnlineClient.getOuid} 로 얻는다
+   * @param params.matchtype - 매치 종류 번호 (50: 공식경기, 52: 감독모드, 214: 볼타 공식 등. 전체 목록은 {@link FcOnlineClient.getMatchTypeMeta})
+   * @param params.offset - 건너뛸 경기 수 (기본값: 0)
+   * @param params.limit - 가져올 경기 수 (최대 100, 기본값: 100)
    * @throws {NexonBadRequestError} ouid 또는 matchtype이 유효하지 않을 때
    *
    * @example
    * ```ts
+   * // 전적 검색: 공식경기 최근 10경기의 매치 번호
    * const matchIds = await client.fcOnline.getMatchList({
    *   ouid,
    *   matchtype: 50,
@@ -177,14 +185,13 @@ export class FcOnlineClient extends AbstractGameClient {
   }
 
   /**
-   * 유저의 이적시장 거래 기록을 조회한다. (본인 거래 기록만 조회 가능)
+   * 내 이적시장 거래 기록(거래한 선수 카드, 강화 등급, 거래 가격)을 조회한다 (최근 거래부터).
    *
-   * 가장 최근 거래부터 내림차순으로 반환됩니다.
-   * `offset`/`limit`으로 페이지네이션 가능합니다.
+   * API 키를 발급받은 계정의 거래만 조회됩니다. 다른 구단주의 거래는 볼 수 없습니다.
    *
-   * @param params.tradetype - 거래 종류 (`'buy'` | `'sell'`)
-   * @param params.offset - 시작 위치 (기본값: 0)
-   * @param params.limit - 가져올 갯수 (최대 100, 기본값: 100)
+   * @param params.tradetype - 거래 종류 (`'buy'`: 구입, `'sell'`: 판매)
+   * @param params.offset - 건너뛸 거래 수 (기본값: 0)
+   * @param params.limit - 가져올 거래 수 (최대 100, 기본값: 100)
    * @throws {NexonBadRequestError} 거래 종류가 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
@@ -213,14 +220,14 @@ export class FcOnlineClient extends AbstractGameClient {
   // ─── 매치 정보 조회 (Match) ─────────────────────────────────────────────
 
   /**
-   * 모든 매치의 종류별 기록(매치 ID 목록)을 요청한다.
+   * 모든 구단주의 매치 번호 목록을 매치 종류별로 요청한다. 더 이상 쓸 수 없다.
    *
    * @deprecated 넥슨이 2026년 7월 7일 제공을 종료했습니다. 개별 계정의 기록은 {@link FcOnlineClient.getMatchList}를 사용하세요.
    * @see https://openapi.nexon.com/support/notice/3495136/
    *
-   * @param params.matchtype - 매치 종류 (/metadata/matchtype 참고)
-   * @param params.offset - 시작 위치 (기본값: 0)
-   * @param params.limit - 가져올 갯수 (최대 100, 기본값: 100)
+   * @param params.matchtype - 매치 종류 번호 (50: 공식경기, 52: 감독모드 등)
+   * @param params.offset - 건너뛸 경기 수 (기본값: 0)
+   * @param params.limit - 가져올 경기 수 (최대 100, 기본값: 100)
    * @param params.orderby - 정렬 순서 (`'desc'` | `'asc'`, 기본값: `'desc'`)
    * @throws {NexonError} 서비스가 종료된 경로에서 HTTP 오류를 반환할 때
    *
@@ -248,12 +255,12 @@ export class FcOnlineClient extends AbstractGameClient {
   }
 
   /**
-   * 매치 상세 기록을 조회한다.
+   * 경기 한 판의 상세 기록(승패, 점유율, 슛·패스·수비 통계, 출전 선수별 평점)을 조회한다.
    *
-   * 매치 시점, 매치 종류와 참여 유저의 상세한 매치 통계가 반환됩니다.
+   * 경기에 참여한 구단주마다 `matchInfo` 항목이 하나씩 들어 있습니다.
    * 매치 통계가 생성되기 전에 상대방이 종료하면 상대 정보가 없을 수 있습니다.
    *
-   * @param matchId - 매치 고유 식별자 ({@link FcOnlineClient.getMatchList}로 획득)
+   * @param matchId - 매치 번호. {@link FcOnlineClient.getMatchList} 로 얻는다
    * @throws {NexonBadRequestError} matchId가 유효하지 않을 때
    *
    * @example
@@ -274,13 +281,13 @@ export class FcOnlineClient extends AbstractGameClient {
   // ─── 랭커 정보 조회 (Ranker) ────────────────────────────────────────────
 
   /**
-   * TOP 10,000 랭커 유저가 사용한 선수의 20경기 평균 스탯을 조회한다.
+   * TOP 10,000 랭커가 쓴 선수 카드의 포지션별 20경기 평균 기록(골·어시스트·패스·수비 등)을 조회한다.
    *
-   * `players` 배열은 SDK 내부에서 JSON 직렬화 후 URL 인코딩하여 전송합니다.
-   * 1회 요청 시 50명 이내를 권장합니다 (초과 시 413 에러 가능).
+   * 선수 카드 번호(spid)와 포지션 번호를 짝지어 넣습니다. 한 번에 50명 이내를 권장합니다
+   * (너무 많으면 넥슨 서버가 요청을 거절할 수 있음). 목록의 인코딩은 SDK가 처리합니다.
    *
-   * @param params.matchtype - 매치 종류 (/metadata/matchtype 참고)
-   * @param params.players - 조회할 선수 목록 (`{ id: spid, po: position }[]`)
+   * @param params.matchtype - 매치 종류 번호 (50: 공식경기, 52: 감독모드 등)
+   * @param params.players - 조회할 선수 목록. `id` 는 선수 카드 번호(spid), `po` 는 포지션 번호 ({@link FcOnlineClient.getSpPositionMeta} 참고, 예: 0 = GK)
    * @throws {NexonBadRequestError} matchtype 또는 players가 유효하지 않을 때
    *
    * @example
@@ -315,7 +322,7 @@ export class FcOnlineClient extends AbstractGameClient {
   // ─── 메타데이터 정보 조회 (MetaData) ──────────────────────────────────
 
   /**
-   * 매치 종류(matchtype) 메타데이터를 조회한다.
+   * 매치 종류 번호와 이름(50 = 공식경기, 52 = 감독모드, 214 = 볼타 공식 등) 목록을 조회한다. API 키 없이도 받을 수 있는 공개 목록이다.
    *
    * @throws {NexonError} 메타데이터를 가져오지 못했을 때
    *
@@ -336,16 +343,19 @@ export class FcOnlineClient extends AbstractGameClient {
   }
 
   /**
-   * 선수 고유 식별자(spid) 메타데이터를 조회한다.
+   * 모든 선수 카드의 번호(spid)와 선수 이름 목록을 조회한다.
    *
-   * spid = class(3자리) + pid(6자리)로 구성됩니다.
+   * 선수 카드 번호(spid)는 클래스 번호 3자리 + 선수 번호(pid) 6자리입니다.
+   * 같은 선수라도 클래스(시즌 카드)가 다르면 spid 가 다릅니다. 목록이 크므로 한 번 받아 두고 재사용하세요.
    *
    * @throws {NexonError} 메타데이터를 가져오지 못했을 때
    *
    * @example
    * ```ts
+   * // 거래 기록의 선수 카드 번호를 선수 이름으로 바꾸기
    * const players = await client.fcOnline.getSpidMeta();
-   * const player = players.find(p => p.name === '손흥민');
+   * const nameBySpid = new Map(players.map((p) => [p.id, p.name]));
+   * console.log(nameBySpid.get(100167680));
    * ```
    */
   async getSpidMeta(): Promise<FcSpidMeta[]> {
@@ -353,9 +363,9 @@ export class FcOnlineClient extends AbstractGameClient {
   }
 
   /**
-   * 시즌 아이디(seasonId) 메타데이터를 조회한다.
+   * 선수 클래스(시즌 카드) 번호와 이름 목록을 예전 형식으로 조회한다. 더 이상 권장하지 않는다.
    *
-   * 이 경로의 시즌 아이디는 선수 클래스 식별자입니다.
+   * 여기서 말하는 시즌 아이디는 공식경기 시즌이 아니라 선수 클래스 번호입니다.
    *
    * @deprecated 넥슨은 2026년 11월 19일 이후 제공 종료를 공지했습니다. 선수 클래스는 {@link FcOnlineClient.getClassMeta}, 공식경기 시즌은 {@link FcOnlineClient.getSeasonMeta}를 사용하세요.
    * @see https://openapi.nexon.com/ko/game/fconline/?id=3
@@ -383,7 +393,7 @@ export class FcOnlineClient extends AbstractGameClient {
   }
 
   /**
-   * 선수 포지션(spposition) 메타데이터를 조회한다.
+   * 포지션 번호와 이름(0 = GK, 1 = SW 등) 목록을 조회한다.
    *
    * @throws {NexonError} 메타데이터를 가져오지 못했을 때
    *
@@ -402,14 +412,14 @@ export class FcOnlineClient extends AbstractGameClient {
   }
 
   /**
-   * 등급 식별자(division) 메타데이터를 조회한다.
+   * 공식경기 등급(디비전) 번호와 이름(800 = 슈퍼 챔피언스, 900 = 챔피언스 등) 목록을 조회한다.
    *
    * @throws {NexonError} 메타데이터를 가져오지 못했을 때
    *
    * @example
    * ```ts
    * const divisions = await client.fcOnline.getDivisionMeta();
-   * // [{ divisionId: 800, divisionName: "슈퍼챔피언스" }, ...]
+   * // [{ divisionId: 800, divisionName: "슈퍼 챔피언스" }, ...]
    * ```
    */
   async getDivisionMeta(): Promise<FcDivisionMeta[]> {
@@ -421,7 +431,7 @@ export class FcOnlineClient extends AbstractGameClient {
   }
 
   /**
-   * 볼타 공식경기 등급 식별자 메타데이터를 조회한다.
+   * 볼타 공식경기 등급 번호와 이름(1100 = 월드 스타 등) 목록을 조회한다.
    *
    * @throws {NexonError} 메타데이터를 가져오지 못했을 때
    *
@@ -440,11 +450,11 @@ export class FcOnlineClient extends AbstractGameClient {
   }
 
   /**
-   * 공식경기 매치 종류별 최신 시즌 메타데이터를 조회한다.
+   * 공식경기·감독모드의 현재(최신) 시즌 번호를 조회한다.
    *
-   * 응답에 없는 시즌은 EA 리그 경기로 구분할 수 있습니다.
-   * 정적 응답의 seasonid 문자열은 포털 스펙의 seasonId 정수로 반환합니다.
-   * 선수 클래스 식별자는 {@link FcOnlineClient.getClassMeta}에서 조회합니다.
+   * 경기 기록의 `seasonId` 가 이 목록에 없으면 EA 리그 경기로 구분할 수 있습니다.
+   * 넥슨은 시즌 번호를 문자열로 주지만 SDK는 숫자(`seasonId`)로 바꿔 돌려줍니다.
+   * 선수 클래스(시즌 카드)는 이 메서드가 아니라 {@link FcOnlineClient.getClassMeta} 로 조회합니다.
    *
    * @throws {NexonError} 메타데이터를 가져오지 못했을 때
    *
@@ -466,9 +476,10 @@ export class FcOnlineClient extends AbstractGameClient {
   }
 
   /**
-   * 선수가 속한 클래스의 식별자, 이름과 이미지 경로를 조회한다.
+   * 선수 클래스(ICON TM 같은 시즌 카드 종류)의 번호·이름·아이콘 이미지 목록을 조회한다.
    *
-   * 넥슨 공지에 따라 선수 클래스의 기존 {@link FcOnlineClient.getSeasonIdMeta} 경로를 대체합니다.
+   * 클래스 번호는 선수 카드 번호(spid)의 앞 3자리입니다.
+   * 넥슨 공지에 따라 기존 {@link FcOnlineClient.getSeasonIdMeta} 를 대체합니다.
    *
    * @throws {NexonError} 메타데이터를 가져오지 못했을 때
    *
@@ -490,11 +501,12 @@ export class FcOnlineClient extends AbstractGameClient {
   // ─── 이미지 URL 조회 (Image) ──────────────────────────────────────────
 
   /**
-   * 선수 고유 식별자(spid) 또는 선수 식별자(pid)로 액션샷 이미지 URL을 반환한다.
+   * 선수 카드 번호(spid) 또는 선수 번호(pid)로 선수 액션샷 이미지 주소를 만든다.
    *
-   * HTTP 호출 없이 URL만 조립합니다. 특정 선수는 이미지가 없을 수 있습니다.
+   * 주소만 만들고 서버에 요청하지 않습니다. 선수에 따라 spid 주소와 pid 주소 중 한쪽에만
+   * 이미지가 있으므로, spid 주소가 열리지 않으면 pid(spid 의 뒤 6자리, 앞쪽 0 제외)로 다시 시도하세요.
    *
-   * @param spid - 선수 고유 식별자 (class 3자리 + pid 6자리) 또는 선수 식별자 (pid)
+   * @param spid - 선수 카드 번호(spid, 클래스 3자리 + 선수 번호 6자리) 또는 선수 번호(pid)
    * @throws {NexonBadRequestError} 식별자가 양의 정수가 아닐 때
    *
    * @example
@@ -513,11 +525,12 @@ export class FcOnlineClient extends AbstractGameClient {
   }
 
   /**
-   * 선수 고유 식별자(spid) 또는 선수 식별자(pid)로 선수 이미지 URL을 반환한다.
+   * 선수 카드 번호(spid) 또는 선수 번호(pid)로 선수 얼굴 이미지 주소를 만든다.
    *
-   * HTTP 호출 없이 URL만 조립합니다. 특정 선수는 이미지가 없을 수 있습니다.
+   * 주소만 만들고 서버에 요청하지 않습니다. 선수에 따라 spid 주소와 pid 주소 중 한쪽에만
+   * 이미지가 있으므로, spid 주소가 열리지 않으면 pid(spid 의 뒤 6자리, 앞쪽 0 제외)로 다시 시도하세요.
    *
-   * @param spid - 선수 고유 식별자 (class 3자리 + pid 6자리) 또는 선수 식별자 (pid)
+   * @param spid - 선수 카드 번호(spid, 클래스 3자리 + 선수 번호 6자리) 또는 선수 번호(pid)
    * @throws {NexonBadRequestError} 식별자가 양의 정수가 아닐 때
    *
    * @example

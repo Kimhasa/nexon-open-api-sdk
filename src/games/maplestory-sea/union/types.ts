@@ -1,6 +1,6 @@
 // ─── GET /maplestorysea/v1/user/union ─────────────────────────────────────────
 
-/** GET /maplestorysea/v1/user/union response */
+/** 유니온 레벨·등급 — `client.maplestorySEA.union.getUnion()` 의 응답. */
 export interface SEAUnion {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -68,7 +68,7 @@ export interface SEAUnionRaiderPreset {
   readonly union_block: readonly SEAUnionBlock[];
 }
 
-/** GET /maplestorysea/v1/user/union-raider response */
+/** 유니온 공격대 배치 — `client.maplestorySEA.union.getRaider()` 의 응답. */
 export interface SEAUnionRaider {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -122,7 +122,7 @@ export interface SEAUnionArtifactCrystal {
   readonly crystal_option_name_3: string;
 }
 
-/** GET /maplestorysea/v1/user/union-artifact response */
+/** 유니온 아티팩트 — `client.maplestorySEA.union.getArtifact()` 의 응답. */
 export interface SEAUnionArtifact {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -156,7 +156,7 @@ export interface SEAUnionChampionInfo {
   readonly champion_badge_info: readonly SEAUnionChampionBadgeInfo[];
 }
 
-/** GET /maplestorysea/v1/user/union-champion response */
+/** 유니온 챔피언 — `client.maplestorySEA.union.getChampion()` 의 응답. */
 export interface SEAUnionChampion {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;

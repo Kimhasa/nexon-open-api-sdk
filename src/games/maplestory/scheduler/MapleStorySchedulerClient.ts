@@ -4,9 +4,9 @@ import { SCHEDULER_CHARACTER_STATE_SHAPE } from '../shapes.js';
 import type { SchedulerCharacterState, SchedulerCharacterStateRequest } from './types.js';
 
 /**
- * 메이플스토리 스케줄러 API 클라이언트.
+ * 메이플스토리 스케줄러: 인게임 스케줄러의 일일·주간·보스 콘텐츠 수행 현황.
  *
- * 인게임 스케줄러의 일일·주간·보스 콘텐츠 수행 현황을 조회합니다.
+ * 내 계정(API 키를 발급받은 계정)의 캐릭터만 조회할 수 있습니다.
  *
  * @example
  * ```ts
@@ -23,15 +23,15 @@ export class MapleStorySchedulerClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 캐릭터의 스케줄러 수행 현황 정보를 조회한다.
+   * 인게임 스케줄러의 일일·주간·보스 콘텐츠 수행 현황(주간 보스 처치 횟수 등)을 조회한다.
    *
    * - 실시간 조회와 이전 일자 조회가 가능하며, 조회 요청일 기준 최대 14일 전까지만 조회할 수 있습니다.
    * - 길드 콘텐츠·에픽던전·무릉도장·보스 정보는 각 콘텐츠 완료 시, 그 외 콘텐츠·퀘스트 정보는
    *   캐릭터 접속 중 및 접속 종료 시 갱신됩니다.
    * - 캐릭터가 기준일에 접속하지 않았다면 응답 결과가 없을 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자. 자신의 계정에 속한 캐릭터만 조회할 수 있습니다
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 오늘 날짜
+   * @param params.ocid - 캐릭터 고유 번호(OCID). 내 계정(API 키를 발급받은 계정)의 캐릭터만 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 오늘. 조회일 기준 14일 전까지만 볼 수 있다
    *
    * @throws {NexonBadRequestError} ocid가 비어 있을 때 (요청 전 즉시 throw)
    * @throws {NexonAuthError} API 키가 유효하지 않거나 다른 계정의 캐릭터일 때

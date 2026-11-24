@@ -28,12 +28,12 @@ import type {
 } from './types.js';
 
 /**
- * 메이플스토리M 랭킹 API 클라이언트.
+ * 메이플스토리M 랭킹: 레벨·무릉도장·시간의 근원·유니온·전투력·커닝M타워·업적·샤레니안.
  *
  * @example
  * ```ts
- * const level = await client.maplestorym.ranking.getLevel({ date: '2024-01-01' });
- * const dojang = await client.maplestorym.ranking.getDojang({ date: '2024-01-01' });
+ * const level = await client.maplestorym.ranking.getLevel({ date: '2026-11-23' });
+ * const dojang = await client.maplestorym.ranking.getDojang({ date: '2026-11-23' });
  * ```
  */
 export class MapleStoryMRankingClient {
@@ -42,9 +42,12 @@ export class MapleStoryMRankingClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 레벨 랭킹 정보를 조회한다.
+   * 레벨 랭킹을 조회한다.
    *
-   * @param params - 조회 기준일(KST), 월드명 또는 캐릭터 식별자, 페이지 번호
+   * @param params.date - 랭킹 기준일 (한국 시간, YYYY-MM-DD)
+   * @param params.world_name - 월드 이름 (선택, 예: '스카니아'). `ocid` 와 함께 넣을 수 없다
+   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 고유 번호 (선택). `world_name` 과 함께 넣을 수 없다
+   * @param params.page - 페이지 번호 (선택, 페이지당 200개)
    * @throws {NexonBadRequestError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -74,9 +77,12 @@ export class MapleStoryMRankingClient {
   }
 
   /**
-   * 무릉도장 랭킹 정보를 조회한다.
+   * 무릉도장 랭킹(도달 층수)을 조회한다.
    *
-   * @param params - 조회 기준일(KST), 월드명 또는 캐릭터 식별자, 페이지 번호
+   * @param params.date - 랭킹 기준일 (한국 시간, YYYY-MM-DD)
+   * @param params.world_name - 월드 이름 (선택, 예: '스카니아'). `ocid` 와 함께 넣을 수 없다
+   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 고유 번호 (선택). `world_name` 과 함께 넣을 수 없다
+   * @param params.page - 페이지 번호 (선택, 페이지당 200개)
    * @throws {NexonBadRequestError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -106,9 +112,12 @@ export class MapleStoryMRankingClient {
   }
 
   /**
-   * 시간의 근원 랭킹 정보를 조회한다.
+   * 시간의 근원 랭킹을 조회한다.
    *
-   * @param params - 조회 기준일(KST), 월드명 또는 캐릭터 식별자, 페이지 번호
+   * @param params.date - 랭킹 기준일 (한국 시간, YYYY-MM-DD)
+   * @param params.world_name - 월드 이름 (선택, 예: '스카니아'). `ocid` 와 함께 넣을 수 없다
+   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 고유 번호 (선택). `world_name` 과 함께 넣을 수 없다
+   * @param params.page - 페이지 번호 (선택, 페이지당 200개)
    * @throws {NexonBadRequestError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -138,9 +147,12 @@ export class MapleStoryMRankingClient {
   }
 
   /**
-   * 유니온 랭킹 정보를 조회한다.
+   * 유니온 랭킹(유니온 등급·레벨)을 조회한다.
    *
-   * @param params - 조회 기준일(KST), 월드명 또는 캐릭터 식별자, 페이지 번호
+   * @param params.date - 랭킹 기준일 (한국 시간, YYYY-MM-DD)
+   * @param params.world_name - 월드 이름 (선택, 예: '스카니아'). `ocid` 와 함께 넣을 수 없다
+   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 고유 번호 (선택). `world_name` 과 함께 넣을 수 없다
+   * @param params.page - 페이지 번호 (선택, 페이지당 200개)
    * @throws {NexonBadRequestError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -170,9 +182,12 @@ export class MapleStoryMRankingClient {
   }
 
   /**
-   * 전투력 랭킹 정보를 조회한다.
+   * 전투력 랭킹을 조회한다.
    *
-   * @param params - 조회 기준일(KST), 월드명 또는 캐릭터 식별자, 페이지 번호
+   * @param params.date - 랭킹 기준일 (한국 시간, YYYY-MM-DD)
+   * @param params.world_name - 월드 이름 (선택, 예: '스카니아'). `ocid` 와 함께 넣을 수 없다
+   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 고유 번호 (선택). `world_name` 과 함께 넣을 수 없다
+   * @param params.page - 페이지 번호 (선택, 페이지당 200개)
    * @throws {NexonBadRequestError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -202,9 +217,12 @@ export class MapleStoryMRankingClient {
   }
 
   /**
-   * 커닝M타워 랭킹 정보를 조회한다.
+   * 커닝M타워 랭킹을 조회한다.
    *
-   * @param params - 조회 기준일(KST), 월드명 또는 캐릭터 식별자, 페이지 번호
+   * @param params.date - 랭킹 기준일 (한국 시간, YYYY-MM-DD)
+   * @param params.world_name - 월드 이름 (선택, 예: '스카니아'). `ocid` 와 함께 넣을 수 없다
+   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 고유 번호 (선택). `world_name` 과 함께 넣을 수 없다
+   * @param params.page - 페이지 번호 (선택, 페이지당 200개)
    * @throws {NexonBadRequestError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -234,9 +252,12 @@ export class MapleStoryMRankingClient {
   }
 
   /**
-   * 업적 랭킹 정보를 조회한다.
+   * 업적 랭킹을 조회한다.
    *
-   * @param params - 조회 기준일(KST), 월드명 또는 캐릭터 식별자, 페이지 번호
+   * @param params.date - 랭킹 기준일 (한국 시간, YYYY-MM-DD)
+   * @param params.world_name - 월드 이름 (선택, 예: '스카니아'). `ocid` 와 함께 넣을 수 없다
+   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 고유 번호 (선택). `world_name` 과 함께 넣을 수 없다
+   * @param params.page - 페이지 번호 (선택, 페이지당 200개)
    * @throws {NexonBadRequestError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -266,9 +287,12 @@ export class MapleStoryMRankingClient {
   }
 
   /**
-   * 샤레니안의 전장 랭킹 정보를 조회한다.
+   * 샤레니안의 전장 랭킹(길드 랭킹)을 조회한다.
    *
-   * @param params - 조회 기준일(KST), 월드명 또는 캐릭터 식별자, 페이지 번호
+   * @param params.date - 랭킹 기준일 (한국 시간, YYYY-MM-DD)
+   * @param params.world_name - 월드 이름 (선택, 예: '스카니아'). `ocid` 와 함께 넣을 수 없다
+   * @param params.ocid - 특정 길드의 순위만 볼 때 넣는 길드 마스터의 캐릭터 고유 번호 (선택). `world_name` 과 함께 넣을 수 없다
+   * @param params.page - 페이지 번호 (선택, 페이지당 200개)
    * @throws {NexonBadRequestError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -300,9 +324,12 @@ export class MapleStoryMRankingClient {
   }
 
   /**
-   * 샤레니안의 지하수로 랭킹 정보를 조회한다.
+   * 샤레니안의 지하수로 랭킹(길드 랭킹)을 조회한다.
    *
-   * @param params - 조회 기준일(KST), 월드명 또는 캐릭터 식별자, 페이지 번호
+   * @param params.date - 랭킹 기준일 (한국 시간, YYYY-MM-DD)
+   * @param params.world_name - 월드 이름 (선택, 예: '스카니아'). `ocid` 와 함께 넣을 수 없다
+   * @param params.ocid - 특정 길드의 순위만 볼 때 넣는 길드 마스터의 캐릭터 고유 번호 (선택). `world_name` 과 함께 넣을 수 없다
+   * @param params.page - 페이지 번호 (선택, 페이지당 200개)
    * @throws {NexonBadRequestError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *

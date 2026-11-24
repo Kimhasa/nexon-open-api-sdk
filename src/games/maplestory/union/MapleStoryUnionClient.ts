@@ -9,7 +9,9 @@ import {
 import type { Union, UnionArtifact, UnionChampion, UnionRaider } from './types.js';
 
 /**
- * 메이플스토리 유니온 API 클라이언트.
+ * 메이플스토리 유니온: 레벨·등급, 공격대 배치, 아티팩트, 챔피언.
+ *
+ * 유니온 정보도 캐릭터 고유 번호(`ocid`)로 조회합니다.
  *
  * @example
  * ```ts
@@ -23,12 +25,12 @@ export class MapleStoryUnionClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 유니온 레벨 및 유니온 등급 정보를 조회한다.
+   * 유니온 레벨·등급과 아티팩트 레벨·포인트를 조회한다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -46,12 +48,12 @@ export class MapleStoryUnionClient {
   }
 
   /**
-   * 유니온 공격대원 효과 및 공격대 점령 효과 등 상세 정보를 조회한다.
+   * 유니온 공격대 배치(블록 위치, 공격대원 효과, 공격대 점령 효과, 프리셋)를 조회한다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -72,12 +74,12 @@ export class MapleStoryUnionClient {
   }
 
   /**
-   * 유니온 아티팩트 정보를 조회한다.
+   * 유니온 아티팩트(효과 레벨과 크리스탈 옵션)를 조회한다.
    *
    * 2024년 01월 18일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -97,12 +99,12 @@ export class MapleStoryUnionClient {
   }
 
   /**
-   * 유니온 챔피언 정보를 조회한다.
+   * 유니온 챔피언(챔피언 캐릭터·등급·휘장 효과)을 조회한다.
    *
    * 2025년 02월 20일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts

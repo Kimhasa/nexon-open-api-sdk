@@ -12,7 +12,7 @@ export interface MNoticeItem {
   readonly date: string;
 }
 
-/** GET /maplestorym/v1/notice 응답 */
+/** 공지사항 목록 — `client.maplestorym.notice.getList()` 의 응답. */
 export interface MNoticeList {
   /** 공지 목록 */
   readonly notice: MNoticeItem[];
@@ -20,7 +20,7 @@ export interface MNoticeList {
 
 // ─── GET /maplestorym/v1/notice/detail ──────────────────────────────────────
 
-/** GET /maplestorym/v1/notice/detail 응답 */
+/** 공지사항 본문 — `client.maplestorym.notice.getDetail()` 의 응답. */
 export interface MNoticeDetail {
   /** 공지 제목 */
   readonly title: string;
@@ -34,7 +34,7 @@ export interface MNoticeDetail {
 
 // ─── GET /maplestorym/v1/notice-patch ───────────────────────────────────────
 
-/** GET /maplestorym/v1/notice-patch 응답 */
+/** 패치노트 목록 — `client.maplestorym.notice.getPatchList()` 의 응답. */
 export interface MPatchNoticeList {
   /** 패치노트 목록 */
   readonly patch_notice: MNoticeItem[];
@@ -42,7 +42,7 @@ export interface MPatchNoticeList {
 
 // ─── GET /maplestorym/v1/notice-event ────────────────────────────────────────
 
-/** GET /maplestorym/v1/notice-event 응답 */
+/** 진행 중 이벤트 목록 — `client.maplestorym.notice.getEventList()` 의 응답. */
 export interface MEventNoticeList {
   /** 이벤트 공지 목록 */
   readonly event_notice: MNoticeItem[];

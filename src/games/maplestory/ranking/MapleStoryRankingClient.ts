@@ -17,14 +17,15 @@ import type {
 } from './types.js';
 
 /**
- * 메이플스토리 랭킹 API 클라이언트.
+ * 메이플스토리 랭킹: 종합·유니온·길드·무릉도장·더 시드·업적.
  *
- * 모든 랭킹 정보는 최근 2년 데이터만 조회 가능합니다.
+ * 2023년 12월 22일 데이터부터, 최근 2년 데이터만 조회할 수 있습니다.
+ * 오늘 랭킹은 오전 9시 30분경부터 조회됩니다 (상황에 따라 더 늦을 수 있음).
  *
  * @example
  * ```ts
- * const overall = await client.maplestory.ranking.getOverall({ date: '2024-01-01' });
- * const union = await client.maplestory.ranking.getUnion({ date: '2024-01-01' });
+ * const overall = await client.maplestory.ranking.getOverall({ date: '2026-11-01' });
+ * const union = await client.maplestory.ranking.getUnion({ date: '2026-11-01' });
  * ```
  */
 export class MapleStoryRankingClient {
@@ -33,18 +34,18 @@ export class MapleStoryRankingClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 종합 랭킹 정보를 조회한다.
+   * 종합 랭킹(레벨·경험치 순위)을 조회한다.
    *
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD)
-   * @param params.world_name - 월드 명 (선택)
-   * @param params.world_type - 월드 타입 (0: 일반, 1: 에오스/핼리오스). world_name 입력 시 미반영
-   * @param params.class - 직업 및 전직 (선택)
-   * @param params.ocid - 특정 캐릭터 랭킹 조회 시 (선택)
+   * @param params.date - 랭킹 기준일 (한국 시간, YYYY-MM-DD)
+   * @param params.world_name - 월드 이름 (선택, 예: '스카니아')
+   * @param params.world_type - 월드 종류 (0: 일반 월드, 1: 에오스·핼리오스). `world_name` 을 넣으면 무시된다
+   * @param params.class - 직업 및 전직 (선택, 예: '전사-히어로')
+   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 고유 번호 (선택)
    * @param params.page - 페이지 번호 (선택)
    *
    * @example
    * ```ts
-   * const overall = await client.maplestory.ranking.getOverall({ date: '2024-01-01' });
+   * const overall = await client.maplestory.ranking.getOverall({ date: '2026-11-01' });
    * for (const r of overall.ranking) {
    *   console.log(`#${r.ranking} ${r.character_name} Lv.${r.character_level}`);
    * }
@@ -67,16 +68,16 @@ export class MapleStoryRankingClient {
   }
 
   /**
-   * 유니온 랭킹 정보를 조회한다.
+   * 유니온 랭킹(유니온 레벨·유니온 파워 순위)을 조회한다.
    *
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD)
-   * @param params.world_name - 월드 명 (선택)
-   * @param params.ocid - 특정 캐릭터 랭킹 조회 시 (선택)
+   * @param params.date - 랭킹 기준일 (한국 시간, YYYY-MM-DD)
+   * @param params.world_name - 월드 이름 (선택, 예: '스카니아')
+   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 고유 번호 (선택)
    * @param params.page - 페이지 번호 (선택)
    *
    * @example
    * ```ts
-   * const union = await client.maplestory.ranking.getUnion({ date: '2024-01-01' });
+   * const union = await client.maplestory.ranking.getUnion({ date: '2026-11-01' });
    * for (const r of union.ranking) {
    *   console.log(`#${r.ranking} ${r.character_name} 유니온Lv.${r.union_level}`);
    * }
@@ -97,18 +98,19 @@ export class MapleStoryRankingClient {
   }
 
   /**
-   * 길드 랭킹 정보를 조회한다.
+   * 길드 랭킹(주간 명성치·플래그 레이스·지하 수로)을 조회한다.
    *
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD)
-   * @param params.world_name - 월드 명 (선택)
-   * @param params.ranking_type - 랭킹 타입 (0: 주간 명성치, 1: 플래그 레이스, 2: 지하 수로)
-   * @param params.guild_name - 길드 명 (선택)
+   * @param params.date - 랭킹 기준일 (한국 시간, YYYY-MM-DD)
+   * @param params.world_name - 월드 이름 (선택, 예: '스카니아')
+   * @param params.ranking_type - 길드 랭킹 종류 (0: 주간 명성치, 1: 플래그 레이스, 2: 지하 수로)
+   * @param params.guild_name - 길드 이름 (선택)
    * @param params.ocid - 지원 종료된 파라미터로, 입력 시 기존 호출 호환을 위해 경고만 출력합니다.
    * @param params.page - 페이지 번호 (선택)
    *
    * @example
    * ```ts
-   * const guild = await client.maplestory.ranking.getGuild({ date: '2024-01-01' });
+   * // 주간 명성치 기준 길드 순위표
+   * const guild = await client.maplestory.ranking.getGuild({ date: '2026-11-01', ranking_type: 0 });
    * for (const r of guild.ranking) {
    *   console.log(`#${r.ranking} ${r.guild_name} Lv.${r.guild_level}`);
    * }
@@ -136,18 +138,19 @@ export class MapleStoryRankingClient {
   }
 
   /**
-   * 무릉도장 랭킹 정보를 조회한다.
+   * 무릉도장 랭킹(일반·통달 구간별 층수와 클리어 시간)을 조회한다.
    *
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD)
-   * @param params.world_name - 월드 명 (선택)
-   * @param params.difficulty - 구간 (0: 일반, 1: 통달)
-   * @param params.class - 직업 및 전직 (선택)
-   * @param params.ocid - 특정 캐릭터 랭킹 조회 시 (선택)
+   * @param params.date - 랭킹 기준일 (한국 시간, YYYY-MM-DD)
+   * @param params.world_name - 월드 이름 (선택, 예: '스카니아')
+   * @param params.difficulty - 무릉도장 구간 (0: 일반, 1: 통달)
+   * @param params.class - 직업 및 전직 (선택, 예: '전사-히어로')
+   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 고유 번호 (선택)
    * @param params.page - 페이지 번호 (선택)
    *
    * @example
    * ```ts
-   * const dojang = await client.maplestory.ranking.getDojang({ date: '2024-01-01' });
+   * // 통달 구간 무릉도장 순위표
+   * const dojang = await client.maplestory.ranking.getDojang({ date: '2026-11-01', difficulty: 1 });
    * for (const r of dojang.ranking) {
    *   console.log(`#${r.ranking} ${r.character_name} ${r.dojang_floor}층 (${r.dojang_time_record}초)`);
    * }
@@ -170,16 +173,16 @@ export class MapleStoryRankingClient {
   }
 
   /**
-   * 더 시드 랭킹 정보를 조회한다.
+   * 더 시드 랭킹(도달 층과 클리어 시간)을 조회한다.
    *
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD)
-   * @param params.world_name - 월드 명 (선택)
-   * @param params.ocid - 특정 캐릭터 랭킹 조회 시 (선택)
+   * @param params.date - 랭킹 기준일 (한국 시간, YYYY-MM-DD)
+   * @param params.world_name - 월드 이름 (선택, 예: '스카니아')
+   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 고유 번호 (선택)
    * @param params.page - 페이지 번호 (선택)
    *
    * @example
    * ```ts
-   * const seed = await client.maplestory.ranking.getTheSeed({ date: '2024-01-01' });
+   * const seed = await client.maplestory.ranking.getTheSeed({ date: '2026-11-01' });
    * for (const r of seed.ranking) {
    *   console.log(`#${r.ranking} ${r.character_name} ${r.theseed_floor}층 (${r.theseed_time_record}초)`);
    * }
@@ -200,15 +203,15 @@ export class MapleStoryRankingClient {
   }
 
   /**
-   * 업적 랭킹 정보를 조회한다.
+   * 업적 랭킹(업적 등급·업적 점수)을 조회한다.
    *
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD)
-   * @param params.ocid - 특정 캐릭터 랭킹 조회 시 (선택)
+   * @param params.date - 랭킹 기준일 (한국 시간, YYYY-MM-DD)
+   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 고유 번호 (선택)
    * @param params.page - 페이지 번호 (선택)
    *
    * @example
    * ```ts
-   * const achievement = await client.maplestory.ranking.getAchievement({ date: '2024-01-01' });
+   * const achievement = await client.maplestory.ranking.getAchievement({ date: '2026-11-01' });
    * for (const r of achievement.ranking) {
    *   console.log(`#${r.ranking} ${r.character_name} ${r.trophy_grade} (${r.trophy_score}점)`);
    * }

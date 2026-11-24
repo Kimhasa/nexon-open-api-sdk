@@ -7,7 +7,7 @@ import type { TWGuildIdDateRequest } from '../types.js';
 import { TW_WORLD_NAMES } from './types.js';
 import type { TWGuildIdResponse, TWGuildBasic, TWWorldName } from './types.js';
 
-/** MapleStory Taiwan Guild API client. */
+/** MapleStory Taiwan 길드(公會): 길드 이름과 월드 이름으로 길드 고유 번호를 받아 길드 정보를 조회한다. */
 export class MapleStoryTWGuildClient {
   private static readonly BASE = 'https://open.api.nexon.com/maplestorytw/v1';
 
@@ -17,10 +17,10 @@ export class MapleStoryTWGuildClient {
   ) {}
 
   /**
-   * Retrieve a guild identifier (oguild_id) by guild and world name.
+   * 길드 이름과 월드 이름으로 길드 고유 번호(oguild_id)를 받아 온다. 길드 정보를 조회할 때 이 값을 넣는다. 대만 명칭: 公會識別碼.
    *
-   * @param guildName - Guild name.
-   * @param worldName - Taiwan world name as listed by the portal.
+   * @param guildName - 길드 이름
+   * @param worldName - 길드가 있는 월드 이름 (예: '艾麗亞'). 포털에 있는 이름만 받는다
    * @throws {NexonBadRequestError} Invalid input. The guild name is blank. The world name is unsupported.
    * @throws {NexonNotFoundError} The guild was not found.
    * @throws {NexonAuthError} The API key is invalid.
@@ -44,10 +44,10 @@ export class MapleStoryTWGuildClient {
   }
 
   /**
-   * Retrieve basic guild information.
+   * 길드 기본 정보(레벨·길드 마스터·길드원 목록·길드 스킬)를 조회한다. 대만 명칭: 公會基本資訊.
    *
-   * @param params.oguild_id - Guild identifier from guild.getId().
-   * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
+   * @param params.oguild_id - 길드 고유 번호. `client.maplestoryTW.guild.getId()` 로 얻는다
+   * @param params.date - 조회 기준일 (대만 시간 UTC+8). 'YYYY-MM-DD' 문자열, Date, 'today' 를 받는다. 2025-10-15 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
    * @throws {NexonBadRequestError} Invalid input. The oguild_id is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example

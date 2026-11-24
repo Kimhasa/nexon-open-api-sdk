@@ -16,7 +16,7 @@ import type {
 } from './types.js';
 
 /**
- * 메이플스토리M 공지사항 API 클라이언트.
+ * 메이플스토리M 공지: 공지사항, 패치노트, 진행 중 이벤트.
  *
  * 각 목록 API는 최근 등록된 게시글 20개를 반환합니다.
  *
@@ -32,7 +32,7 @@ export class MapleStoryMNoticeClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 공지사항 목록을 조회한다 (최근 20개).
+   * 메이플스토리M 공지사항 목록을 조회한다 (최근 20개).
    *
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -56,9 +56,9 @@ export class MapleStoryMNoticeClient {
   }
 
   /**
-   * 공지사항 상세를 조회한다.
+   * 공지사항 한 건의 본문을 조회한다.
    *
-   * @param noticeId - 공지 식별자
+   * @param noticeId - 공지 번호. 목록 응답의 `notice_id`
    *
    * @throws {NexonBadRequestError} 공지 식별자가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
@@ -110,9 +110,9 @@ export class MapleStoryMNoticeClient {
   }
 
   /**
-   * 패치노트 상세를 조회한다.
+   * 패치노트 한 건의 본문을 조회한다.
    *
-   * @param noticeId - 공지 식별자
+   * @param noticeId - 공지 번호. 목록 응답의 `notice_id`
    *
    * @throws {NexonBadRequestError} 공지 식별자가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
@@ -164,9 +164,9 @@ export class MapleStoryMNoticeClient {
   }
 
   /**
-   * 진행 중 이벤트 상세를 조회한다.
+   * 진행 중 이벤트 한 건의 본문을 조회한다.
    *
-   * @param noticeId - 공지 식별자
+   * @param noticeId - 공지 번호. 목록 응답의 `notice_id`
    *
    * @throws {NexonBadRequestError} 공지 식별자가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때

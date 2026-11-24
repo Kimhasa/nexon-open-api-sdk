@@ -2,7 +2,7 @@ import type { OcidDateRequest } from '../../_base/maple-base-types.js';
 
 // ─── GET /maplestorysea/v1/character/basic ────────────────────────────────────
 
-/** GET /maplestorysea/v1/character/basic response */
+/** 캐릭터 기본 정보 — `client.maplestorySEA.character.getBasic()` 의 응답. */
 export interface SEACharacterBasic {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -54,7 +54,7 @@ export interface SEACharacterBasic {
 
 // ─── GET /maplestorysea/v1/character/popularity ───────────────────────────────
 
-/** GET /maplestorysea/v1/character/popularity response */
+/** 캐릭터 인기도 — `client.maplestorySEA.character.getPopularity()` 의 응답. */
 export interface SEACharacterPopularity {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -64,7 +64,7 @@ export interface SEACharacterPopularity {
 
 // ─── GET /maplestorysea/v1/character/stat ─────────────────────────────────────
 
-/** GET /maplestorysea/v1/character/stat response */
+/** 캐릭터 정보창의 스탯(종합 능력치) — `client.maplestorySEA.character.getStat()` 의 응답. */
 export interface SEACharacterStat {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -88,7 +88,7 @@ export interface SEAStatDetail {
 
 // ─── GET /maplestorysea/v1/character/hyper-stat ───────────────────────────────
 
-/** GET /maplestorysea/v1/character/hyper-stat response */
+/** 하이퍼 스탯 — `client.maplestorySEA.character.getHyperStat()` 의 응답. */
 export interface SEACharacterHyperStat {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -126,7 +126,7 @@ export interface SEAHyperStatPreset {
 
 // ─── GET /maplestorysea/v1/character/propensity ───────────────────────────────
 
-/** GET /maplestorysea/v1/character/propensity response */
+/** 성향 — `client.maplestorySEA.character.getPropensity()` 의 응답. */
 export interface SEACharacterPropensity {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -146,7 +146,7 @@ export interface SEACharacterPropensity {
 
 // ─── GET /maplestorysea/v1/character/ability ──────────────────────────────────
 
-/** GET /maplestorysea/v1/character/ability response */
+/** 어빌리티 — `client.maplestorySEA.character.getAbility()` 의 응답. */
 export interface SEACharacterAbility {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -469,7 +469,7 @@ export interface SEAMedalShape {
   readonly medal_shape_changed_description: string;
 }
 
-/** GET /maplestorysea/v1/character/item-equipment response */
+/** 장착 장비(캐시 장비 제외) — `client.maplestorySEA.character.getItemEquipment()` 의 응답. */
 export interface SEACharacterItemEquipment {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -559,7 +559,7 @@ export interface SEACashItemEquipmentItem {
   readonly freestyle_flag: string;
 }
 
-/** GET /maplestorysea/v1/character/cashitem-equipment response */
+/** 장착 캐시 장비 — `client.maplestorySEA.character.getCashItemEquipment()` 의 응답. */
 export interface SEACharacterCashItemEquipment {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -625,7 +625,7 @@ export interface SEASymbolInfo {
   readonly symbol_require_growth_count: number;
 }
 
-/** GET /maplestorysea/v1/character/symbol-equipment response */
+/** 장착 심볼 — `client.maplestorySEA.character.getSymbolEquipment()` 의 응답. */
 export interface SEACharacterSymbolEquipment {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -657,7 +657,7 @@ export interface SEASetEffectDetail {
   readonly set_option_full: readonly SEASetEffectInfo[];
 }
 
-/** GET /maplestorysea/v1/character/set-effect response */
+/** 적용 중인 세트 효과 — `client.maplestorySEA.character.getSetEffect()` 의 응답. */
 export interface SEACharacterSetEffect {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -709,7 +709,7 @@ export interface SEASkinInfo {
   readonly brightness: number;
 }
 
-/** GET /maplestorysea/v1/character/beauty-equipment response */
+/** 헤어·성형·피부 — `client.maplestorySEA.character.getBeautyEquipment()` 의 응답. */
 export interface SEACharacterBeautyEquipment {
   /** Reference date for query (SGT) */
   readonly date: string;
@@ -789,7 +789,7 @@ export interface SEAAndroidPreset {
   readonly android_shop_usable_flag: string;
 }
 
-/** GET /maplestorysea/v1/character/android-equipment response */
+/** 장착 안드로이드 — `client.maplestorySEA.character.getAndroidEquipment()` 의 응답. */
 export interface SEACharacterAndroidEquipment {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -871,7 +871,7 @@ export interface SEAPetAutoSkill {
   readonly skill_2_icon: string;
 }
 
-/** GET /maplestorysea/v1/character/pet-equipment response */
+/** 장착 펫과 펫 장비·펫 스킬 — `client.maplestorySEA.character.getPetEquipment()` 의 응답. */
 export interface SEACharacterPetEquipment {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -967,7 +967,7 @@ export interface SEASkillInfo {
   readonly skill_icon: string;
 }
 
-/** GET /maplestorysea/v1/character/skill response */
+/** 전직 차수별 스킬 — `client.maplestorySEA.character.getSkill()` 의 응답. */
 export interface SEACharacterSkill {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -1011,7 +1011,7 @@ export interface SEALinkSkillPresetInfo {
   readonly skill_icon: string;
 }
 
-/** GET /maplestorysea/v1/character/link-skill response */
+/** 링크 스킬 — `client.maplestorySEA.character.getLinkSkill()` 의 응답. */
 export interface SEACharacterLinkSkill {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -1057,7 +1057,7 @@ export interface SEAVCoreInfo {
   readonly v_core_skill_3: string;
 }
 
-/** GET /maplestorysea/v1/character/vmatrix response */
+/** V매트릭스(5차) — `client.maplestorySEA.character.getVMatrix()` 의 응답. */
 export interface SEACharacterVMatrix {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -1089,7 +1089,7 @@ export interface SEAHexaCoreInfo {
   readonly linked_skill: readonly SEAHexaLinkedSkill[];
 }
 
-/** GET /maplestorysea/v1/character/hexamatrix response */
+/** HEXA 매트릭스(6차)의 HEXA 코어 — `client.maplestorySEA.character.getHexaMatrix()` 의 응답. */
 export interface SEACharacterHexaMatrix {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -1119,7 +1119,7 @@ export interface SEAHexaStatCoreInfo {
   readonly stat_grade: number;
 }
 
-/** GET /maplestorysea/v1/character/hexamatrix-stat response */
+/** HEXA 스탯 — `client.maplestorySEA.character.getHexaMatrixStat()` 의 응답. */
 export interface SEACharacterHexaMatrixStat {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -1141,7 +1141,7 @@ export interface SEACharacterHexaMatrixStat {
 
 // ─── GET /maplestorysea/v1/character/dojang ───────────────────────────────────
 
-/** GET /maplestorysea/v1/character/dojang response */
+/** 무릉도장 최고 기록 — `client.maplestorySEA.character.getDojang()` 의 응답. */
 export interface SEACharacterDojang {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;

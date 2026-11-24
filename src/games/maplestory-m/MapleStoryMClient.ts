@@ -12,6 +12,9 @@ import { M_OCID_SHAPE } from './shapes.js';
 /**
  * 메이플스토리M 클라이언트.
  *
+ * PC 메이플스토리와 달리 캐릭터를 찾을 때 월드 이름이 필요하고, 캐릭터·유니온·길드 조회에
+ * 날짜를 넣지 않습니다. 날짜는 랭킹에만 씁니다.
+ *
  * @example
  * ```ts
  * import { NexonClient } from 'nexon-open-api';
@@ -33,41 +36,41 @@ export class MapleStoryMClient extends AbstractGameClient {
   private _ranking: MapleStoryMRankingClient | undefined;
   private _notice: MapleStoryMNoticeClient | undefined;
 
-  /** 캐릭터 관련 API (17개 엔드포인트) */
+  /** 캐릭터 정보: 스탯·장비·심볼·쥬얼·스킬 등 (17개) */
   get character(): MapleStoryMCharacterClient {
     this._character ??= new MapleStoryMCharacterClient(this.http);
     return this._character;
   }
 
-  /** 유니온 관련 API (3개 엔드포인트) */
+  /** 유니온: 레벨·등급, 공격대원 효과, 유니온 스탯 (3개) */
   get union(): MapleStoryMUnionClient {
     this._union ??= new MapleStoryMUnionClient(this.http);
     return this._union;
   }
 
-  /** 길드 관련 API (2개 엔드포인트) */
+  /** 길드: 길드 고유 번호와 길드 기본 정보 (2개) */
   get guild(): MapleStoryMGuildClient {
     this._guild ??= new MapleStoryMGuildClient(this.http);
     return this._guild;
   }
 
-  /** 랭킹 관련 API (9개 엔드포인트) */
+  /** 랭킹: 레벨·무릉도장·시간의 근원·유니온·전투력·커닝M타워·업적·샤레니안 (9개) */
   get ranking(): MapleStoryMRankingClient {
     this._ranking ??= new MapleStoryMRankingClient(this.http);
     return this._ranking;
   }
 
-  /** 공지사항 관련 API (6개 엔드포인트) */
+  /** 공지: 공지사항·패치노트·진행 중 이벤트 (6개) */
   get notice(): MapleStoryMNoticeClient {
     this._notice ??= new MapleStoryMNoticeClient(this.http);
     return this._notice;
   }
 
   /**
-   * 캐릭터명과 월드명으로 OCID를 조회한다.
+   * 월드 이름과 캐릭터 이름으로 캐릭터 고유 번호(OCID)를 받아 온다. 메이플스토리M은 월드마다 같은 이름이 있을 수 있어 월드 이름이 꼭 필요하다.
    *
-   * @param worldName - 월드 명 (아케인, 크로아, 엘리시움, 루나, 스카니아, 유니온, 제니스, 챌린저스)
-   * @param characterName - 조회할 캐릭터명
+   * @param worldName - 캐릭터가 있는 월드 이름 (아케인, 크로아, 엘리시움, 루나, 스카니아, 유니온, 제니스, 챌린저스)
+   * @param characterName - 게임에서 쓰는 캐릭터 이름
    * @throws {NexonNotFoundError} 캐릭터를 찾을 수 없을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *

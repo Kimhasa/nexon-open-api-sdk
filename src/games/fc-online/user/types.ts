@@ -4,7 +4,7 @@ declare const __brand: unique symbol;
 type Brand<T, B extends string> = T & { readonly [__brand]: B };
 
 /**
- * EA SPORTS FC Online 계정 고유 식별자 (OUID).
+ * EA SPORTS FC 온라인 계정 고유 번호 (OUID). 구단주 닉네임으로 받아 두고 정보를 조회할 때 넣는다.
  *
  * FC Online 전용 브랜드 타입입니다.
  * `FcOnlineClient.getOuid()` 로 획득합니다.
@@ -13,23 +13,23 @@ export type OUID = Brand<string, 'OUID'>;
 
 // ─── GET /fconline/v1/user/basic ────────────────────────────────────────────
 
-/** 유저 기본 정보 응답 */
+/** 구단주 기본 정보 — `client.fcOnline.getBasic()` 의 응답. */
 export interface FcUserBasic {
   /** 계정 식별자 */
   readonly ouid: OUID;
-  /** 유저 닉네임 */
+  /** 구단주 닉네임 */
   readonly nickname: string;
-  /** 유저 레벨 */
+  /** 구단주 레벨 */
   readonly level: number;
 }
 
 // ─── GET /fconline/v1/user/maxdivision ──────────────────────────────────────
 
-/** 역대 최고 등급 정보 */
+/** 매치 종류 하나의 역대 최고 등급(디비전) — `client.fcOnline.getMaxDivision()` 응답 배열의 항목. */
 export interface FcMaxDivision {
-  /** 매치 종류 (/metadata/matchtype API 참고) */
+  /** 매치 종류 번호 (50: 공식경기, 52: 감독모드 등. `getMatchTypeMeta()` 참고) */
   readonly matchType: number;
-  /** 등급 식별자 (공식경기 /metadata/division, 볼타모드 /metadata/division_volta 참고) */
+  /** 등급(디비전) 번호 (예: 800 = 슈퍼 챔피언스). 공식경기는 `getDivisionMeta()`, 볼타는 `getDivisionVoltaMeta()` 로 이름을 찾는다 */
   readonly division: number;
   /** 최고 등급 달성 일자 (UTC0, ISO 8601) */
   readonly achievementDate: string;
@@ -41,7 +41,7 @@ export interface FcMaxDivision {
 export interface FcUserMatchRequest {
   /** 계정 식별자 */
   readonly ouid: OUID;
-  /** 매치 종류 (/metadata/matchtype API 참고) */
+  /** 매치 종류 번호 (50: 공식경기, 52: 감독모드 등. `getMatchTypeMeta()` 참고) */
   readonly matchtype: number;
   /** 리스트에서 가져올 시작 위치 (기본값: 0) */
   readonly offset?: number | undefined;
@@ -64,16 +64,16 @@ export interface FcUserTradeRequest {
   readonly limit?: number | undefined;
 }
 
-/** 거래 기록 */
+/** 이적시장 거래 한 건 — `client.fcOnline.getTradeList()` 응답 배열의 항목. */
 export interface FcTradeRecord {
   /** 거래 일자 (UTC0) — 구매: 등록 시점, 판매: 완료 시점 */
   readonly tradeDate: string;
   /** 거래 고유 식별자 */
   readonly saleSn: string;
-  /** 선수 고유 식별자 (/metadata/spid API 참고) */
+  /** 선수 고유 식별자 — 선수 카드 번호 (`getSpidMeta()` 참고) */
   readonly spid: number;
-  /** 거래 선수 강화 등급 */
+  /** 거래한 선수 카드의 강화 등급 (강화 단계) */
   readonly grade: number;
-  /** 거래 선수 가치 (BP) */
+  /** 거래 가격 (BP) */
   readonly value: number;
 }
