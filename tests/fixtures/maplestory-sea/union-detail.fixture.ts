@@ -19,7 +19,7 @@ export const seaUnionRaiderFixture: SEAUnionRaider = {
   union_block: [
     {
       block_type: 'block type',
-      block_class: 'block class',
+      block_class: null,
       block_level: 'block level',
       block_control_point: {
         x: 1,
@@ -46,7 +46,7 @@ export const seaUnionRaiderFixture: SEAUnionRaider = {
     union_block: [
       {
         block_type: 'block type',
-        block_class: 'block class',
+        block_class: null,
         block_level: 'block level',
         block_control_point: {
           x: 1,
