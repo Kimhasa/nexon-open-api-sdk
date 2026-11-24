@@ -28,6 +28,13 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
   - 히트2 — `client.hit2`, `nexon-open-api/hit2` (2)
   - 넥슨 Open API 공지 — `client.platform`, `nexon-open-api/platform` (1)
 - 신규 게임 E2E 스크립트 `yarn test:{game}` 11개 (실 API 키 필요, `.env.example` 참고)
+- 모든 게임 sub-path 진입점(`nexon-open-api/{sub-path}`)이 `HttpClient` 와 `HttpClientConfig` 타입을 내보낸다. sub-path만 import해도 `new MapleStoryClient(new HttpClient({ apiKey }))` 처럼 게임 클라이언트를 만들 수 있으며, 루트의 `HttpClient` 와 같은 클래스다 (CJS·ESM 모두)
+- `yarn test:live` — API 키 없이 실제 넥슨 서버로 확인한다
+  - 공개 정적 메타데이터 44개: 실응답과 SDK 타입을 중첩 필드까지 대조
+  - FC 이미지 CDN
+  - 15개 게임의 인증 오류 처리
+  - 2026-11-24 결과: 44/44 통과, 타입 불일치 0건
+- `yarn test:package` — npm tarball을 오프라인 설치해 CJS·ESM 실호출과 TypeScript(Node16·Bundler) 타입 해석을 확인
 
 - 넥슨 포털 OpenAPI 스펙 저장소: `yarn specs:fetch` 가 포털의 카테고리별 OpenAPI YAML을 `specs/openapi/{slug}/{categoryId}.yaml` 로 수집하고 `specs/openapi/index.json` 색인을 만든다 (2026-11-24 기준 15개 게임, 270개 오퍼레이션)
 - `yarn specs:check` — 저장된 스펙과 포털을 비교해 게임·카테고리·오퍼레이션 추가/삭제, YAML 수정(시각·해시)을 감지
@@ -74,6 +81,9 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 - SDK 입력 검증 실패를 모든 게임에서 `NexonBadRequestError`(code `OPENAPI00004`, status 400)로 통일했다. 오류 메시지는 유효한 값이나 조회 방법을 안내한다. 이전에 `toNexonDate()` 가 파싱할 수 없는 날짜 문자열에 던지던 `Error` 도 이 에러로 바뀐다. `NexonBadRequestError` 는 `Error` 의 하위 클래스이므로 `catch (e)` / `instanceof Error` 처리는 그대로 동작한다
 - 런타임 응답 shape 검증(`responseValidation`)이 최상위 배열 응답에도 적용된다 (`arrayOf()` 사용, 서든어택·마비노기 영웅전·퍼스트 디센던트 메타데이터 등 37개)
 - CI에 `specs:drift --strict` 게이트 추가 — SDK 타입이 커밋된 포털 스펙에서 벗어나면 실패 (nullable 넓힘과 `@deprecated` 유지는 허용)
+- 에러 클래스 JSDoc과 문서의 HTTP 상태 설명을 실제 동작에 맞췄다 (동작 변경 없음). `NexonAuthError` 는 HTTP 상태가 아니라 에러 코드(`OPENAPI00002`, `OPENAPI00005`)로 분류하며, 실제 서버는 잘못된 API 키에 HTTP 400 + `OPENAPI00005` 를 돌려준다
+- README를 0.2.0 기준으로 다시 썼다: 에러 클래스 표, `responseValidation`, 실서버 검증 현황, 개발 · 기여 섹션을 추가하고 동작하지 않던 codecov 배지를 제거했다
+- npm 패키지 `description` 과 `keywords` 를 지원 범위(14개 게임 + Open API 공지)에 맞게 갱신
 
 - CI: GitHub Actions 메이저 버전 갱신(Node 24 런타임), 테스트 매트릭스 Node 22/24/26 (`engines` 는 `>=18` 유지), npm Trusted Publishing(OIDC·provenance) 준비
 - `yarn type-check` 가 `tests`, `scripts` 까지, `yarn lint` 가 `scripts` 까지 검사
