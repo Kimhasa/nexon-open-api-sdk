@@ -9,6 +9,24 @@ import { NexonServerError } from './NexonServerError.js';
 import { NexonMaintenanceError } from './NexonMaintenanceError.js';
 import type { NexonErrorPayload } from './NexonError.js';
 
+const GAME_NAMES_BY_PATH_PREFIX = new Map([
+  ['maplestory', '메이플스토리'],
+  ['maplestorym', '메이플스토리M'],
+  ['maplestorysea', 'MapleStory SEA'],
+  ['maplestorytw', 'MapleStory Taiwan'],
+  ['fconline', 'FC 온라인'],
+  ['tfd', '퍼스트 디센던트'],
+  ['heroes', '마비노기 영웅전'],
+  ['suddenattack', '서든어택'],
+  ['kartrush', '카트라이더 러쉬플러스'],
+  ['baram', '바람의나라'],
+  ['mabinogi', '마비노기'],
+  ['baramy', '바람의나라: 연'],
+  ['v4', 'V4'],
+  ['hit2', '히트2'],
+  ['platform', '넥슨 Open API 공지'],
+]);
+
 /**
  * HTTP 상태 코드와 넥슨 에러 코드를 기반으로 적절한 에러 인스턴스를 반환한다.
  *
@@ -18,17 +36,45 @@ import type { NexonErrorPayload } from './NexonError.js';
  * @param status - HTTP 상태 코드
  * @param payload - 넥슨 API 에러 응답 페이로드 (파싱 실패 시 undefined)
  * @param retryAfterMs - Retry-After 헤더값 (밀리초)
+ * @param context - 요청 URL을 넘기면 `OPENAPI00006` 안내에 조회하려던 게임 이름을 표시합니다.
+ *
+ * @example
+ * ```ts
+ * import { classifyError } from 'nexon-open-api';
+ *
+ * const error = classifyError(
+ *   400,
+ *   { error: { name: 'OPENAPI00006', message: 'Invalid game or path' } },
+ *   undefined,
+ *   { url: 'https://open.api.nexon.com/maplestory/v1/id' },
+ * );
+ * console.error(error.message); // 메이플스토리용 키를 확인하라는 안내
+ * ```
  */
 export function classifyError(
   status: number,
   payload: NexonErrorPayload | undefined,
   retryAfterMs?: number,
+  context?: { readonly url?: string | undefined },
 ): NexonError {
-  const code = payload?.error.name;
+  const code = payload?.error?.name;
   // 서버가 준 원문. 응답 본문을 읽지 못했으면 undefined
-  const rawMessage = payload?.error.message;
+  const rawMessage = payload?.error?.message;
   const nexonMessage = rawMessage ?? 'Unknown error';
   const baseMessage = `[${code ?? status}] ${nexonMessage}`;
+
+  if (code === NEXON_ERROR_CODES.INVALID_GAME_OR_PATH) {
+    const game = getGameName(context?.url);
+    const api = game ? `${game} API` : '이 API';
+    const application = game ? `${game}용 애플리케이션` : '조회하려는 게임의 애플리케이션';
+    return new NexonAuthError(
+      `${baseMessage}\n→ 이 API 키로는 ${api}를 부를 수 없습니다. ` +
+        '넥슨 Open API 키는 게임마다 따로 발급됩니다. ' +
+        `${application}의 키인지 확인하세요 (https://openapi.nexon.com/ko/my-application/). ` +
+        '키가 맞다면 넥슨이 이 API 제공을 중단했을 수 있으니 nexon-open-api를 최신 버전으로 올리세요.',
+      { status, code, nexonMessage: rawMessage },
+    );
+  }
 
   // 호출량 초과
   if (status === 429 || code === NEXON_ERROR_CODES.RATE_LIMIT) {
@@ -99,14 +145,6 @@ export function classifyError(
       { code, nexonMessage },
     );
   }
-  if (status === 400 && code === NEXON_ERROR_CODES.INVALID_GAME_OR_PATH) {
-    return new NexonBadRequestError(
-      `${baseMessage}\n→ 넥슨이 이 게임 또는 API 주소를 찾지 못했습니다. ` +
-        'API 키를 발급받은 게임이 맞는지 확인하고 nexon-open-api 를 최신 버전으로 올리세요. ' +
-        '계속되면 https://github.com/Kimhasa/nexon-open-api-sdk/issues 로 알려 주세요.',
-      { code, nexonMessage },
-    );
-  }
 
   // 서버 오류 (5xx, 서버 내부 오류). 00008은 포털 표에 없어 점검이라고 단정하지 않는다
   if (
@@ -122,4 +160,14 @@ export function classifyError(
 
   // 표에 없는 응답
   return new NexonError(baseMessage, { status, code, nexonMessage });
+}
+
+function getGameName(url: string | undefined): string | undefined {
+  if (!url) return undefined;
+  try {
+    const [, prefix] = new URL(url).pathname.split('/');
+    return prefix ? GAME_NAMES_BY_PATH_PREFIX.get(prefix) : undefined;
+  } catch {
+    return undefined;
+  }
 }

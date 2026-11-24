@@ -6,7 +6,7 @@
  *   2. yarn test:v4 실행
  */
 import 'dotenv/config';
-import { NexonClient } from '../src/index.js';
+import { maskIdentifier, NexonClient } from '../src/index.js';
 import type { V4OCID } from '../src/games/v4/types.js';
 
 const apiKey = process.env['NEXON_V4_API_KEY'];
@@ -40,7 +40,7 @@ let ocid: V4OCID | undefined;
 await test('getOcid', async () => {
   ocid = await client.v4.getOcid(characterName);
   if (!ocid) throw new Error('ocid가 비어있음');
-  console.log(`    ocid: ${ocid}`);
+  console.log(`    ocid: ${maskIdentifier(ocid)}`);
 });
 
 // ─── 2. Character ────────────────────────────────────────────────────────────

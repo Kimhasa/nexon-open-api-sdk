@@ -69,7 +69,7 @@ describe('HttpClient', () => {
       expect(err).toBeInstanceOf(NexonServerError);
       expect((err as NexonMaintenanceError).status).toBe(503);
       expect((err as NexonMaintenanceError).nexonMessage).toBe('Under maintenance');
-      expect(calls).toBe(2); // 최초 1회 + 재시도 1회 (재시도 정책은 그대로)
+      expect(calls).toBe(2); // 최초 1회 + 재시도 1회
     });
   });
 
@@ -133,6 +133,46 @@ describe('HttpClient', () => {
     });
   });
 
+  describe('기본 디버그 로거', () => {
+    it('요청과 응답 검증 경고의 URL에서 고유 번호를 가리고 캐릭터명은 유지한다', async () => {
+      const debug = vi.spyOn(console, 'debug').mockImplementation(() => {});
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const ocid = '0123456789abcdef'.repeat(4);
+      const characterName = '메이플용사';
+      const matchingRequest = vi.fn(({ request }: { request: Request }) => {
+        const query = new URL(request.url).searchParams;
+        expect(query.get('ocid')).toBe(ocid);
+        expect(query.get('character_name')).toBe(characterName);
+        return HttpResponse.json({});
+      });
+      server.use(http.get(TEST_URL, matchingRequest));
+
+      try {
+        const client = createClient({ debug: true, responseValidation: true });
+        await client.get(
+          TEST_URL,
+          { ocid, character_name: characterName },
+          { expectedKeys: { character_name: 'string' } },
+        );
+
+        const query = new URLSearchParams({
+          ocid: '01234567…',
+          character_name: characterName,
+        }).toString();
+        expect(matchingRequest).toHaveBeenCalledOnce();
+        expect(debug).toHaveBeenCalledWith(`[nexon-sdk] → GET ${TEST_URL}?${query}`);
+        expect(warn).toHaveBeenCalledWith(
+          expect.stringContaining(`Response shape mismatch for ${TEST_URL}?${query}`),
+        );
+        expect(debug.mock.calls.flat().join(' ')).not.toContain(ocid);
+        expect(warn.mock.calls.flat().join(' ')).not.toContain(ocid);
+      } finally {
+        debug.mockRestore();
+        warn.mockRestore();
+      }
+    });
+  });
+
   describe('에러 처리', () => {
     it('403 응답 시 NexonAuthError를 던진다', async () => {
       server.use(
@@ -146,6 +186,29 @@ describe('HttpClient', () => {
 
       const client = createClient({ maxRetries: 0 });
       await expect(client.get(TEST_URL)).rejects.toThrow(NexonAuthError);
+    });
+
+    it('HTTP 400의 OPENAPI00006은 재시도 없이 조회하려던 게임의 키를 확인하도록 안내한다', async () => {
+      const url = 'https://open.api.nexon.com/tfd/v1/id';
+      const handler = vi.fn(() =>
+        HttpResponse.json(
+          { error: { name: 'OPENAPI00006', message: 'Invalid game or path' } },
+          { status: 400 },
+        ),
+      );
+      server.use(http.get(url, handler));
+
+      const client = createClient({ maxRetries: 2, retryBaseDelayMs: 1 });
+      const err: unknown = await client.get(url, { user_name: 'example' }).catch((e: unknown) => e);
+
+      expect(err).toBeInstanceOf(NexonAuthError);
+      expect(err).toMatchObject({
+        status: 400,
+        code: 'OPENAPI00006',
+        nexonMessage: 'Invalid game or path',
+        message: expect.stringContaining('퍼스트 디센던트용 애플리케이션'),
+      });
+      expect(handler).toHaveBeenCalledOnce();
     });
 
     it('500 응답 시 NexonServerError를 던진다', async () => {
@@ -169,6 +232,15 @@ describe('HttpClient', () => {
 
       const client = createClient({ maxRetries: 0 });
       await expect(client.get(TEST_URL)).rejects.toThrow(NexonError);
+    });
+
+    it('넥슨 에러 코드가 없는 502 JSON 응답은 재시도 후 NexonServerError를 던진다', async () => {
+      const handler = vi.fn(() => HttpResponse.json({ message: 'Bad Gateway' }, { status: 502 }));
+      server.use(http.get(TEST_URL, handler));
+
+      const client = createClient({ maxRetries: 1, retryBaseDelayMs: 1 });
+      await expect(client.get(TEST_URL)).rejects.toThrow(NexonServerError);
+      expect(handler).toHaveBeenCalledTimes(2);
     });
   });
 
@@ -209,13 +281,33 @@ describe('HttpClient', () => {
       await expect(client.get(TEST_URL)).rejects.toThrow(NexonRateLimitError);
     });
 
-    it('400 응답은 재시도하지 않는다', async () => {
+    it('500 응답 뒤 재시도에 성공하면 응답을 반환한다', async () => {
+      let callCount = 0;
+      server.use(
+        http.get(TEST_URL, () => {
+          callCount++;
+          if (callCount === 1) {
+            return HttpResponse.json(
+              { error: { name: 'OPENAPI00001', message: 'Server error' } },
+              { status: 500 },
+            );
+          }
+          return HttpResponse.json({ ok: true });
+        }),
+      );
+
+      const client = createClient({ maxRetries: 1, retryBaseDelayMs: 1 });
+      await expect(client.get(TEST_URL)).resolves.toEqual({ ok: true });
+      expect(callCount).toBe(2);
+    });
+
+    it.each(['OPENAPI00003', 'OPENAPI00004'])('400 %s는 재시도하지 않는다', async (code) => {
       let callCount = 0;
       server.use(
         http.get(TEST_URL, () => {
           callCount++;
           return HttpResponse.json(
-            { error: { name: 'OPENAPI00004', message: 'Bad request' } },
+            { error: { name: code, message: 'Bad request' } },
             { status: 400 },
           );
         }),

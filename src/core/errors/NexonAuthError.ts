@@ -6,6 +6,7 @@ import type { NexonErrorCode } from './error-codes.js';
  *
  * - `OPENAPI00005`: 유효하지 않은 API 키. 키를 잘못 복사했거나 앞뒤에 공백·따옴표가 붙은 경우
  * - `OPENAPI00002`: 권한이 없는 경우. 이 키로는 이 API를 쓸 수 없다
+ * - `OPENAPI00006`: 다른 게임용 키로 조회했거나 API 주소가 유효하지 않은 경우
  *
  * API 키는 게임마다 따로 발급됩니다. 키를 발급받은 게임과 조회하려는 게임이 같은지 확인하세요.
  *
