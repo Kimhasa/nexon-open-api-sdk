@@ -1,6 +1,6 @@
 // ─── GET /maplestorytw/v1/user/union ─────────────────────────────────────────
 
-/** GET /maplestorytw/v1/user/union response */
+/** 유니온 레벨·등급 — `client.maplestoryTW.union.getUnion()` 의 응답. */
 export interface TWUnion {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -68,7 +68,7 @@ export interface TWUnionRaiderPreset {
   readonly union_block: readonly TWUnionBlock[];
 }
 
-/** GET /maplestorytw/v1/user/union-raider response */
+/** 유니온 공격대 배치 — `client.maplestoryTW.union.getRaider()` 의 응답. */
 export interface TWUnionRaider {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -122,7 +122,7 @@ export interface TWUnionArtifactCrystal {
   readonly crystal_option_name_3: string;
 }
 
-/** GET /maplestorytw/v1/user/union-artifact response */
+/** 유니온 아티팩트 — `client.maplestoryTW.union.getArtifact()` 의 응답. */
 export interface TWUnionArtifact {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;
@@ -156,7 +156,7 @@ export interface TWUnionChampionInfo {
   readonly champion_badge_info: readonly TWUnionChampionBadgeInfo[];
 }
 
-/** GET /maplestorytw/v1/user/union-champion response */
+/** 유니온 챔피언 — `client.maplestoryTW.union.getChampion()` 의 응답. */
 export interface TWUnionChampion {
   /** Reference date for query (TST, daily data with hours and minutes set to 0) */
   readonly date: string;

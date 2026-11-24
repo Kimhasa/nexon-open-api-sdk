@@ -7,12 +7,14 @@ import { MapleStorySEAUnionClient } from './union/MapleStorySEAUnionClient.js';
 import { MapleStorySEAGuildClient } from './guild/MapleStorySEAGuildClient.js';
 
 /**
- * MapleStory SEA 클라이언트.
+ * MapleStory SEA(동남아 서버) 클라이언트.
  *
- * - 타임존: UTC+8 (SGT)
+ * 사용법은 한국 메이플스토리와 같고, 날짜 기준과 월드 이름이 다릅니다.
+ *
+ * - 날짜 기준: 싱가포르 시간 (SGT, UTC+8)
  * - 데이터 제공 시작일: 2025-04-20
- * - 전일 데이터 갱신 시각: 익일 오전 2시 (SGT)
- * - 게임 데이터 반영: 업데이트 후 약 15분 소요
+ * - 어제 날짜의 데이터: 오늘 오전 2시(SGT)부터 조회 가능
+ * - 게임에서 바뀐 내용: 약 15분 뒤 조회 가능
  *
  * @example
  * ```ts
@@ -35,19 +37,19 @@ export class MapleStorySEAClient extends AbstractMapleBaseClient {
 
   // ─── Sub-clients ────────────────────────────────────────────────────────
 
-  /** Character API (19 endpoints) */
+  /** 캐릭터 정보: 스탯·장비·스킬·심볼·무릉도장(Mu Lung Garden) 등 (19개) */
   get character(): MapleStorySEACharacterClient {
     this._character ??= new MapleStorySEACharacterClient(this.http);
     return this._character;
   }
 
-  /** Union API (4 endpoints) */
+  /** 유니온(Union): 레벨·등급, 공격대 배치, 아티팩트, 챔피언 (4개) */
   get union(): MapleStorySEAUnionClient {
     this._union ??= new MapleStorySEAUnionClient(this.http);
     return this._union;
   }
 
-  /** Guild API (2 endpoints) */
+  /** 길드: 길드 고유 번호와 길드 기본 정보 (2개) */
   get guild(): MapleStorySEAGuildClient {
     this._guild ??= new MapleStorySEAGuildClient(this.http);
     return this._guild;
@@ -56,11 +58,11 @@ export class MapleStorySEAClient extends AbstractMapleBaseClient {
   // ─── OCID ───────────────────────────────────────────────────────────────
 
   /**
-   * Retrieve character identifier (ocid).
+   * 캐릭터 이름으로 캐릭터 고유 번호(OCID)를 받아 온다. 캐릭터 정보를 조회하는 메서드에 이 값을 넣는다.
    *
    * GET /maplestorysea/v1/id
    *
-   * @param characterName - Character name to look up
+   * @param characterName - 게임에서 쓰는 캐릭터 이름
    * @throws {NexonBadRequestError} A required identifier or parameter is blank
    * @throws {NexonNotFoundError} Character not found
    * @throws {NexonAuthError} Invalid API key

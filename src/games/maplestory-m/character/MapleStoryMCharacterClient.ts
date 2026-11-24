@@ -44,9 +44,10 @@ import type {
 const OCID_HINT = 'maplestorym.getOcid()로 캐릭터 식별자를 조회하세요.';
 
 /**
- * 메이플스토리M 캐릭터 API 클라이언트.
+ * 메이플스토리M 캐릭터 정보: 스탯·장비·심볼·쥬얼·스킬·V매트릭스·HEXA매트릭스 등.
  *
- * 메이플스토리M 캐릭터 API는 date 파라미터 없이 현재 데이터를 반환합니다.
+ * 날짜를 넣지 않고 현재 데이터를 조회합니다. 게임에서 바뀐 내용은 평균 10분 뒤에 조회됩니다.
+ * 값이 게임과 다르면 게임에 다시 접속한 뒤 조회하세요.
  *
  * @example
  * ```ts
@@ -63,9 +64,9 @@ export class MapleStoryMCharacterClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 기본 정보를 조회한다.
+   * 캐릭터 기본 정보(레벨·직업·월드·최근 접속 일시·외형 이미지)를 조회한다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -89,9 +90,9 @@ export class MapleStoryMCharacterClient {
   }
 
   /**
-   * 스탯 정보를 조회한다.
+   * 캐릭터 스탯(스탯 이름·값 목록)을 조회한다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -117,9 +118,9 @@ export class MapleStoryMCharacterClient {
   }
 
   /**
-   * 하이퍼 스탯 정보를 조회한다.
+   * 하이퍼 스탯(프리셋별 스탯 레벨과 상승량)을 조회한다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -143,9 +144,9 @@ export class MapleStoryMCharacterClient {
   }
 
   /**
-   * 가입한 길드 정보를 조회한다.
+   * 캐릭터가 가입한 길드 이름을 조회한다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -169,9 +170,9 @@ export class MapleStoryMCharacterClient {
   }
 
   /**
-   * 장착 아이템 정보를 조회한다.
+   * 장착 장비(프리셋 포함, 캐시 아이템 제외)를 조회한다. 스타포스·잠재능력·에디셔널 잠재능력·소울·마스터리가 함께 온다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -197,9 +198,9 @@ export class MapleStoryMCharacterClient {
   }
 
   /**
-   * 장착 캐시 아이템 정보를 조회한다.
+   * 장착 중인 캐시 아이템(코디, 프리셋 포함)을 조회한다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -225,9 +226,9 @@ export class MapleStoryMCharacterClient {
   }
 
   /**
-   * 장착 심볼 정보를 조회한다.
+   * 장착한 심볼(아케인심볼·어센틱심볼)의 레벨·성장치·옵션을 조회한다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -253,9 +254,9 @@ export class MapleStoryMCharacterClient {
   }
 
   /**
-   * 적용 세트 효과 정보를 조회한다.
+   * 적용 중인 세트 효과를 조회한다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -281,9 +282,9 @@ export class MapleStoryMCharacterClient {
   }
 
   /**
-   * 장착 안드로이드 정보를 조회한다.
+   * 장착 안드로이드(프리셋 포함)를 조회한다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -307,9 +308,9 @@ export class MapleStoryMCharacterClient {
   }
 
   /**
-   * 장착 쥬얼 정보를 조회한다.
+   * 장착 쥬얼(페이지별 쥬얼과 쥬얼 세트 옵션)을 조회한다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -335,9 +336,9 @@ export class MapleStoryMCharacterClient {
   }
 
   /**
-   * 장착 헤어, 성형, 피부 정보를 조회한다.
+   * 헤어·성형·피부를 조회한다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -361,9 +362,9 @@ export class MapleStoryMCharacterClient {
   }
 
   /**
-   * 장착 펫 정보를 조회한다.
+   * 장착 펫과 펫 장비·펫 스킬을 조회한다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -387,9 +388,9 @@ export class MapleStoryMCharacterClient {
   }
 
   /**
-   * 장착 스킬 정보를 조회한다.
+   * 캐릭터가 장착 중인 스킬을 조회한다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -415,9 +416,9 @@ export class MapleStoryMCharacterClient {
   }
 
   /**
-   * 장착 링크 스킬 정보를 조회한다.
+   * 장착 링크 스킬(프리셋별)을 조회한다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -443,9 +444,9 @@ export class MapleStoryMCharacterClient {
   }
 
   /**
-   * V매트릭스 정보를 조회한다.
+   * V매트릭스의 V코어(코어 레벨·스킬·코어 점수)를 조회한다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -491,9 +492,9 @@ export class MapleStoryMCharacterClient {
   }
 
   /**
-   * HEXA매트릭스 스킬 정보를 조회한다.
+   * HEXA매트릭스의 스킬(슬롯 레벨·스킬 타입)을 조회한다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -519,9 +520,9 @@ export class MapleStoryMCharacterClient {
   }
 
   /**
-   * HEXA매트릭스 스탯 정보를 조회한다.
+   * HEXA매트릭스의 HEXA 스탯(메인·서브 스탯 강화 레벨)을 조회한다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *

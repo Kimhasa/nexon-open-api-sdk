@@ -24,7 +24,7 @@ export interface SEAGuildSkill {
   readonly skill_icon: string;
 }
 
-/** GET /maplestorysea/v1/guild/basic response */
+/** 길드 기본 정보 — `client.maplestorySEA.guild.getBasic()` 의 응답. */
 export interface SEAGuildBasic {
   /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
   readonly date: string;

@@ -54,7 +54,7 @@ export interface BattlePracticeReplay {
   readonly replay_id: string;
 }
 
-/** GET /maplestory/v1/battle-practice/replay-id 응답 */
+/** 연무장 리플레이 목록 — `client.maplestory.battlePractice.getReplayId()` 의 응답. */
 export interface BattlePracticeReplayId {
   /** 리플레이 목록 */
   readonly replay_list: readonly BattlePracticeReplay[];
@@ -84,7 +84,7 @@ export interface BattlePracticeSkillStatistic {
   readonly min_damage: number;
 }
 
-/** GET /maplestory/v1/battle-practice/result 응답 */
+/** 연무장 측정 결과 — `client.maplestory.battlePractice.getResult()` 의 응답. */
 export interface BattlePracticeResult {
   /** 리플레이 등록 일시 (KST, 일 단위 데이터로 시, 분은 일괄 0으로 표기) */
   readonly register_date: string;
@@ -118,7 +118,7 @@ export interface BattlePracticeSkillTimelineItem {
   readonly sequence_key: string | null;
 }
 
-/** GET /maplestory/v1/battle-practice/skill-timeline 응답 */
+/** 연무장 스킬 사용 내역 — `client.maplestory.battlePractice.getSkillTimeline()` 의 응답. */
 export interface BattlePracticeSkillTimeline {
   /** 조회된 페이지 번호 */
   readonly page_no: number;

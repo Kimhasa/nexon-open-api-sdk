@@ -1,6 +1,6 @@
 // ─── GET /maplestorym/v1/user/union ──────────────────────────────────────────
 
-/** GET /maplestorym/v1/user/union 응답 */
+/** 유니온 레벨·등급 — `client.maplestorym.union.get()` 의 응답. */
 export interface MUnion {
   /** 유니온 레벨 */
   readonly union_level: number;
@@ -72,7 +72,7 @@ export interface MUnionBattleMap {
   readonly union_raider: MUnionRaiderBlock[];
 }
 
-/** GET /maplestorym/v1/user/union-raider 응답 */
+/** 유니온 공격대원 효과 — `client.maplestorym.union.getRaider()` 의 응답. */
 export interface MUnionRaider {
   /** @deprecated 현재 포털 스펙에서 제거된 필드입니다. 스탯 프리셋 번호는 `getStat()`에서 조회하세요. */
   readonly use_preset_no?: number | undefined;
@@ -104,7 +104,7 @@ export interface MUnionStatPreset {
   readonly union_stat: MUnionStatEntry[];
 }
 
-/** GET /maplestorym/v1/user/union-stat 응답 */
+/** 유니온 스탯 — `client.maplestorym.union.getStat()` 의 응답. */
 export interface MUnionStat {
   /** 적용 중인 유니온 스탯 프리셋 번호 */
   readonly use_preset_no: number;

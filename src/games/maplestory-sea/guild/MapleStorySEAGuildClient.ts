@@ -6,9 +6,9 @@ import type { GuildIdDateRequest } from '../../_base/maple-base-types.js';
 import type { SEAGuildBasic } from './types.js';
 
 /**
- * MapleStory SEA Guild API client.
+ * MapleStory SEA 길드: 길드 이름과 월드 이름으로 길드 고유 번호를 받아 길드 정보를 조회합니다.
  *
- * Data available starting from April 20, 2025.
+ * 2025년 4월 20일 데이터부터 조회할 수 있습니다.
  *
  * @example
  * ```ts
@@ -24,10 +24,10 @@ export class MapleStorySEAGuildClient {
   // ─── GET /maplestorysea/v1/guild/id ─────────────────────────────────────
 
   /**
-   * Retrieve guild identifier (oguild_id) information.
+   * 길드 이름과 월드 이름으로 길드 고유 번호(oguild_id)를 받아 온다. 길드 정보를 조회할 때 이 값을 넣는다. SEA 명칭: Guild identifier.
    *
-   * @param guildName - Guild name
-   * @param worldName - World name
+   * @param guildName - 길드 이름
+   * @param worldName - 길드가 있는 월드 이름 (예: 'Aquila')
    * @throws {NexonNotFoundError} Guild not found
    * @throws {NexonAuthError} Invalid API key
    *
@@ -54,10 +54,10 @@ export class MapleStorySEAGuildClient {
   // ─── GET /maplestorysea/v1/guild/basic ──────────────────────────────────
 
   /**
-   * Retrieve basic guild information.
+   * 길드 기본 정보(레벨·길드 마스터·길드원 목록·길드 스킬)를 조회한다. SEA 명칭: Guild basic information.
    *
-   * @param params.oguild_id - Guild identifier
-   * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   * @param params.oguild_id - 길드 고유 번호. `client.maplestorySEA.guild.getId()` 로 얻는다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
    *
    * @throws {NexonBadRequestError} A required identifier or parameter is blank
    * @throws {NexonAuthError} Invalid API key

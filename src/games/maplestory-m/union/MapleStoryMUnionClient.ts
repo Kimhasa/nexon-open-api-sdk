@@ -7,7 +7,7 @@ import type { MUnion, MUnionRaider, MUnionStat } from './types.js';
 const OCID_HINT = 'maplestorym.getOcid()로 캐릭터 식별자를 조회하세요.';
 
 /**
- * 메이플스토리M 유니온 API 클라이언트.
+ * 메이플스토리M 유니온: 레벨·등급, 공격대원 효과, 유니온 스탯.
  *
  * @example
  * ```ts
@@ -21,9 +21,9 @@ export class MapleStoryMUnionClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 유니온 정보를 조회한다.
+   * 유니온 레벨·등급과 레벨 총합 누적 효과를 조회한다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -47,9 +47,9 @@ export class MapleStoryMUnionClient {
   }
 
   /**
-   * 유니온 공격대 정보를 조회한다.
+   * 유니온에 배치된 공격대원 효과를 조회한다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
@@ -75,9 +75,9 @@ export class MapleStoryMUnionClient {
   }
 
   /**
-   * 유니온 스탯과 프리셋 정보를 조회한다.
+   * 유니온 스탯(적용 중인 스탯과 프리셋별 포인트 분배)을 조회한다.
    *
-   * @param params - 캐릭터 식별자(`ocid`)
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorym.getOcid('월드명', '캐릭터명')` 으로 얻는다
    * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *

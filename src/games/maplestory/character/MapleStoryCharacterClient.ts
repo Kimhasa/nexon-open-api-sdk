@@ -54,7 +54,10 @@ import type {
 } from './types.js';
 
 /**
- * 메이플스토리 캐릭터 API 클라이언트.
+ * 메이플스토리 캐릭터 정보: 스탯·장비·스킬·심볼·V매트릭스·HEXA 매트릭스·무릉도장 등.
+ *
+ * `getList()` 를 뺀 모든 메서드는 캐릭터 고유 번호(`ocid`)가 필요합니다.
+ * 게임에서 바뀐 내용은 평균 15분 뒤에 조회되고, 어제 날짜의 데이터는 오늘 오전 2시부터 조회됩니다.
  *
  * @example
  * ```ts
@@ -71,7 +74,7 @@ export class MapleStoryCharacterClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 계정에 보유한 모든 캐릭터 목록을 조회한다.
+   * 내 계정의 모든 캐릭터 목록(월드·직업·레벨)을 조회한다. API 키를 발급받은 계정이 기준이다.
    *
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 요청 한도 초과 시
@@ -91,12 +94,12 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * 캐릭터 기본 정보를 조회한다.
+   * 캐릭터 기본 정보(레벨·직업·월드·소속 길드·외형 이미지)를 조회한다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonDataNotReadyError} 해당 날짜 데이터 미준비 시
@@ -116,12 +119,12 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * 캐릭터 인기도 정보를 조회한다.
+   * 캐릭터 인기도를 조회한다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -138,19 +141,19 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * 캐릭터 종합 능력치 정보를 조회한다.
+   * 캐릭터 정보창의 스탯(종합 능력치)을 조회한다. 스탯 이름·값 목록으로 온다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
+   * // 디스코드 봇의 `!전투력 캐릭터명` 응답: 스탯 목록에서 전투력만 골라 보여 주기
    * const stat = await client.maplestory.character.getStat({ ocid });
-   * for (const s of stat.final_stat) {
-   *   console.log(`${s.stat_name}: ${s.stat_value}`);
-   * }
+   * const power = stat.final_stat.find((s) => s.stat_name === '전투력');
+   * console.log(`전투력: ${power?.stat_value ?? '정보 없음'}`);
    * ```
    */
   async getStat(params: OcidDateRequest): Promise<CharacterStat> {
@@ -162,12 +165,12 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * 캐릭터 하이퍼스탯 정보를 조회한다.
+   * 하이퍼 스탯을 조회한다. 프리셋별 스탯 레벨과 상승량, 남은 포인트가 들어 있다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -187,12 +190,12 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * 캐릭터 성향 정보를 조회한다.
+   * 성향 6종(카리스마·감성·통찰력·의지·손재주·매력)의 레벨을 조회한다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -209,12 +212,12 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * 캐릭터 어빌리티 정보를 조회한다.
+   * 어빌리티(등급과 옵션, 프리셋 포함)와 보유 명성치를 조회한다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -234,18 +237,21 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * 장착 장비 정보를 조회한다 (캐시 장비 제외).
+   * 장비창의 장착 장비(프리셋 포함, 캐시 장비 제외)를 조회한다. 스타포스·잠재능력·에디셔널 잠재능력·추가 옵션과 칭호가 함께 온다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
+   * // 장비 검색 사이트: 부위별 장비 이름, 스타포스, 잠재능력 등급 표시
    * const equip = await client.maplestory.character.getItemEquipment({ ocid });
    * for (const item of equip.item_equipment) {
-   *   console.log(`[${item.item_equipment_part}] ${item.item_name} ★${item.starforce}`);
+   *   console.log(
+   *     `[${item.item_equipment_part}] ${item.item_name} ★${item.starforce} ${item.potential_option_grade}`,
+   *   );
    * }
    * ```
    */
@@ -258,12 +264,12 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * 장착 캐시 장비 정보를 조회한다.
+   * 장착 중인 캐시 장비(코디, 프리셋 포함)를 조회한다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -283,12 +289,12 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * 장착 심볼 정보를 조회한다.
+   * 장착한 심볼(아케인심볼·어센틱심볼)의 레벨·성장치·증가 스탯을 조회한다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -308,12 +314,12 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * 적용 중인 세트 효과 정보를 조회한다.
+   * 적용 중인 세트 효과(세트 이름, 착용 세트 수, 옵션)를 조회한다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -333,12 +339,12 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * 장착 헤어, 성형, 피부 정보를 조회한다.
+   * 헤어·성형·피부(믹스 염색 포함)를 조회한다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -357,12 +363,12 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * 장착 안드로이드 정보를 조회한다.
+   * 장착 안드로이드(외형·캐시 장비·프리셋)를 조회한다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -379,12 +385,12 @@ export class MapleStoryCharacterClient {
     );
   }
   /**
-   * 장착 펫 및 펫 스킬, 장비 정보를 조회한다.
+   * 장착 펫(최대 3마리)과 펫 장비·펫 스킬(자동 버프)을 조회한다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -402,13 +408,13 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * 캐릭터 스킬과 하이퍼 스킬 정보를 조회한다.
+   * 전직 차수별 스킬 또는 하이퍼 스킬(스킬 레벨·효과)을 조회한다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
-   * @param params.character_skill_grade - 전직 차수 ("0"~"6", "hyperpassive", "hyperactive")
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.character_skill_grade - 전직 차수 ("0"~"6", "1.5", "2.5") 또는 하이퍼 스킬 ("hyperpassive": 하이퍼 패시브, "hyperactive": 하이퍼 액티브). "5" 는 5차(V매트릭스), "6" 은 6차(HEXA 매트릭스) 스킬
    *
    * @example
    * ```ts
@@ -435,12 +441,12 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * 장착 링크 스킬 정보를 조회한다.
+   * 장착 링크 스킬(프리셋 포함)과 이 캐릭터가 주는 링크 스킬을 조회한다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -460,12 +466,12 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * V매트릭스 슬롯 정보와 장착 V코어 정보를 조회한다.
+   * V매트릭스(5차)에 장착한 V코어와 슬롯 정보를 조회한다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -485,12 +491,12 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * HEXA 매트릭스에 장착한 HEXA 코어 정보를 조회한다.
+   * HEXA 매트릭스(6차)에 장착한 HEXA 코어(이름·레벨·타입)를 조회한다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -510,12 +516,12 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * HEXA 매트릭스에 설정한 HEXA 스탯 정보를 조회한다.
+   * HEXA 매트릭스에 설정한 HEXA 스탯(메인·서브 스탯 레벨)을 조회한다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -535,12 +541,12 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * 캐릭터 무릉도장 최고 기록 정보를 조회한다.
+   * 무릉도장 최고 기록(최고 층수와 클리어 시간)을 조회한다.
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -558,12 +564,12 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * 능력치에 영향을 주는 기타 요소 정보를 조회한다.
+   * 다른 조회에서는 확인하기 어려운, 능력치에 영향을 주는 기타 요소를 조회한다.
    *
    * 2025년 8월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -586,12 +592,13 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * 링 익스체인지 스킬 등록 장비를 조회한다.
+   * 링 익스체인지에 등록한 특수 반지를 조회한다.
    *
-   * 2025년 8월 21일 데이터부터 조회할 수 있습니다.
+   * 2025년 8월 21일부터 2026년 3월 18일까지의 데이터만 조회할 수 있습니다.
+   * 2026년 3월 19일 이후 날짜는 {@link MapleStoryCharacterClient.getRingReserveSkillEquipment} 를 사용하세요.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @example
    * ```ts
@@ -611,10 +618,10 @@ export class MapleStoryCharacterClient {
   }
 
   /**
-   * 예비 특수 반지 슬롯에 장착한 특수 반지 정보를 조회한다.
+   * 예비 특수 반지 슬롯에 장착한 특수 반지를 조회한다.
    *
-   * @param params.ocid - 캐릭터 식별자
-   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
    * @throws {NexonBadRequestError} ocid가 비어 있을 때 (요청 전 즉시 throw)
    * @throws {NexonAuthError} API 키가 유효하지 않을 때

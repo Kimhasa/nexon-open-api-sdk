@@ -8,7 +8,10 @@ import type { TWDate, TWOcidResponse } from './types.js';
 import { MapleStoryTWUnionClient } from './union/MapleStoryTWUnionClient.js';
 
 /**
- * MapleStory Taiwan API client.
+ * MapleStory Taiwan(대만 서버, 楓之谷) 클라이언트.
+ *
+ * 사용법은 한국 메이플스토리와 같고, 날짜 기준과 월드 이름이 다르며 패밀리어(萌獸) 조회가 더 있습니다.
+ * 날짜는 대만 시간(UTC+8) 기준이고 `'YYYY-MM-DD'` 문자열, `Date`, `'today'` 를 받습니다.
  *
  * - Dates use Taiwan Standard Time (UTC+8).
  * - Character and guild data starts on October 15, 2025. Union data starts on
@@ -35,7 +38,7 @@ export class MapleStoryTWClient extends AbstractMapleBaseClient {
   private _union: MapleStoryTWUnionClient | undefined;
   private _guild: MapleStoryTWGuildClient | undefined;
 
-  /** Character API (20 endpoints). */
+  /** 캐릭터 정보: 스탯·장비·스킬·심볼·무릉도장(武陵道場)·패밀리어(萌獸) 등 (20개) */
   get character(): MapleStoryTWCharacterClient {
     return (this._character ??= new MapleStoryTWCharacterClient(
       this.http,
@@ -43,7 +46,7 @@ export class MapleStoryTWClient extends AbstractMapleBaseClient {
     ));
   }
 
-  /** Union API (4 endpoints). */
+  /** 유니온(戰地): 레벨·등급, 공격대 배치, 아티팩트, 챔피언 (4개) */
   get union(): MapleStoryTWUnionClient {
     return (this._union ??= new MapleStoryTWUnionClient(
       this.http,
@@ -51,7 +54,7 @@ export class MapleStoryTWClient extends AbstractMapleBaseClient {
     ));
   }
 
-  /** Guild API (2 endpoints). */
+  /** 길드(公會): 길드 고유 번호와 길드 기본 정보 (2개) */
   get guild(): MapleStoryTWGuildClient {
     return (this._guild ??= new MapleStoryTWGuildClient(
       this.http,
@@ -60,9 +63,9 @@ export class MapleStoryTWClient extends AbstractMapleBaseClient {
   }
 
   /**
-   * Retrieve the identifier (OCID) for a character.
+   * 캐릭터 이름으로 캐릭터 고유 번호(OCID)를 받아 온다. 캐릭터 정보를 조회하는 메서드에 이 값을 넣는다.
    *
-   * @param characterName - Character name to look up.
+   * @param characterName - 게임에서 쓰는 캐릭터 이름
    * @throws {NexonBadRequestError} The character name is blank.
    * @throws {NexonNotFoundError} The character was not found.
    * @throws {NexonAuthError} The API key is invalid.
