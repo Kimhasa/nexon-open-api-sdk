@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org/)
 
-[Nexon Open API](https://openapi.nexon.com/) 전체 게임을 TypeScript로 감싼 SDK입니다. 외부 의존성 없이 네이티브 `fetch`만 사용하며, CJS/ESM 듀얼 출력을 지원합니다.
+[Nexon Open API](https://openapi.nexon.com/)를 TypeScript로 감싼 SDK입니다. 현재 메이플스토리, 메이플스토리M, MapleStorySEA, EA SPORTS FC 온라인을 지원하며 나머지 게임은 순차적으로 추가합니다([지원 게임](#지원-게임)). 외부 의존성 없이 네이티브 `fetch`만 사용하며, CJS/ESM 듀얼 출력을 지원합니다.
 
 ## 설치
 
@@ -35,6 +35,16 @@ const ocid = await client.maplestory.getOcid('캐릭터명');
 // 캐릭터 기본 정보
 const basic = await client.maplestory.character.getBasic({ ocid });
 console.log(`${basic.character_name} Lv.${basic.character_level}`);
+```
+
+### 메이플스토리M
+
+```ts
+// OCID 조회 (월드명 필요)
+const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+
+// 캐릭터 기본 정보
+const basic = await client.maplestorym.character.getBasic({ ocid });
 ```
 
 ### MapleStorySEA
@@ -75,9 +85,15 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 - **자동 재시도** — 429 (Rate Limit) / 503 응답 시 지수 백오프 자동 재시도
 - **에러 분류** — `NexonRateLimitError`, `NexonAuthError` 등 `instanceof`로 에러 분기
 - **외부 의존성 0** — Node.js 18+ 네이티브 `fetch` 사용
-- **멀티 게임** — 하나의 `NexonClient`로 모든 게임 접근
+- **멀티 게임** — 하나의 `NexonClient`로 지원 게임 전체에 접근
 
 ## 지원 게임
+
+넥슨 Open API 포털이 제공하는 14개 게임 중 **4개 게임을 지원**합니다 (2026-11-24 포털 기준).
+
+- <img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> — SDK에 구현되어 npm으로 배포된 게임. 아래 날짜는 처음 포함된 버전과 구현일입니다.
+- <img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"> — 넥슨이 API를 제공하지만 SDK에는 아직 없는 게임.
+- **API 개수** — 지원 게임은 "SDK public API 메서드 수"(메서드 1개 = 넥슨 API 경로 1개), 예정 게임은 넥슨 포털 스펙의 API 경로 수입니다.
 
 <!-- 아이콘 파일: docs/assets/games/{game}.png (48x48 권장) -->
 
@@ -87,8 +103,8 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/fc-online.png" alt="EA SPORTS FC 온라인" height="64">
 <h4>EA SPORTS FC 온라인</h4>
-<img src="https://img.shields.io/badge/Live-brightgreen" alt="Live"> <img src="https://img.shields.io/badge/endpoints-18-blue" alt="18 endpoints"><br>
-<sub>2026-03-04</sub><br>
+<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-16-blue" alt="SDK 지원 API 16개"><br>
+<sub>v0.1.1 · 2026-03-04</sub><br>
 <br>
 <a href="docs/fc-online.md">레퍼런스</a><br>
 <br>
@@ -97,8 +113,8 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/maplestory.png" alt="메이플스토리" height="64">
 <h4>메이플스토리</h4>
-<img src="https://img.shields.io/badge/Live-brightgreen" alt="Live"> <img src="https://img.shields.io/badge/endpoints-45-blue" alt="45 endpoints"><br>
-<sub>2026-03-04</sub><br>
+<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-48-blue" alt="SDK 지원 API 48개"><br>
+<sub>v0.1.0 · 2026-03-04</sub><br>
 <br>
 <a href="docs/maplestory.md">레퍼런스</a><br>
 <br>
@@ -107,8 +123,8 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/maplestory-m.png" alt="메이플스토리M" height="64">
 <h4>메이플스토리M</h4>
-<img src="https://img.shields.io/badge/Live-brightgreen" alt="Live"> <img src="https://img.shields.io/badge/endpoints-36-blue" alt="36 endpoints"><br>
-<sub>2026-03-05</sub><br>
+<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-37-blue" alt="SDK 지원 API 37개"><br>
+<sub>v0.1.1 · 2026-03-05</sub><br>
 <br>
 <a href="docs/maplestory-m.md">레퍼런스</a><br>
 <br>
@@ -119,8 +135,8 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/maplestory-sea.png" alt="MapleStorySEA" height="64">
 <h4>MapleStorySEA</h4>
-<img src="https://img.shields.io/badge/Live-brightgreen" alt="Live"> <img src="https://img.shields.io/badge/endpoints-26-blue" alt="26 endpoints"><br>
-<sub>2026-03-09</sub><br>
+<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-26-blue" alt="SDK 지원 API 26개"><br>
+<sub>v0.1.1 · 2026-03-09</sub><br>
 <br>
 <a href="docs/maplestory-sea.md">레퍼런스</a><br>
 <br>
@@ -129,8 +145,8 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/maplestory-taiwan.png" alt="MapleStoryTaiwan" height="64">
 <h4>MapleStoryTaiwan</h4>
-<img src="https://img.shields.io/badge/Live-brightgreen" alt="Live"> <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
-&nbsp;<br>
+<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
+<sub>넥슨 제공 API 27개</sub><br>
 <br>
 &nbsp;<br>
 <br>
@@ -139,8 +155,8 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/sudden-attack.png" alt="서든어택" height="64">
 <h4>서든어택</h4>
-<img src="https://img.shields.io/badge/Live-brightgreen" alt="Live"> <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
-&nbsp;<br>
+<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
+<sub>넥슨 제공 API 11개</sub><br>
 <br>
 &nbsp;<br>
 <br>
@@ -151,8 +167,8 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/first-descendant.png" alt="퍼스트 디센던트" height="64">
 <h4>퍼스트 디센던트</h4>
-<img src="https://img.shields.io/badge/Live-brightgreen" alt="Live"> <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
-&nbsp;<br>
+<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
+<sub>넥슨 제공 API 42개</sub><br>
 <br>
 &nbsp;<br>
 <br>
@@ -161,8 +177,8 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/mabinogi.png" alt="마비노기" height="64">
 <h4>마비노기</h4>
-<img src="https://img.shields.io/badge/Live-brightgreen" alt="Live"> <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
-&nbsp;<br>
+<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
+<sub>넥슨 제공 API 5개</sub><br>
 <br>
 &nbsp;<br>
 <br>
@@ -171,8 +187,8 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/mabinogi-heroes.png" alt="마비노기 영웅전" height="64">
 <h4>마비노기 영웅전</h4>
-<img src="https://img.shields.io/badge/Live-brightgreen" alt="Live"> <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
-&nbsp;<br>
+<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
+<sub>넥슨 제공 API 19개</sub><br>
 <br>
 &nbsp;<br>
 <br>
@@ -183,8 +199,8 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/kartrider-rush-plus.png" alt="카트라이더 러쉬플러스" height="64">
 <h4>카트라이더 러쉬플러스</h4>
-<img src="https://img.shields.io/badge/Live-brightgreen" alt="Live"> <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
-&nbsp;<br>
+<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
+<sub>넥슨 제공 API 9개</sub><br>
 <br>
 &nbsp;<br>
 <br>
@@ -193,8 +209,8 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/baram-nara.png" alt="바람의나라" height="64">
 <h4>바람의나라</h4>
-<img src="https://img.shields.io/badge/Live-brightgreen" alt="Live"> <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
-&nbsp;<br>
+<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
+<sub>넥슨 제공 API 7개</sub><br>
 <br>
 &nbsp;<br>
 <br>
@@ -203,8 +219,8 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/hit2.png" alt="히트2" height="64">
 <h4>히트2</h4>
-<img src="https://img.shields.io/badge/Live-brightgreen" alt="Live"> <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
-&nbsp;<br>
+<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
+<sub>넥슨 제공 API 2개</sub><br>
 <br>
 &nbsp;<br>
 <br>
@@ -213,20 +229,10 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <tr>
 <td align="center" valign="top" width="33%">
 <br>
-<img src="docs/assets/games/crazy-arcade.png" alt="크레이지 아케이드" height="64">
-<h4>크레이지 아케이드</h4>
-<img src="https://img.shields.io/badge/Live-brightgreen" alt="Live"> <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
-&nbsp;<br>
-<br>
-&nbsp;<br>
-<br>
-</td>
-<td align="center" valign="top" width="33%">
-<br>
 <img src="docs/assets/games/baram-yeon.png" alt="바람의나라: 연" height="64">
 <h4>바람의나라: 연</h4>
-<img src="https://img.shields.io/badge/Live-brightgreen" alt="Live"> <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
-&nbsp;<br>
+<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
+<sub>넥슨 제공 API 4개</sub><br>
 <br>
 &nbsp;<br>
 <br>
@@ -235,30 +241,8 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/v4.png" alt="V4" height="64">
 <h4>V4</h4>
-<img src="https://img.shields.io/badge/Live-brightgreen" alt="Live"> <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
-&nbsp;<br>
-<br>
-&nbsp;<br>
-<br>
-</td>
-</tr>
-<tr>
-<td align="center" valign="top" width="33%">
-<br>
-<img src="docs/assets/games/dungeon-and-fighter.png" alt="던전앤파이터" height="64">
-<h4>던전앤파이터</h4>
-<img src="https://img.shields.io/badge/Live-brightgreen" alt="Live"> <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
-&nbsp;<br>
-<br>
-&nbsp;<br>
-<br>
-</td>
-<td align="center" valign="top" width="33%">
-<br>
-<img src="docs/assets/games/cyphers.png" alt="사이퍼즈" height="64">
-<h4>사이퍼즈</h4>
-<img src="https://img.shields.io/badge/Live-brightgreen" alt="Live"> <img src="https://img.shields.io/badge/예정-lightgrey" alt="예정"><br>
-&nbsp;<br>
+<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
+<sub>넥슨 제공 API 4개</sub><br>
 <br>
 &nbsp;<br>
 <br>
@@ -266,6 +250,28 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <td width="33%"></td>
 </tr>
 </table>
+
+### 포털 대비 지원 범위
+
+넥슨이 포털에 API를 추가하면 SDK가 뒤처질 수 있습니다. 2026-11-24 포털 스펙과 대조한 결과입니다.
+
+| 게임                | SDK 메서드 | 포털 API 경로 | 차이                                                                                                   |
+| ------------------- | ---------- | ------------- | ------------------------------------------------------------------------------------------------------ |
+| 메이플스토리        | 48         | 56            | 8개 미지원 (연무장 4, 스케줄러 1, 확률 1, 캐릭터 1, 계정 1)                                            |
+| 메이플스토리M       | 37         | 38            | 1개 미지원 (`user/union-stat`)                                                                         |
+| MapleStorySEA       | 26         | 26            | 없음                                                                                                   |
+| EA SPORTS FC 온라인 | 16         | 19            | 메타데이터 2개 미지원. 이미지 4개 경로는 URL 헬퍼 2개로 지원 ([상세](docs/fc-online.md#포털과의-차이)) |
+
+이 밖에 게임과 무관한 `platform` API(NEXON Open API 공지 사항 1개)도 넥슨이 제공하며, SDK에는 아직 없습니다.
+
+### 범위 외: 네오플 API
+
+던전앤파이터와 사이퍼즈는 넥슨 Open API가 아니라 [네오플 Developers](https://developers.neople.co.kr/) API로 제공됩니다. 호스트와 API 키가 달라 이 SDK의 지원 범위에 포함하지 않습니다.
+
+| 게임                                                                                              | API 문서                                                                        |
+| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| <img src="docs/assets/games/dungeon-and-fighter.png" alt="던전앤파이터" height="24"> 던전앤파이터 | [네오플 던전앤파이터 API](https://developers.neople.co.kr/contents/apiDocs/df)  |
+| <img src="docs/assets/games/cyphers.png" alt="사이퍼즈" height="24"> 사이퍼즈                     | [네오플 사이퍼즈 API](https://developers.neople.co.kr/contents/apiDocs/cyphers) |
 
 ## 에러 처리
 
@@ -336,7 +342,7 @@ import { FcOnlineClient } from 'nexon-open-api/fconline';
 
 ## 상세 문서
 
-| 게임          | 문서                                   | 엔드포인트                                      |
+| 게임          | 문서                                   | 카테고리                                        |
 | ------------- | -------------------------------------- | ----------------------------------------------- |
 | 메이플스토리  | [API 레퍼런스](docs/maplestory.md)     | 캐릭터, 유니온, 길드, 랭킹, 확률/이력, 공지사항 |
 | 메이플스토리M | [API 레퍼런스](docs/maplestory-m.md)   | 캐릭터, 유니온, 길드, 랭킹, 공지사항            |

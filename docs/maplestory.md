@@ -1,6 +1,8 @@
 # 메이플스토리 API 레퍼런스
 
-> 45개 엔드포인트 — `client.maplestory`
+> SDK 지원 API 48개 — `client.maplestory`
+>
+> 개수 기준: SDK public API 메서드 수 (메서드 1개 = 넥슨 API 경로 1개). 넥슨 포털 기준 56개 중 48개를 지원합니다 ([미지원 API](#미지원-api-포털-기준) 참고).
 
 ## 빠른 시작
 
@@ -101,9 +103,22 @@ await notice.getCashshopList(); // 캐시샵 목록
 await notice.getCashshopDetail(12345); // 캐시샵 상세
 ```
 
-## 기타 (2개)
+## 식별자·계정 (3개)
 
 ```ts
+await client.maplestory.getOcid('캐릭터명'); // 캐릭터 식별자 (OCID)
 await client.maplestory.getOuid(); // 계정 식별자
 await client.maplestory.getAchievement(); // 계정 업적
 ```
+
+## 미지원 API (포털 기준)
+
+2026-11-24 넥슨 포털 스펙과 대조했을 때 SDK에 아직 없는 8개입니다.
+
+| 카테고리 | 경로                                                    |
+| -------- | ------------------------------------------------------- |
+| 연무장   | `/maplestory/v1/battle-practice/*` (4개)                |
+| 스케줄러 | `/maplestory/v1/scheduler/character-state`              |
+| 확률     | `/maplestory/v1/history/soul-potential`                 |
+| 캐릭터   | `/maplestory/v1/character/ring-reserve-skill-equipment` |
+| 계정     | `/maplestory/legacy/ouid`                               |
