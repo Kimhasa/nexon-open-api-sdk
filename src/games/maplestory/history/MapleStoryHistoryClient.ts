@@ -1,4 +1,5 @@
-import { assertInteger, invalidInput } from '../../../core/validation/input.js';
+import { historyDate } from '../../_base/maple-date.js';
+import { assertInteger } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import {
   STARFORCE_HISTORY_SHAPE,
@@ -44,8 +45,9 @@ export class MapleStoryHistoryClient {
    * 스타포스 확률 정보는 최대 5분 후 확인 가능합니다.
    *
    * @param params.count - 한 번에 가져올 기록 수 (10~1000)
-   * @param params.date - 기록을 볼 날짜 (한국 시간, YYYY-MM-DD). 첫 페이지를 볼 때 넣는다. `date` 와 `cursor` 중 하나는 꼭 넣는다
+   * @param params.date - 기록을 볼 날짜 (한국 시간, YYYY-MM-DD). 2023-12-27부터 오늘까지의 날짜 중 최근 2년 이내. 첫 페이지는 date, 다음 페이지는 cursor를 넣는다.
    * @param params.cursor - 다음 페이지를 볼 때 넣는 값. 이전 응답의 `next_cursor` 를 그대로 넣는다
+   * @throws {NexonBadRequestError} date와 cursor가 모두 빠졌거나 날짜 형식이나 조회 범위가 잘못되었을 때.
    *
    * @example
    * ```ts
@@ -59,7 +61,7 @@ export class MapleStoryHistoryClient {
       `${MapleStoryHistoryClient.BASE}/history/starforce`,
       {
         count: params.count,
-        date: params.date as string | undefined,
+        date: historyDate(params.date, params.cursor, '2023-12-27'),
         cursor: params.cursor,
       },
       STARFORCE_HISTORY_SHAPE,
@@ -73,8 +75,9 @@ export class MapleStoryHistoryClient {
    * 잠재능력 재설정 정보는 최대 30분 후 확인 가능합니다.
    *
    * @param params.count - 한 번에 가져올 기록 수 (10~1000)
-   * @param params.date - 기록을 볼 날짜 (한국 시간, YYYY-MM-DD). 첫 페이지를 볼 때 넣는다. `date` 와 `cursor` 중 하나는 꼭 넣는다
+   * @param params.date - 기록을 볼 날짜 (한국 시간, YYYY-MM-DD). 2024-01-25부터 오늘까지의 날짜 중 최근 2년 이내. 첫 페이지는 date, 다음 페이지는 cursor를 넣는다.
    * @param params.cursor - 다음 페이지를 볼 때 넣는 값. 이전 응답의 `next_cursor` 를 그대로 넣는다
+   * @throws {NexonBadRequestError} date와 cursor가 모두 빠졌거나 날짜 형식이나 조회 범위가 잘못되었을 때.
    *
    * @example
    * ```ts
@@ -90,7 +93,7 @@ export class MapleStoryHistoryClient {
       `${MapleStoryHistoryClient.BASE}/history/potential`,
       {
         count: params.count,
-        date: params.date as string | undefined,
+        date: historyDate(params.date, params.cursor, '2024-01-25'),
         cursor: params.cursor,
       },
       POTENTIAL_HISTORY_SHAPE,
@@ -104,8 +107,9 @@ export class MapleStoryHistoryClient {
    * 큐브 확률 정보는 최대 30분 후 확인 가능합니다.
    *
    * @param params.count - 한 번에 가져올 기록 수 (10~1000)
-   * @param params.date - 기록을 볼 날짜 (한국 시간, YYYY-MM-DD). 첫 페이지를 볼 때 넣는다. `date` 와 `cursor` 중 하나는 꼭 넣는다
+   * @param params.date - 기록을 볼 날짜 (한국 시간, YYYY-MM-DD). 오늘을 포함해 최근 2년 이내. 첫 페이지는 date, 다음 페이지는 cursor를 넣는다.
    * @param params.cursor - 다음 페이지를 볼 때 넣는 값. 이전 응답의 `next_cursor` 를 그대로 넣는다
+   * @throws {NexonBadRequestError} date와 cursor가 모두 빠졌거나 날짜 형식이나 조회 범위가 잘못되었을 때.
    *
    * @example
    * ```ts
@@ -121,7 +125,7 @@ export class MapleStoryHistoryClient {
       `${MapleStoryHistoryClient.BASE}/history/cube`,
       {
         count: params.count,
-        date: params.date as string | undefined,
+        date: historyDate(params.date, params.cursor),
         cursor: params.cursor,
       },
       CUBE_HISTORY_SHAPE,
@@ -135,10 +139,10 @@ export class MapleStoryHistoryClient {
    * 소울 잠재능력 재설정 이용 정보는 최대 30분 후 확인 가능합니다.
    *
    * @param params.count - 한 번에 가져올 기록 수 (10~1000)
-   * @param params.date - 기록을 볼 날짜 (한국 시간, YYYY-MM-DD). 첫 페이지를 볼 때 넣는다. `date` 와 `cursor` 중 하나는 꼭 넣는다
+   * @param params.date - 기록을 볼 날짜 (한국 시간, YYYY-MM-DD). 오늘을 포함해 최근 2년 이내. 첫 페이지는 date, 다음 페이지는 cursor를 넣는다.
    * @param params.cursor - 다음 페이지를 볼 때 넣는 값. 이전 응답의 `next_cursor` 를 그대로 넣는다
    *
-   * @throws {NexonBadRequestError} count가 10~1000 사이의 정수가 아니거나 date·cursor가 모두 없을 때 (요청 전 즉시 throw)
+   * @throws {NexonBadRequestError} count가 10~1000 사이의 정수가 아니거나, date와 cursor가 모두 빠졌거나 날짜 형식이나 조회 범위가 잘못되었을 때.
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 요청 한도 초과 시
    *
@@ -156,17 +160,11 @@ export class MapleStoryHistoryClient {
    */
   async getSoulPotential(params: HistoryRequest): Promise<SoulPotentialHistory> {
     assertInteger(params.count, 'count', { min: 10, max: 1000 });
-    if (params.date === undefined && params.cursor === undefined) {
-      invalidInput(
-        'date와 cursor가 모두 빠졌습니다. date와 cursor 중 1개 이상을 입력하세요.',
-        "첫 페이지는 { count: 100, date: 'YYYY-MM-DD' }, 다음 페이지는 { count: 100, cursor: next_cursor } 로 조회하세요.",
-      );
-    }
     return this.http.get<SoulPotentialHistory>(
       `${MapleStoryHistoryClient.BASE}/history/soul-potential`,
       {
         count: params.count,
-        date: params.date as string | undefined,
+        date: historyDate(params.date, params.cursor),
         cursor: params.cursor,
       },
       SOUL_POTENTIAL_HISTORY_SHAPE,

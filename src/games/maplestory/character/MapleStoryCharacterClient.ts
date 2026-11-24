@@ -1,3 +1,4 @@
+import { KST_OFFSET_MINUTES, snapshotDate } from '../../_base/maple-date.js';
 import { assertNonEmptyString } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { OcidDateRequest } from '../../_base/maple-base-types.js';
@@ -53,6 +54,12 @@ import type {
   SkillRequest,
 } from './types.js';
 
+const SNAPSHOT = {
+  firstDate: '2023-12-21',
+  timezoneOffset: KST_OFFSET_MINUTES,
+  apiLabel: '캐릭터',
+} as const;
+
 /**
  * 메이플스토리 캐릭터 정보: 스탯·장비·스킬·심볼·V매트릭스·HEXA 매트릭스·무릉도장 등.
  *
@@ -99,8 +106,9 @@ export class MapleStoryCharacterClient {
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonDataNotReadyError} 해당 날짜 데이터 미준비 시
    *
@@ -113,7 +121,7 @@ export class MapleStoryCharacterClient {
   async getBasic(params: OcidDateRequest): Promise<CharacterBasic> {
     return this.http.get<CharacterBasic>(
       `${MapleStoryCharacterClient.BASE}/character/basic`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       CHARACTER_BASIC_SHAPE,
     );
   }
@@ -124,7 +132,8 @@ export class MapleStoryCharacterClient {
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -135,7 +144,7 @@ export class MapleStoryCharacterClient {
   async getPopularity(params: OcidDateRequest): Promise<CharacterPopularity> {
     return this.http.get<CharacterPopularity>(
       `${MapleStoryCharacterClient.BASE}/character/popularity`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       CHARACTER_POPULARITY_SHAPE,
     );
   }
@@ -146,7 +155,8 @@ export class MapleStoryCharacterClient {
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -159,7 +169,7 @@ export class MapleStoryCharacterClient {
   async getStat(params: OcidDateRequest): Promise<CharacterStat> {
     return this.http.get<CharacterStat>(
       `${MapleStoryCharacterClient.BASE}/character/stat`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       CHARACTER_STAT_SHAPE,
     );
   }
@@ -170,7 +180,8 @@ export class MapleStoryCharacterClient {
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -184,7 +195,7 @@ export class MapleStoryCharacterClient {
   async getHyperStat(params: OcidDateRequest): Promise<CharacterHyperStat> {
     return this.http.get<CharacterHyperStat>(
       `${MapleStoryCharacterClient.BASE}/character/hyper-stat`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       CHARACTER_HYPER_STAT_SHAPE,
     );
   }
@@ -195,7 +206,8 @@ export class MapleStoryCharacterClient {
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -206,7 +218,7 @@ export class MapleStoryCharacterClient {
   async getPropensity(params: OcidDateRequest): Promise<CharacterPropensity> {
     return this.http.get<CharacterPropensity>(
       `${MapleStoryCharacterClient.BASE}/character/propensity`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       CHARACTER_PROPENSITY_SHAPE,
     );
   }
@@ -217,7 +229,8 @@ export class MapleStoryCharacterClient {
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -231,7 +244,7 @@ export class MapleStoryCharacterClient {
   async getAbility(params: OcidDateRequest): Promise<CharacterAbility> {
     return this.http.get<CharacterAbility>(
       `${MapleStoryCharacterClient.BASE}/character/ability`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       CHARACTER_ABILITY_SHAPE,
     );
   }
@@ -245,7 +258,8 @@ export class MapleStoryCharacterClient {
    * 칭호 프리셋 1~3번은 `title_preset1`~`3` 이다. 잠재능력·소울이 없는 장비는 해당 필드가 null이다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -261,7 +275,7 @@ export class MapleStoryCharacterClient {
   async getItemEquipment(params: OcidDateRequest): Promise<CharacterItemEquipment> {
     return this.http.get<CharacterItemEquipment>(
       `${MapleStoryCharacterClient.BASE}/character/item-equipment`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       CHARACTER_ITEM_EQUIPMENT_SHAPE,
     );
   }
@@ -272,7 +286,8 @@ export class MapleStoryCharacterClient {
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -286,7 +301,7 @@ export class MapleStoryCharacterClient {
   async getCashItemEquipment(params: OcidDateRequest): Promise<CharacterCashItemEquipment> {
     return this.http.get<CharacterCashItemEquipment>(
       `${MapleStoryCharacterClient.BASE}/character/cashitem-equipment`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       CHARACTER_CASHITEM_EQUIPMENT_SHAPE,
     );
   }
@@ -297,7 +312,8 @@ export class MapleStoryCharacterClient {
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -311,7 +327,7 @@ export class MapleStoryCharacterClient {
   async getSymbolEquipment(params: OcidDateRequest): Promise<CharacterSymbolEquipment> {
     return this.http.get<CharacterSymbolEquipment>(
       `${MapleStoryCharacterClient.BASE}/character/symbol-equipment`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       CHARACTER_SYMBOL_EQUIPMENT_SHAPE,
     );
   }
@@ -322,7 +338,8 @@ export class MapleStoryCharacterClient {
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -336,7 +353,7 @@ export class MapleStoryCharacterClient {
   async getSetEffect(params: OcidDateRequest): Promise<CharacterSetEffect> {
     return this.http.get<CharacterSetEffect>(
       `${MapleStoryCharacterClient.BASE}/character/set-effect`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       CHARACTER_SET_EFFECT_SHAPE,
     );
   }
@@ -347,7 +364,8 @@ export class MapleStoryCharacterClient {
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -360,7 +378,7 @@ export class MapleStoryCharacterClient {
   async getBeautyEquipment(params: OcidDateRequest): Promise<CharacterBeautyEquipment> {
     return this.http.get<CharacterBeautyEquipment>(
       `${MapleStoryCharacterClient.BASE}/character/beauty-equipment`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       CHARACTER_BEAUTY_EQUIPMENT_SHAPE,
     );
   }
@@ -371,7 +389,8 @@ export class MapleStoryCharacterClient {
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -383,7 +402,7 @@ export class MapleStoryCharacterClient {
   async getAndroidEquipment(params: OcidDateRequest): Promise<CharacterAndroidEquipment> {
     return this.http.get<CharacterAndroidEquipment>(
       `${MapleStoryCharacterClient.BASE}/character/android-equipment`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       CHARACTER_ANDROID_EQUIPMENT_SHAPE,
     );
   }
@@ -393,7 +412,8 @@ export class MapleStoryCharacterClient {
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -405,7 +425,7 @@ export class MapleStoryCharacterClient {
   async getPetEquipment(params: OcidDateRequest): Promise<CharacterPetEquipment> {
     return this.http.get<CharacterPetEquipment>(
       `${MapleStoryCharacterClient.BASE}/character/pet-equipment`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       CHARACTER_PET_EQUIPMENT_SHAPE,
     );
   }
@@ -416,8 +436,9 @@ export class MapleStoryCharacterClient {
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    * @param params.character_skill_grade - 전직 차수 ("0"~"6", "1.5", "2.5") 또는 하이퍼 스킬 ("hyperpassive": 하이퍼 패시브, "hyperactive": 하이퍼 액티브). "5" 는 5차(V매트릭스), "6" 은 6차(HEXA 매트릭스) 스킬
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -436,7 +457,7 @@ export class MapleStoryCharacterClient {
       `${MapleStoryCharacterClient.BASE}/character/skill`,
       {
         ocid: params.ocid,
-        date: params.date as string | undefined,
+        date: snapshotDate(params.date, SNAPSHOT),
         character_skill_grade: params.character_skill_grade,
       },
       CHARACTER_SKILL_SHAPE,
@@ -449,7 +470,8 @@ export class MapleStoryCharacterClient {
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -463,7 +485,7 @@ export class MapleStoryCharacterClient {
   async getLinkSkill(params: OcidDateRequest): Promise<CharacterLinkSkill> {
     return this.http.get<CharacterLinkSkill>(
       `${MapleStoryCharacterClient.BASE}/character/link-skill`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       CHARACTER_LINK_SKILL_SHAPE,
     );
   }
@@ -474,7 +496,8 @@ export class MapleStoryCharacterClient {
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -488,7 +511,7 @@ export class MapleStoryCharacterClient {
   async getVMatrix(params: OcidDateRequest): Promise<CharacterVMatrix> {
     return this.http.get<CharacterVMatrix>(
       `${MapleStoryCharacterClient.BASE}/character/vmatrix`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       CHARACTER_VMATRIX_SHAPE,
     );
   }
@@ -499,7 +522,8 @@ export class MapleStoryCharacterClient {
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -513,7 +537,7 @@ export class MapleStoryCharacterClient {
   async getHexaMatrix(params: OcidDateRequest): Promise<CharacterHexaMatrix> {
     return this.http.get<CharacterHexaMatrix>(
       `${MapleStoryCharacterClient.BASE}/character/hexamatrix`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       CHARACTER_HEXAMATRIX_SHAPE,
     );
   }
@@ -524,7 +548,8 @@ export class MapleStoryCharacterClient {
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -538,7 +563,7 @@ export class MapleStoryCharacterClient {
   async getHexaMatrixStat(params: OcidDateRequest): Promise<CharacterHexaMatrixStat> {
     return this.http.get<CharacterHexaMatrixStat>(
       `${MapleStoryCharacterClient.BASE}/character/hexamatrix-stat`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       CHARACTER_HEXAMATRIX_STAT_SHAPE,
     );
   }
@@ -549,7 +574,8 @@ export class MapleStoryCharacterClient {
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -561,7 +587,7 @@ export class MapleStoryCharacterClient {
   async getDojang(params: OcidDateRequest): Promise<CharacterDojang> {
     return this.http.get<CharacterDojang>(
       `${MapleStoryCharacterClient.BASE}/character/dojang`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       CHARACTER_DOJANG_SHAPE,
     );
   }
@@ -572,7 +598,8 @@ export class MapleStoryCharacterClient {
    * 2025년 8월 21일 데이터부터 조회할 수 있습니다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2025-08-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2025-08-21부터 어제까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -590,7 +617,14 @@ export class MapleStoryCharacterClient {
   async getOtherStat(params: OcidDateRequest): Promise<CharacterOtherStat> {
     return this.http.get<CharacterOtherStat>(
       `${MapleStoryCharacterClient.BASE}/character/other-stat`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      {
+        ocid: params.ocid,
+        date: snapshotDate(params.date, {
+          ...SNAPSHOT,
+          firstDate: '2025-08-21',
+          apiLabel: '기타 능력치',
+        }),
+      },
       CHARACTER_OTHER_STAT_SHAPE,
     );
   }
@@ -602,11 +636,12 @@ export class MapleStoryCharacterClient {
    * 2026년 3월 19일 이후 날짜는 {@link MapleStoryCharacterClient.getRingReserveSkillEquipment} 를 사용하세요.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2025-08-21부터 2026-03-18까지. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
    * @deprecated 넥슨 안내에 따라 2026년 3월 19일 이후 데이터는
    * {@link MapleStoryCharacterClient.getRingReserveSkillEquipment} (예비 특수 반지)로 조회한다.
    * 2025-08-21 ~ 2026-03-18 날짜의 기록을 볼 때만 쓴다.
+   * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2025-08-21부터 2026-03-18까지의 범위를 벗어났을 때.
    *
    * @example
    * ```ts
@@ -623,7 +658,15 @@ export class MapleStoryCharacterClient {
   ): Promise<CharacterRingExchangeSkillEquipment> {
     return this.http.get<CharacterRingExchangeSkillEquipment>(
       `${MapleStoryCharacterClient.BASE}/character/ring-exchange-skill-equipment`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      {
+        ocid: params.ocid,
+        date: snapshotDate(params.date, {
+          ...SNAPSHOT,
+          firstDate: '2025-08-21',
+          lastDate: '2026-03-18',
+          apiLabel: '링 익스체인지',
+        }),
+      },
       CHARACTER_RING_EXCHANGE_SKILL_EQUIPMENT_SHAPE,
     );
   }
@@ -632,9 +675,9 @@ export class MapleStoryCharacterClient {
    * 예비 특수 반지 슬롯에 장착한 특수 반지를 조회한다.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
-   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2026-03-19부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} ocid가 비어 있을 때 (요청 전 즉시 throw)
+   * @throws {NexonBadRequestError} ocid가 비어 있을 때. 날짜 형식이 잘못되었거나 2026-03-19부터 어제까지의 범위를 벗어났을 때.
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonDataNotReadyError} 해당 날짜 데이터 미준비 시
    *
@@ -657,7 +700,14 @@ export class MapleStoryCharacterClient {
     );
     return this.http.get<CharacterRingReserveSkillEquipment>(
       `${MapleStoryCharacterClient.BASE}/character/ring-reserve-skill-equipment`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      {
+        ocid: params.ocid,
+        date: snapshotDate(params.date, {
+          ...SNAPSHOT,
+          firstDate: '2026-03-19',
+          apiLabel: '예비 특수 반지 장착',
+        }),
+      },
       CHARACTER_RING_RESERVE_SKILL_EQUIPMENT_SHAPE,
     );
   }

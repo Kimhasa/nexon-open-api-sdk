@@ -1,6 +1,7 @@
-import { assertDateInRange, assertNonEmptyString } from '../../core/validation/input.js';
+import { assertNonEmptyString } from '../../core/validation/input.js';
 import { lookupByName } from '../../core/errors/name-lookup.js';
 import { AbstractMapleBaseClient } from '../_base/AbstractMapleStoryBaseClient.js';
+import { UTC_PLUS_8_OFFSET_MINUTES, snapshotDate } from '../_base/maple-date.js';
 import type { OCID } from '../_base/maple-base-types.js';
 import { MapleStoryTWCharacterClient } from './character/MapleStoryTWCharacterClient.js';
 import { MapleStoryTWGuildClient } from './guild/MapleStoryTWGuildClient.js';
@@ -12,7 +13,7 @@ import { MapleStoryTWUnionClient } from './union/MapleStoryTWUnionClient.js';
  * MapleStory Taiwan(대만 서버, 楓之谷) 클라이언트.
  *
  * 사용법은 한국 메이플스토리와 같고, 날짜 기준과 월드 이름이 다르며 패밀리어(萌獸) 조회가 더 있습니다.
- * 날짜는 대만 시간(UTC+8) 기준이고 `'YYYY-MM-DD'` 문자열, `Date`, `'today'` 를 받습니다.
+ * 지난 날짜는 대만 시간(UTC+8) 기준 어제까지 `'YYYY-MM-DD'` 문자열이나 `Date`로 지정하고, 최신 데이터는 날짜를 생략합니다.
  *
  * - Dates use Taiwan Standard Time (UTC+8).
  * - Character and guild data starts on October 15, 2025. Union data starts on
@@ -33,7 +34,7 @@ import { MapleStoryTWUnionClient } from './union/MapleStoryTWUnionClient.js';
  */
 export class MapleStoryTWClient extends AbstractMapleBaseClient {
   protected readonly pathPrefix = 'maplestorytw';
-  protected readonly timezoneOffset = 480; // UTC+8 (TST)
+  protected readonly timezoneOffset = UTC_PLUS_8_OFFSET_MINUTES; // UTC+8 (TST)
 
   private _character: MapleStoryTWCharacterClient | undefined;
   private _union: MapleStoryTWUnionClient | undefined;
@@ -101,11 +102,11 @@ export class MapleStoryTWClient extends AbstractMapleBaseClient {
   }
 
   private formatQueryDate(date: TWDate | undefined, availableFrom: string): string | undefined {
-    if (date === undefined) return undefined;
-
-    const formatted = this.formatDate(date);
-    const today = this.formatDate('today');
-    assertDateInRange(formatted, availableFrom, today, 'Use a date in Taiwan time.');
-    return formatted;
+    return snapshotDate(date, {
+      firstDate: availableFrom,
+      timezoneOffset: this.timezoneOffset,
+      apiLabel: 'MapleStory Taiwan',
+      language: 'en',
+    });
   }
 }

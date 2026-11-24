@@ -1,6 +1,6 @@
 import type { GuildId, OCID } from '../_base/maple-base-types.js';
 
-/** A calendar date (YYYY-MM-DD), a Date, or 'today' in Taiwan Standard Time (UTC+8). */
+/** A past calendar date (YYYY-MM-DD) or a Date in Taiwan Standard Time (UTC+8). */
 export type TWDate = Date | string;
 
 /** GET /maplestorytw/v1/id response. */

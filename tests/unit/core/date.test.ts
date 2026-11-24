@@ -1,6 +1,12 @@
 import { NexonBadRequestError } from '../../../src/core/errors/NexonBadRequestError.js';
-import { describe, it, expect } from 'vitest';
-import { toNexonDate } from '../../../src/games/_base/maple-date.js';
+import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
+import {
+  assertRankingDate,
+  historyDate,
+  schedulerDate,
+  snapshotDate,
+  toNexonDate,
+} from '../../../src/games/_base/maple-date.js';
 import type { NexonDate } from '../../../src/games/_base/maple-base-types.js';
 
 describe('toNexonDate', () => {
@@ -64,5 +70,65 @@ describe('toNexonDate', () => {
     const instant = '2024-02-29T15:30:00Z';
     expect(toNexonDate(instant, 540)).toBe('2024-03-01');
     expect(toNexonDate(instant, 480)).toBe('2024-02-29');
+  });
+});
+
+describe('메이플스토리 조회 날짜', () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2026-11-24T15:00:00Z'));
+  });
+  afterEach(() => vi.useRealTimers());
+
+  it.each(['2026-11-25', '2026-11-26'])('스냅숏은 %s 날짜를 거부한다', (date) => {
+    const options = { firstDate: '2023-12-21', timezoneOffset: 540, apiLabel: '캐릭터' };
+    expect(() => snapshotDate(date, options)).toThrow(NexonBadRequestError);
+    expect(() => snapshotDate(date, options)).toThrow(/date를 생략하세요/);
+  });
+
+  it.each(['2026-2-01', '2026-02-29', '2026-11-23T00:00:00Z', '2026-11-23\n'])(
+    'YYYY-MM-DD 형식의 실제 날짜만 받는다 (%j)',
+    (date) => {
+      const options = { firstDate: '2023-12-21', timezoneOffset: 540, apiLabel: '캐릭터' };
+      expect(() => snapshotDate(date, options)).toThrow(/YYYY-MM-DD/);
+      expect(() => assertRankingDate(date, '2023-12-22')).toThrow(/YYYY-MM-DD/);
+    },
+  );
+
+  it('랭킹은 2년 전부터 오늘까지 받는다', () => {
+    expect(() => assertRankingDate('2024-11-24', '2023-12-22')).toThrow(/2024-11-25/);
+    expect(() => assertRankingDate('2024-11-25', '2023-12-22')).not.toThrow();
+    expect(() => assertRankingDate('2026-11-25', '2023-12-22')).not.toThrow();
+    expect(() => assertRankingDate('2026-11-26', '2023-12-22')).toThrow(/2026-11-25까지/);
+  });
+
+  it('최근 2년을 셀 때 2월 29일은 평년 2월 말일에 맞춘다', () => {
+    vi.setSystemTime(new Date('2028-02-28T15:00:00Z'));
+    expect(() => assertRankingDate('2026-02-27', '2025-11-27')).toThrow(/2026-02-28/);
+    expect(() => assertRankingDate('2026-02-28', '2025-11-27')).not.toThrow();
+  });
+
+  it.each(['2023-12-27', '2024-01-25'])('강화 기록의 첫 조회 가능 날짜 %s를 포함한다', (first) => {
+    vi.setSystemTime(new Date('2024-02-01T00:00:00Z'));
+    const previous = first === '2023-12-27' ? '2023-12-26' : '2024-01-24';
+    expect(() => historyDate(previous, undefined, first)).toThrow(first);
+    expect(historyDate(first, undefined, first)).toBe(first);
+  });
+
+  it('강화 기록은 오늘, 2년 전, 커서를 받는다', () => {
+    expect(historyDate('2024-11-25', undefined)).toBe('2024-11-25');
+    expect(historyDate('2026-11-25', undefined)).toBe('2026-11-25');
+    expect(historyDate(undefined, 'next-page')).toBeUndefined();
+    expect(() => historyDate('2024-11-24', undefined)).toThrow(/2024-11-25/);
+    expect(() => historyDate('2026-11-26', undefined)).toThrow(/2026-11-25까지/);
+    expect(() => historyDate(undefined, ' ')).toThrow(/next_cursor/);
+  });
+
+  it('스케줄러는 날짜 생략과 14일 전부터 오늘까지 받는다', () => {
+    expect(schedulerDate(undefined)).toBeUndefined();
+    expect(schedulerDate('2026-11-25')).toBe('2026-11-25');
+    expect(schedulerDate('2026-11-11')).toBe('2026-11-11');
+    expect(() => schedulerDate('2026-11-10')).toThrow(/2026-11-11/);
+    expect(() => schedulerDate('2026-11-26')).toThrow(/2026-11-25까지/);
   });
 });

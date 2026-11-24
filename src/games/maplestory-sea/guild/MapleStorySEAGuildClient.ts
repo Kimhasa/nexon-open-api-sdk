@@ -1,3 +1,4 @@
+import { UTC_PLUS_8_OFFSET_MINUTES, snapshotDate } from '../../_base/maple-date.js';
 import { assertNonEmptyString } from '../../../core/validation/input.js';
 import { lookupByName, requireFoundId } from '../../../core/errors/name-lookup.js';
 import { SEA_GUILD_ID_SHAPE, SEA_GUILD_BASIC_SHAPE } from '../shapes.js';
@@ -5,6 +6,13 @@ import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { GuildId } from '../../_base/maple-base-types.js';
 import type { GuildIdDateRequest } from '../../_base/maple-base-types.js';
 import type { SEAGuildBasic } from './types.js';
+
+const SNAPSHOT = {
+  firstDate: '2025-04-20',
+  timezoneOffset: UTC_PLUS_8_OFFSET_MINUTES,
+  language: 'en',
+  apiLabel: 'Guild',
+} as const;
 
 /**
  * MapleStory SEA 길드: 길드 이름과 월드 이름으로 길드 고유 번호를 받아 길드 정보를 조회합니다.
@@ -66,9 +74,9 @@ export class MapleStorySEAGuildClient {
    * 길드 기본 정보(레벨·길드 마스터·길드원 목록·길드 스킬)를 조회한다. SEA 명칭: Guild basic information.
    *
    * @param params.oguild_id - 길드 고유 번호. `client.maplestorySEA.guild.getId()` 로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -83,7 +91,7 @@ export class MapleStorySEAGuildClient {
       `${MapleStorySEAGuildClient.BASE}/guild/basic`,
       {
         oguild_id: params.oguild_id,
-        date: params.date as string | undefined,
+        date: snapshotDate(params.date, SNAPSHOT),
       },
       SEA_GUILD_BASIC_SHAPE,
     );

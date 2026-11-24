@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { NexonAuthError, NexonBadRequestError, NexonClient } from '../../../src/index.js';
 import type { GuildId, OCID } from '../../../src/index.js';
 import type { MapleStoryMClient } from '../../../src/games/maplestory-m/index.js';
@@ -43,6 +43,7 @@ import {
   mUnionStatFixture,
 } from '../../fixtures/maplestory-m/union.fixture.js';
 import {
+  M_RANKING_DATE,
   mLevelRankingFixture,
   mDojangRankingFixture,
   mRootOfTimeRankingFixture,
@@ -70,7 +71,12 @@ const TEST_OCID = mOcidFixture.ocid as OCID;
 const TEST_GUILD_ID = mGuildIdFixture.oguild_id as GuildId;
 
 describe('MapleStoryMClient', () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2026-11-02T00:00:00Z'));
+  });
   afterEach(() => {
+    vi.useRealTimers();
     vi.restoreAllMocks();
     const calls = onResponseShapeMismatch.mock.calls.slice();
     onResponseShapeMismatch.mockClear();
@@ -277,9 +283,25 @@ describe('MapleStoryMClient', () => {
   });
 
   describe('ranking', () => {
+    it('랭킹 첫날은 KST 자정을 지나면 조회할 수 있다', async () => {
+      vi.setSystemTime(new Date('2025-11-26T14:59:59.999Z'));
+      const fetch = vi.spyOn(globalThis, 'fetch');
+      const client = createClient();
+      await expect(client.ranking.getLevel({ date: M_RANKING_DATE })).rejects.toMatchObject({
+        code: 'OPENAPI00004',
+      });
+      expect(fetch).not.toHaveBeenCalled();
+      vi.setSystemTime(new Date('2025-11-26T15:00:00Z'));
+      await expect(client.ranking.getLevel({ date: '2025-11-26' })).rejects.toThrow(/2025-11-27/);
+      expect(fetch).not.toHaveBeenCalled();
+      await expect(client.ranking.getLevel({ date: M_RANKING_DATE })).resolves.toEqual(
+        mLevelRankingFixture,
+      );
+    });
+
     it('getLevel 응답을 반환한다', async () => {
       const client = createClient();
-      await expect(client.ranking.getLevel({ date: '2024-01-01' })).resolves.toEqual(
+      await expect(client.ranking.getLevel({ date: M_RANKING_DATE })).resolves.toEqual(
         mLevelRankingFixture,
       );
     });
@@ -287,41 +309,41 @@ describe('MapleStoryMClient', () => {
     it('getDojang 응답을 반환한다', async () => {
       const client = createClient();
       await expect(
-        client.ranking.getDojang({ date: '2024-01-01', world_name: '스카니아', page: 2 }),
+        client.ranking.getDojang({ date: M_RANKING_DATE, world_name: '스카니아', page: 2 }),
       ).resolves.toEqual(mDojangRankingFixture);
     });
 
     it('getRootOfTime 응답을 반환한다', async () => {
       const client = createClient();
-      await expect(client.ranking.getRootOfTime({ date: '2024-01-01' })).resolves.toEqual(
+      await expect(client.ranking.getRootOfTime({ date: M_RANKING_DATE })).resolves.toEqual(
         mRootOfTimeRankingFixture,
       );
     });
 
     it('getUnion 응답을 반환한다', async () => {
       const client = createClient();
-      await expect(client.ranking.getUnion({ date: '2024-01-01' })).resolves.toEqual(
+      await expect(client.ranking.getUnion({ date: M_RANKING_DATE })).resolves.toEqual(
         mUnionRankingFixture,
       );
     });
 
     it('getCombatPower 응답을 반환한다', async () => {
       const client = createClient();
-      await expect(client.ranking.getCombatPower({ date: '2024-01-01' })).resolves.toEqual(
+      await expect(client.ranking.getCombatPower({ date: M_RANKING_DATE })).resolves.toEqual(
         mCombatPowerRankingFixture,
       );
     });
 
     it('getKerningMTower 응답을 반환한다', async () => {
       const client = createClient();
-      await expect(client.ranking.getKerningMTower({ date: '2024-01-01' })).resolves.toEqual(
+      await expect(client.ranking.getKerningMTower({ date: M_RANKING_DATE })).resolves.toEqual(
         mKerningMTowerRankingFixture,
       );
     });
 
     it('getAchievement 응답을 반환한다', async () => {
       const client = createClient();
-      await expect(client.ranking.getAchievement({ date: '2024-01-01' })).resolves.toEqual(
+      await expect(client.ranking.getAchievement({ date: M_RANKING_DATE })).resolves.toEqual(
         mAchievementRankingFixture,
       );
     });
@@ -329,13 +351,13 @@ describe('MapleStoryMClient', () => {
     it('getSharenianBattlefield 응답을 반환한다', async () => {
       const client = createClient();
       await expect(
-        client.ranking.getSharenianBattlefield({ date: '2024-01-01', ocid: TEST_OCID }),
+        client.ranking.getSharenianBattlefield({ date: M_RANKING_DATE, ocid: TEST_OCID }),
       ).resolves.toEqual(mSharenianBattlefieldRankingFixture);
     });
 
     it('getSharenianWaterway 응답을 반환한다', async () => {
       const client = createClient();
-      await expect(client.ranking.getSharenianWaterway({ date: '2024-01-01' })).resolves.toEqual(
+      await expect(client.ranking.getSharenianWaterway({ date: M_RANKING_DATE })).resolves.toEqual(
         mSharenianWaterwayRankingFixture,
       );
     });
@@ -449,7 +471,7 @@ describe('MapleStoryMClient', () => {
     [
       '동시에 지정한 월드명과 식별자',
       (client: MapleStoryMClient) =>
-        client.ranking.getLevel({ date: '2024-01-01', world_name: '스카니아', ocid: TEST_OCID }),
+        client.ranking.getLevel({ date: M_RANKING_DATE, world_name: '스카니아', ocid: TEST_OCID }),
       'world_name과 ocid',
     ],
   ] as const)('%s 입력을 요청 전에 거부한다', async (_name, call, message) => {

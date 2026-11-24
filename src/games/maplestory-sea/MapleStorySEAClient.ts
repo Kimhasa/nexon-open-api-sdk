@@ -1,3 +1,4 @@
+import { UTC_PLUS_8_OFFSET_MINUTES } from '../_base/maple-date.js';
 import { assertNonEmptyString } from '../../core/validation/input.js';
 import { lookupByName } from '../../core/errors/name-lookup.js';
 import { SEA_OCID_SHAPE } from './shapes.js';
@@ -30,7 +31,7 @@ import { MapleStorySEAGuildClient } from './guild/MapleStorySEAGuildClient.js';
  */
 export class MapleStorySEAClient extends AbstractMapleBaseClient {
   protected readonly pathPrefix = 'maplestorysea';
-  protected readonly timezoneOffset = 480; // UTC+8 (SGT)
+  protected readonly timezoneOffset = UTC_PLUS_8_OFFSET_MINUTES; // UTC+8 (SGT)
 
   private _character: MapleStorySEACharacterClient | undefined;
   private _union: MapleStorySEAUnionClient | undefined;

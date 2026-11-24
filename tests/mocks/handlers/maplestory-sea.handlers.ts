@@ -21,6 +21,7 @@ import {
   seaCharacterDojangFixture,
 } from '../../fixtures/maplestory-sea/character.fixture.js';
 import {
+  SEA_UNION_CHAMPION_DATE,
   seaUnionRaiderFixture,
   seaUnionArtifactFixture,
   seaUnionChampionFixture,
@@ -51,7 +52,7 @@ const REQUEST_DATE = '2025-04-21';
 function datedOcidHandler(
   path: string,
   fixture: Parameters<typeof HttpResponse.json>[0],
-  skillGrade?: string,
+  { date = REQUEST_DATE, skillGrade }: { date?: string; skillGrade?: string } = {},
 ): HttpHandler {
   return http.get(`${BASE}/${path}`, ({ request }) => {
     const authError = checkApiKey(request);
@@ -59,7 +60,7 @@ function datedOcidHandler(
     const query = new URL(request.url).searchParams;
     if (
       query.get('ocid') !== seaOcidFixture.ocid ||
-      query.get('date') !== REQUEST_DATE ||
+      query.get('date') !== date ||
       (skillGrade !== undefined && query.get('character_skill_grade') !== skillGrade)
     ) {
       return HttpResponse.json(
@@ -84,7 +85,7 @@ export const mapleStorySEAHandlers = [
   datedOcidHandler('character/beauty-equipment', seaCharacterBeautyEquipmentFixture),
   datedOcidHandler('character/android-equipment', seaCharacterAndroidEquipmentFixture),
   datedOcidHandler('character/pet-equipment', seaCharacterPetEquipmentFixture),
-  datedOcidHandler('character/skill', seaCharacterSkillFixture, '6'),
+  datedOcidHandler('character/skill', seaCharacterSkillFixture, { skillGrade: '6' }),
   datedOcidHandler('character/link-skill', seaCharacterLinkSkillFixture),
   datedOcidHandler('character/vmatrix', seaCharacterVMatrixFixture),
   datedOcidHandler('character/hexamatrix', seaCharacterHexaMatrixFixture),
@@ -92,7 +93,9 @@ export const mapleStorySEAHandlers = [
   datedOcidHandler('character/dojang', seaCharacterDojangFixture),
   datedOcidHandler('user/union-raider', seaUnionRaiderFixture),
   datedOcidHandler('user/union-artifact', seaUnionArtifactFixture),
-  datedOcidHandler('user/union-champion', seaUnionChampionFixture),
+  datedOcidHandler('user/union-champion', seaUnionChampionFixture, {
+    date: SEA_UNION_CHAMPION_DATE,
+  }),
 
   // OCID
   http.get(`${BASE}/id`, ({ request }) => {

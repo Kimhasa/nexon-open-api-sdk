@@ -1,3 +1,4 @@
+import { KST_OFFSET_MINUTES } from '../_base/maple-date.js';
 import { assertNonEmptyString } from '../../core/validation/input.js';
 import { lookupByName } from '../../core/errors/name-lookup.js';
 import { AbstractMapleBaseClient } from '../_base/AbstractMapleStoryBaseClient.js';
@@ -35,7 +36,7 @@ import type { Achievement } from './user-types.js';
  */
 export class MapleStoryClient extends AbstractMapleBaseClient {
   protected readonly pathPrefix = 'maplestory';
-  protected readonly timezoneOffset = 540; // UTC+9 (KST)
+  protected readonly timezoneOffset = KST_OFFSET_MINUTES; // UTC+9 (KST)
 
   private _character: MapleStoryCharacterClient | undefined;
   private _union: MapleStoryUnionClient | undefined;
