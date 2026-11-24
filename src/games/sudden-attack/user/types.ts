@@ -1,3 +1,4 @@
+/** 유저 프로필에 표시할 닉네임, 장착 칭호, 소속 클랜과 매너 등급. */
 export interface SuddenAttackUserBasic {
   /** 닉네임 */
   readonly user_name: string;
@@ -11,6 +12,7 @@ export interface SuddenAttackUserBasic {
   readonly manner_grade: string;
 }
 
+/** 게임 접속 종료 시 갱신되는 통합·시즌 계급, 경험치와 순위. */
 export interface SuddenAttackUserRank {
   /** 닉네임 */
   readonly user_name: string;
@@ -18,29 +20,31 @@ export interface SuddenAttackUserRank {
   readonly grade: string;
   /** 통합 계급 경험치 */
   readonly grade_exp: number;
-  /** 통합 계급 랭킹 */
+  /** 통합 계급 순위 */
   readonly grade_ranking: number;
   /** 시즌 계급 */
   readonly season_grade: string;
   /** 시즌 계급 경험치 */
   readonly season_grade_exp: number;
-  /** 시즌 계급 랭킹 */
+  /** 시즌 계급 순위 */
   readonly season_grade_ranking: number;
 }
 
+/** 게임 접속 종료 시 갱신되는 솔로·파티 랭크전 티어와 점수. */
 export interface SuddenAttackUserTier {
   /** 닉네임 */
   readonly user_name: string;
-  /** 솔로 랭크전 티어 */
+  /** 솔로 랭크전 티어의 숫자 값 */
   readonly solo_rank_match_tier: number;
   /** 솔로 랭크전 점수 */
   readonly solo_rank_match_score: number;
-  /** 파티 랭크전 티어 */
+  /** 파티 랭크전 티어의 숫자 값 */
   readonly party_rank_match_tier: number;
   /** 파티 랭크전 점수 */
   readonly party_rank_match_score: number;
 }
 
+/** 매치 종료 시 갱신되는 최근 승률과 무기별 킬데스. */
 export interface SuddenAttackUserRecentInfo {
   /** 닉네임 */
   readonly user_name: string;

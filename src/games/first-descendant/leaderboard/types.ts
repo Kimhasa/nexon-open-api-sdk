@@ -82,7 +82,7 @@ export interface TfdLeaderboardMember {
 export interface TfdLeaderboardVoidInterceptBattleEntry {
   /** 순위 */
   readonly ranking: number | null;
-  /** 기록 (클리어 타임, 숫자가 아닌 문자열) */
+  /** 보이드 요격전을 클리어하는 데 걸린 시간. 문자열로 제공된다. */
   readonly score: string | null;
   /** 멤버 목록 */
   readonly member: readonly TfdLeaderboardMember[];
@@ -100,9 +100,9 @@ export interface TfdLeaderboardVoidInterceptBattle {
 export interface TfdLeaderboardVoidErosionPurgeChallengeEntry {
   /** 순위 */
   readonly ranking: number;
-  /** 기록 (클리어 타임, 숫자가 아닌 문자열) */
+  /** 보이드 침식 정화 - 도전을 클리어하는 데 걸린 시간. 문자열로 제공된다. */
   readonly score: string;
-  /** 단계 (숫자가 아닌 문자열) */
+  /** 보이드 침식 정화 - 도전의 단계. 문자열로 제공된다. */
   readonly stage: string;
   /** 멤버 목록 */
   readonly member: readonly TfdLeaderboardMember[];

@@ -26,8 +26,8 @@ export interface BaramYeonCharacterBasic {
 
 /** 보유 칭호 항목 */
 export interface BaramYeonTitle {
-  /** 칭호 타입 명 */
-  readonly title_type_name: string | null; // 2022-03-18 이후 획득한 칭호만 제공. 그 이전 칭호는 값이 없을 수 있어 null 허용 (스펙에 nullable 표시 없음, 실 API 미검증)
+  /** 보유 칭호의 유형 이름. 2022년 3월 18일 이후 획득한 칭호에 제공된다. */
+  readonly title_type_name: string | null;
   /** 칭호 명 */
   readonly title_name: string;
 }
@@ -46,10 +46,10 @@ export interface BaramYeonCharacterTitle {
 
 /** 장착 칭호 항목 */
 export interface BaramYeonTitleEquipment {
-  /** 장착 칭호 장착 타입 */
-  readonly title_equipment_type: string; // "1": 장착 칭호, "2": 표시 칭호 (숫자가 아닌 문자열)
-  /** 장착 칭호 타입 명 */
-  readonly title_type_name: string | null; // 2022-03-18 이후 장착한 칭호만 제공. 그 이전 칭호는 값이 없을 수 있어 null 허용 (스펙에 nullable 표시 없음, 실 API 미검증)
+  /** 문자열 "1"은 장착 칭호, "2"는 표시 칭호다. */
+  readonly title_equipment_type: string;
+  /** 장착한 칭호의 유형 이름. 2022년 3월 18일 이후 장착한 칭호에 제공된다. */
+  readonly title_type_name: string | null;
   /** 장착 칭호 명 */
   readonly title_name: string;
 }

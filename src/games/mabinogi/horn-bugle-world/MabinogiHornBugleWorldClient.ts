@@ -12,7 +12,7 @@ export class MabinogiHornBugleWorldClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 거대한 외침의 뿔피리로 지정한 서버의 모든 채널에 전송된 대화 내역을 조회합니다.
+   * 서버의 모든 채널에 전송된 거대한 외침의 뿔피리 메시지를 조회한다.
    *
    * @param serverName - 조회할 서버 이름
    * @throws {NexonBadRequestError} 지원되지 않는 서버를 지정했을 때
@@ -22,7 +22,11 @@ export class MabinogiHornBugleWorldClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 류트 서버 소식판에 뿔피리 대화를 표시할 때
    * const result = await client.mabinogi.hornBugleWorld.getHistory('류트');
    * console.log(result.horn_bugle_world_history);
    * ```

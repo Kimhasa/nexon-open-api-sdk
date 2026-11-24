@@ -66,13 +66,14 @@ export interface MabinogiNpcShopTab {
   readonly item: readonly MabinogiNpcShopItem[];
 }
 
+/** 선택한 서버와 채널에서 NPC가 판매하는 아이템과 다음 상점 갱신 시각. */
 export interface MabinogiNpcShopList {
   /** NPC 상점의 탭 개수 */
   readonly shop_tab_count: number;
-  /** NPC 상점 정보 */
+  /** 조회한 서버·채널에 있는 NPC 상점의 탭별 판매 목록 */
   readonly shop: readonly MabinogiNpcShopTab[];
   /** 데이터를 조회한 일시 (UTC0) */
   readonly date_inquire: string;
-  /** 다음에 상점 데이터가 갱신될 일시 (UTC0) */
+  /** NPC 상점의 다음 판매 목록 갱신 시각(UTC) */
   readonly date_shop_next_update: string;
 }

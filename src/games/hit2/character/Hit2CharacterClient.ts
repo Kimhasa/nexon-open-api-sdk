@@ -11,7 +11,9 @@ import type { Hit2CharacterBasic } from './types.js';
  * ```ts
  * import { NexonClient } from 'nexon-open-api';
  *
- * const client = new NexonClient({ apiKey: 'your-api-key' });
+ * const apiKey = process.env['NEXON_API_KEY'];
+ * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+ * const client = new NexonClient({ apiKey });
  * const ocid = await client.hit2.getOcid('캐릭터명');
  * const basic = await client.hit2.character.getBasic({ ocid });
  * ```
@@ -22,12 +24,12 @@ export class Hit2CharacterClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 기본 정보를 조회한다.
+   * 캐릭터 프로필의 서버·직업군·레벨과 접속 시각을 조회한다.
    *
    * `character_date_create` 는 일 단위라 시·분·초가 항상 0이다.
    * 로그인·로그아웃 필드명은 `character_last_login` / `character_last_logout` 이다 (`date_` 없음).
    *
-   * @param params - `{ ocid }` 캐릭터 식별자
+   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 고유 번호
    * @throws {NexonBadRequestError} ocid가 비어 있거나(요청 전 차단) 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -36,7 +38,11 @@ export class Hit2CharacterClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 커뮤니티 프로필에 서버와 직업, 레벨을 표시할 때
    * const ocid = await client.hit2.getOcid('캐릭터명');
    * const basic = await client.hit2.character.getBasic({ ocid });
    * console.log(`[${basic.server_name}] ${basic.character_name} Lv.${basic.character_level}`);

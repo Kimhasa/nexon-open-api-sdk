@@ -12,7 +12,9 @@ import type { HeroesEnchantMeta, HeroesEnchantMetaRequest } from './types.js';
  * ```ts
  * import { NexonClient } from 'nexon-open-api';
  *
- * const client = new NexonClient({ apiKey: 'your-api-key' });
+ * const apiKey = process.env['NEXON_API_KEY'];
+ * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+ * const client = new NexonClient({ apiKey });
  * const enchant = await client.mabinogiHeroes.meta.getEnchant({
  *   enchant_type: '0',
  *   enchant_name: '용맹한',
@@ -25,18 +27,25 @@ export class MabinogiHeroesMetaClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 인챈트 명으로 인챈트 등급, 장착 가능 부위, 능력치를 조회한다.
+   * 접두·접미 인챈트의 적용 부위와 능력치 효과를 조회한다.
    *
    * 인챈트 명은 `character.getItemEquipment()` 의 `item_option.prefix_enchant_preset_1` 등에서 얻습니다.
    *
    * @param params.enchant_type - 접두/접미 타입. `'0'`: 접두 인챈트, `'1'`: 접미 인챈트 (문자열)
-   * @param params.enchant_name - 인챈트 명
+   * @param params.enchant_name - 장비나 스크롤에 표시되는 인챈트 이름
    * @throws {NexonBadRequestError} enchant_type이 `'0'`/`'1'` 이 아니거나 enchant_name이 비어 있을 때 (요청 전에 SDK가 throw)
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
    *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 장비 계산기에서 선택한 인챈트 효과를 확인할 때
    * const enchant = await client.mabinogiHeroes.meta.getEnchant({
    *   enchant_type: '0',
    *   enchant_name: '용맹한',

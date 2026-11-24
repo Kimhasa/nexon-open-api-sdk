@@ -21,12 +21,12 @@ export interface HeroesRealTimeRankingRequest {
 
 /** 랭킹 항목 (명예의 전당·실시간 공통). 두 랭킹 API의 응답은 이 항목의 배열이다 */
 export interface HeroesRankingEntry {
-  /** 랭킹 유형. `"0"`: 공격력 기준 순위, `"1"`: 마법 공격력 기준 순위 */
+  /** 순위 기준. 문자열 "0"은 공격력, "1"은 마법 공격력이다. */
   readonly ranking_type: string;
   /** 랭킹 순위 */
   readonly ranking: number;
   /** 캐릭터 명 */
   readonly character_name: string;
-  /** 스코어 */
+  /** 공격력 또는 마법 공격력 점수. 조회할 때 고른 순위 기준으로 결정된다. */
   readonly score: number;
 }

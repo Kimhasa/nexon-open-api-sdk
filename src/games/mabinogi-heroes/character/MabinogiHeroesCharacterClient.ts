@@ -28,7 +28,9 @@ import type {
  * ```ts
  * import { NexonClient } from 'nexon-open-api';
  *
- * const client = new NexonClient({ apiKey: 'your-api-key' });
+ * const apiKey = process.env['NEXON_API_KEY'];
+ * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+ * const client = new NexonClient({ apiKey });
  * const ocid = await client.mabinogiHeroes.getOcid('캐릭터명');
  *
  * const basic = await client.mabinogiHeroes.character.getBasic({ ocid });
@@ -41,11 +43,11 @@ export class MabinogiHeroesCharacterClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 기본 정보를 조회한다.
+   * 캐릭터 프로필의 직업·레벨과 타이틀 능력치를 조회한다.
    *
    * 버프, 아이템 사용 등으로 적용된 효과 때문에 경험치·레벨이 게임 내 데이터와 다를 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자 (`client.mabinogiHeroes.getOcid()` 로 조회)
+   * @param params.ocid - `getOcid()`로 찾은 영웅의 캐릭터 고유 번호
    * @throws {NexonBadRequestError} ocid가 비어 있을 때 (요청 전에 SDK가 throw) 또는 파라미터가 잘못됐을 때
    * @throws {NexonNotFoundError} ocid에 해당하는 캐릭터가 없을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
@@ -53,6 +55,13 @@ export class MabinogiHeroesCharacterClient {
    *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 길드 모집 게시판에 직업과 레벨을 표시할 때
    * const ocid = await client.mabinogiHeroes.getOcid('캐릭터명');
    * const basic = await client.mabinogiHeroes.character.getBasic({ ocid });
    * console.log(`${basic.character_name} Lv.${basic.character_level} (${basic.character_class_name})`);
@@ -67,11 +76,11 @@ export class MabinogiHeroesCharacterClient {
   }
 
   /**
-   * 타이틀/문양 보유 정보를 조회한다.
+   * 캐릭터가 보유한 타이틀과 문양을 조회한다.
    *
    * `title_type` 은 2023년 11월 23일 이후 획득한 타이틀/문양에 한해 조회됩니다.
    *
-   * @param params.ocid - 캐릭터 식별자 (`client.mabinogiHeroes.getOcid()` 로 조회)
+   * @param params.ocid - `getOcid()`로 찾은 영웅의 캐릭터 고유 번호
    * @throws {NexonBadRequestError} ocid가 비어 있을 때 (요청 전에 SDK가 throw) 또는 파라미터가 잘못됐을 때
    * @throws {NexonNotFoundError} ocid에 해당하는 캐릭터가 없을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
@@ -79,6 +88,13 @@ export class MabinogiHeroesCharacterClient {
    *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 타이틀 수집 페이지에 보유 타이틀을 표시할 때
    * const ocid = await client.mabinogiHeroes.getOcid('캐릭터명');
    * const { title } = await client.mabinogiHeroes.character.getTitle({ ocid });
    * for (const t of title) {
@@ -95,11 +111,11 @@ export class MabinogiHeroesCharacterClient {
   }
 
   /**
-   * 장착 타이틀/문양 정보를 조회한다.
+   * 캐릭터가 장착한 타이틀과 문양을 조회한다.
    *
    * `title_type` 은 2023년 11월 23일 이후 장착한 타이틀/문양에 한해 조회됩니다.
    *
-   * @param params.ocid - 캐릭터 식별자 (`client.mabinogiHeroes.getOcid()` 로 조회)
+   * @param params.ocid - `getOcid()`로 찾은 영웅의 캐릭터 고유 번호
    * @throws {NexonBadRequestError} ocid가 비어 있을 때 (요청 전에 SDK가 throw) 또는 파라미터가 잘못됐을 때
    * @throws {NexonNotFoundError} ocid에 해당하는 캐릭터가 없을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
@@ -107,6 +123,13 @@ export class MabinogiHeroesCharacterClient {
    *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 프로필 카드에 현재 장착한 타이틀을 붙일 때
    * const ocid = await client.mabinogiHeroes.getOcid('캐릭터명');
    * const { title_equipment } = await client.mabinogiHeroes.character.getTitleEquipment({ ocid });
    * for (const t of title_equipment) {
@@ -123,11 +146,11 @@ export class MabinogiHeroesCharacterClient {
   }
 
   /**
-   * 장착 아이템 정보를 조회한다.
+   * 장착소지품과 캐시소지품의 장비·프리셋을 조회한다.
    *
    * 인챈트 명의 등급·능력치는 `client.mabinogiHeroes.meta.getEnchant()` 로 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 식별자 (`client.mabinogiHeroes.getOcid()` 로 조회)
+   * @param params.ocid - `getOcid()`로 찾은 영웅의 캐릭터 고유 번호
    * @throws {NexonBadRequestError} ocid가 비어 있을 때 (요청 전에 SDK가 throw) 또는 파라미터가 잘못됐을 때
    * @throws {NexonNotFoundError} ocid에 해당하는 캐릭터가 없을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
@@ -135,6 +158,13 @@ export class MabinogiHeroesCharacterClient {
    *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 장비 검색에서 인챈트와 강화 단계를 표시할 때
    * const ocid = await client.mabinogiHeroes.getOcid('캐릭터명');
    * const { item_equipment } = await client.mabinogiHeroes.character.getItemEquipment({ ocid });
    * for (const item of item_equipment) {
@@ -153,9 +183,9 @@ export class MabinogiHeroesCharacterClient {
   }
 
   /**
-   * 능력치 정보를 조회한다.
+   * 캐릭터 능력치의 이름과 값을 조회한다.
    *
-   * @param params.ocid - 캐릭터 식별자 (`client.mabinogiHeroes.getOcid()` 로 조회)
+   * @param params.ocid - `getOcid()`로 찾은 영웅의 캐릭터 고유 번호
    * @throws {NexonBadRequestError} ocid가 비어 있을 때 (요청 전에 SDK가 throw) 또는 파라미터가 잘못됐을 때
    * @throws {NexonNotFoundError} ocid에 해당하는 캐릭터가 없을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
@@ -163,6 +193,13 @@ export class MabinogiHeroesCharacterClient {
    *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 캐릭터 검색 페이지에 능력치를 표시할 때
    * const ocid = await client.mabinogiHeroes.getOcid('캐릭터명');
    * const { stat } = await client.mabinogiHeroes.character.getStat({ ocid });
    * for (const s of stat) {
@@ -179,9 +216,9 @@ export class MabinogiHeroesCharacterClient {
   }
 
   /**
-   * 가입/신청한 길드 정보를 조회한다.
+   * 캐릭터가 가입했거나 가입 신청한 길드를 조회한다.
    *
-   * @param params.ocid - 캐릭터 식별자 (`client.mabinogiHeroes.getOcid()` 로 조회)
+   * @param params.ocid - `getOcid()`로 찾은 영웅의 캐릭터 고유 번호
    * @throws {NexonBadRequestError} ocid가 비어 있을 때 (요청 전에 SDK가 throw) 또는 파라미터가 잘못됐을 때
    * @throws {NexonNotFoundError} ocid에 해당하는 캐릭터가 없을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
@@ -189,6 +226,13 @@ export class MabinogiHeroesCharacterClient {
    *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 길드 디스코드의 프로필 카드에 길드를 표시할 때
    * const ocid = await client.mabinogiHeroes.getOcid('캐릭터명');
    * const guild = await client.mabinogiHeroes.character.getGuild({ ocid });
    * console.log(guild.guild_name ?? '길드 없음');

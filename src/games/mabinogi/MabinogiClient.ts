@@ -11,17 +11,17 @@ export class MabinogiClient extends AbstractGameClient {
   private _auction: MabinogiAuctionClient | undefined;
   private _hornBugleWorld: MabinogiHornBugleWorldClient | undefined;
 
-  /** NPC 상점 API. */
+  /** 서버와 채널별 NPC 상점. */
   get npcShop(): MabinogiNpcShopClient {
     return (this._npcShop ??= new MabinogiNpcShopClient(this.http));
   }
 
-  /** 경매장 API. */
+  /** 판매 중인 매물과 거래 내역을 찾는 경매장. */
   get auction(): MabinogiAuctionClient {
     return (this._auction ??= new MabinogiAuctionClient(this.http));
   }
 
-  /** 거대한 외침의 뿔피리 API. */
+  /** 거대한 외침의 뿔피리로 보낸 서버별 메시지 내역. */
   get hornBugleWorld(): MabinogiHornBugleWorldClient {
     return (this._hornBugleWorld ??= new MabinogiHornBugleWorldClient(this.http));
   }

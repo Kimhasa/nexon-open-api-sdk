@@ -26,9 +26,9 @@ export interface TfdUserArcheTuningRequest extends TfdUserRequest {
 export interface TfdUserModule {
   /** 모듈 슬롯 식별자 */
   readonly module_slot_id: string;
-  /** 모듈 식별자 (`meta.getModule()` 참고) */
+  /** 장착한 모듈의 고유 번호. 같은 번호를 모듈 도감에서 찾으면 이름과 강화 효과를 알 수 있다. */
   readonly module_id: string;
-  /** 모듈 강화 레벨 */
+  /** 장착한 모듈의 강화 단계 */
   readonly module_enchant_level: number;
 }
 
@@ -54,7 +54,7 @@ export interface TfdUserCore {
 
 /** 계정 기본 정보 */
 export interface TfdUserBasic {
-  /** 계정 식별자 */
+  /** 닉네임과 태그로 찾는 계정 고유 번호 */
   readonly ouid: TfdOuid;
   /** 닉네임 (예: `닉네임#1234`) */
   readonly user_name: string;
@@ -64,11 +64,11 @@ export interface TfdUserBasic {
   readonly mastery_rank_level: number;
   /** 마스터리 랭크 경험치 */
   readonly mastery_rank_exp: number;
-  /** 접두 칭호 식별자 (`meta.getTitle()` 참고) */
+  /** 접두 칭호 번호. 타이틀 도감의 같은 번호에서 이름을 찾는다. */
   readonly title_prefix_id: string;
-  /** 접미 칭호 식별자 (`meta.getTitle()` 참고) */
+  /** 접미 칭호 번호. 타이틀 도감의 같은 번호에서 이름을 찾는다. */
   readonly title_suffix_id: string;
-  /** OS 언어 */
+  /** 접속 환경의 운영체제 표시 언어 */
   readonly os_language: string;
   /** 게임 설정 언어 */
   readonly game_language: string;
@@ -156,8 +156,8 @@ export interface TfdUserWeaponItem {
   readonly weapon_additional_stat: readonly TfdUserAdditionalStat[];
   /** 모듈 정보 */
   readonly module: readonly TfdUserModule[];
-  /** 코어 개방 여부 */
-  readonly core_unlock_flag: string; // "0": 잠금, "1": 개방 (boolean이 아닌 문자열)
+  /** 무기 코어 슬롯 개방 여부. 문자열 "0"은 잠금, "1"은 개방이다. */
+  readonly core_unlock_flag: string;
   /** 코어 옵션 정보 */
   readonly core: readonly TfdUserCore[];
 }
@@ -208,8 +208,8 @@ export interface TfdUserExternalComponentItem {
   readonly external_component_level: number;
   /** 외장 부품 랜덤 옵션 */
   readonly external_component_additional_stat: readonly TfdUserAdditionalStat[];
-  /** 코어 개방 여부 */
-  readonly core_unlock_flag: string; // "0": 잠금, "1": 개방 (boolean이 아닌 문자열)
+  /** 외장 부품 코어 슬롯 개방 여부. 문자열 "0"은 잠금, "1"은 개방이다. */
+  readonly core_unlock_flag: string;
   /** 코어 옵션 정보 */
   readonly core: readonly TfdUserCore[];
 }
@@ -230,9 +230,9 @@ export interface TfdUserExternalComponent {
 export interface TfdUserArcheTuningNode {
   /** 노드 식별자 (`meta.getArcheTuningNode()` 참고) */
   readonly node_id: string;
-  /** 노드의 행 좌표 (숫자가 아닌 문자열) */
+  /** 아르케 조율 보드의 노드 행 좌표. 문자열로 제공된다. */
   readonly position_row: string;
-  /** 노드의 열 좌표 (숫자가 아닌 문자열) */
+  /** 아르케 조율 보드의 노드 열 좌표. 문자열로 제공된다. */
   readonly position_column: string;
 }
 

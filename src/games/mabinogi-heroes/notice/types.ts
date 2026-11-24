@@ -55,7 +55,7 @@ export interface HeroesEventNoticeListItem {
   readonly date_event_start: string | null;
   /** 이벤트 종료일(시) (UTC0). 상시 판매 등 기간이 없으면 null일 수 있다 */
   readonly date_event_end: string | null;
-  /** 상시 판매 여부. `"true"` 이면 상시 (boolean이 아닌 문자열) */
+  /** 이벤트&샵에서 상시 판매 중이면 문자열 "true"다. 값이 없는 글은 null일 수 있다. */
   readonly ongoing_flag: string | null;
 }
 
@@ -79,6 +79,6 @@ export interface HeroesEventNoticeDetail {
   readonly date_event_start: string | null;
   /** 이벤트 종료일(시) (UTC0). 상시 판매 등 기간이 없으면 null일 수 있다 */
   readonly date_event_end: string | null;
-  /** 상시 판매 여부. `"true"` 이면 상시 (boolean이 아닌 문자열) */
+  /** 이벤트&샵에서 상시 판매 중이면 문자열 "true"다. 값이 없는 글은 null일 수 있다. */
   readonly ongoing_flag: string | null;
 }

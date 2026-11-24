@@ -28,8 +28,8 @@ export interface BaramCharacterBasic {
 
 /** 보유 칭호 항목 */
 export interface BaramTitle {
-  /** 칭호 명 */
-  readonly title_id: string; // 필드명은 id지만 스펙 설명은 "칭호 명"
+  /** 보유 칭호 이름(넥슨 포털의 필드 설명 기준) */
+  readonly title_id: string;
   /** 칭호 만료 일(시) (UTC0) */
   readonly date_expire: string | null; // 스펙에 nullable 표시는 없으나 만료 없는 칭호는 null일 수 있어 넓게 잡음 (실 API 미검증)
 }
@@ -44,8 +44,8 @@ export interface BaramCharacterTitle {
 
 /** 장착 칭호 항목 */
 export interface BaramTitleEquipment {
-  /** 장착 칭호 명 */
-  readonly title_id: string; // 필드명은 id지만 스펙 설명은 "장착 칭호 명"
+  /** 장착한 칭호 이름(넥슨 포털의 필드 설명 기준) */
+  readonly title_id: string;
   /** 장착 칭호 만료 일(시) (UTC0) */
   readonly date_expire: string | null; // 스펙에 nullable 표시는 없으나 만료 없는 칭호는 null일 수 있어 넓게 잡음 (실 API 미검증)
 }
@@ -60,8 +60,8 @@ export interface BaramCharacterTitleEquipment {
 
 /** 장착 아이템 항목 */
 export interface BaramItemEquipment {
-  /** 장착 아이템 명 */
-  readonly item_id: string; // 필드명은 id지만 스펙 설명은 "장착 아이템 명"
+  /** 장착한 아이템 이름(넥슨 포털의 필드 설명 기준) */
+  readonly item_id: string;
   /** 장착 아이템 페이지 슬롯 명 */
   readonly item_equipment_slot_name: string;
 }
@@ -78,8 +78,8 @@ export interface BaramCharacterItemEquipment {
 export interface BaramStat {
   /** 능력치 명 */
   readonly stat_name: string;
-  /** 능력치 값 */
-  readonly stat_value: string; // 숫자가 아닌 문자열. 계산에 쓰려면 Number() 로 변환
+  /** 캐릭터 능력치 값. 문자열로 제공된다. */
+  readonly stat_value: string;
 }
 
 /** 능력치 정보 조회 응답 */
@@ -92,6 +92,6 @@ export interface BaramCharacterStat {
 
 /** 가입한 길드(문파) 정보 조회 응답 */
 export interface BaramCharacterGuild {
-  /** 가입한 문파(길드) 명 */
-  readonly guild_name: string | null; // 스펙에 nullable 표시는 없으나 문파 미가입 캐릭터는 null일 수 있어 넓게 잡음 (실 API 미검증)
+  /** 가입한 문파 이름. SDK 타입은 null을 허용한다. */
+  readonly guild_name: string | null;
 }
