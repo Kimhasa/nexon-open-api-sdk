@@ -120,11 +120,15 @@ jobs:
                 "Bash(corepack yarn specs:diff)", "Bash(git status)", "Bash(git status --short)",
                 "Bash(git diff)", "Bash(git diff --stat)", "Bash(git log)", "Bash(git log -5)", "Bash(git show)"
               ],
+              # .git 경로는 deny에 넣지 않는다. Edit/Read deny 규칙은 sandbox의 쓰기·읽기 거부에
+              # 합쳐져, .git/** 를 막으면 git이 쓰는 .git/config.lock 등에서 모든 Bash 호출이 실패한다.
+              # .git의 config·hooks는 sandbox가 기본으로 보호하고(https://code.claude.com/docs/en/sandboxing),
+              # Edit 허용 목록과 publish 단계의 패치 경로 검사가 나머지 경로를 막는다.
               deny: [
-                "Edit(./.git/**)", "Edit(./.github/**)", "Edit(./.claude/**)", "Edit(./specs/**)",
+                "Edit(./.github/**)", "Edit(./.claude/**)", "Edit(./specs/**)",
                 "Edit(./package.json)", "Edit(./yarn.lock)", "Edit(./src/NexonClient.ts)",
                 "Edit(./src/index.ts)", "Edit(./tsup.config.ts)",
-                "Read(./.git/config)", "Read(~/.gitconfig)", "Read(//**/.env*)"
+                "Read(~/.gitconfig)", "Read(//**/.env*)"
               ]
             },
             sandbox: {
