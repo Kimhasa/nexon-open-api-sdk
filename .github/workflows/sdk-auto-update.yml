@@ -1,0 +1,333 @@
+name: SDK Auto Update
+
+on:
+  workflow_call:
+    inputs:
+      branch:
+        type: string
+        required: true
+      pr_number:
+        type: number
+        required: true
+      expected_sha:
+        type: string
+        required: false
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: '모니터가 관리하는 PR 브랜치'
+        type: string
+        default: specs/auto-update
+        required: true
+      pr_number:
+        description: '열려 있는 스펙 갱신 PR 번호'
+        type: number
+        required: true
+
+permissions: {}
+
+concurrency:
+  group: sdk-auto-update-${{ inputs.branch }}
+  cancel-in-progress: false
+
+env:
+  HUSKY: '0'
+  UPDATE_BRANCH: ${{ inputs.branch }}
+  PR_NUMBER: ${{ inputs.pr_number }}
+  GH_REPO: ${{ github.repository }}
+
+jobs:
+  implement:
+    if: vars.SDK_AUTO_IMPLEMENT != 'false'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    # Claude와 생성된 코드를 실행하는 runner에는 저장소 쓰기 권한을 주지 않는다.
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      sha: ${{ steps.validate.outputs.sha }}
+      result: ${{ steps.collect.outputs.result }}
+    steps:
+      - name: Validate target PR
+        id: validate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_SHA: ${{ inputs.expected_sha }}
+        run: |
+          [[ "$UPDATE_BRANCH" = specs/auto-update && "$PR_NUMBER" =~ ^[1-9][0-9]*$ ]]
+          pr=$(gh api "repos/$GH_REPO/pulls/$PR_NUMBER")
+          sha=$(jq -er --arg repo "$GH_REPO" --arg branch "$UPDATE_BRANCH" '
+            select(.state == "open" and .base.ref == "main" and .head.repo.full_name == $repo and .head.ref == $branch)
+            | .head.sha | select(test("^[a-f0-9]{40}$"))' <<< "$pr")
+          [[ -z "$EXPECTED_SHA" || "$sha" = "$EXPECTED_SHA" ]]
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
+      - name: Check whether Claude is configured
+        id: auth
+        env:
+          HAS_CLAUDE_AUTH: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN != '' || secrets.ANTHROPIC_API_KEY != '' }}
+        run: echo "configured=$HAS_CLAUDE_AUTH" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v7
+        if: steps.auth.outputs.configured == 'true'
+        with:
+          ref: ${{ steps.validate.outputs.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        if: steps.auth.outputs.configured == 'true'
+        with:
+          node-version: 24
+
+      - name: Prepare the Claude shell sandbox
+        if: steps.auth.outputs.configured == 'true'
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y bubblewrap socat
+          if [ -f /proc/sys/kernel/apparmor_restrict_unprivileged_userns ]; then
+            sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          fi
+
+      - name: Install dependencies and generate reports
+        if: steps.auth.outputs.configured == 'true'
+        id: prepare
+        env:
+          CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL || 'claude-sonnet-5-5' }}
+          CLAUDE_MAX_TURNS: ${{ vars.CLAUDE_MAX_TURNS || '80' }}
+        run: |
+          [[ "$CLAUDE_MODEL" =~ ^[a-zA-Z0-9._:-]+$ && "$CLAUDE_MAX_TURNS" =~ ^[1-9][0-9]*$ ]]
+          npm install --global corepack@0.36.0
+          corepack yarn install --immutable
+          corepack yarn specs:diff --base origin/main > "$RUNNER_TEMP/portal-diff.md"
+          corepack yarn specs:diff --base origin/main --json > "$RUNNER_TEMP/portal-diff.json"
+          corepack yarn specs:drift > "$RUNNER_TEMP/portal-drift.md"
+          jq -r '.changes[] | select(.severity == "MAJOR") | "- \(.game) \(.operation) \(.path) (\(.kind))"' \
+            "$RUNNER_TEMP/portal-diff.json" > "$RUNNER_TEMP/major.md"
+
+          # Claude 권한 문법에서 //는 절대 경로다. Edit 규칙이 Write에도 적용된다.
+          # https://code.claude.com/docs/en/permissions#read-and-edit
+          jq -n --arg summary "Edit(//${RUNNER_TEMP#/}/claude-summary.md)" '{
+            permissions: {
+              allow: [
+                "Read", "Glob", "Grep", "Edit(./src/games/**)",
+                "Edit(./src/core/metadata/api-metadata.ts)", "Edit(./tests/**)", "Edit(./docs/**)",
+                "Edit(./CHANGELOG.md)", $summary,
+                "Bash(corepack yarn type-check)", "Bash(corepack yarn lint)", "Bash(corepack yarn lint:fix)",
+                "Bash(corepack yarn format:check)", "Bash(corepack yarn format)", "Bash(corepack yarn test)",
+                "Bash(corepack yarn build)", "Bash(corepack yarn check:exports)",
+                "Bash(corepack yarn specs:coverage)", "Bash(corepack yarn specs:drift)",
+                "Bash(corepack yarn specs:diff)", "Bash(git status)", "Bash(git status --short)",
+                "Bash(git diff)", "Bash(git diff --stat)", "Bash(git log)", "Bash(git log -5)", "Bash(git show)"
+              ],
+              deny: [
+                "Edit(./.git/**)", "Edit(./.github/**)", "Edit(./.claude/**)", "Edit(./specs/**)",
+                "Edit(./package.json)", "Edit(./yarn.lock)", "Edit(./src/NexonClient.ts)",
+                "Edit(./src/index.ts)", "Edit(./tsup.config.ts)",
+                "Read(./.git/config)", "Read(~/.gitconfig)", "Read(//**/.env*)"
+              ]
+            },
+            sandbox: {
+              enabled: true, autoAllowBashIfSandboxed: false, allowUnsandboxedCommands: false,
+              failIfUnavailable: true,
+              network: {allowedDomains: [], strictAllowlist: true}
+            }
+          }' > "$RUNNER_TEMP/claude-settings.json"
+
+          # 신뢰하는 기본 브랜치의 프롬프트에 보고서 경로만 넘긴다.
+          {
+            printf 'diff: %s\ndrift: %s\n요약 저장 경로: %s\n\n' \
+              "$RUNNER_TEMP/portal-diff.md" "$RUNNER_TEMP/portal-drift.md" "$RUNNER_TEMP/claude-summary.md"
+            git show origin/main:.github/prompts/sdk-auto-update.md
+          } > "$RUNNER_TEMP/sdk-prompt.md"
+          {
+            echo "model=$CLAUDE_MODEL"
+            echo "turns=$CLAUDE_MAX_TURNS"
+            echo "settings=$RUNNER_TEMP/claude-settings.json"
+            echo 'prompt<<SDK_AUTO_UPDATE_PROMPT'
+            cat "$RUNNER_TEMP/sdk-prompt.md"
+            echo 'SDK_AUTO_UPDATE_PROMPT'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Run Claude Code
+        if: steps.prepare.outcome == 'success'
+        id: claude
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        env:
+          CLAUDE_CODE_SUBPROCESS_ENV_SCRUB: '1'
+          CLAUDE_BRANCH: ${{ inputs.branch }}
+        with:
+          github_token: ${{ github.token }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          anthropic_api_key: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN == '' && secrets.ANTHROPIC_API_KEY || '' }}
+          allowed_bots: 'github-actions[bot]'
+          prompt: ${{ steps.prepare.outputs.prompt }}
+          settings: ${{ steps.prepare.outputs.settings }}
+          claude_args: >-
+            --model ${{ steps.prepare.outputs.model }}
+            --max-turns ${{ steps.prepare.outputs.turns }}
+            --permission-mode dontAsk
+            --tools "Read,Glob,Grep,Edit,Write,Bash"
+            --strict-mcp-config --mcp-config '{}'
+            --disallowedTools "Bash(git push:*),Bash(git commit:*),Bash(git checkout:*),Bash(git reset:*),Bash(git rebase:*),Bash(yarn add:*),Bash(yarn dlx:*),Bash(npx:*),Bash(curl:*),WebFetch,WebSearch"
+
+      - name: Independently verify Claude's changes
+        if: steps.claude.outcome == 'success'
+        id: gates
+        env:
+          HEAD_SHA: ${{ steps.validate.outputs.sha }}
+        run: |
+          failed=0
+          printf '| 명령 | 결과 |\n| --- | --- |\n' > "$RUNNER_TEMP/sdk-gates.md"
+          for gate in type-check lint format:check test build check:exports specs:drift; do
+            log="$RUNNER_TEMP/sdk-${gate//:/-}.log"
+            if corepack yarn "$gate" > "$log" 2>&1; then
+              printf '| `%s` | 통과 |\n' "$gate" >> "$RUNNER_TEMP/sdk-gates.md"
+            else
+              printf '| `%s` | 실패 |\n' "$gate" >> "$RUNNER_TEMP/sdk-gates.md"
+              tail -n 20 "$log" >&2
+              failed=1
+            fi
+          done
+          [[ "$(git rev-parse HEAD)" = "$HEAD_SHA" && -s "$RUNNER_TEMP/claude-summary.md" ]] || failed=1
+          if [ "$failed" = 0 ]; then
+            git add -A
+            git diff --cached --binary --no-ext-diff --no-textconv --no-renames "$HEAD_SHA" > "$RUNNER_TEMP/sdk.patch"
+            echo 'passed=true' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Prepare validation results
+        if: always() && steps.validate.outcome == 'success'
+        id: collect
+        env:
+          CONFIGURED: ${{ steps.auth.outputs.configured }}
+          PASSED: ${{ steps.gates.outputs.passed }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          mkdir "$RUNNER_TEMP/sdk-automation"
+          {
+            printf '## SDK 자동 반영\n\n[워크플로 실행](%s)\n\n' "$RUN_URL"
+            if [ "$CONFIGURED" = false ]; then
+              echo '자동 구현 비활성: 시크릿 없음'
+              result=skipped
+            elif [ "$PASSED" = true ]; then
+              echo 'SDK 자동 반영 검증을 통과했습니다.'
+              cp "$RUNNER_TEMP/sdk.patch" "$RUNNER_TEMP/sdk-automation/"
+              result=passed
+            else
+              echo '사람 개입 필요. Claude 실행, 변경 범위 또는 검증 게이트를 확인하세요.'
+              result=failed
+            fi
+            if [ -f "$RUNNER_TEMP/sdk-gates.md" ]; then
+              printf '\n### 검증 결과\n\n'
+              cat "$RUNNER_TEMP/sdk-gates.md"
+            fi
+            if [ -f "$RUNNER_TEMP/claude-summary.md" ]; then
+              printf '\n### Claude 요약\n\n'
+              # 모델이 작성한 내용은 인용문으로 넣고 알림을 유발하는 멘션을 이스케이프한다.
+              head -n 100 "$RUNNER_TEMP/claude-summary.md" | cut -c 1-240 | sed -e 's/[&]/\&amp;/g' -e 's/</\&lt;/g' -e 's/@/\&#64;/g' -e 's/^/> /'
+            fi
+            if [ -s "$RUNNER_TEMP/major.md" ]; then
+              printf '\n### 사람 판단이 필요한 MAJOR 항목\n\n'
+              head -n 100 "$RUNNER_TEMP/major.md" | cut -c 1-240 | sed 's/@/\&#64;/g'
+              if [ "$(wc -l < "$RUNNER_TEMP/major.md")" -gt 100 ]; then
+                printf '\n전체 MAJOR 항목은 스펙 PR 본문에서 확인할 수 있습니다.\n'
+              fi
+            fi
+          } > "$RUNNER_TEMP/sdk-automation/comment.md"
+          echo "result=$result" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-artifact@v7
+        if: always() && steps.collect.outcome == 'success'
+        with:
+          name: sdk-automation-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/sdk-automation/
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: implement
+    if: always() && needs.implement.outputs.sha != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    env:
+      HEAD_SHA: ${{ needs.implement.outputs.sha }}
+      RESULT: ${{ needs.implement.outputs.result }}
+    steps:
+      - uses: actions/download-artifact@v8
+        continue-on-error: true
+        with:
+          name: sdk-automation-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/sdk-automation/
+      - uses: actions/checkout@v7
+        if: env.RESULT == 'passed'
+        with:
+          ref: ${{ env.HEAD_SHA }}
+          persist-credentials: false
+
+      - name: Validate patch scope and publish SDK commit
+        if: env.RESULT == 'passed'
+        id: push
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ref="refs/heads/$UPDATE_BRANCH"
+          gh auth setup-git
+          remote=$(git ls-remote --exit-code origin "$ref")
+          [[ "${remote%%$'\t'*}" = "$HEAD_SHA" ]]
+          patch="$RUNNER_TEMP/sdk-automation/sdk.patch"
+          [[ -f "$patch" ]]
+          if [ -s "$patch" ]; then
+            git apply --index "$patch"
+            git diff --cached --raw --no-renames -z > "$RUNNER_TEMP/sdk-paths"
+            while IFS= read -r -d '' meta && IFS= read -r -d '' file; do
+              case "$file" in
+                src/games/*|src/core/metadata/api-metadata.ts|tests/*|docs/*|CHANGELOG.md) ;;
+                *) echo "::error::SDK 패치에 허용하지 않은 파일이 있습니다."; exit 1 ;;
+              esac
+              # 일반 파일만 받는다. 심볼릭 링크, 실행 파일, 서브모듈은 허용하지 않는다.
+              [[ "$meta" =~ ^:(000000|100644)\ (000000|100644)\  ]]
+            done < "$RUNNER_TEMP/sdk-paths"
+            printf 'chore(sdk): 포털 스펙 변경 자동 반영 (%s)\n' "$(date -u +%F)" > "$RUNNER_TEMP/sdk-commit.txt"
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+              -c core.hooksPath=/dev/null commit --file "$RUNNER_TEMP/sdk-commit.txt"
+            git merge-base --is-ancestor "$HEAD_SHA" HEAD
+            git push --force-with-lease="$ref:$HEAD_SHA" origin "HEAD:$ref"
+          fi
+          # workflow_dispatch는 GITHUB_TOKEN으로도 CI 실행을 생성한다.
+          gh workflow run ci.yml --ref "$UPDATE_BRANCH"
+
+      - name: Comment on the spec PR
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PUSH_RESULT: ${{ steps.push.outcome }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          source="$RUNNER_TEMP/sdk-automation/comment.md"
+          body="$RUNNER_TEMP/sdk-comment.md"
+          if [ -f "$source" ]; then
+            if [ "$(wc -c < "$source")" -gt 58000 ]; then
+              head -c 58000 "$source" | sed '$d' > "$body"
+            else
+              cp "$source" "$body"
+            fi
+          else
+            printf '## SDK 자동 반영\n\n[워크플로 실행](%s)\n' "$RUN_URL" > "$body"
+            if [ "$RESULT" = skipped ]; then
+              printf '\n자동 구현 비활성: 시크릿 없음\n' >> "$body"
+            fi
+          fi
+          if [ "$PUSH_RESULT" = success ]; then
+            printf '\n`ci.yml` 실행을 요청했습니다.\n' >> "$body"
+          elif [ "$RESULT" != skipped ]; then
+            printf '\n사람 개입 필요. SDK 커밋 게시와 CI 실행 상태는 워크플로 로그를 확인하세요.\n' >> "$body"
+          fi
+          gh pr comment "$PR_NUMBER" --body-file "$body"
+          [[ "$RESULT" = skipped || "$PUSH_RESULT" = success ]]

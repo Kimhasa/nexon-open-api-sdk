@@ -232,25 +232,31 @@ function renderReport(changes: readonly Change[], fingerprint: string): string {
 interface CliOptions {
   readonly manifestPath: string;
   readonly reportPath: string;
+  readonly currentPath?: string;
 }
 
 function parseArgs(argv: readonly string[]): CliOptions {
   let manifestPath = MANIFEST_PATH;
   let reportPath = resolve(process.env['RUNNER_TEMP'] ?? tmpdir(), 'specs-check-report.md');
+  let currentPath: string | undefined;
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     const value = argv[i + 1];
-    if ((arg === '--manifest' || arg === '--report') && value !== undefined) {
+    if (
+      (arg === '--manifest' || arg === '--current' || arg === '--report') &&
+      value !== undefined
+    ) {
       if (arg === '--manifest') manifestPath = resolve(value);
+      else if (arg === '--current') currentPath = resolve(value);
       else reportPath = resolve(value);
       i++;
     } else {
       throw new Error(
-        `알 수 없는 인자: ${arg ?? ''}. 사용법: yarn specs:check [--manifest <path>] [--report <path>]`,
+        `알 수 없는 인자: ${arg ?? ''}. 사용법: yarn specs:check [--manifest <path>] [--current <path>] [--report <path>]`,
       );
     }
   }
-  return { manifestPath, reportPath };
+  return { manifestPath, reportPath, ...(currentPath === undefined ? {} : { currentPath }) };
 }
 
 function writeActionsOutput(entries: Record<string, string>): void {
@@ -267,10 +273,14 @@ async function main(): Promise<void> {
   const baseline = readManifest(options.manifestPath);
 
   console.log('넥슨 Open API 포털 변경 확인 시작');
-  const { manifest: current } = await collectPortal({
-    seedSlugs: baseline.games.filter((g) => !g.external).map((g) => g.slug),
-    log: (message) => console.log(`  ${message}`),
-  });
+  const current = options.currentPath
+    ? readManifest(options.currentPath)
+    : (
+        await collectPortal({
+          seedSlugs: baseline.games.filter((g) => !g.external).map((g) => g.slug),
+          log: (message) => console.log(`  ${message}`),
+        })
+      ).manifest;
 
   const changes = diffManifests(baseline, current);
   const fingerprint = fingerprintOf(changes);
