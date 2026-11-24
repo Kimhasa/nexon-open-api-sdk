@@ -107,6 +107,13 @@ jobs:
 
           # Claude 권한 문법에서 //는 절대 경로다. Edit 규칙이 Write에도 적용된다.
           # https://code.claude.com/docs/en/permissions#read-and-edit
+          # GitHub 호스팅 runner에서는 sandbox가 apply-seccomp setgroups 오류로 Bash를 시작하지 못한다
+          # (2026-11-24, 미문서화). 이때 failIfUnavailable 때문에 Bash가 거부되고 Claude는 편집만 한다.
+          # 검증은 아래 "Independently verify" 단계가 비밀값 없이 수행한다. 자세한 내용은 specs/README.md 참고.
+          # .git 경로는 deny에 넣지 않는다. Edit/Read deny 규칙은 sandbox의 쓰기·읽기 거부에
+          # 합쳐져, .git/** 를 막으면 git이 쓰는 .git/config.lock 등에서 모든 Bash 호출이 실패한다.
+          # .git의 config·hooks는 sandbox가 기본으로 보호하고(https://code.claude.com/docs/en/sandboxing),
+          # Edit 허용 목록과 publish 단계의 패치 경로 검사가 나머지 경로를 막는다.
           jq -n --arg summary "Edit(//${RUNNER_TEMP#/}/claude-summary.md)" '{
             permissions: {
               allow: [
@@ -121,10 +128,10 @@ jobs:
                 "Bash(git diff)", "Bash(git diff --stat)", "Bash(git log)", "Bash(git log -5)", "Bash(git show)"
               ],
               deny: [
-                "Edit(./.git/**)", "Edit(./.github/**)", "Edit(./.claude/**)", "Edit(./specs/**)",
+                "Edit(./.github/**)", "Edit(./.claude/**)", "Edit(./specs/**)",
                 "Edit(./package.json)", "Edit(./yarn.lock)", "Edit(./src/NexonClient.ts)",
                 "Edit(./src/index.ts)", "Edit(./tsup.config.ts)",
-                "Read(./.git/config)", "Read(~/.gitconfig)", "Read(//**/.env*)"
+                "Read(~/.gitconfig)", "Read(//**/.env*)"
               ]
             },
             sandbox: {
@@ -133,6 +140,9 @@ jobs:
               network: {allowedDomains: [], strictAllowlist: true}
             }
           }' > "$RUNNER_TEMP/claude-settings.json"
+          # CLAUDE_CODE_SUBPROCESS_ENV_SCRUB가 켜지면 권한 모드가 default로 강제되므로
+          # settings의 허용 목록을 --allowedTools로도 명시한다.
+          allowed=$(jq -r '.permissions.allow | join(",")' "$RUNNER_TEMP/claude-settings.json")
 
           # 신뢰하는 기본 브랜치의 프롬프트에 보고서 경로만 넘긴다.
           {
@@ -144,6 +154,7 @@ jobs:
             echo "model=$CLAUDE_MODEL"
             echo "turns=$CLAUDE_MAX_TURNS"
             echo "settings=$RUNNER_TEMP/claude-settings.json"
+            echo "allowed=$allowed"
             echo 'prompt<<SDK_AUTO_UPDATE_PROMPT'
             cat "$RUNNER_TEMP/sdk-prompt.md"
             echo 'SDK_AUTO_UPDATE_PROMPT'
@@ -169,7 +180,8 @@ jobs:
             --max-turns ${{ steps.prepare.outputs.turns }}
             --permission-mode dontAsk
             --tools "Read,Glob,Grep,Edit,Write,Bash"
-            --strict-mcp-config --mcp-config '{}'
+            --allowedTools "${{ steps.prepare.outputs.allowed }}"
+            --strict-mcp-config --mcp-config '{"mcpServers":{}}'
             --disallowedTools "Bash(git push:*),Bash(git commit:*),Bash(git checkout:*),Bash(git reset:*),Bash(git rebase:*),Bash(yarn add:*),Bash(yarn dlx:*),Bash(npx:*),Bash(curl:*),WebFetch,WebSearch"
 
       - name: Independently verify Claude's changes
