@@ -140,6 +140,7 @@ NexonError (base)
 - **HttpClient** → 429/503만 재시도, 나머지 즉시 throw. `x-nxopen-api-key` 헤더 자동 주입
 - **에러 분류** → OPENAPI 에러 코드 기반 서브클래스 분류 (`classify-error.ts`)
 - **SDK 경계 입력 검증** → `src/core/validation/input.ts` 의 공용 헬퍼를 사용한다. 게임별 조건과 상수는 해당 게임에 두고 `NexonBadRequestError` (`OPENAPI00004`)로 알린다.
+- **신규 게임 공개 export** → 게임의 `index.ts` 에 게임별 접두어가 있는 Client, sub-client, 공개 타입을 내보낸다. 루트 진입점도 게임별 `index.ts` 를 재노출한다.
 - **엔드포인트 URL** → 두 방식이 공존한다. 한 게임 안에서는 한 방식만 쓴다
   - 메이플 계열(KMS, M, SEA): sub-client마다 `private static readonly BASE = 'https://open.api.nexon.com/{prefix}/v1'` 상수를 두고 `` `${Xxx.BASE}/character/basic` `` 로 조립. 게임 진입 클라이언트는 `this.buildUrl('id')` 사용
   - FC Online: `fc-online/endpoints.ts` 에 `as const` 객체로 모아 관리 (`/static/...`, CDN처럼 host 경로가 여러 갈래일 때 적합)

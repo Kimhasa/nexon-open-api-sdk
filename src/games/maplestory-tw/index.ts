@@ -1,4 +1,7 @@
 export { MapleStoryTWClient } from './MapleStoryTWClient.js';
+export { MapleStoryTWCharacterClient } from './character/MapleStoryTWCharacterClient.js';
+export { MapleStoryTWGuildClient } from './guild/MapleStoryTWGuildClient.js';
+export { MapleStoryTWUnionClient } from './union/MapleStoryTWUnionClient.js';
 
 export type { TWDate, TWOcidResponse, TWOcidDateRequest, TWGuildIdDateRequest } from './types.js';
 

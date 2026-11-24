@@ -1,4 +1,8 @@
 export { SuddenAttackClient } from './SuddenAttackClient.js';
+export { SuddenAttackMatchClient } from './match/SuddenAttackMatchClient.js';
+export { SuddenAttackMetadataClient } from './metadata/SuddenAttackMetadataClient.js';
+export { SuddenAttackUserClient } from './user/SuddenAttackUserClient.js';
+
 export type { SuddenAttackOuid, SuddenAttackOuidResponse } from './types.js';
 export type {
   SuddenAttackUserBasic,
