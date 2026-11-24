@@ -96,9 +96,23 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     note: 'Portal OpenAPI spec (specs/openapi/suddenattack/, 2026-11-24). All four static metadata endpoints verified against live data. Authenticated endpoints were mocked from the spec.',
   },
 
-  // [slot:kartrush] 카트라이더 러쉬플러스
+  kartrush: {
+    game: 'KartRider Rush+',
+    pathPrefix: 'kartrush',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 9,
+    note: 'OUID(1) + User(2) + Notice(6). Portal OpenAPI spec (specs/openapi/kartrush/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+  },
 
-  // [slot:baram] 바람의나라
+  baram: {
+    game: 'The Kingdom of the Winds (Baram)',
+    pathPrefix: 'baram',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 7,
+    note: 'OCID(1) + Character(6). Portal OpenAPI spec (specs/openapi/baram/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+  },
 
   mabinogi: {
     game: '마비노기',
@@ -109,13 +123,41 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     note: 'Portal OpenAPI spec (specs/openapi/mabinogi/, 2026-11-24). Fixtures synthesized from the spec. Not verified with a real API key.',
   },
 
-  // [slot:baramy] 바람의나라: 연
+  baramy: {
+    game: 'The Kingdom of the Winds: Yeon (Baram: Yeon)',
+    pathPrefix: 'baramy',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 4,
+    note: 'OCID(1) + Character(3). Portal OpenAPI spec (specs/openapi/baramy/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+  },
 
-  // [slot:v4] V4
+  v4: {
+    game: 'V4',
+    pathPrefix: 'v4',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 4,
+    note: 'OCID(1) + Character(3). Portal OpenAPI spec (specs/openapi/v4/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+  },
 
-  // [slot:hit2] 히트2
+  hit2: {
+    game: 'HIT2',
+    pathPrefix: 'hit2',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 2,
+    note: 'OCID(1) + Character(1). Portal OpenAPI spec (specs/openapi/hit2/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+  },
 
-  // [slot:platform] 넥슨 Open API 플랫폼 (Open API 공지)
+  platform: {
+    game: 'NEXON Open API Platform (Open API notices)',
+    pathPrefix: 'platform',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 1,
+    note: 'Notice(1), path /platform/openapi/v1/notice. Portal OpenAPI spec (specs/openapi/platform/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+  },
 };
 
 /**
