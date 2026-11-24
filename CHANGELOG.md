@@ -13,6 +13,20 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 
 ### Added
 
+- **넥슨 Open API 포털 전체 지원** — 신규 게임 클라이언트 11개를 추가해 포털의 API 270개를 모두 지원한다 (14개 게임 + Open API 공지)
+  - MapleStory Taiwan — `client.maplestoryTW`, `nexon-open-api/maplestory-tw` (27)
+  - 퍼스트 디센던트 — `client.firstDescendant`, `nexon-open-api/first-descendant` (42)
+  - 마비노기 영웅전 — `client.mabinogiHeroes`, `nexon-open-api/mabinogi-heroes` (19)
+  - 서든어택 — `client.suddenAttack`, `nexon-open-api/sudden-attack` (11)
+  - 카트라이더 러쉬플러스 — `client.kartrider`, `nexon-open-api/kartrider` (9)
+  - 바람의나라 — `client.baram`, `nexon-open-api/baram` (7)
+  - 마비노기 — `client.mabinogi`, `nexon-open-api/mabinogi` (5)
+  - 바람의나라: 연 — `client.baramYeon`, `nexon-open-api/baram-yeon` (4)
+  - V4 — `client.v4`, `nexon-open-api/v4` (4)
+  - 히트2 — `client.hit2`, `nexon-open-api/hit2` (2)
+  - 넥슨 Open API 공지 — `client.platform`, `nexon-open-api/platform` (1)
+- 신규 게임 E2E 스크립트 `yarn test:{game}` 11개 (실 API 키 필요, `.env.example` 참고)
+
 - 넥슨 포털 OpenAPI 스펙 저장소: `yarn specs:fetch` 가 포털의 카테고리별 OpenAPI YAML을 `specs/openapi/{slug}/{categoryId}.yaml` 로 수집하고 `specs/openapi/index.json` 색인을 만든다 (2026-11-24 기준 15개 게임, 270개 오퍼레이션)
 - `yarn specs:check` — 저장된 스펙과 포털을 비교해 게임·카테고리·오퍼레이션 추가/삭제, YAML 수정(시각·해시)을 감지
 - `yarn specs:coverage` — SDK가 호출하는 경로와 스펙 경로를 게임별로 대조
@@ -49,10 +63,14 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 - CI가 이미 게시된 버전을 다시 `npm publish` 하려다 실패하던 문제 — 게시 전 버전 존재 확인
 - FC 온라인 이미지 URL 헬퍼(`getActionShotUrl`, `getPlayerImageUrl`)가 HTTP 400을 돌려주는 `open.api.nexon.com` 을 가리키던 문제 — 포털 스펙의 CDN `fco.dn.nexoncdn.co.kr` 로 변경 (실측 200)
 - 메이플스토리·메이플스토리M·MapleStorySEA·FC 온라인 응답 타입을 현재 포털 스펙과 대조해 누락 필드·nullable 정정
+- `toNexonDate()` 가 유효하지 않은 `Date` 객체를 `NaN-NaN-NaN` 으로, 달력에 없는 날짜(예: `2026-02-30`)를 그대로 넘기던 문제 — 이제 `NexonBadRequestError`(`OPENAPI00004`)로 거부한다. MapleStory Taiwan 날짜 조회도 이 공용 검증을 사용한다
+- SDK 자동 반영 워크플로에서 Claude Code가 시작 직후 종료되던 문제 (MCP 설정 형식, 샌드박스 거부 규칙) — 2026-11-24 실제 실행으로 검증
 
 ### Changed
 
 - **BREAKING** FC 온라인 `getMaxDivision()` 반환 타입 `FcMaxDivision` → `readonly FcMaxDivision[]`. 역대 최고 등급은 매치 종류별로 존재하며, 응답이 단일 객체여도 배열로 정규화한다
+- SDK 입력 검증 실패를 모든 게임에서 `NexonBadRequestError`(code `OPENAPI00004`, status 400)로 통일했다. 오류 메시지는 유효한 값이나 조회 방법을 안내한다. 이전에 `toNexonDate()` 가 파싱할 수 없는 날짜 문자열에 던지던 `Error` 도 이 에러로 바뀐다. `NexonBadRequestError` 는 `Error` 의 하위 클래스이므로 `catch (e)` / `instanceof Error` 처리는 그대로 동작한다
+- 런타임 응답 shape 검증(`responseValidation`)이 최상위 배열 응답에도 적용된다 (`arrayOf()` 사용, 서든어택·마비노기 영웅전·퍼스트 디센던트 메타데이터 등 37개)
 - CI에 `specs:drift --strict` 게이트 추가 — SDK 타입이 커밋된 포털 스펙에서 벗어나면 실패 (nullable 넓힘과 `@deprecated` 유지는 허용)
 
 - CI: GitHub Actions 메이저 버전 갱신(Node 24 런타임), 테스트 매트릭스 Node 22/24/26 (`engines` 는 `>=18` 유지), npm Trusted Publishing(OIDC·provenance) 준비

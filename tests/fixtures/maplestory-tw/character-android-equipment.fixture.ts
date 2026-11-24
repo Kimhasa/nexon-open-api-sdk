@@ -1,0 +1,98 @@
+import type { TWCharacterAndroidEquipment } from '../../../src/games/maplestory-tw/character/types.js';
+
+const androidPreset = {
+  android_name: 'Fixture android',
+  android_nickname: 'android nickname',
+  android_icon: 'https://example.com/fixture.png',
+  android_description: 'android description',
+  android_gender: 'android gender',
+  android_grade: 'android grade',
+  android_skin: {
+    skin_name: 'Fixture skin',
+    color_style: 'color style',
+    hue: 1,
+    saturation: 1,
+    brightness: 1,
+  },
+  android_hair: {
+    hair_name: 'Fixture hair',
+    base_color: 'base color',
+    mix_color: 'mix color',
+    mix_rate: '1',
+    freestyle_flag: '0',
+  },
+  android_face: {
+    face_name: 'Fixture face',
+    base_color: 'base color',
+    mix_color: 'mix color',
+    mix_rate: '1',
+    freestyle_flag: '0',
+  },
+  android_ear_sensor_clip_flag: 'OFF',
+  android_non_humanoid_flag: 'N',
+  android_shop_usable_flag: 'Y',
+};
+
+export const twCharacterAndroidEquipmentFixture: TWCharacterAndroidEquipment = {
+  date: '2025-10-15T00:00+08:00',
+  android_name: 'Fixture android',
+  android_nickname: 'android nickname',
+  android_icon: 'https://example.com/fixture.png',
+  android_description: 'android description',
+  android_hair: {
+    hair_name: 'Fixture hair',
+    base_color: 'base color',
+    mix_color: 'mix color',
+    mix_rate: '1',
+    freestyle_flag: '0',
+  },
+  android_face: {
+    face_name: 'Fixture face',
+    base_color: 'base color',
+    mix_color: 'mix color',
+    mix_rate: '1',
+    freestyle_flag: '0',
+  },
+  android_skin: {
+    skin_name: 'Fixture skin',
+    color_style: 'color style',
+    hue: 1,
+    saturation: 1,
+    brightness: 1,
+  },
+  android_cash_item_equipment: [
+    {
+      cash_item_equipment_part: 'cash item equipment part',
+      cash_item_equipment_slot: '1',
+      cash_item_name: 'Fixture cash item',
+      cash_item_icon: 'https://example.com/fixture.png',
+      cash_item_description: 'cash item description',
+      cash_item_option: [
+        {
+          option_type: 'option type',
+          option_value: 'option value',
+        },
+      ],
+      date_expire: '2025-10-15T17:28+08:00',
+      date_option_expire: '2025-10-15T17:00+08:00',
+      cash_item_label: 'cash item label',
+      cash_item_coloring_prism: {
+        color_range: 'color range',
+        hue: 1,
+        saturation: 1,
+        value: 1,
+      },
+      android_item_gender: 'android item gender',
+      freestyle_flag: '0',
+    },
+  ],
+  android_ear_sensor_clip_flag: 'OFF',
+  android_gender: 'android gender',
+  android_grade: 'android grade',
+  android_non_humanoid_flag: 'N',
+  android_shop_usable_flag: 'Y',
+  preset_no: 1,
+  android_preset_1: androidPreset,
+  android_preset_2: androidPreset,
+  android_preset_3: androidPreset,
+};

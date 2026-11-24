@@ -131,6 +131,35 @@ class Analyzer {
     return this.stringFromSymbol(prefix, new Set());
   }
 
+  private templateUrl(expression: ts.TemplateExpression): string | undefined {
+    let url = expression.head.text;
+    for (const span of expression.templateSpans) {
+      const literal = this.staticString(span.expression);
+      if (literal !== undefined) {
+        url += literal + span.literal.text;
+        continue;
+      }
+
+      // Only a bounded set of single path segments can stand in for an OpenAPI parameter.
+      const value = unwrap(span.expression);
+      if (!url.endsWith('/') || !span.literal.text.startsWith('/') || !ts.isIdentifier(value)) {
+        return undefined;
+      }
+      const declaration = this.checker.getSymbolAtLocation(value)?.valueDeclaration;
+      const type = this.checker.getTypeAtLocation(value);
+      const alternatives = type.isUnion() ? type.types : [type];
+      if (
+        !declaration ||
+        !ts.isParameter(declaration) ||
+        !alternatives.every((part) => part.isStringLiteral() && /^[\w-]+$/.test(part.value))
+      ) {
+        return undefined;
+      }
+      url += `{${value.text}}${span.literal.text}`;
+    }
+    return url;
+  }
+
   private url(
     node: ts.Expression,
     prefix: string,
@@ -162,6 +191,9 @@ class Analyzer {
       ) {
         return this.url(declaration.initializer, prefix, seen);
       }
+    }
+    if (ts.isTemplateExpression(expression)) {
+      return this.templateUrl(expression);
     }
     return this.staticString(expression);
   }

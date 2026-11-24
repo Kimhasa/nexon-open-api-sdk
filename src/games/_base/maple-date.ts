@@ -1,4 +1,7 @@
+import { invalidInput } from '../../core/validation/input.js';
 import type { NexonDate } from './maple-base-types.js';
+
+const DATE_HINT = "실제로 존재하는 'YYYY-MM-DD' 날짜, 유효한 Date 객체 또는 'today'를 입력하세요.";
 
 /**
  * 날짜를 Nexon Open API 형식(YYYY-MM-DD)으로 변환한다.
@@ -6,6 +9,8 @@ import type { NexonDate } from './maple-base-types.js';
  * `timezoneOffset`을 기준으로 변환하므로 지역별 날짜 기준이 정확합니다.
  * - KMS / M: UTC+9 (540분) → `timezoneOffset: 540`
  * - SEA / TW: UTC+8 (480분) → `timezoneOffset: 480`
+ *
+ * @throws {NexonBadRequestError} 날짜를 파싱할 수 없거나 달력에 없는 날짜일 때
  *
  * @example
  * ```ts
@@ -19,33 +24,40 @@ export function toNexonDate(
   timezoneOffset: number,
 ): NexonDate {
   if (date === 'today') {
-    return formatDateWithOffset(new Date(), timezoneOffset);
+    return formatDateWithOffset(Date.now(), timezoneOffset);
   }
 
+  let time: number;
   if (typeof date === 'string') {
-    // 이미 YYYY-MM-DD 형식이면 그대로 반환
-    if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-      return date as NexonDate;
+    // Date의 ISO 파서가 일부 잘못된 날짜를 다음 달로 넘겨 처리하므로 원래 날짜를 검사합니다.
+    const calendarDay = /^\s*(\d{4}-\d{2}-\d{2})(?!\d)/.exec(date)?.[1];
+    if (calendarDay !== undefined) {
+      const parsedDay = new Date(`${calendarDay}T00:00:00Z`);
+      if (
+        !Number.isFinite(parsedDay.getTime()) ||
+        parsedDay.toISOString().slice(0, 10) !== calendarDay
+      ) {
+        invalidInput(`date 값 "${calendarDay}"은 달력에 없는 날짜입니다.`, DATE_HINT);
+      }
+      if (calendarDay === date) return date as NexonDate;
     }
-    // 다른 문자열이면 Date로 파싱
-    const parsed = new Date(date);
-    if (isNaN(parsed.getTime())) {
-      throw new Error(
-        `잘못된 날짜 형식: "${date}"\n→ 올바른 형식: 'YYYY-MM-DD', Date 객체, 또는 'today'`,
-      );
-    }
-    return formatDateWithOffset(parsed, timezoneOffset);
+    time = Date.parse(date);
+  } else {
+    time = typeof date?.getTime === 'function' ? date.getTime() : NaN;
   }
 
-  return formatDateWithOffset(date, timezoneOffset);
+  if (!Number.isFinite(time)) {
+    const problem =
+      typeof date === 'string'
+        ? `date 값 "${date}"을 날짜로 해석할 수 없습니다.`
+        : 'date 값이 유효한 Date 객체가 아닙니다.';
+    invalidInput(problem, DATE_HINT);
+  }
+  return formatDateWithOffset(time, timezoneOffset);
 }
 
-/**
- * Date 객체를 지정된 timezone offset 기준의 YYYY-MM-DD 문자열로 변환한다.
- */
-function formatDateWithOffset(date: Date, timezoneOffset: number): NexonDate {
-  // UTC 기준 ms + timezone offset ms
-  const localMs = date.getTime() + timezoneOffset * 60 * 1000;
+function formatDateWithOffset(time: number, timezoneOffset: number): NexonDate {
+  const localMs = time + timezoneOffset * 60 * 1000;
   const localDate = new Date(localMs);
 
   const yyyy = localDate.getUTCFullYear();

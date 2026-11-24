@@ -80,6 +80,116 @@
         "types": "./dist/maplestory-sea.d.cts",
         "default": "./dist/maplestory-sea.cjs"
       }
+    },
+    "./maplestory-tw": {
+      "import": {
+        "types": "./dist/maplestory-tw.d.ts",
+        "default": "./dist/maplestory-tw.js"
+      },
+      "require": {
+        "types": "./dist/maplestory-tw.d.cts",
+        "default": "./dist/maplestory-tw.cjs"
+      }
+    },
+    "./first-descendant": {
+      "import": {
+        "types": "./dist/first-descendant.d.ts",
+        "default": "./dist/first-descendant.js"
+      },
+      "require": {
+        "types": "./dist/first-descendant.d.cts",
+        "default": "./dist/first-descendant.cjs"
+      }
+    },
+    "./mabinogi-heroes": {
+      "import": {
+        "types": "./dist/mabinogi-heroes.d.ts",
+        "default": "./dist/mabinogi-heroes.js"
+      },
+      "require": {
+        "types": "./dist/mabinogi-heroes.d.cts",
+        "default": "./dist/mabinogi-heroes.cjs"
+      }
+    },
+    "./sudden-attack": {
+      "import": {
+        "types": "./dist/sudden-attack.d.ts",
+        "default": "./dist/sudden-attack.js"
+      },
+      "require": {
+        "types": "./dist/sudden-attack.d.cts",
+        "default": "./dist/sudden-attack.cjs"
+      }
+    },
+    "./kartrider": {
+      "import": {
+        "types": "./dist/kartrider.d.ts",
+        "default": "./dist/kartrider.js"
+      },
+      "require": {
+        "types": "./dist/kartrider.d.cts",
+        "default": "./dist/kartrider.cjs"
+      }
+    },
+    "./baram": {
+      "import": {
+        "types": "./dist/baram.d.ts",
+        "default": "./dist/baram.js"
+      },
+      "require": {
+        "types": "./dist/baram.d.cts",
+        "default": "./dist/baram.cjs"
+      }
+    },
+    "./mabinogi": {
+      "import": {
+        "types": "./dist/mabinogi.d.ts",
+        "default": "./dist/mabinogi.js"
+      },
+      "require": {
+        "types": "./dist/mabinogi.d.cts",
+        "default": "./dist/mabinogi.cjs"
+      }
+    },
+    "./baram-yeon": {
+      "import": {
+        "types": "./dist/baram-yeon.d.ts",
+        "default": "./dist/baram-yeon.js"
+      },
+      "require": {
+        "types": "./dist/baram-yeon.d.cts",
+        "default": "./dist/baram-yeon.cjs"
+      }
+    },
+    "./v4": {
+      "import": {
+        "types": "./dist/v4.d.ts",
+        "default": "./dist/v4.js"
+      },
+      "require": {
+        "types": "./dist/v4.d.cts",
+        "default": "./dist/v4.cjs"
+      }
+    },
+    "./hit2": {
+      "import": {
+        "types": "./dist/hit2.d.ts",
+        "default": "./dist/hit2.js"
+      },
+      "require": {
+        "types": "./dist/hit2.d.cts",
+        "default": "./dist/hit2.cjs"
+      }
+    },
+    "./platform": {
+      "import": {
+        "types": "./dist/platform.d.ts",
+        "default": "./dist/platform.js"
+      },
+      "require": {
+        "types": "./dist/platform.d.cts",
+        "default": "./dist/platform.cjs"
+      }
     }
   },
   "main": "./dist/index.cjs",
@@ -106,6 +216,17 @@
     "test:maplestory-m": "tsx scripts/test-maplestory-m.ts",
     "test:fconline": "tsx scripts/test-fconline.ts",
     "test:maplestory-sea": "tsx scripts/test-maplestory-sea.ts",
+    "test:maplestory-tw": "tsx scripts/test-maplestory-tw.ts",
+    "test:first-descendant": "tsx scripts/test-first-descendant.ts",
+    "test:mabinogi-heroes": "tsx scripts/test-mabinogi-heroes.ts",
+    "test:sudden-attack": "tsx scripts/test-sudden-attack.ts",
+    "test:kartrider": "tsx scripts/test-kartrider.ts",
+    "test:baram": "tsx scripts/test-baram.ts",
+    "test:mabinogi": "tsx scripts/test-mabinogi.ts",
+    "test:baram-yeon": "tsx scripts/test-baram-yeon.ts",
+    "test:v4": "tsx scripts/test-v4.ts",
+    "test:hit2": "tsx scripts/test-hit2.ts",
+    "test:platform": "tsx scripts/test-platform.ts",
     "specs:fetch": "tsx scripts/specs-fetch.ts",
     "specs:check": "tsx scripts/specs-check.ts",
     "specs:coverage": "tsx scripts/specs-coverage.ts",

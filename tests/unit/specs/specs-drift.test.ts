@@ -39,6 +39,13 @@ const CLIENT = [
   '    return this.http.get(url, { limit: params.limit, old: params.old, extra: true });',
   '  }',
   '  async getMeta(): Promise<number[]> { return this.http.get(ENDPOINTS.META); }',
+  '  async getLocalizedMeta(language: "ko" | "en" = "ko"): Promise<number[]> {',
+  '    const url = `https://api.example.test/static/fixture/${language}/meta.json`;',
+  '    return this.http.get(url);',
+  '  }',
+  '  async getDynamicMeta(path: "a" | "b/c"): Promise<number[]> {',
+  '    return this.http.get(`https://api.example.test/static/fixture/${path}/meta.json`);',
+  '  }',
   "  async getLiteral(): Promise<string> { return this.http.get('https://api.example.test/fixture/v1/literal'); }",
   '  async getDynamic(path: string): Promise<boolean> { return this.http.get(this.buildUrl(path)); }',
   '  async getGeneric<T>(): Promise<T> { return this.http.get("/fixture/v1/generic"); }',
@@ -106,6 +113,13 @@ paths:
           content:
             application/json:
               schema: { type: array, items: { type: integer } }
+  /static/fixture/{language_code}/meta.json:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: { type: array, items: { type: integer } }
   /fixture/v1/literal:
     get:
       responses:
@@ -156,7 +170,7 @@ describe('SDK drift', () => {
       expect(report.baselineCount).toBe(1);
       expect(report.deprecatedCount).toBe(4);
       const game = report.games[0];
-      expect(game?.matchedMethods).toBe(6);
+      expect(game?.matchedMethods).toBe(7);
       expect(game?.findings.map(({ path, kind }) => [path, kind])).toEqual([
         ['query.extra', 'missing-spec-query'],
         ['query.limit', 'required-query-mismatch'],
@@ -174,6 +188,7 @@ describe('SDK drift', () => {
       ]);
       expect(game?.unresolved.map(({ method }) => method)).toEqual([
         'Client.getDynamic',
+        'Client.getDynamicMeta',
         'Client.getGeneric',
       ]);
     } finally {

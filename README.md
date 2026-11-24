@@ -76,6 +76,41 @@ const matchIds = await client.fcOnline.getMatchList({ ouid, matchtype: 50, limit
 const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 ```
 
+### 그 밖의 게임
+
+모든 게임이 같은 패턴입니다: 식별자 조회(`getOcid` / `getOuid`) → 카테고리별 sub-client.
+
+```ts
+// MapleStory Taiwan
+const twOcid = await client.maplestoryTW.getOcid('角色名稱');
+const twBasic = await client.maplestoryTW.character.getBasic({ ocid: twOcid });
+
+// 퍼스트 디센던트
+const tfdOuid = await client.firstDescendant.getOuid('닉네임#1234');
+const tfdUser = await client.firstDescendant.user.getBasic({ ouid: tfdOuid });
+const descendants = await client.firstDescendant.meta.getDescendant('ko'); // 정적 메타데이터
+
+// 마비노기 영웅전
+const heroesOcid = await client.mabinogiHeroes.getOcid('캐릭터명');
+const heroesBasic = await client.mabinogiHeroes.character.getBasic({ ocid: heroesOcid });
+
+// 서든어택
+const saOuid = await client.suddenAttack.getOuid('닉네임');
+const matches = await client.suddenAttack.match.getList({ ouid: saOuid, match_mode: '폭파미션' });
+
+// 마비노기
+const items = await client.mabinogi.auction.listItems({ auction_item_category: '검' });
+
+// 바람의나라 (서버 이름 필요)
+const baramOcid = await client.baram.getOcid('캐릭터명', '연');
+const baramBasic = await client.baram.character.getBasic({ ocid: baramOcid });
+
+// 넥슨 Open API 공지
+const { notice } = await client.platform.getNoticeList();
+```
+
+게임별 전체 API는 아래 [상세 문서](#상세-문서)를 참고하세요.
+
 > API 키는 [Nexon Open API 포털](https://openapi.nexon.com/)에서 발급받을 수 있습니다.
 
 ## 주요 특징
@@ -89,11 +124,10 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 
 ## 지원 게임
 
-넥슨 Open API 포털이 제공하는 14개 게임 중 **4개 게임을 지원**합니다 (2026-11-24 포털 기준).
+넥슨 Open API 포털이 제공하는 **14개 게임 전부와 Open API 공지(`client.platform`)를 지원**합니다 (2026-11-24 포털 기준, API 270개).
 
-- <img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> — SDK에 구현되어 npm으로 배포된 게임. 아래 날짜는 처음 포함된 버전과 구현일입니다.
-- <img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"> — 넥슨이 API를 제공하지만 SDK에는 아직 없는 게임.
-- **API 개수** — 지원 게임은 "SDK public API 메서드 수"(메서드 1개 = 넥슨 API 경로 1개), 예정 게임은 넥슨 포털 스펙의 API 경로 수입니다.
+- <img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> — SDK에 구현된 게임. 아래 버전과 날짜는 처음 포함된 버전과 구현일입니다.
+- **API 개수** — "SDK public API 메서드 수"(메서드 1개 = 넥슨 API 경로 1개)입니다.
 
 <!-- 아이콘 파일: docs/assets/games/{game}.png (48x48 권장) -->
 
@@ -145,20 +179,20 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/maplestory-taiwan.png" alt="MapleStoryTaiwan" height="64">
 <h4>MapleStoryTaiwan</h4>
-<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
-<sub>넥슨 제공 API 27개</sub><br>
+<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-27-blue" alt="SDK 지원 API 27개"><br>
+<sub>v0.2.0 · 2026-11-24</sub><br>
 <br>
-&nbsp;<br>
+<a href="docs/maplestory-tw.md">레퍼런스</a><br>
 <br>
 </td>
 <td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/sudden-attack.png" alt="서든어택" height="64">
 <h4>서든어택</h4>
-<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
-<sub>넥슨 제공 API 11개</sub><br>
+<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-11-blue" alt="SDK 지원 API 11개"><br>
+<sub>v0.2.0 · 2026-11-24</sub><br>
 <br>
-&nbsp;<br>
+<a href="docs/sudden-attack.md">레퍼런스</a><br>
 <br>
 </td>
 </tr>
@@ -167,30 +201,30 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/first-descendant.png" alt="퍼스트 디센던트" height="64">
 <h4>퍼스트 디센던트</h4>
-<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
-<sub>넥슨 제공 API 42개</sub><br>
+<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-42-blue" alt="SDK 지원 API 42개"><br>
+<sub>v0.2.0 · 2026-11-24</sub><br>
 <br>
-&nbsp;<br>
+<a href="docs/first-descendant.md">레퍼런스</a><br>
 <br>
 </td>
 <td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/mabinogi.png" alt="마비노기" height="64">
 <h4>마비노기</h4>
-<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
-<sub>넥슨 제공 API 5개</sub><br>
+<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-5-blue" alt="SDK 지원 API 5개"><br>
+<sub>v0.2.0 · 2026-11-24</sub><br>
 <br>
-&nbsp;<br>
+<a href="docs/mabinogi.md">레퍼런스</a><br>
 <br>
 </td>
 <td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/mabinogi-heroes.png" alt="마비노기 영웅전" height="64">
 <h4>마비노기 영웅전</h4>
-<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
-<sub>넥슨 제공 API 19개</sub><br>
+<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-19-blue" alt="SDK 지원 API 19개"><br>
+<sub>v0.2.0 · 2026-11-24</sub><br>
 <br>
-&nbsp;<br>
+<a href="docs/mabinogi-heroes.md">레퍼런스</a><br>
 <br>
 </td>
 </tr>
@@ -199,30 +233,30 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/kartrider-rush-plus.png" alt="카트라이더 러쉬플러스" height="64">
 <h4>카트라이더 러쉬플러스</h4>
-<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
-<sub>넥슨 제공 API 9개</sub><br>
+<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-9-blue" alt="SDK 지원 API 9개"><br>
+<sub>v0.2.0 · 2026-11-24</sub><br>
 <br>
-&nbsp;<br>
+<a href="docs/kartrider.md">레퍼런스</a><br>
 <br>
 </td>
 <td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/baram-nara.png" alt="바람의나라" height="64">
 <h4>바람의나라</h4>
-<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
-<sub>넥슨 제공 API 7개</sub><br>
+<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-7-blue" alt="SDK 지원 API 7개"><br>
+<sub>v0.2.0 · 2026-11-24</sub><br>
 <br>
-&nbsp;<br>
+<a href="docs/baram.md">레퍼런스</a><br>
 <br>
 </td>
 <td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/hit2.png" alt="히트2" height="64">
 <h4>히트2</h4>
-<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
-<sub>넥슨 제공 API 2개</sub><br>
+<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-2-blue" alt="SDK 지원 API 2개"><br>
+<sub>v0.2.0 · 2026-11-24</sub><br>
 <br>
-&nbsp;<br>
+<a href="docs/hit2.md">레퍼런스</a><br>
 <br>
 </td>
 </tr>
@@ -231,20 +265,20 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/baram-yeon.png" alt="바람의나라: 연" height="64">
 <h4>바람의나라: 연</h4>
-<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
-<sub>넥슨 제공 API 4개</sub><br>
+<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-4-blue" alt="SDK 지원 API 4개"><br>
+<sub>v0.2.0 · 2026-11-24</sub><br>
 <br>
-&nbsp;<br>
+<a href="docs/baram-yeon.md">레퍼런스</a><br>
 <br>
 </td>
 <td align="center" valign="top" width="33%">
 <br>
 <img src="docs/assets/games/v4.png" alt="V4" height="64">
 <h4>V4</h4>
-<img src="https://img.shields.io/badge/SDK-예정-lightgrey" alt="SDK 예정"><br>
-<sub>넥슨 제공 API 4개</sub><br>
+<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-4-blue" alt="SDK 지원 API 4개"><br>
+<sub>v0.2.0 · 2026-11-24</sub><br>
 <br>
-&nbsp;<br>
+<a href="docs/v4.md">레퍼런스</a><br>
 <br>
 </td>
 <td width="33%"></td>
@@ -253,16 +287,27 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 
 ### 포털 대비 지원 범위
 
-넥슨이 포털에 API를 추가하면 SDK가 뒤처질 수 있습니다. 2026-11-24 포털 스펙과 대조한 결과입니다.
+2026-11-24 넥슨 Open API 포털 스펙과 대조한 결과, **포털의 API 270개를 모두 지원합니다** (14개 게임 + platform).
 
-| 게임                | SDK 메서드 | 포털 API 경로 | 차이                                                                                                   |
-| ------------------- | ---------- | ------------- | ------------------------------------------------------------------------------------------------------ |
-| 메이플스토리        | 48         | 56            | 8개 미지원 (연무장 4, 스케줄러 1, 확률 1, 캐릭터 1, 계정 1)                                            |
-| 메이플스토리M       | 37         | 38            | 1개 미지원 (`user/union-stat`)                                                                         |
-| MapleStorySEA       | 26         | 26            | 없음                                                                                                   |
-| EA SPORTS FC 온라인 | 16         | 19            | 메타데이터 2개 미지원. 이미지 4개 경로는 URL 헬퍼 2개로 지원 ([상세](docs/fc-online.md#포털과의-차이)) |
+| 게임                                   | SDK 메서드 | 포털 API 경로                                                         |
+| -------------------------------------- | ---------- | --------------------------------------------------------------------- |
+| 메이플스토리                           | 56         | 56                                                                    |
+| 메이플스토리M                          | 38         | 38                                                                    |
+| MapleStorySEA                          | 26         | 26                                                                    |
+| MapleStory Taiwan                      | 27         | 27                                                                    |
+| EA SPORTS FC 온라인                    | 18         | 19 (이미지 4개 경로를 URL 헬퍼 2개로 지원, [상세](docs/fc-online.md)) |
+| 퍼스트 디센던트                        | 42         | 42                                                                    |
+| 마비노기 영웅전                        | 19         | 19                                                                    |
+| 서든어택                               | 11         | 11                                                                    |
+| 카트라이더 러쉬플러스                  | 9          | 9                                                                     |
+| 바람의나라                             | 7          | 7                                                                     |
+| 마비노기                               | 5          | 5                                                                     |
+| 바람의나라: 연                         | 4          | 4                                                                     |
+| V4                                     | 4          | 4                                                                     |
+| 히트2                                  | 2          | 2                                                                     |
+| 넥슨 Open API 공지 (`client.platform`) | 1          | 1                                                                     |
 
-이 밖에 게임과 무관한 `platform` API(NEXON Open API 공지 사항 1개)도 넥슨이 제공하며, SDK에는 아직 없습니다.
+넥슨이 포털을 바꾸면 주간 모니터가 감지해 스펙 갱신 PR을 열고, CI의 `specs:drift --strict` 검사가 SDK 타입과 공식 스펙의 차이를 막습니다. 자세한 내용은 [specs/README.md](specs/README.md)를 참고하세요.
 
 ### 범위 외: 네오플 API
 
@@ -338,16 +383,38 @@ import { MapleStoryClient } from 'nexon-open-api/maplestory';
 import { MapleStoryMClient } from 'nexon-open-api/maplestory-m';
 import { MapleStorySEAClient } from 'nexon-open-api/maplestory-sea';
 import { FcOnlineClient } from 'nexon-open-api/fconline';
+import { MapleStoryTWClient } from 'nexon-open-api/maplestory-tw';
+import { FirstDescendantClient } from 'nexon-open-api/first-descendant';
+import { MabinogiHeroesClient } from 'nexon-open-api/mabinogi-heroes';
+import { SuddenAttackClient } from 'nexon-open-api/sudden-attack';
+import { KartriderClient } from 'nexon-open-api/kartrider';
+import { BaramClient } from 'nexon-open-api/baram';
+import { MabinogiClient } from 'nexon-open-api/mabinogi';
+import { BaramYeonClient } from 'nexon-open-api/baram-yeon';
+import { V4Client } from 'nexon-open-api/v4';
+import { Hit2Client } from 'nexon-open-api/hit2';
+import { PlatformClient } from 'nexon-open-api/platform';
 ```
 
 ## 상세 문서
 
-| 게임          | 문서                                   | 카테고리                                        |
-| ------------- | -------------------------------------- | ----------------------------------------------- |
-| 메이플스토리  | [API 레퍼런스](docs/maplestory.md)     | 캐릭터, 유니온, 길드, 랭킹, 확률/이력, 공지사항 |
-| 메이플스토리M | [API 레퍼런스](docs/maplestory-m.md)   | 캐릭터, 유니온, 길드, 랭킹, 공지사항            |
-| MapleStorySEA | [API 레퍼런스](docs/maplestory-sea.md) | 캐릭터, 유니온, 길드                            |
-| FC Online     | [API 레퍼런스](docs/fc-online.md)      | 계정 정보, 매치, 랭커, 메타데이터, 이미지 URL   |
+| 게임                  | 문서                                     | 카테고리                                        |
+| --------------------- | ---------------------------------------- | ----------------------------------------------- |
+| 메이플스토리          | [API 레퍼런스](docs/maplestory.md)       | 캐릭터, 유니온, 길드, 랭킹, 확률/이력, 공지사항 |
+| 메이플스토리M         | [API 레퍼런스](docs/maplestory-m.md)     | 캐릭터, 유니온, 길드, 랭킹, 공지사항            |
+| MapleStorySEA         | [API 레퍼런스](docs/maplestory-sea.md)   | 캐릭터, 유니온, 길드                            |
+| FC Online             | [API 레퍼런스](docs/fc-online.md)        | 계정 정보, 매치, 랭커, 메타데이터, 이미지 URL   |
+| MapleStory Taiwan     | [API 레퍼런스](docs/maplestory-tw.md)    | 캐릭터, 유니온, 길드                            |
+| 퍼스트 디센던트       | [API 레퍼런스](docs/first-descendant.md) | 계정, 메타데이터, 추천 모듈, 리더보드           |
+| 마비노기 영웅전       | [API 레퍼런스](docs/mabinogi-heroes.md)  | 캐릭터, 메타(인챈트), 거래소, 랭킹, 공지사항    |
+| 서든어택              | [API 레퍼런스](docs/sudden-attack.md)    | 계정, 매치, 메타데이터                          |
+| 카트라이더 러쉬플러스 | [API 레퍼런스](docs/kartrider.md)        | 계정, 공지사항                                  |
+| 바람의나라            | [API 레퍼런스](docs/baram.md)            | 캐릭터                                          |
+| 마비노기              | [API 레퍼런스](docs/mabinogi.md)         | NPC 상점, 경매장, 거대한 외침의 뿔피리          |
+| 바람의나라: 연        | [API 레퍼런스](docs/baram-yeon.md)       | 캐릭터                                          |
+| V4                    | [API 레퍼런스](docs/v4.md)               | 캐릭터                                          |
+| 히트2                 | [API 레퍼런스](docs/hit2.md)             | 캐릭터                                          |
+| 넥슨 Open API 공지    | [API 레퍼런스](docs/platform.md)         | 공지 사항                                       |
 
 ## 요구사항
 

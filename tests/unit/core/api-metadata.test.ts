@@ -21,10 +21,8 @@ const KNOWN_PREFIXES = [
 ];
 
 describe('api-metadata', () => {
-  it('기존 4개 게임이 등록되어 있다', () => {
-    expect(Object.keys(API_METADATA)).toEqual(
-      expect.arrayContaining(['maplestory', 'maplestorym', 'maplestorysea', 'fconline']),
-    );
+  it('지원하는 15개 게임의 path prefix가 모두 등록되어 있다', () => {
+    expect(Object.keys(API_METADATA).sort()).toEqual([...KNOWN_PREFIXES].sort());
   });
 
   it('모든 키는 SDK 범위의 path prefix이고 pathPrefix 필드와 같다', () => {

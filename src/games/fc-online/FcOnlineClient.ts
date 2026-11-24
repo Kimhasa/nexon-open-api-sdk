@@ -1,5 +1,10 @@
+import {
+  assertInteger,
+  assertNonEmptyString,
+  assertOneOf,
+  invalidInput,
+} from '../../core/validation/input.js';
 import { emitDeprecation } from '../../core/deprecation/deprecation.js';
-import { NexonBadRequestError } from '../../core/errors/NexonBadRequestError.js';
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
 import type { OUID } from './user/types.js';
 import {
@@ -78,7 +83,7 @@ export class FcOnlineClient extends AbstractGameClient {
    * ```
    */
   async getOuid(nickname: string): Promise<OUID> {
-    assertNonBlank(nickname, 'nickname');
+    assertNonEmptyString(nickname, 'nickname', undefined, 'trim-truthy');
     const url = this.buildUrl('id');
     const response = await this.http.get<{ ouid: string }>(url, { nickname }, FC_OUID_SHAPE);
     return response.ouid as OUID;
@@ -99,7 +104,7 @@ export class FcOnlineClient extends AbstractGameClient {
    * ```
    */
   async getBasic(ouid: OUID): Promise<FcUserBasic> {
-    assertNonBlank(ouid, 'ouid');
+    assertNonEmptyString(ouid, 'ouid', undefined, 'trim-truthy');
     const url = this.buildUrl('user/basic');
     return this.http.get<FcUserBasic>(url, { ouid: ouid as string }, FC_USER_BASIC_SHAPE);
   }
@@ -122,7 +127,7 @@ export class FcOnlineClient extends AbstractGameClient {
    * ```
    */
   async getMaxDivision(ouid: OUID): Promise<readonly FcMaxDivision[]> {
-    assertNonBlank(ouid, 'ouid');
+    assertNonEmptyString(ouid, 'ouid', undefined, 'trim-truthy');
     const url = this.buildUrl('user/maxdivision');
     const response = await this.http.get<FcMaxDivision | FcMaxDivision[]>(
       url,
@@ -157,7 +162,7 @@ export class FcOnlineClient extends AbstractGameClient {
    * ```
    */
   async getMatchList(params: FcUserMatchRequest): Promise<string[]> {
-    assertNonBlank(params.ouid, 'ouid');
+    assertNonEmptyString(params.ouid, 'ouid', undefined, 'trim-truthy');
     const url = this.buildUrl('user/match');
     return this.http.get<string[]>(
       url,
@@ -192,11 +197,7 @@ export class FcOnlineClient extends AbstractGameClient {
    * ```
    */
   async getTradeList(params: FcUserTradeRequest): Promise<FcTradeRecord[]> {
-    if (params.tradetype !== 'buy' && params.tradetype !== 'sell') {
-      throw new NexonBadRequestError("tradetype에 'buy' 또는 'sell'을 지정하세요.", {
-        code: 'OPENAPI00004',
-      });
-    }
+    assertOneOf(params.tradetype, ['buy', 'sell'], 'tradetype');
     const url = this.buildUrl('user/trade');
     return this.http.get<FcTradeRecord[]>(
       url,
@@ -265,7 +266,7 @@ export class FcOnlineClient extends AbstractGameClient {
    * ```
    */
   async getMatchDetail(matchId: string): Promise<FcMatchDetail> {
-    assertNonBlank(matchId, 'matchid');
+    assertNonEmptyString(matchId, 'matchid', undefined, 'trim-truthy');
     const url = this.buildUrl('match-detail');
     return this.http.get<FcMatchDetail>(url, { matchid: matchId }, FC_MATCH_DETAIL_SHAPE);
   }
@@ -298,9 +299,7 @@ export class FcOnlineClient extends AbstractGameClient {
    */
   async getRankerStats(params: FcRankerStatsRequest): Promise<FcRankerStats[]> {
     if (params.players.length === 0) {
-      throw new NexonBadRequestError('players에 조회할 선수와 포지션을 한 쌍 이상 지정하세요.', {
-        code: 'OPENAPI00004',
-      });
+      invalidInput('players가 비어 있습니다.', '조회할 선수와 포지션을 한 쌍 이상 지정하세요.');
     }
     const url = this.buildUrl('ranker-stats');
     return this.http.get<FcRankerStats[]>(
@@ -505,11 +504,11 @@ export class FcOnlineClient extends AbstractGameClient {
    * ```
    */
   getActionShotUrl(spid: number): string {
-    if (!Number.isSafeInteger(spid) || spid <= 0) {
-      throw new NexonBadRequestError('spid 또는 pid를 양의 정수로 지정하세요.', {
-        code: 'OPENAPI00004',
-      });
-    }
+    assertInteger(spid, 'spid', {
+      min: 1,
+      safe: true,
+      hint: '선수 메타데이터에서 spid 또는 pid를 확인하세요.',
+    });
     return `${FC_IMAGE_ENDPOINTS.ACTION_SHOT}/p${spid}.png`;
   }
 
@@ -528,19 +527,11 @@ export class FcOnlineClient extends AbstractGameClient {
    * ```
    */
   getPlayerImageUrl(spid: number): string {
-    if (!Number.isSafeInteger(spid) || spid <= 0) {
-      throw new NexonBadRequestError('spid 또는 pid를 양의 정수로 지정하세요.', {
-        code: 'OPENAPI00004',
-      });
-    }
-    return `${FC_IMAGE_ENDPOINTS.PLAYER}/p${spid}.png`;
-  }
-}
-
-function assertNonBlank(value: string, parameter: string): void {
-  if (!value.trim()) {
-    throw new NexonBadRequestError(`${parameter}에 비어 있지 않은 값을 지정하세요.`, {
-      code: 'OPENAPI00004',
+    assertInteger(spid, 'spid', {
+      min: 1,
+      safe: true,
+      hint: '선수 메타데이터에서 spid 또는 pid를 확인하세요.',
     });
+    return `${FC_IMAGE_ENDPOINTS.PLAYER}/p${spid}.png`;
   }
 }

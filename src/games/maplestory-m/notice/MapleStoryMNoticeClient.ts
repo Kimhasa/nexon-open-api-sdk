@@ -1,3 +1,4 @@
+import { assertInteger } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import {
   M_NOTICE_LIST_SHAPE,
@@ -59,7 +60,7 @@ export class MapleStoryMNoticeClient {
    *
    * @param noticeId - 공지 식별자
    *
-   * @throws {TypeError} 공지 식별자가 정수가 아닐 때
+   * @throws {NexonBadRequestError} 공지 식별자가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -76,7 +77,7 @@ export class MapleStoryMNoticeClient {
    * ```
    */
   async getDetail(noticeId: number): Promise<MNoticeDetail> {
-    this.validateNoticeId(noticeId);
+    assertInteger(noticeId, 'noticeId', { hint: '해당 공지 목록에서 notice_id를 확인하세요.' });
     return this.http.get<MNoticeDetail>(
       `${MapleStoryMNoticeClient.BASE}/notice/detail`,
       { notice_id: noticeId },
@@ -113,7 +114,7 @@ export class MapleStoryMNoticeClient {
    *
    * @param noticeId - 공지 식별자
    *
-   * @throws {TypeError} 공지 식별자가 정수가 아닐 때
+   * @throws {NexonBadRequestError} 공지 식별자가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -130,7 +131,7 @@ export class MapleStoryMNoticeClient {
    * ```
    */
   async getPatchDetail(noticeId: number): Promise<MNoticeDetail> {
-    this.validateNoticeId(noticeId);
+    assertInteger(noticeId, 'noticeId', { hint: '해당 공지 목록에서 notice_id를 확인하세요.' });
     return this.http.get<MNoticeDetail>(
       `${MapleStoryMNoticeClient.BASE}/notice-patch/detail`,
       { notice_id: noticeId },
@@ -167,7 +168,7 @@ export class MapleStoryMNoticeClient {
    *
    * @param noticeId - 공지 식별자
    *
-   * @throws {TypeError} 공지 식별자가 정수가 아닐 때
+   * @throws {NexonBadRequestError} 공지 식별자가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -184,19 +185,11 @@ export class MapleStoryMNoticeClient {
    * ```
    */
   async getEventDetail(noticeId: number): Promise<MEventNoticeDetail> {
-    this.validateNoticeId(noticeId);
+    assertInteger(noticeId, 'noticeId', { hint: '해당 공지 목록에서 notice_id를 확인하세요.' });
     return this.http.get<MEventNoticeDetail>(
       `${MapleStoryMNoticeClient.BASE}/notice-event/detail`,
       { notice_id: noticeId },
       M_EVENT_NOTICE_DETAIL_SHAPE,
     );
-  }
-
-  private validateNoticeId(noticeId: number): void {
-    if (!Number.isInteger(noticeId)) {
-      throw new TypeError(
-        'noticeId는 정수로 입력하세요. 해당 공지 목록에서 notice_id를 확인하세요.',
-      );
-    }
   }
 }

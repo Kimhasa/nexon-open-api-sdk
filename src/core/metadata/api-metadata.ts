@@ -57,6 +57,107 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     endpointCount: 18,
     note: 'Portal OpenAPI spec (specs/openapi/fconline/, 2026-11-24). Public static metadata and image CDN checked without a key. Authenticated endpoints verified with MSW fixtures.',
   },
+
+  // ── 아래 자리는 게임 구현 워커가 채운다: 자기 게임의 [slot] 주석 한 줄을 엔트리로 교체 ──
+
+  maplestorytw: {
+    game: 'MapleStory Taiwan',
+    pathPrefix: 'maplestorytw',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 27,
+    note: 'Portal OpenAPI spec (specs/openapi/maplestorytw/, 2026-11-24). Not verified with a real API key.',
+  },
+
+  tfd: {
+    game: 'The First Descendant',
+    pathPrefix: 'tfd',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 42,
+    note: 'OUID(1) + User(6) + Meta(32) + Recommendation(1) + Leaderboard(2). Portal OpenAPI spec (specs/openapi/tfd/, 2026-11-24). The 32 static meta files were checked against live responses (no key needed); types follow the live data where it differs from the spec. The 10 keyed APIs are not verified with a real API key (spec-based synthetic fixtures).',
+  },
+
+  heroes: {
+    game: 'Mabinogi Heroes',
+    pathPrefix: 'heroes',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 19,
+    note: 'OCID(1) + Character V2(6) + Meta(1) + Notice V1(6) + Marketplace(3) + Ranking(2). Portal OpenAPI spec (specs/openapi/heroes/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec, and nullable fields are an SDK-side assumption (the spec marks none).',
+  },
+
+  suddenattack: {
+    game: 'Sudden Attack',
+    pathPrefix: 'suddenattack',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 11,
+    note: 'Portal OpenAPI spec (specs/openapi/suddenattack/, 2026-11-24). All four static metadata endpoints verified against live data. Authenticated endpoints were mocked from the spec.',
+  },
+
+  kartrush: {
+    game: 'KartRider Rush+',
+    pathPrefix: 'kartrush',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 9,
+    note: 'OUID(1) + User(2) + Notice(6). Portal OpenAPI spec (specs/openapi/kartrush/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+  },
+
+  baram: {
+    game: 'The Kingdom of the Winds (Baram)',
+    pathPrefix: 'baram',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 7,
+    note: 'OCID(1) + Character(6). Portal OpenAPI spec (specs/openapi/baram/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+  },
+
+  mabinogi: {
+    game: 'Mabinogi',
+    pathPrefix: 'mabinogi',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 5,
+    note: 'Portal OpenAPI spec (specs/openapi/mabinogi/, 2026-11-24). Fixtures synthesized from the spec. Not verified with a real API key.',
+  },
+
+  baramy: {
+    game: 'The Kingdom of the Winds: Yeon (Baram: Yeon)',
+    pathPrefix: 'baramy',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 4,
+    note: 'OCID(1) + Character(3). Portal OpenAPI spec (specs/openapi/baramy/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+  },
+
+  v4: {
+    game: 'V4',
+    pathPrefix: 'v4',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 4,
+    note: 'OCID(1) + Character(3). Portal OpenAPI spec (specs/openapi/v4/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+  },
+
+  hit2: {
+    game: 'HIT2',
+    pathPrefix: 'hit2',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 2,
+    note: 'OCID(1) + Character(1). Portal OpenAPI spec (specs/openapi/hit2/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+  },
+
+  platform: {
+    game: 'NEXON Open API Platform (Open API notices)',
+    pathPrefix: 'platform',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 1,
+    note: 'Notice(1), path /platform/openapi/v1/notice. Portal OpenAPI spec (specs/openapi/platform/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+  },
 };
 
 /**
