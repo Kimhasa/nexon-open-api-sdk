@@ -68,7 +68,14 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
 
   // [slot:suddenattack] 서든어택
 
-  // [slot:kartrush] 카트라이더 러쉬플러스
+  kartrush: {
+    game: 'KartRider Rush+',
+    pathPrefix: 'kartrush',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 9,
+    note: 'OUID(1) + User(2) + Notice(6). Portal OpenAPI spec (specs/openapi/kartrush/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+  },
 
   // [slot:baram] 바람의나라
 
