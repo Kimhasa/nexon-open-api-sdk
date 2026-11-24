@@ -17,6 +17,7 @@ export {
   NexonBadRequestError,
   NexonDataNotReadyError,
   NexonServerError,
+  NexonMaintenanceError,
   NEXON_ERROR_CODES,
   classifyError,
 } from './core/errors/index.js';

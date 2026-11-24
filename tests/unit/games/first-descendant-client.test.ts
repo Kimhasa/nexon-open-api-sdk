@@ -460,8 +460,17 @@ describe('FirstDescendantClient', () => {
       expect(urls).toEqual([]);
     });
 
-    it('API 키가 없으면 NexonAuthError를 던진다 (403)', async () => {
-      const { client } = createClient('');
+    it('서버가 API 키를 거부하면 NexonAuthError를 던진다 (403)', async () => {
+      // 빈 키는 이제 요청 전에 막히므로, 서버가 키를 거부하는 응답을 직접 돌려준다
+      server.use(
+        mswHttp.get(`${BASE}/recommendation/module`, () =>
+          HttpResponse.json(
+            { error: { name: 'OPENAPI00002', message: 'Invalid or missing API Key' } },
+            { status: 403 },
+          ),
+        ),
+      );
+      const { client } = createClient();
 
       await expect(client.recommendation.getModule(request)).rejects.toBeInstanceOf(NexonAuthError);
     });

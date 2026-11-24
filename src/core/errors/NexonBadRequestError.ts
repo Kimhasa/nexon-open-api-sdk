@@ -2,18 +2,19 @@ import { NexonError } from './NexonError.js';
 import type { NexonErrorCode } from './error-codes.js';
 
 /**
- * 요청 파라미터 오류 (HTTP 400).
+ * 입력이 잘못되어 조회하지 못함 (HTTP 400).
  *
- * 서버가 파라미터를 거부했을 때와, SDK가 요청 전에 입력을 검증해 거부했을 때(항상 `OPENAPI00004`) 던집니다.
+ * - `OPENAPI00004`: 파라미터 누락 또는 유효하지 않음. 빈 이름, 형식이 틀린 날짜, 허용되지 않는 값 등
+ * - `OPENAPI00006`: 유효하지 않은 게임 또는 API PATH. 넥슨이 이 게임 또는 API 주소를 찾지 못했다
  *
- * - `OPENAPI00004`: 날짜 형식 오류, 필수 파라미터 누락 등
- * - `OPENAPI00006`: 특정 필드 값 오류
+ * 빈 캐릭터명이나 달력에 없는 날짜처럼 보내 봐야 실패할 입력은 SDK가 요청을 보내기 전에 거부합니다
+ * (항상 `OPENAPI00004`). `message` 에 어떤 값이 왜 틀렸고 어떻게 고치는지가 들어 있습니다.
  *
  * @example
  * ```ts
  * } catch (err) {
  *   if (err instanceof NexonBadRequestError) {
- *     console.log('요청 파라미터를 확인해주세요:', err.nexonMessage);
+ *     console.log(err.message); // 무엇이 틀렸고 어떻게 고치는지
  *   }
  * }
  * ```

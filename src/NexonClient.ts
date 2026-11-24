@@ -55,11 +55,7 @@ export class NexonClient {
   private _platform: PlatformClient | undefined;
 
   constructor(options: NexonClientOptions) {
-    if (!options.apiKey) {
-      throw new Error(
-        'API 키가 필요합니다.\n→ https://openapi.nexon.com/ 에서 API 키를 발급받으세요.',
-      );
-    }
+    // apiKey 검증은 HttpClient 생성자가 한다 (sub-path로 직접 만들 때와 같은 안내가 나오도록)
     this.http = new HttpClient(options);
   }
 
