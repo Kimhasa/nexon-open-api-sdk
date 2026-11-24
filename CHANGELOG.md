@@ -63,6 +63,8 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 - CI가 이미 게시된 버전을 다시 `npm publish` 하려다 실패하던 문제 — 게시 전 버전 존재 확인
 - FC 온라인 이미지 URL 헬퍼(`getActionShotUrl`, `getPlayerImageUrl`)가 HTTP 400을 돌려주는 `open.api.nexon.com` 을 가리키던 문제 — 포털 스펙의 CDN `fco.dn.nexoncdn.co.kr` 로 변경 (실측 200)
 - 메이플스토리·메이플스토리M·MapleStorySEA·FC 온라인 응답 타입을 현재 포털 스펙과 대조해 누락 필드·nullable 정정
+- `toNexonDate()` 가 유효하지 않은 `Date` 객체를 `NaN-NaN-NaN` 으로, 달력에 없는 날짜(예: `2026-02-30`)를 그대로 넘기던 문제 — 이제 `NexonBadRequestError`(`OPENAPI00004`)로 거부한다. MapleStory Taiwan 날짜 조회도 이 공용 검증을 사용한다
+- SDK 자동 반영 워크플로에서 Claude Code가 시작 직후 종료되던 문제 (MCP 설정 형식, 샌드박스 거부 규칙) — 2026-11-24 실제 실행으로 검증
 
 ### Changed
 
