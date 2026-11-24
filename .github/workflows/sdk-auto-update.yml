@@ -107,6 +107,9 @@ jobs:
 
           # Claude 권한 문법에서 //는 절대 경로다. Edit 규칙이 Write에도 적용된다.
           # https://code.claude.com/docs/en/permissions#read-and-edit
+          # GitHub 호스팅 runner에서는 sandbox가 apply-seccomp setgroups 오류로 Bash를 시작하지 못한다
+          # (2026-11-24, 미문서화). 이때 failIfUnavailable 때문에 Bash가 거부되고 Claude는 편집만 한다.
+          # 검증은 아래 "Independently verify" 단계가 비밀값 없이 수행한다. 자세한 내용은 specs/README.md 참고.
           # .git 경로는 deny에 넣지 않는다. Edit/Read deny 규칙은 sandbox의 쓰기·읽기 거부에
           # 합쳐져, .git/** 를 막으면 git이 쓰는 .git/config.lock 등에서 모든 Bash 호출이 실패한다.
           # .git의 config·hooks는 sandbox가 기본으로 보호하고(https://code.claude.com/docs/en/sandboxing),
