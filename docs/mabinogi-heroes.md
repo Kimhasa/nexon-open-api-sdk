@@ -142,24 +142,24 @@ await notice.getEventList(); // 이벤트&샵 (최근 20개) → event_notice[]
 
 ## 거래소 (3개)
 
-| 메서드                               | 경로                                                 | 반환                        |
-| ------------------------------------ | ---------------------------------------------------- | --------------------------- |
-| `getHistory({ item_name, cursor? })` | `GET /heroes/v2/marketplace/market-history`          | `HeroesMarketHistory`       |
-| `getGoldBuyTop30()`                  | `GET /heroes/v2/marketplace/gold-market-buy-top-30`  | `HeroesGoldMarketBuyTop30`  |
-| `getGoldSellTop30()`                 | `GET /heroes/v2/marketplace/gold-market-sell-top-30` | `HeroesGoldMarketSellTop30` |
+| 메서드                                | 경로                                                 | 반환                        |
+| ------------------------------------- | ---------------------------------------------------- | --------------------------- |
+| `listHistory({ item_name, cursor? })` | `GET /heroes/v2/marketplace/market-history`          | `HeroesMarketHistory`       |
+| `getGoldBuyTop30()`                   | `GET /heroes/v2/marketplace/gold-market-buy-top-30`  | `HeroesGoldMarketBuyTop30`  |
+| `getGoldSellTop30()`                  | `GET /heroes/v2/marketplace/gold-market-sell-top-30` | `HeroesGoldMarketSellTop30` |
 
 ```ts
 const market = client.mabinogiHeroes.marketplace;
 
 // 최근 1주 거래 기록 (페이지당 500개)
-const first = await market.getHistory({ item_name: '인챈트 스크롤' });
+const first = await market.listHistory({ item_name: '인챈트 스크롤' });
 for (const record of first.item) {
   console.log(record.date_update, record.average_price, record.min_price, record.max_price);
 }
 
 // 다음 페이지: next_cursor 를 cursor 로 넘긴다
 if (first.next_cursor) {
-  const next = await market.getHistory({ item_name: '인챈트 스크롤', cursor: first.next_cursor });
+  const next = await market.listHistory({ item_name: '인챈트 스크롤', cursor: first.next_cursor });
   console.log(next.item.length);
 }
 
@@ -167,7 +167,7 @@ await market.getGoldBuyTop30(); // 최근 1주 골드 구매 상위 30명 → bu
 await market.getGoldSellTop30(); // 최근 1주 골드 판매 상위 30명 → sell_gold[]
 ```
 
-- `getHistory` 는 단일 페이지 메서드입니다. 자동 순회(`iterate`/`collect`)는 제공하지 않습니다.
+- `listHistory` 는 단일 페이지 메서드입니다. 자동 순회(`iterate`/`collect`)는 제공하지 않습니다.
 - 최근 24시간 내 10건 이상 거래된 아이템만 조회됩니다.
 - 현재 평균가는 마지막으로 갱신된 기록의 `average_price` 입니다.
 - 인챈트 스크롤은 `"인챈트 스크롤"` / `"인챈트 스크롤 (무기한)"` 으로 검색한 뒤 `item_option.prefix_enchant_preset_1` / `suffix_enchant_preset_1` 로 종류를 구분합니다.
@@ -212,7 +212,7 @@ SDK는 서버 400 응답을 기다리지 않고 요청 전에 `NexonBadRequestEr
 | `character.*({ ocid })`                          | 빈 `ocid`                                                                |
 | `meta.getEnchant`                                | `enchant_type` 이 `'0'`/`'1'` 이 아님, 빈 `enchant_name`                 |
 | `notice.get*Detail(noticeId)`                    | 1 이상의 정수가 아님                                                     |
-| `marketplace.getHistory`                         | 빈 `item_name`                                                           |
+| `marketplace.listHistory`                        | 빈 `item_name`                                                           |
 | `ranking.getHallOfHonor` / `ranking.getRealTime` | `ranking_type` 이 `'0'`/`'1'` 이 아님, `page_no` 가 1 이상의 정수가 아님 |
 
 ```ts

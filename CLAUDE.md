@@ -212,16 +212,19 @@ throw new NexonRateLimitError(
 
 ### 메서드 네이밍
 
-| 패턴               | 메서드명             | 반환 타입                |
-| ------------------ | -------------------- | ------------------------ |
-| 단건 조회          | `getXxx(params)`     | `Promise<T>`             |
-| 이름으로 단건 조회 | `getXxxByName(name)` | `Promise<T>`             |
-| 식별자 조회        | `getOcid(name)`      | `Promise<OCID>`          |
-| 단일 페이지        | `listXxx(params)`    | `Promise<CursorPage<T>>` |
-| 자동 순회          | `iterateXxx(params)` | `AsyncGenerator<T>`      |
-| 전체 수집          | `collectXxx(params)` | `Promise<T[]>`           |
+| 패턴                                | 메서드명                             | 반환 타입                                        |
+| ----------------------------------- | ------------------------------------ | ------------------------------------------------ |
+| 단건 조회                           | `getXxx(params)`                     | `Promise<T>`                                     |
+| 이름으로 단건 조회                  | `getXxxByName(name)`                 | `Promise<T>`                                     |
+| 식별자 조회                         | `getOcid(name)`                      | `Promise<OCID>`                                  |
+| 커서 목록 한 페이지 (`next_cursor`) | `listXxx(params)`                    | `Promise<CursorPage<T>>` 또는 게임별 페이지 응답 |
+| 커서 없는 목록                      | `getList(params)` / `getXxx(params)` | `Promise<T[]>` 또는 게임별 목록 응답             |
+| 자동 순회                           | `iterateXxx(params)`                 | `AsyncGenerator<T>`                              |
+| 전체 수집                           | `collectXxx(params)`                 | `Promise<T[]>`                                   |
 
 **금지**: 메서드 이름에 컨텍스트 중복 — `character.getBasic()` ✅, `character.getCharacterBasic()` ❌
+
+예를 들어 `mabinogi.auction.listItems()` 는 `next_cursor` 를 반환하고, `suddenAttack.match.getList()` 는 커서 없이 매치 목록을 반환한다.
 
 ## 파일 네이밍 규칙
 

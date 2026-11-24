@@ -28,11 +28,11 @@ export class MabinogiAuctionClient {
    * import { NexonClient } from 'nexon-open-api';
    *
    * const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
-   * const page = await client.mabinogi.auction.list({ auction_item_category: '검' });
+   * const page = await client.mabinogi.auction.listItems({ auction_item_category: '검' });
    * console.log(page.auction_item);
    * ```
    */
-  async list({
+  async listItems({
     auction_item_category,
     item_name,
     cursor,

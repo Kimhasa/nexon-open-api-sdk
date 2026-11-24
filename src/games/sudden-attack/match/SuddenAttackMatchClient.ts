@@ -26,11 +26,11 @@ export class SuddenAttackMatchClient {
    *
    * const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
    * const ouid = await client.suddenAttack.getOuid('닉네임');
-   * const page = await client.suddenAttack.match.list({ ouid, match_mode: '폭파미션' });
+   * const page = await client.suddenAttack.match.getList({ ouid, match_mode: '폭파미션' });
    * console.log(page.match);
    * ```
    */
-  async list({
+  async getList({
     ouid,
     match_mode,
     match_type,
@@ -65,7 +65,7 @@ export class SuddenAttackMatchClient {
    *
    * const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
    * const ouid = await client.suddenAttack.getOuid('닉네임');
-   * const { match } = await client.suddenAttack.match.list({ ouid, match_mode: '폭파미션' });
+   * const { match } = await client.suddenAttack.match.getList({ ouid, match_mode: '폭파미션' });
    * const firstMatch = match[0];
    * if (firstMatch) console.log(await client.suddenAttack.match.getDetail(firstMatch.match_id));
    * ```

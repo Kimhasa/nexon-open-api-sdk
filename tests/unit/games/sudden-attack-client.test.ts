@@ -74,13 +74,13 @@ describe('SuddenAttackClient', () => {
 
   it('매치 모드와 유형으로 최근 매치 목록을 조회한다', async () => {
     const params = { ouid, match_mode: '폭파미션', match_type: '퀵매치 클랜전' } as const;
-    await expect(game.match.list(params)).resolves.toEqual(suddenAttackMatchListFixture);
+    await expect(game.match.getList(params)).resolves.toEqual(suddenAttackMatchListFixture);
     expectRequest(`${BASE}/match`, params);
   });
 
   it('매치 유형을 생략할 수 있다', async () => {
     const params = { ouid, match_mode: '폭파미션' } as const;
-    await expect(game.match.list(params)).resolves.toEqual(suddenAttackMatchListFixture);
+    await expect(game.match.getList(params)).resolves.toEqual(suddenAttackMatchListFixture);
     expectRequest(`${BASE}/match`, params);
   });
 
@@ -130,7 +130,7 @@ describe('SuddenAttackClient', () => {
     await expect(game.getOuid(' ')).rejects.toThrow(/userName.*닉네임/);
     await expect(game.user.getBasic(' ' as SuddenAttackOuid)).rejects.toThrow(/ouid.*getOuid/);
     await expect(
-      game.match.list({ ouid: '' as SuddenAttackOuid, match_mode: '폭파미션' }),
+      game.match.getList({ ouid: '' as SuddenAttackOuid, match_mode: '폭파미션' }),
     ).rejects.toThrow(/ouid.*getOuid/);
     await expect(game.match.getDetail('')).rejects.toThrow(/matchId.*match_id/);
     expect(onRequest).not.toHaveBeenCalled();
@@ -138,10 +138,10 @@ describe('SuddenAttackClient', () => {
 
   it('스펙에 없는 매치 모드와 유형을 요청 전에 거절한다', async () => {
     await expect(
-      game.match.list({ ouid, match_mode: '잘못된 모드' as SuddenAttackMatchMode }),
+      game.match.getList({ ouid, match_mode: '잘못된 모드' as SuddenAttackMatchMode }),
     ).rejects.toThrow(/match_mode/);
     await expect(
-      game.match.list({
+      game.match.getList({
         ouid,
         match_mode: '개인전',
         match_type: '잘못된 유형' as SuddenAttackMatchType,

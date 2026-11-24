@@ -58,8 +58,8 @@ if (ouid) {
   });
 
   let matchId: string | undefined;
-  await test('match.list', async () => {
-    const result = await suddenAttack.match.list({ ouid: accountId, match_mode: matchMode });
+  await test('match.getList', async () => {
+    const result = await suddenAttack.match.getList({ ouid: accountId, match_mode: matchMode });
     assert.ok(Array.isArray(result.match), 'match 배열 누락');
     matchId = result.match[0]?.match_id;
   });

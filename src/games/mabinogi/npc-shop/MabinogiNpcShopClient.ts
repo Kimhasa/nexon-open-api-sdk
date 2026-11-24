@@ -23,11 +23,11 @@ export class MabinogiNpcShopClient {
    * import { NexonClient } from 'nexon-open-api';
    *
    * const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
-   * const result = await client.mabinogi.npcShop.list({ npc_name: '델', server_name: '류트', channel: 1 });
+   * const result = await client.mabinogi.npcShop.getList({ npc_name: '델', server_name: '류트', channel: 1 });
    * console.log(result.shop);
    * ```
    */
-  async list({
+  async getList({
     npc_name,
     server_name,
     channel,
