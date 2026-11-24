@@ -150,10 +150,84 @@ function render(root: string): string {
     walk(getter.type, `client.${getter.name}`);
     lines.push('');
   }
+  const helpers = rootFunctions(root);
   lines.push(
-    `(공개 메서드 ${total}개. 더 이상 권장하지 않는 메서드는 뺐다. 이 파일은 \`${relative(root, resolve(root, 'scripts', 'build-llms.ts')).replaceAll('\\', '/')}\` 가 소스에서 만든다.)`,
+    '## 도우미 함수 — `nexon-open-api` 에서 바로 import',
+    '',
+    '넥슨에 요청을 보내지 않고 받은 데이터를 다루는 함수다. 예: 메이플 캐릭터 외형 이미지의 동작·표정 주소, 잠재능력 옵션 문자열("STR +12%") 파싱과 합산, 로그용 고유 번호 마스킹.',
+    '',
+    ...helpers.map(
+      (helper) => `- \`${helper.signature}\`${helper.summary ? ` — ${helper.summary}` : ''}`,
+    ),
+    '',
+    `(공개 메서드 ${total}개, 도우미 함수 ${helpers.length}개. 더 이상 권장하지 않는 메서드는 뺐다. 이 파일은 \`${relative(root, resolve(root, 'scripts', 'build-llms.ts')).replaceAll('\\', '/')}\` 가 소스에서 만든다.)`,
   );
   return `${lines.join('\n')}\n`;
+}
+
+/** 루트 진입점(`src/index.ts`)이 내보내는 함수의 시그니처와 JSDoc 첫 문단 */
+function rootFunctions(root: string): { signature: string; summary: string }[] {
+  const indexPath = resolve(root, 'src', 'index.ts');
+  const index = ts.createSourceFile(
+    indexPath,
+    readFileSync(indexPath, 'utf8'),
+    ts.ScriptTarget.Latest,
+    true,
+  );
+  // 내보낸 이름(명시 export) 또는 파일 전체(export *)
+  const wanted = new Map<string, Set<string> | 'all'>();
+  for (const statement of index.statements) {
+    if (!ts.isExportDeclaration(statement) || statement.isTypeOnly) continue;
+    const specifier = statement.moduleSpecifier;
+    if (!specifier || !ts.isStringLiteral(specifier)) continue;
+    const file = resolve(root, 'src', specifier.text.replace(/\.js$/, '.ts'));
+    if (!statement.exportClause) {
+      wanted.set(file, 'all');
+    } else if (ts.isNamedExports(statement.exportClause)) {
+      const names = wanted.get(file);
+      const set = names instanceof Set ? names : new Set<string>();
+      for (const element of statement.exportClause.elements) {
+        if (!element.isTypeOnly) set.add((element.propertyName ?? element.name).text);
+      }
+      if (names !== 'all') wanted.set(file, set);
+    }
+  }
+  const result: { signature: string; summary: string }[] = [];
+  const visit = (file: string, names: Set<string> | 'all'): void => {
+    let text: string;
+    try {
+      text = readFileSync(file, 'utf8');
+    } catch {
+      return;
+    }
+    const source = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true);
+    for (const statement of source.statements) {
+      // 재노출(export { x } from './y.js')은 따라간다
+      if (ts.isExportDeclaration(statement) && statement.moduleSpecifier) {
+        const specifier = statement.moduleSpecifier;
+        if (ts.isStringLiteral(specifier) && !statement.isTypeOnly) {
+          visit(resolve(file, '..', specifier.text.replace(/\.js$/, '.ts')), names);
+        }
+        continue;
+      }
+      if (!ts.isFunctionDeclaration(statement) || !statement.name) continue;
+      const exported = ts
+        .getModifiers(statement)
+        ?.some(({ kind }) => kind === ts.SyntaxKind.ExportKeyword);
+      if (!exported || (names !== 'all' && !names.has(statement.name.text))) continue;
+      const params = statement.parameters
+        .map((p) => p.getText(source).replace(/\s+/g, ' '))
+        .join(', ');
+      const returns = statement.type
+        ? `: ${statement.type.getText(source).replace(/\s+/g, ' ')}`
+        : '';
+      const { summary, deprecated } = jsDocSummary(statement);
+      if (!deprecated)
+        result.push({ signature: `${statement.name.text}(${params})${returns}`, summary });
+    }
+  };
+  for (const [file, names] of wanted) visit(file, names);
+  return result.sort((a, b) => a.signature.localeCompare(b.signature));
 }
 
 const HEADER = `

@@ -85,8 +85,8 @@ export interface MLevelRankingItem {
   readonly character_class: string;
   /** 캐릭터 레벨 */
   readonly character_level: number;
-  /** 길드 명 */
-  readonly guild_name: string;
+  /** 길드 명. 길드에 가입하지 않았으면 null (2026-11-25 실측) */
+  readonly guild_name: string | null;
   /** 길드 마크 아이콘 */
   readonly guild_mark_icon: string;
 }

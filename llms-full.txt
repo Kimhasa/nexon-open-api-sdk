@@ -384,4 +384,20 @@ try {
 
 - `client.platform.getNoticeList(params: PlatformNoticeRequest = {}): Promise<PlatformNoticeList>` — 넥슨 Open API의 최근 공지 10개와 본문을 조회한다.
 
-(공개 메서드 266개. 더 이상 권장하지 않는 메서드는 뺐다. 이 파일은 `scripts/build-llms.ts` 가 소스에서 만든다.)
+## 도우미 함수 — `nexon-open-api` 에서 바로 import
+
+넥슨에 요청을 보내지 않고 받은 데이터를 다루는 함수다. 예: 메이플 캐릭터 외형 이미지의 동작·표정 주소, 잠재능력 옵션 문자열("STR +12%") 파싱과 합산, 로그용 고유 번호 마스킹.
+
+- `characterImageUrl(imageUrl: string, options: MapleCharacterImageOptions = {}): string` — 캐릭터 외형 이미지 주소에 동작·감정표현·무기 모션을 입힌다 — 코디 카드, 프로필 이미지를 만들 때 쓴다.
+- `classifyError(status: number, payload: NexonErrorPayload | undefined, retryAfterMs?: number, context?: { readonly url?: string | undefined }): NexonError` — HTTP 상태 코드와 넥슨 에러 코드를 기반으로 적절한 에러 인스턴스를 반환한다.
+- `emitDeprecation(id: string, message: string): void` — 일회성 deprecation 경고를 출력한다.
+- `getApiMetadata(gameId: string): GameApiMetadata | undefined` — 특정 게임의 API 메타데이터를 조회한다.
+- `getItemStarforce(item: { readonly starforce?: string | number | null | undefined; }): number` — 장비의 스타포스 별 개수를 숫자로 돌려준다.
+- `maskIdentifier(value: string): string` — 캐릭터·계정·길드 고유 번호를 로그에 남길 때 앞 8자만 표시한다.
+- `maskIdentifiers(url: string): string` — 요청 URL의 쿼리에서 캐릭터·계정·길드 고유 번호를 가린다.
+- `parseItemOption(text: string | null | undefined): MapleItemOption | null` — 잠재능력·에디셔널 잠재능력 한 줄(`"STR +12%"`)을 옵션명·수치·단위로 나눈다 — 환산 계산기, 스펙 비교 도구의 재료.
+- `sumItemTotalOptions(items: readonly MapleOptionItem[], source: MapleItemOptionSource = 'item_total_option'): MapleItemOptionSum` — 장착 장비 전체의 옵션 수치를 항목별로 합산한다 — "장비로 얻는 STR 총합", "추가 옵션 공격력 총합" 을 구한다.
+- `summarizeItemOptions(items: readonly MaplePotentialItem[]): MapleItemOptionSummary` — 장착 장비 전체의 잠재능력과 에디셔널 잠재능력을 같은 옵션끼리 합산한다 — "STR% 총합", "보스 데미지 총합" 을 한 번에 구한다.
+- `toNexonDate(date: Date | NexonDate | 'today' | string, timezoneOffset: number): NexonDate` — 날짜를 Nexon Open API 형식(YYYY-MM-DD)으로 변환한다.
+
+(공개 메서드 266개, 도우미 함수 11개. 더 이상 권장하지 않는 메서드는 뺐다. 이 파일은 `scripts/build-llms.ts` 가 소스에서 만든다.)

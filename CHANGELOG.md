@@ -53,6 +53,11 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 - AI 코딩 도구용 `llms.txt`·`llms-full.txt` (npm 패키지에 포함) — 코드 생성 규칙과 15개 게임 공개 메서드 시그니처를 소스에서 자동 생성한다 (`yarn docs:llms`, CI LLM Docs 게이트). 창작자용 [`docs/ai-guide.md`](docs/ai-guide.md): AI 도구에 넣을 지침, 요청 예, 생성된 코드 점검표
 - [`docs/why.md`](docs/why.md) — 직접 fetch한 코드와의 비교, 넥슨 AI 에이전트 가이드 항목별로 SDK가 처리하는 것과 창작자 몫, 다른 라이브러리와의 비교
 - [`docs/service-checklist.md`](docs/service-checklist.md) — 서비스 공개 전 체크리스트 (호출 한도, 캐시, 출처 표기 "Data based on NEXON Open API", 30일 갱신 의무, 식별자 노출 금지)
+- 메이플스토리 도우미 함수 (`nexon-open-api`·`nexon-open-api/maplestory` 에서 import, 넥슨 호출 없음)
+  - `characterImageUrl()`: 캐릭터 외형 이미지에 동작(A00~A41)·감정표현(E00~E24)·무기 모션(W00~W04)과 프레임을 입힌다. 코드·프레임 범위는 스펙 표대로 검증하고, 코드 표는 `MAPLE_CHARACTER_ACTIONS`·`MAPLE_CHARACTER_EMOTIONS`·`MAPLE_WEAPON_MOTIONS` 로 제공한다 (실제 이미지 응답 확인)
+  - `parseItemOption()`·`summarizeItemOptions()`: 잠재능력·에디셔널 잠재능력 한 줄("STR +12%", "캐릭터 기준 9레벨 당 DEX +1")을 옵션명·수치·단위로 나누고 장비 전체를 같은 옵션끼리 합산한다. 실제 옵션 문자열 151종을 테스트에 넣었고, 확률 효과 같은 문장형은 버리지 않고 원문으로 남긴다
+  - `sumItemTotalOptions()`·`getItemStarforce()`: 장비 옵션 묶음(최종·기본·추가·기타·스타포스)의 숫자 문자열을 항목별로 합산하고 스타포스를 숫자로 읽는다
+- [`docs/recipes/`](docs/recipes/) — 환산 계산기 같은 장비 분석 도구의 재료 모으기, 메애기처럼 코디 카드 만들기. 예제 `examples/maplestory-equipment-summary.mjs`·`maplestory-coordi-card.mjs`
 - **실 API 키 검증 (2026-11-24, 게임별 개발 단계 키)** — 직업·레벨·월드가 다른 공개 캐릭터 42명(게임별 2~6명)으로 HTTP 메서드 263/267개를 불러 응답을 SDK 타입과 대조했다. 처음 600종이 넘던 차이를 아래 Fixed·Changed 항목으로 정정해 0건이 됐다. 부르지 못한 메서드는 다음과 같다
   - FC `getTradeList`: 키 계정 본인의 거래 기록만 나온다
   - 메이플스토리 `getLegacyOuid`: 구 개발자센터 키가 필요하다
@@ -125,6 +130,7 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
   - 마비노기 영웅전 골드 거래소 TOP 30: `total_buy_gold`·`total_sell_gold` → `buy_gold`·`sell_gold`
   - 히트2: `character_last_login`·`character_last_logout` → `character_date_last_login`·`character_date_last_logout`
 - 메이플스토리 연무장 `getCharacterInfo()`: 리플레이 스냅숏에 없는 필드를 선택 필드로 바꿨다 (소울, 월드 공유 펫, 유니온 상태 스탯 등). 스킬 효과 `null` 은 새 `BattlePracticeSkillInfo` 로 따로 표현한다
+- 메이플스토리M 레벨 랭킹 `guild_name`(길드 미가입 시 null), 연무장 리플레이 유니온의 `union_occupied_stat`(없을 수 있음) — 2026-11-25 실측
 - 실 API E2E 스크립트
   - 메이플스토리 강화 기록·랭킹이 최근 2년 밖인 고정 날짜를 쓰던 문제
   - 스케줄러를 다른 계정 캐릭터로 부르던 문제 (키 계정 본인 캐릭터만 조회됨)
@@ -134,6 +140,11 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 ### Changed
 
 - **BREAKING** FC 온라인 `getMaxDivision()` 반환 타입 `FcMaxDivision` → `readonly FcMaxDivision[]`. 역대 최고 등급은 매치 종류별로 존재하며, 응답이 단일 객체여도 배열로 정규화한다
+- **동작 변경** 메이플스토리·SEA·TW·M의 날짜를 요청 전에 검사한다 (날짜를 받는 조회 96개). 넥슨 AI 에이전트 가이드의 실측 규칙을 따른다
+  - 날짜가 선택인 조회(캐릭터·유니온·길드 등)는 오늘·미래 날짜와 서비스 개시 이전 날짜를 막는다. 넥슨은 오늘·미래에 400을, 개시 이전 날짜에는 200과 전부 null인 응답을 준다. 최신 데이터는 date를 생략한다
+  - 랭킹(날짜 필수)은 오늘을 허용하고 미래와 조회 가능 범위 밖(최근 2년, 첫 제공일 이전)만 막는다. 강화 기록과 스케줄러는 각자의 범위를 따른다
+  - 기준 시간대는 KMS·M은 KST, SEA·TW는 UTC+8이다. TW는 이제 `today` 문자열과 YYYY-MM-DD가 아닌 날짜 문자열도 거부한다
+  - 예비 특수 반지는 2026-03-19부터(그 전 날짜는 넥슨이 반지 정보를 null로 준다, 실측), 링 익스체인지는 2025-08-21 ~ 2026-03-18
 - **동작 변경** 다른 게임용 API 키로 부를 때 오는 `OPENAPI00006` 을 `NexonBadRequestError` 대신 `NexonAuthError` 로 알리고, 안내에 게임 이름을 넣는다 (예: "이 API 키로는 메이플스토리 API를 부를 수 없습니다"). 넥슨 AI 에이전트 가이드에 따르면 다른 게임 키는 이 코드로 온다
 - 재시도 범위를 429·503에서 429·5xx(500~599)로 넓혔다. 넥슨 가이드는 서버 내부 오류(`OPENAPI00001`, 500)를 백오프 후 재시도하라고 안내한다. 400대(00003·00004·00006 등)는 여전히 재시도하지 않는다
 - README 첫 화면을 "무엇·누구·왜·어떻게" 순서로 다시 짰다 (360줄 → 240줄대). 한 줄 설명, 첫 코드, 왜 직접 fetch하거나 AI가 짠 코드 대신 쓰는지(실측 근거), 만들 수 있는 것과 시작점
