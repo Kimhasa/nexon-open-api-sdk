@@ -9,7 +9,7 @@ export const OCID_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_BASIC_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_name: 'string',
     world_name: 'string',
     character_gender: 'string',
@@ -18,7 +18,7 @@ export const CHARACTER_BASIC_SHAPE: ShapeDescriptor = {
     character_level: 'number',
     character_exp: 'number',
     character_exp_rate: 'string',
-    character_guild_name: 'string',
+    character_guild_name: 'any',
     character_image: 'string',
     character_date_create: 'string',
     access_flag: 'string',
@@ -28,14 +28,14 @@ export const CHARACTER_BASIC_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_POPULARITY_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     popularity: 'number',
   },
 };
 
 export const CHARACTER_STAT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_class: 'string',
     final_stat: 'array',
     remain_ap: 'number',
@@ -45,7 +45,7 @@ export const CHARACTER_STAT_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_HYPER_STAT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_class: 'string',
     use_preset_no: 'string',
     use_available_hyper_stat: 'number',
@@ -60,7 +60,7 @@ export const CHARACTER_HYPER_STAT_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_PROPENSITY_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     charisma_level: 'number',
     sensibility_level: 'number',
     insight_level: 'number',
@@ -72,7 +72,7 @@ export const CHARACTER_PROPENSITY_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_ABILITY_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     ability_grade: 'string',
     ability_info: 'array',
     remain_fame: 'number',
@@ -85,7 +85,7 @@ export const CHARACTER_ABILITY_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_ITEM_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_gender: 'string',
     character_class: 'string',
     preset_no: 'any',
@@ -102,7 +102,7 @@ export const CHARACTER_ITEM_EQUIPMENT_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_CASHITEM_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_gender: 'string',
     character_class: 'string',
     character_look_mode: 'string',
@@ -120,7 +120,7 @@ export const CHARACTER_CASHITEM_EQUIPMENT_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_SYMBOL_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_class: 'string',
     symbol: 'array',
   },
@@ -128,14 +128,14 @@ export const CHARACTER_SYMBOL_EQUIPMENT_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_SET_EFFECT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     set_effect: 'array',
   },
 };
 
 export const CHARACTER_BEAUTY_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_gender: 'string',
     character_class: 'string',
     character_hair: 'object',
@@ -149,7 +149,7 @@ export const CHARACTER_BEAUTY_EQUIPMENT_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_ANDROID_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     android_name: 'any',
     android_nickname: 'any',
     android_icon: 'any',
@@ -172,7 +172,7 @@ export const CHARACTER_ANDROID_EQUIPMENT_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_PET_EQUIPMENT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     pet_1_name: 'any',
     pet_1_nickname: 'any',
     pet_1_icon: 'any',
@@ -184,7 +184,7 @@ export const CHARACTER_PET_EQUIPMENT_SHAPE: ShapeDescriptor = {
     pet_1_date_expire: 'any',
     pet_1_appearance: 'any',
     pet_1_appearance_icon: 'any',
-    pet_1_potential: 'array',
+    pet_1_potential: 'any',
     pet_2_name: 'any',
     pet_2_nickname: 'any',
     pet_2_icon: 'any',
@@ -196,7 +196,7 @@ export const CHARACTER_PET_EQUIPMENT_SHAPE: ShapeDescriptor = {
     pet_2_date_expire: 'any',
     pet_2_appearance: 'any',
     pet_2_appearance_icon: 'any',
-    pet_2_potential: 'array',
+    pet_2_potential: 'any',
     pet_3_name: 'any',
     pet_3_nickname: 'any',
     pet_3_icon: 'any',
@@ -208,13 +208,13 @@ export const CHARACTER_PET_EQUIPMENT_SHAPE: ShapeDescriptor = {
     pet_3_date_expire: 'any',
     pet_3_appearance: 'any',
     pet_3_appearance_icon: 'any',
-    pet_3_potential: 'array',
+    pet_3_potential: 'any',
   },
 };
 
 export const CHARACTER_SKILL_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_class: 'string',
     character_skill_grade: 'string',
     character_skill: 'array',
@@ -223,7 +223,7 @@ export const CHARACTER_SKILL_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_LINK_SKILL_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_class: 'string',
     character_link_skill: 'array',
     character_link_skill_preset_1: 'array',
@@ -238,7 +238,7 @@ export const CHARACTER_LINK_SKILL_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_VMATRIX_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_class: 'string',
     character_v_core_equipment: 'array',
     character_v_matrix_remain_slot_upgrade_point: 'number',
@@ -247,27 +247,27 @@ export const CHARACTER_VMATRIX_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_HEXAMATRIX_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
-    character_hexa_core_equipment: 'array',
+    date: 'any',
+    character_hexa_core_equipment: 'any',
   },
 };
 
 export const CHARACTER_HEXAMATRIX_STAT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
-    character_class: 'string',
+    date: 'any',
+    character_class: 'any',
     character_hexa_stat_core: 'array',
-    character_hexa_stat_core_2: 'array',
-    character_hexa_stat_core_3: 'array',
+    character_hexa_stat_core_2: 'any',
+    character_hexa_stat_core_3: 'any',
     preset_hexa_stat_core: 'array',
-    preset_hexa_stat_core_2: 'array',
-    preset_hexa_stat_core_3: 'array',
+    preset_hexa_stat_core_2: 'any',
+    preset_hexa_stat_core_3: 'any',
   },
 };
 
 export const CHARACTER_DOJANG_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     character_class: 'string',
     world_name: 'string',
     dojang_best_floor: 'number',
@@ -278,7 +278,7 @@ export const CHARACTER_DOJANG_SHAPE: ShapeDescriptor = {
 
 export const CHARACTER_FAMILIAR_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     familiar_link_slot: 'array',
     familiar_info: 'array',
   },
@@ -286,7 +286,7 @@ export const CHARACTER_FAMILIAR_SHAPE: ShapeDescriptor = {
 
 export const USER_UNION_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     union_level: 'number',
     union_grade: 'string',
     union_artifact_level: 'number',
@@ -297,7 +297,7 @@ export const USER_UNION_SHAPE: ShapeDescriptor = {
 
 export const USER_UNION_RAIDER_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     union_raider_stat: 'array',
     union_occupied_stat: 'array',
     union_inner_stat: 'array',
@@ -313,7 +313,7 @@ export const USER_UNION_RAIDER_SHAPE: ShapeDescriptor = {
 
 export const USER_UNION_ARTIFACT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     union_artifact_effect: 'array',
     union_artifact_crystal: 'array',
     union_artifact_remain_ap: 'number',
@@ -322,7 +322,7 @@ export const USER_UNION_ARTIFACT_SHAPE: ShapeDescriptor = {
 
 export const USER_UNION_CHAMPION_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    date: 'string',
+    date: 'any',
     union_champion: 'array',
     champion_badge_total_info: 'array',
   },

@@ -51,7 +51,7 @@ export const twCharacterPetEquipmentFixture: TWCharacterPetEquipment = {
   pet_2_date_expire: null,
   pet_2_appearance: null,
   pet_2_appearance_icon: null,
-  pet_2_potential: [],
+  pet_2_potential: null,
   pet_3_name: null,
   pet_3_nickname: null,
   pet_3_icon: null,
@@ -63,5 +63,5 @@ export const twCharacterPetEquipmentFixture: TWCharacterPetEquipment = {
   pet_3_date_expire: null,
   pet_3_appearance: null,
   pet_3_appearance_icon: null,
-  pet_3_potential: [],
+  pet_3_potential: null,
 };

@@ -26,7 +26,6 @@ import type {
 
 const equipment = {
   item_equipment_part: 'item equipment part',
-  equipment_slot: 'equipment slot',
   item_name: 'item name',
   item_icon: 'https://example.test/icon.png',
   item_description: 'item description',
@@ -96,7 +95,6 @@ const equipment = {
   cuttable_count: 'cuttable count',
   golden_hammer_flag: '0',
   scroll_resilience_count: 'scroll resilience count',
-  scroll_upgradable_count: 'scroll upgradable count',
   soul_name: 'soul name',
   soul_option: 'soul option',
   item_etc_option: {
@@ -134,14 +132,22 @@ const equipment = {
 
 const presetEquipment: SEAPresetItemEquipment = {
   ...equipment,
+  item_equipment_slot: 'Hat',
+  scroll_upgradeable_count: '2',
+  potential_option_flag: 'false',
+  additional_potential_option_flag: 'false',
+  item_description: null,
+  item_gender: null,
+  soul_name: null,
+  soul_option: null,
   potential_option_grade: 'potential option grade',
-  additional_potential_option_grade: 'additional potential option grade',
+  additional_potential_option_grade: null,
   potential_option_1: 'potential option 1',
   potential_option_2: 'potential option 2',
   potential_option_3: 'potential option 3',
-  additional_potential_option_1: 'additional potential option 1',
-  additional_potential_option_2: 'additional potential option 2',
-  additional_potential_option_3: 'additional potential option 3',
+  additional_potential_option_1: null,
+  additional_potential_option_2: null,
+  additional_potential_option_3: null,
   item_exceptional_option: {
     str: 'str',
     dex: 'dex',
@@ -157,6 +163,8 @@ const presetEquipment: SEAPresetItemEquipment = {
 
 const classEquipment: SEAClassItemEquipment = {
   ...equipment,
+  equipment_slot: 'Dragon Mask',
+  scroll_upgradable_count: '2',
   item_exceptional_option: {
     str: 'str',
     dex: 'dex',
@@ -174,7 +182,7 @@ const cashEquipment: SEACashItemEquipmentItem = {
   cash_item_equipment_slot: 'cash item equipment slot',
   cash_item_name: 'cash item name',
   cash_item_icon: 'https://example.test/icon.png',
-  cash_item_description: 'cash item description',
+  cash_item_description: null,
   cash_item_option: [
     {
       option_type: 'option type',
@@ -183,9 +191,9 @@ const cashEquipment: SEACashItemEquipmentItem = {
   ],
   date_expire: null,
   date_option_expire: null,
-  cash_item_label: 'cash item label',
+  cash_item_label: null,
   cash_item_coloring_prism: null,
-  item_gender: 'Male',
+  item_gender: null,
   skill_info: [
     {
       skill_name: 'skill name',
@@ -320,7 +328,7 @@ export const seaCharacterItemEquipmentFixture: SEACharacterItemEquipment = {
       item_description: 'item description',
       item_shape_name: 'item shape name',
       item_shape_icon: 'https://example.test/icon.png',
-      item_gender: 'Male',
+      item_gender: null,
       item_total_option: {
         str: 'str',
         dex: 'dex',
@@ -366,7 +374,7 @@ export const seaCharacterItemEquipmentFixture: SEACharacterItemEquipment = {
       additional_potential_option_grade: 'additional potential option grade',
       potential_option_1: 'potential option 1',
       potential_option_2: 'potential option 2',
-      potential_option_3: 'potential option 3',
+      potential_option_3: null,
       additional_potential_option_1: 'additional potential option 1',
       additional_potential_option_2: 'additional potential option 2',
       additional_potential_option_3: 'additional potential option 3',
@@ -405,7 +413,7 @@ export const seaCharacterItemEquipmentFixture: SEACharacterItemEquipment = {
       cuttable_count: 'cuttable count',
       golden_hammer_flag: '0',
       scroll_resilience_count: 'scroll resilience count',
-      scroll_upgradable_count: 'scroll upgradable count',
+      scroll_upgradeable_count: '2',
       soul_name: 'soul name',
       soul_option: 'soul option',
       item_etc_option: {
@@ -553,27 +561,9 @@ export const seaCharacterBeautyEquipmentFixture: SEACharacterBeautyEquipment = {
     saturation: 1,
     brightness: 1,
   },
-  additional_character_hair: {
-    hair_name: 'hair name',
-    base_color: 'base color',
-    mix_color: 'mix color',
-    mix_rate: 'mix rate',
-    freestyle_flag: '0',
-  },
-  additional_character_face: {
-    face_name: 'face name',
-    base_color: 'base color',
-    mix_color: 'mix color',
-    mix_rate: 'mix rate',
-    freestyle_flag: '0',
-  },
-  additional_character_skin: {
-    skin_name: 'skin name',
-    color_style: 'color style',
-    hue: 1,
-    saturation: 1,
-    brightness: 1,
-  },
+  additional_character_hair: null,
+  additional_character_face: null,
+  additional_character_skin: null,
 };
 
 export const seaCharacterAndroidEquipmentFixture: SEACharacterAndroidEquipment = {
@@ -585,23 +575,23 @@ export const seaCharacterAndroidEquipmentFixture: SEACharacterAndroidEquipment =
   android_hair: {
     hair_name: 'hair name',
     base_color: 'base color',
-    mix_color: 'mix color',
+    mix_color: null,
     mix_rate: 'mix rate',
     freestyle_flag: '0',
   },
   android_face: {
     face_name: 'face name',
     base_color: 'base color',
-    mix_color: 'mix color',
+    mix_color: null,
     mix_rate: 'mix rate',
     freestyle_flag: '0',
   },
   android_skin: {
     skin_name: 'skin name',
-    color_style: 'color style',
-    hue: 1,
-    saturation: 1,
-    brightness: 1,
+    color_style: null,
+    hue: null,
+    saturation: null,
+    brightness: null,
   },
   android_cash_item_equipment: [
     {
@@ -609,7 +599,7 @@ export const seaCharacterAndroidEquipmentFixture: SEACharacterAndroidEquipment =
       cash_item_equipment_slot: 'cash item equipment slot',
       cash_item_name: 'cash item name',
       cash_item_icon: 'https://example.test/icon.png',
-      cash_item_description: 'cash item description',
+      cash_item_description: null,
       cash_item_option: [
         {
           option_type: 'option type',
@@ -618,9 +608,9 @@ export const seaCharacterAndroidEquipmentFixture: SEACharacterAndroidEquipment =
       ],
       date_expire: null,
       date_option_expire: null,
-      cash_item_label: 'cash item label',
+      cash_item_label: null,
       cash_item_coloring_prism: null,
-      android_item_gender: 'android item gender',
+      android_item_gender: null,
       freestyle_flag: '0',
     },
   ],
@@ -639,22 +629,22 @@ export const seaCharacterAndroidEquipmentFixture: SEACharacterAndroidEquipment =
     android_grade: 'android grade',
     android_skin: {
       skin_name: 'skin name',
-      color_style: 'color style',
-      hue: 1,
-      saturation: 1,
-      brightness: 1,
+      color_style: null,
+      hue: null,
+      saturation: null,
+      brightness: null,
     },
     android_hair: {
       hair_name: 'hair name',
       base_color: 'base color',
-      mix_color: 'mix color',
+      mix_color: null,
       mix_rate: 'mix rate',
       freestyle_flag: '0',
     },
     android_face: {
       face_name: 'face name',
       base_color: 'base color',
-      mix_color: 'mix color',
+      mix_color: null,
       mix_rate: 'mix rate',
       freestyle_flag: '0',
     },
@@ -688,8 +678,8 @@ export const seaCharacterPetEquipmentFixture: SEACharacterPetEquipment = {
     item_shape_icon: 'https://example.test/icon.png',
   },
   pet_1_auto_skill: {
-    skill_1: 'skill 1',
-    skill_1_icon: 'https://example.test/icon.png',
+    skill_1: null,
+    skill_1_icon: null,
     skill_2: 'skill 2',
     skill_2_icon: 'https://example.test/icon.png',
   },
@@ -732,7 +722,7 @@ export const seaCharacterSkillFixture: SEACharacterSkill = {
       skill_description: 'skill description',
       skill_level: 1,
       skill_effect: 'skill effect',
-      skill_effect_next: 'skill effect next',
+      skill_effect_next: null,
       skill_icon: 'https://example.test/icon.png',
     },
   ],
@@ -747,7 +737,7 @@ export const seaCharacterLinkSkillFixture: SEACharacterLinkSkill = {
       skill_description: 'skill description',
       skill_level: 1,
       skill_effect: 'skill effect',
-      skill_effect_next: 'skill effect next',
+      skill_effect_next: null,
       skill_icon: 'https://example.test/icon.png',
     },
   ],
@@ -818,9 +808,9 @@ export const seaCharacterVMatrixFixture: SEACharacterVMatrix = {
       v_core_name: 'v core name',
       v_core_type: 'v core type',
       v_core_level: 1,
-      v_core_skill_1: 'v core skill 1',
-      v_core_skill_2: 'v core skill 2',
-      v_core_skill_3: 'v core skill 3',
+      v_core_skill_1: null,
+      v_core_skill_2: null,
+      v_core_skill_3: null,
     },
   ],
   character_v_matrix_remain_slot_upgrade_point: 1,

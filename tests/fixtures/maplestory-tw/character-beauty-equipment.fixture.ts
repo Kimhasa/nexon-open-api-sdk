@@ -7,23 +7,23 @@ export const twCharacterBeautyEquipmentFixture: TWCharacterBeautyEquipment = {
   character_hair: {
     hair_name: 'Fixture hair',
     base_color: 'base color',
-    mix_color: 'mix color',
+    mix_color: null,
     mix_rate: '1',
     freestyle_flag: '0',
   },
   character_face: {
     face_name: 'Fixture face',
     base_color: 'base color',
-    mix_color: 'mix color',
+    mix_color: null,
     mix_rate: '1',
     freestyle_flag: '0',
   },
   character_skin: {
     skin_name: 'Fixture skin',
-    color_style: 'color style',
-    hue: 1,
-    saturation: 1,
-    brightness: 1,
+    color_style: null,
+    hue: null,
+    saturation: null,
+    brightness: null,
   },
   additional_character_hair: {
     hair_name: 'Fixture hair',
@@ -41,9 +41,9 @@ export const twCharacterBeautyEquipmentFixture: TWCharacterBeautyEquipment = {
   },
   additional_character_skin: {
     skin_name: 'Fixture skin',
-    color_style: 'color style',
-    hue: 1,
-    saturation: 1,
-    brightness: 1,
+    color_style: null,
+    hue: null,
+    saturation: null,
+    brightness: null,
   },
 };

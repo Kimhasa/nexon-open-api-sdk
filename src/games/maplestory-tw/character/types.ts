@@ -4,8 +4,8 @@ import type { TWOcidDateRequest } from '../types.js';
 
 /** 캐릭터 기본 정보 — `client.maplestoryTW.character.getBasic()` 의 응답. */
 export interface TWCharacterBasic {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character name */
   readonly character_name: string;
   /** World name */
@@ -22,8 +22,8 @@ export interface TWCharacterBasic {
   readonly character_exp: number;
   /** Percentage of experience points at the current level */
   readonly character_exp_rate: string;
-  /** Guild name the character belongs to */
-  readonly character_guild_name: string;
+  /** 캐릭터의 길드 이름. 가입한 길드가 없으면 null. */
+  readonly character_guild_name: string | null;
   /**
    * Character appearance image URL.
    *
@@ -51,8 +51,8 @@ export interface TWCharacterBasic {
 
 /** 캐릭터 인기도 — `client.maplestoryTW.character.getPopularity()` 의 응답. */
 export interface TWCharacterPopularity {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character popularity */
   readonly popularity: number;
 }
@@ -61,8 +61,8 @@ export interface TWCharacterPopularity {
 
 /** 캐릭터 정보창의 스탯(종합 능력치) — `client.maplestoryTW.character.getStat()` 의 응답. */
 export interface TWCharacterStat {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character job */
   readonly character_class: string;
   /** Current stat information */
@@ -93,8 +93,8 @@ export interface TWMentorshipStat {
 
 /** 하이퍼 스탯 — `client.maplestoryTW.character.getHyperStat()` 의 응답. */
 export interface TWCharacterHyperStat {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character job */
   readonly character_class: string;
   /** Active preset number */
@@ -131,8 +131,8 @@ export interface TWHyperStatPreset {
 
 /** 성향 — `client.maplestoryTW.character.getPropensity()` 의 응답. */
 export interface TWCharacterPropensity {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Ambition level */
   readonly charisma_level: number;
   /** Empathy level */
@@ -151,8 +151,8 @@ export interface TWCharacterPropensity {
 
 /** 어빌리티 — `client.maplestoryTW.character.getAbility()` 의 응답. */
 export interface TWCharacterAbility {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Ability grade */
   readonly ability_grade: string;
   /** Ability information */
@@ -293,14 +293,14 @@ export interface TWItemEquipmentDetails {
   readonly item_name: string;
   /** Equipment icon */
   readonly item_icon: string;
-  /** Equipment description */
-  readonly item_description: string;
+  /** 장비 설명. 설명이 없으면 null. */
+  readonly item_description: string | null;
   /** Equipment appearance name */
   readonly item_shape_name: string;
   /** Equipment appearance icon */
   readonly item_shape_icon: string;
-  /** Gender restriction */
-  readonly item_gender: string;
+  /** 장비 착용 성별 제한. 제한이 없으면 null. */
+  readonly item_gender: string | null;
   /** Total option (sum of all options) */
   readonly item_total_option: TWItemTotalOption;
   /** Base option */
@@ -321,20 +321,22 @@ export interface TWItemEquipmentDetails {
   readonly golden_hammer_flag: string;
   /** Scroll resilience count */
   readonly scroll_resilience_count: string;
-  /** Remaining scroll upgrade count */
-  readonly scroll_upgradable_count: string;
-  /** Soul name */
-  readonly soul_name: string;
-  /** Soul option */
-  readonly soul_option: string;
-  /** Soul Weapon grade. */
-  readonly soul_weapon_grade: string;
-  /** Soul Weapon level. */
-  readonly soul_weapon_level: string;
-  /** Soul Weapon option. */
-  readonly soul_weapon_option: string;
-  /** Power increase from the Soul Weapon. */
-  readonly soul_weapon_power_increase: string;
+  /** 업그레이드 가능 횟수. 포털 스펙의 이름. 2026-11-24 실제 응답에는 없고 scroll_upgradeable_count로 온다. */
+  readonly scroll_upgradable_count?: string | undefined;
+  /** 업그레이드 가능 횟수. 실제 응답의 필드. 포털 스펙에는 scroll_upgradable_count로 적혀 있다. */
+  readonly scroll_upgradeable_count?: string | undefined;
+  /** 장착한 소울 이름. 소울이 없으면 null. */
+  readonly soul_name: string | null;
+  /** 장착한 소울 옵션. 값이 없으면 null. */
+  readonly soul_option: string | null;
+  /** 소울웨폰 등급. 값이 없으면 null. */
+  readonly soul_weapon_grade: string | null;
+  /** 소울웨폰 레벨. 값이 없으면 null. */
+  readonly soul_weapon_level: string | null;
+  /** 소울웨폰 옵션. 값이 없으면 null. */
+  readonly soul_weapon_option: string | null;
+  /** 소울웨폰으로 증가한 수치. 값이 없으면 null. */
+  readonly soul_weapon_power_increase: string | null;
   /** Etc option (scroll stats) */
   readonly item_etc_option: TWItemEtcOption;
   /** Starforce enhancement level */
@@ -353,22 +355,22 @@ export interface TWItemEquipmentDetails {
 
 /** Potential grades and lines on regular and preset items. */
 export interface TWItemPotentialOptions {
-  /** Potential option grade. */
-  readonly potential_option_grade: string;
-  /** Additional potential option grade. */
-  readonly additional_potential_option_grade: string;
-  /** First potential option. */
-  readonly potential_option_1: string;
-  /** Second potential option. */
-  readonly potential_option_2: string;
-  /** Third potential option. */
-  readonly potential_option_3: string;
-  /** First additional potential option. */
-  readonly additional_potential_option_1: string;
-  /** Second additional potential option. */
-  readonly additional_potential_option_2: string;
-  /** Third additional potential option. */
-  readonly additional_potential_option_3: string;
+  /** 잠재능력 등급. 잠재능력이 없으면 null. */
+  readonly potential_option_grade: string | null;
+  /** 에디셔널 잠재능력 등급. 에디셔널 잠재능력이 없으면 null. */
+  readonly additional_potential_option_grade: string | null;
+  /** 잠재능력 1번째 줄. 해당 줄이 없으면 null. */
+  readonly potential_option_1: string | null;
+  /** 잠재능력 2번째 줄. 해당 줄이 없으면 null. */
+  readonly potential_option_2: string | null;
+  /** 잠재능력 3번째 줄. 해당 줄이 없으면 null. */
+  readonly potential_option_3: string | null;
+  /** 에디셔널 잠재능력 1번째 줄. 해당 줄이 없으면 null. */
+  readonly additional_potential_option_1: string | null;
+  /** 에디셔널 잠재능력 2번째 줄. 해당 줄이 없으면 null. */
+  readonly additional_potential_option_2: string | null;
+  /** 에디셔널 잠재능력 3번째 줄. 해당 줄이 없으면 null. */
+  readonly additional_potential_option_3: string | null;
 }
 
 /** Currently equipped item. */
@@ -385,14 +387,33 @@ export interface TWItemEquipment extends TWItemEquipmentDetails, TWItemPotential
 
 /** Item in an equipment preset. */
 export interface TWPresetItemEquipment extends TWItemEquipmentDetails, TWItemPotentialOptions {
-  /** Slot occupied by the preset item. */
-  readonly equipment_slot: string;
+  /** 프리셋 장비 슬롯. 포털 스펙의 이름. 2026-11-24 실제 응답에는 없고 item_equipment_slot으로 온다. */
+  readonly equipment_slot?: string | undefined;
+  /** 프리셋 장비 슬롯. 실제 응답의 필드. 포털 스펙에는 equipment_slot으로 적혀 있다. */
+  readonly item_equipment_slot?: string | undefined;
+  /** 잠재능력 봉인 상태. 포털 스펙에는 없고 실제 응답에 있는 필드 (2026-11-24 실측). */
+  readonly potential_option_flag?: string | undefined;
+  /** 에디셔널 잠재능력 봉인 상태. 포털 스펙에는 없고 실제 응답에 있는 필드 (2026-11-24 실측). */
+  readonly additional_potential_option_flag?: string | undefined;
   /** Exceptional upgrade information. */
   readonly item_exceptional_option: TWItemExceptionalOption;
 }
 
 /** Dragon or Mechanic equipment. */
-export interface TWClassItemEquipment extends TWItemEquipmentDetails {
+export interface TWClassItemEquipment extends Omit<
+  TWItemEquipmentDetails,
+  'scroll_upgradeable_count'
+> {
+  /** 직업 전용 장비의 업그레이드 가능 횟수. */
+  readonly scroll_upgradable_count: string;
+  readonly item_description: string;
+  readonly item_gender: string;
+  readonly soul_name: string;
+  readonly soul_option: string;
+  readonly soul_weapon_grade: string;
+  readonly soul_weapon_level: string;
+  readonly soul_weapon_option: string;
+  readonly soul_weapon_power_increase: string;
   /** Slot occupied by the class item. */
   readonly equipment_slot: string;
   /** Stats from exceptional upgrades. */
@@ -411,12 +432,12 @@ export interface TWTitleInfo {
   readonly date_expire: string | null;
   /** Title option expiry date (TST, "expired" when expired, null when permanent) */
   readonly date_option_expire: string | null;
-  /** Title appearance name */
-  readonly title_shape_name: string;
-  /** Title appearance icon */
-  readonly title_shape_icon: string;
-  /** Title appearance description */
-  readonly title_shape_description: string;
+  /** 칭호 외형 이름. 값이 없으면 null. */
+  readonly title_shape_name: string | null;
+  /** 칭호 외형 아이콘. 값이 없으면 null. */
+  readonly title_shape_icon: string | null;
+  /** 칭호 외형 설명. 값이 없으면 null. */
+  readonly title_shape_description: string | null;
 }
 
 /** Medal shape info */
@@ -431,8 +452,8 @@ export interface TWMedalShape {
 
 /** 장착 장비(캐시 장비 제외) — `client.maplestoryTW.character.getItemEquipment()` 의 응답. */
 export interface TWCharacterItemEquipment {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character gender */
   readonly character_gender: string;
   /** Character job */
@@ -449,8 +470,8 @@ export interface TWCharacterItemEquipment {
   readonly item_equipment_preset_3: readonly TWPresetItemEquipment[];
   /** Title info */
   readonly title: TWTitleInfo;
-  /** Medal shape info */
-  readonly medal_shape: TWMedalShape;
+  /** 훈장 외형 정보. 값이 없으면 null. */
+  readonly medal_shape: TWMedalShape | null;
   /** Evan dragon equipment (only for Evan class) */
   readonly dragon_equipment: readonly TWClassItemEquipment[];
   /** Mechanic equipment (only for Mechanic class) */
@@ -497,20 +518,20 @@ export interface TWCashItemEquipmentItem {
   readonly cash_item_name: string;
   /** Cash equipment icon */
   readonly cash_item_icon: string;
-  /** Cash equipment description */
-  readonly cash_item_description: string;
+  /** 캐시 장비 설명. 설명이 없으면 null. */
+  readonly cash_item_description: string | null;
   /** Cash equipment options */
   readonly cash_item_option: readonly TWCashItemOption[];
   /** Cash equipment expiry date (TST, null = permanent) */
   readonly date_expire: string | null;
   /** Cash equipment option expiry date (TST, null = permanent) */
   readonly date_option_expire: string | null;
-  /** Cash equipment label information */
-  readonly cash_item_label: string;
+  /** 캐시 장비 라벨. 라벨이 없으면 null. */
+  readonly cash_item_label: string | null;
   /** Cash equipment coloring prism info (null = not applied) */
   readonly cash_item_coloring_prism: TWCashItemColoringPrism | null;
-  /** Gender compatibility for item equipment */
-  readonly item_gender: string;
+  /** 캐시 장비 착용 성별 제한. 제한이 없으면 null. */
+  readonly item_gender: string | null;
   /** Skill names */
   readonly skills: readonly string[];
   /** Name and level of each skill granted by the cash item. */
@@ -521,16 +542,16 @@ export interface TWCashItemEquipmentItem {
 
 /** 장착 캐시 장비 — `client.maplestoryTW.character.getCashItemEquipment()` 의 응답. */
 export interface TWCharacterCashItemEquipment {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character gender */
   readonly character_gender: string;
   /** Character job */
   readonly character_class: string;
   /** Character appearance mode ("0": Normal, "1": Beta for Zero / Dress-up for Angelic Buster) */
   readonly character_look_mode: string;
-  /** Active cash item preset number */
-  readonly preset_no: number;
+  /** 적용 중인 캐시 장비 프리셋 번호. 적용된 프리셋이 없으면 null. */
+  readonly preset_no: number | null;
   /** Equipped cash item info */
   readonly cash_item_equipment_base: readonly TWCashItemEquipmentItem[];
   /** Preset 1 cash item info */
@@ -587,8 +608,8 @@ export interface TWSymbolInfo {
 
 /** 장착 심볼 — `client.maplestoryTW.character.getSymbolEquipment()` 의 응답. */
 export interface TWCharacterSymbolEquipment {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character job */
   readonly character_class: string;
   /** Symbol information */
@@ -619,8 +640,8 @@ export interface TWSetEffectDetail {
 
 /** 적용 중인 세트 효과 — `client.maplestoryTW.character.getSetEffect()` 의 응답. */
 export interface TWCharacterSetEffect {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Set Item effect information */
   readonly set_effect: readonly TWSetEffectDetail[];
 }
@@ -629,12 +650,12 @@ export interface TWCharacterSetEffect {
 
 /** Hair info */
 export interface TWHairInfo {
-  /** Hair name */
-  readonly hair_name: string;
-  /** Base hair color */
-  readonly base_color: string;
-  /** Mixed hair color */
-  readonly mix_color: string;
+  /** 헤어 이름. 값이 없으면 null. */
+  readonly hair_name: string | null;
+  /** 기본 헤어 색상. 값이 없으면 null. */
+  readonly base_color: string | null;
+  /** 믹스염색 색상. 믹스염색이 없으면 null. */
+  readonly mix_color: string | null;
   /** Dye ratio for mixed hair color */
   readonly mix_rate: string;
   /** Freestyle Coupon application status ("0": not applied, "1": applied) */
@@ -643,12 +664,12 @@ export interface TWHairInfo {
 
 /** Face info */
 export interface TWFaceInfo {
-  /** Face name */
-  readonly face_name: string;
-  /** Base face color */
-  readonly base_color: string;
-  /** Mixed face color */
-  readonly mix_color: string;
+  /** 성형 이름. 값이 없으면 null. */
+  readonly face_name: string | null;
+  /** 기본 컬러렌즈 색상. 값이 없으면 null. */
+  readonly base_color: string | null;
+  /** 믹스 컬러렌즈 색상. 믹스 컬러렌즈가 없으면 null. */
+  readonly mix_color: string | null;
   /** Dye ratio for mixed face color */
   readonly mix_rate: string;
   /** Freestyle Coupon application status ("0": not applied, "1": applied) */
@@ -659,20 +680,20 @@ export interface TWFaceInfo {
 export interface TWSkinInfo {
   /** Skin name */
   readonly skin_name: string;
-  /** Color style */
-  readonly color_style: string;
-  /** Skin hue */
-  readonly hue: number;
-  /** Skin saturation */
-  readonly saturation: number;
-  /** Skin brightness */
-  readonly brightness: number;
+  /** 피부 색상 유형. 색상 보정 정보가 없으면 null. */
+  readonly color_style: string | null;
+  /** 피부 색조. 색상 보정 정보가 없으면 null. */
+  readonly hue: number | null;
+  /** 피부 채도. 색상 보정 정보가 없으면 null. */
+  readonly saturation: number | null;
+  /** 피부 밝기. 색상 보정 정보가 없으면 null. */
+  readonly brightness: number | null;
 }
 
 /** 헤어·성형·피부 — `client.maplestoryTW.character.getBeautyEquipment()` 의 응답. */
 export interface TWCharacterBeautyEquipment {
-  /** Reference date for query (TST) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character gender */
   readonly character_gender: string;
   /** Character job */
@@ -735,8 +756,8 @@ export interface TWAndroidPreset {
   readonly android_gender: string;
   /** Android grade */
   readonly android_grade: string;
-  /** Android skin info */
-  readonly android_skin: TWSkinInfo;
+  /** 안드로이드 피부 정보. 값이 없으면 null. */
+  readonly android_skin: TWSkinInfo | null;
   /** Android hair info */
   readonly android_hair: TWHairInfo;
   /** Android face info */
@@ -751,8 +772,8 @@ export interface TWAndroidPreset {
 
 /** 장착 안드로이드 — `client.maplestoryTW.character.getAndroidEquipment()` 의 응답. */
 export interface TWCharacterAndroidEquipment {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Android name */
   readonly android_name: string | null;
   /** Android nickname */
@@ -765,8 +786,8 @@ export interface TWCharacterAndroidEquipment {
   readonly android_hair: TWHairInfo;
   /** Android face info */
   readonly android_face: TWFaceInfo;
-  /** Android skin info */
-  readonly android_skin: TWSkinInfo;
+  /** 안드로이드 피부 정보. 값이 없으면 null. */
+  readonly android_skin: TWSkinInfo | null;
   /** Android cash item equipment info */
   readonly android_cash_item_equipment: readonly TWAndroidCashItem[];
   /** Android ear sensor clip status as a string flag. */
@@ -845,8 +866,8 @@ export interface TWPetPotential {
 
 /** 장착 펫과 펫 장비·펫 스킬 — `client.maplestoryTW.character.getPetEquipment()` 의 응답. */
 export interface TWCharacterPetEquipment {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Name of pet 1 */
   readonly pet_1_name: string | null;
   /** Nickname of pet 1 */
@@ -869,8 +890,8 @@ export interface TWCharacterPetEquipment {
   readonly pet_1_appearance: string | null;
   /** Appearance icon of pet 1 */
   readonly pet_1_appearance_icon: string | null;
-  /** Potential lines for pet 1. */
-  readonly pet_1_potential: readonly TWPetPotential[];
+  /** 1번 펫의 잠재능력. 잠재능력 정보가 없으면 null. */
+  readonly pet_1_potential: readonly TWPetPotential[] | null;
   /** Name of pet 2 */
   readonly pet_2_name: string | null;
   /** Nickname of pet 2 */
@@ -893,8 +914,8 @@ export interface TWCharacterPetEquipment {
   readonly pet_2_appearance: string | null;
   /** Appearance icon of pet 2 */
   readonly pet_2_appearance_icon: string | null;
-  /** Potential lines for pet 2. */
-  readonly pet_2_potential: readonly TWPetPotential[];
+  /** 2번 펫의 잠재능력. 잠재능력 정보가 없으면 null. */
+  readonly pet_2_potential: readonly TWPetPotential[] | null;
   /** Name of pet 3 */
   readonly pet_3_name: string | null;
   /** Nickname of pet 3 */
@@ -917,8 +938,8 @@ export interface TWCharacterPetEquipment {
   readonly pet_3_appearance: string | null;
   /** Appearance icon of pet 3 */
   readonly pet_3_appearance_icon: string | null;
-  /** Potential lines for pet 3. */
-  readonly pet_3_potential: readonly TWPetPotential[];
+  /** 3번 펫의 잠재능력. 잠재능력 정보가 없으면 null. */
+  readonly pet_3_potential: readonly TWPetPotential[] | null;
 }
 
 // ─── GET /maplestorytw/v1/character/skill ────────────────────────────────────
@@ -956,16 +977,16 @@ export interface TWSkillInfo {
   readonly skill_level: number;
   /** Effect description by skill level */
   readonly skill_effect: string;
-  /** Effect description for the next skill level */
-  readonly skill_effect_next: string;
+  /** 다음 레벨 스킬 효과. 다음 레벨 효과가 없으면 null. */
+  readonly skill_effect_next: string | null;
   /** Skill icon */
   readonly skill_icon: string;
 }
 
 /** 전직 차수별 스킬 — `client.maplestoryTW.character.getSkill()` 의 응답. */
 export interface TWCharacterSkill {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character job */
   readonly character_class: string;
   /** Job advancement tier */
@@ -1008,8 +1029,8 @@ export interface TWLinkSkillPresetInfo {
 
 /** 링크 스킬 — `client.maplestoryTW.character.getLinkSkill()` 의 응답. */
 export interface TWCharacterLinkSkill {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character job */
   readonly character_class: string;
   /** Link Skill information */
@@ -1038,24 +1059,24 @@ export interface TWVCoreInfo {
   readonly slot_id: string;
   /** Slot level */
   readonly slot_level: number;
-  /** Node name */
-  readonly v_core_name: string;
-  /** Node type */
-  readonly v_core_type: string;
+  /** V코어 이름. 슬롯에 코어가 없으면 null. */
+  readonly v_core_name: string | null;
+  /** V코어 종류. 슬롯에 코어가 없으면 null. */
+  readonly v_core_type: string | null;
   /** Node level */
   readonly v_core_level: number;
-  /** Name of the skill that corresponds to the node */
-  readonly v_core_skill_1: string;
-  /** Name of the second skill (Boost Nodes) */
-  readonly v_core_skill_2: string;
-  /** Name of the third skill (Boost Nodes) */
-  readonly v_core_skill_3: string;
+  /** 코어의 첫 번째 스킬 이름. 해당 스킬이 없으면 null. */
+  readonly v_core_skill_1: string | null;
+  /** 코어의 두 번째 스킬 이름. 해당 스킬이 없으면 null. */
+  readonly v_core_skill_2: string | null;
+  /** 코어의 세 번째 스킬 이름. 해당 스킬이 없으면 null. */
+  readonly v_core_skill_3: string | null;
 }
 
 /** V매트릭스(5차) — `client.maplestoryTW.character.getVMatrix()` 의 응답. */
 export interface TWCharacterVMatrix {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character job */
   readonly character_class: string;
   /** V Matrix Node information */
@@ -1086,10 +1107,10 @@ export interface TWHexaCoreInfo {
 
 /** HEXA 매트릭스(6차)의 HEXA 코어 — `client.maplestoryTW.character.getHexaMatrix()` 의 응답. */
 export interface TWCharacterHexaMatrix {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
-  /** HEXA Node information */
-  readonly character_hexa_core_equipment: readonly TWHexaCoreInfo[];
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
+  /** 장착한 HEXA 코어 정보. 값이 없으면 null. */
+  readonly character_hexa_core_equipment: readonly TWHexaCoreInfo[] | null;
 }
 
 // ─── GET /maplestorytw/v1/character/hexamatrix-stat ──────────────────────────
@@ -1116,30 +1137,30 @@ export interface TWHexaStatCoreInfo {
 
 /** HEXA 스탯 — `client.maplestoryTW.character.getHexaMatrixStat()` 의 응답. */
 export interface TWCharacterHexaMatrixStat {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
-  /** Character job */
-  readonly character_class: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
+  /** HEXA 스탯에 기록된 캐릭터 직업. 값이 없으면 null. */
+  readonly character_class: string | null;
   /** HEXA Stat Node I information */
   readonly character_hexa_stat_core: readonly TWHexaStatCoreInfo[];
-  /** HEXA Stat Node II information */
-  readonly character_hexa_stat_core_2: readonly TWHexaStatCoreInfo[];
-  /** HEXA Stat Node III information */
-  readonly character_hexa_stat_core_3: readonly TWHexaStatCoreInfo[];
+  /** HEXA 스탯 코어 II 정보. 값이 없으면 null. */
+  readonly character_hexa_stat_core_2: readonly TWHexaStatCoreInfo[] | null;
+  /** HEXA 스탯 코어 III 정보. 값이 없으면 null. */
+  readonly character_hexa_stat_core_3: readonly TWHexaStatCoreInfo[] | null;
   /** Preset HEXA Stat Node I information */
   readonly preset_hexa_stat_core: readonly TWHexaStatCoreInfo[];
-  /** Preset HEXA Stat Node II information */
-  readonly preset_hexa_stat_core_2: readonly TWHexaStatCoreInfo[];
-  /** Preset HEXA Stat Node III information */
-  readonly preset_hexa_stat_core_3: readonly TWHexaStatCoreInfo[];
+  /** 프리셋의 HEXA 스탯 코어 II 정보. 값이 없으면 null. */
+  readonly preset_hexa_stat_core_2: readonly TWHexaStatCoreInfo[] | null;
+  /** 프리셋의 HEXA 스탯 코어 III 정보. 값이 없으면 null. */
+  readonly preset_hexa_stat_core_3: readonly TWHexaStatCoreInfo[] | null;
 }
 
 // ─── GET /maplestorytw/v1/character/dojang ───────────────────────────────────
 
 /** 무릉도장 최고 기록 — `client.maplestoryTW.character.getDojang()` 의 응답. */
 export interface TWCharacterDojang {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Character job */
   readonly character_class: string;
   /** World name */
@@ -1208,8 +1229,8 @@ export interface TWFamiliarInfo {
 
 /** 패밀리어(萌獸) — `client.maplestoryTW.character.getFamiliar()` 의 응답. */
 export interface TWCharacterFamiliar {
-  /** Reference date for the snapshot (TST, with daily timestamps at midnight). */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Familiar link slots. */
   readonly familiar_link_slot: readonly TWFamiliarLinkSlot[];
   /** Familiar details. */

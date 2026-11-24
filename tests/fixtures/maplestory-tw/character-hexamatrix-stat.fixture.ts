@@ -13,11 +13,11 @@ const hexaStatCore = {
 
 export const twCharacterHexaMatrixStatFixture: TWCharacterHexaMatrixStat = {
   date: '2025-10-15T00:00+08:00',
-  character_class: 'Night Lord',
+  character_class: null,
   character_hexa_stat_core: [hexaStatCore],
-  character_hexa_stat_core_2: [hexaStatCore],
-  character_hexa_stat_core_3: [hexaStatCore],
+  character_hexa_stat_core_2: null,
+  character_hexa_stat_core_3: null,
   preset_hexa_stat_core: [hexaStatCore],
-  preset_hexa_stat_core_2: [hexaStatCore],
-  preset_hexa_stat_core_3: [hexaStatCore],
+  preset_hexa_stat_core_2: null,
+  preset_hexa_stat_core_3: null,
 };

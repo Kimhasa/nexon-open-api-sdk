@@ -2,8 +2,8 @@
 
 /** 유니온 레벨·등급 — `client.maplestoryTW.union.getUnion()` 의 응답. */
 export interface TWUnion {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Union level */
   readonly union_level: number;
   /** Union grade */
@@ -38,8 +38,8 @@ export interface TWUnionBlockPosition {
 export interface TWUnionBlock {
   /** Block shapes (Warrior, Magician, Bowman, Thief, Pirate, Maple M, Hybrid) */
   readonly block_type: string;
-  /** Character class corresponding to the block */
-  readonly block_class: string;
+  /** 유니온 공격대 블록에 해당하는 캐릭터 직업. 직업 정보가 없으면 null. */
+  readonly block_class: string | null;
   /** Character level corresponding to the block */
   readonly block_level: string;
   /**
@@ -70,8 +70,8 @@ export interface TWUnionRaiderPreset {
 
 /** 유니온 공격대 배치 — `client.maplestoryTW.union.getRaider()` 의 응답. */
 export interface TWUnionRaider {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Union raid member effects */
   readonly union_raider_stat: readonly string[];
   /** Union raid capture effects */
@@ -124,8 +124,8 @@ export interface TWUnionArtifactCrystal {
 
 /** 유니온 아티팩트 — `client.maplestoryTW.union.getArtifact()` 의 응답. */
 export interface TWUnionArtifact {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Artifact effect information */
   readonly union_artifact_effect: readonly TWUnionArtifactEffect[];
   /** Artifact crystal information */
@@ -158,8 +158,8 @@ export interface TWUnionChampionInfo {
 
 /** 유니온 챔피언 — `client.maplestoryTW.union.getChampion()` 의 응답. */
 export interface TWUnionChampion {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 일별 데이터는 0시 0분 기준. 최신 데이터 조회 시 null일 수 있다. */
+  readonly date: string | null;
   /** Union Champion information */
   readonly union_champion: readonly TWUnionChampionInfo[];
   /** Champion Insignia effects */
