@@ -1,4 +1,5 @@
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
+import { FirstDescendantMetaClient } from './meta/FirstDescendantMetaClient.js';
 import { TFD_OUID_SHAPE } from './shapes.js';
 import type { TfdOuid } from './types.js';
 import { FirstDescendantUserClient } from './user/FirstDescendantUserClient.js';
@@ -24,6 +25,7 @@ export class FirstDescendantClient extends AbstractGameClient {
   protected readonly pathPrefix = 'tfd';
 
   private _user: FirstDescendantUserClient | undefined;
+  private _meta: FirstDescendantMetaClient | undefined;
 
   /**
    * 닉네임으로 계정 식별자(ouid)를 조회한다.
@@ -61,5 +63,11 @@ export class FirstDescendantClient extends AbstractGameClient {
   get user(): FirstDescendantUserClient {
     this._user ??= new FirstDescendantUserClient(this.http);
     return this._user;
+  }
+
+  /** 메타데이터 조회 (계승자·무기·모듈 등 각종 id의 이름·이미지·수치를 담은 정적 파일) */
+  get meta(): FirstDescendantMetaClient {
+    this._meta ??= new FirstDescendantMetaClient(this.http);
+    return this._meta;
   }
 }

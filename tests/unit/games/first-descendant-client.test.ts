@@ -5,6 +5,7 @@ import { NexonError } from '../../../src/core/errors/NexonError.js';
 import { NexonAuthError } from '../../../src/core/errors/NexonAuthError.js';
 import { NexonBadRequestError } from '../../../src/core/errors/NexonBadRequestError.js';
 import { NexonRateLimitError } from '../../../src/core/errors/NexonRateLimitError.js';
+import { NexonServerError } from '../../../src/core/errors/NexonServerError.js';
 import { FirstDescendantClient } from '../../../src/games/first-descendant/FirstDescendantClient.js';
 import type { TfdOuid } from '../../../src/games/first-descendant/types.js';
 import { server } from '../../mocks/server.js';
@@ -19,7 +20,43 @@ import {
   tfdUserWeaponFixture,
 } from '../../fixtures/first-descendant/user.fixture.js';
 
+import {
+  tfdAcquisitionDetailMetaFixture,
+  tfdArcheTuningNodeMetaFixture,
+  tfdCollectibleItemMetaFixture,
+  tfdConsumableMaterialMetaFixture,
+  tfdCoreTypeMetaFixture,
+  tfdCustomizingItemMetaFixture,
+  tfdDescendantMetaFixture,
+  tfdDescendantGroupMetaFixture,
+  tfdExternalComponentMetaFixture,
+  tfdFellowMetaFixture,
+  tfdMedalMetaFixture,
+  tfdModuleMetaFixture,
+  tfdNodeItemMetaFixture,
+  tfdNodeSocketTypeMetaFixture,
+  tfdReactorMetaFixture,
+  tfdResearchMetaFixture,
+  tfdRewardMetaFixture,
+  tfdStatMetaFixture,
+  tfdTierMetaFixture,
+  tfdTitleMetaFixture,
+  tfdVehicleMetaFixture,
+  tfdVoidBattleMetaFixture,
+  tfdWeaponMetaFixture,
+  tfdWeaponTypeMetaFixture,
+  tfdAdaptLevelMetaFixture,
+  tfdAmorphousRewardMetaFixture,
+  tfdArcheTuningBoardMetaFixture,
+  tfdArcheTuningBoardGroupMetaFixture,
+  tfdCoreSlotMetaFixture,
+  tfdDescendantLevelDetailMetaFixture,
+  tfdFellowLevelDetailMetaFixture,
+  tfdMasteryRankLevelDetailMetaFixture,
+} from '../../fixtures/first-descendant/meta.fixture.js';
+
 const BASE = 'https://open.api.nexon.com/tfd/v1';
+const META = 'https://open.api.nexon.com/static/tfd/meta';
 
 /** 클라이언트와, 실제로 나간 요청 URL 기록을 함께 만든다. */
 const createClient = (
@@ -74,6 +111,7 @@ describe('FirstDescendantClient', () => {
       const { client } = createClient();
 
       expect(client.user).toBe(client.user);
+      expect(client.meta).toBe(client.meta);
     });
   });
 
@@ -212,6 +250,124 @@ describe('FirstDescendantClient', () => {
       await expect(client.user.getReactor({ ouid: TFD_TEST_OUID })).rejects.toBeInstanceOf(
         NexonRateLimitError,
       );
+    });
+  });
+
+  describe('meta', () => {
+    const localized = [
+      ['getAcquisitionDetail', 'acquisition-detail', tfdAcquisitionDetailMetaFixture],
+      ['getArcheTuningNode', 'arche-tuning-node', tfdArcheTuningNodeMetaFixture],
+      ['getCollectibleItem', 'collectible-item', tfdCollectibleItemMetaFixture],
+      ['getConsumableMaterial', 'consumable-material', tfdConsumableMaterialMetaFixture],
+      ['getCoreType', 'core-type', tfdCoreTypeMetaFixture],
+      ['getCustomizingItem', 'customizing-item', tfdCustomizingItemMetaFixture],
+      ['getDescendant', 'descendant', tfdDescendantMetaFixture],
+      ['getDescendantGroup', 'descendant-group', tfdDescendantGroupMetaFixture],
+      ['getExternalComponent', 'external-component', tfdExternalComponentMetaFixture],
+      ['getFellow', 'fellow', tfdFellowMetaFixture],
+      ['getMedal', 'medal', tfdMedalMetaFixture],
+      ['getModule', 'module', tfdModuleMetaFixture],
+      ['getNodeItem', 'node-item', tfdNodeItemMetaFixture],
+      ['getNodeSocketType', 'node-socket-type', tfdNodeSocketTypeMetaFixture],
+      ['getReactor', 'reactor', tfdReactorMetaFixture],
+      ['getResearch', 'research', tfdResearchMetaFixture],
+      ['getReward', 'reward', tfdRewardMetaFixture],
+      ['getStat', 'stat', tfdStatMetaFixture],
+      ['getTier', 'tier', tfdTierMetaFixture],
+      ['getTitle', 'title', tfdTitleMetaFixture],
+      ['getVehicle', 'vehicle', tfdVehicleMetaFixture],
+      ['getVoidBattle', 'void-battle', tfdVoidBattleMetaFixture],
+      ['getWeapon', 'weapon', tfdWeaponMetaFixture],
+      ['getWeaponType', 'weapon-type', tfdWeaponTypeMetaFixture],
+    ] as const;
+
+    const common = [
+      ['getAdaptLevel', 'adapt-level', tfdAdaptLevelMetaFixture],
+      ['getAmorphousReward', 'amorphous-reward', tfdAmorphousRewardMetaFixture],
+      ['getArcheTuningBoard', 'arche-tuning-board', tfdArcheTuningBoardMetaFixture],
+      ['getArcheTuningBoardGroup', 'arche-tuning-board-group', tfdArcheTuningBoardGroupMetaFixture],
+      ['getCoreSlot', 'core-slot', tfdCoreSlotMetaFixture],
+      ['getDescendantLevelDetail', 'descendant-level-detail', tfdDescendantLevelDetailMetaFixture],
+      ['getFellowLevelDetail', 'fellow-level-detail', tfdFellowLevelDetailMetaFixture],
+      [
+        'getMasteryRankLevelDetail',
+        'mastery-rank-level-detail',
+        tfdMasteryRankLevelDetailMetaFixture,
+      ],
+    ] as const;
+
+    it.each(localized)(
+      '%s — GET /static/tfd/meta/{language_code}/%s.json',
+      async (method, file, fixture) => {
+        const { client, urls } = createClient();
+
+        const byDefault = await client.meta[method]();
+        const english = await client.meta[method]('en');
+
+        expect(byDefault).toEqual(fixture);
+        expect(english).toEqual(fixture);
+        expect(byDefault.length).toBeGreaterThan(0);
+        expect(urls).toEqual([`${META}/ko/${file}.json`, `${META}/en/${file}.json`]);
+      },
+    );
+
+    it.each(common)('%s — GET /static/tfd/meta/%s.json', async (method, file, fixture) => {
+      const { client, urls } = createClient();
+      const result = await client.meta[method]();
+
+      expect(result).toEqual(fixture);
+      expect(result.length).toBeGreaterThan(0);
+      expect(urls).toEqual([`${META}/${file}.json`]);
+    });
+
+    it('스펙의 메타데이터 32개를 모두 덮는다', () => {
+      expect(localized).toHaveLength(24);
+      expect(common).toHaveLength(8);
+    });
+
+    it('언어 코드는 대소문자를 구분해 경로에 그대로 들어간다', async () => {
+      const { client, urls } = createClient();
+      await client.meta.getTier('zh-TW');
+
+      expect(urls).toEqual([`${META}/zh-TW/tier.json`]);
+    });
+
+    it('지원하지 않는 언어 코드는 요청 없이 NexonError를 던지고 지원 목록을 안내한다', async () => {
+      const { client, urls } = createClient();
+
+      // @ts-expect-error 지원 목록에 없는 언어 코드
+      await expect(client.meta.getDescendant('kr')).rejects.toThrow(NexonError);
+      // @ts-expect-error 대소문자가 다른 언어 코드
+      await expect(client.meta.getWeapon('zh-cn')).rejects.toThrow(/zh-CN, zh-TW/);
+      expect(urls).toEqual([]);
+    });
+
+    it('실데이터가 스펙과 다른 필드를 타입이 그대로 담는다', async () => {
+      const { client } = createClient();
+
+      const mastery = await client.meta.getMasteryRankLevelDetail();
+      // 스펙은 mastery_rank_level 이지만 실데이터 키는 mastery_level 이다
+      expect(mastery[0]?.mastery_level).toBe(1);
+      expect(mastery[0]?.mastery_rank_level).toBeUndefined();
+
+      const coreType = await client.meta.getCoreType();
+      // 스펙은 core_option[] 아래에 두지만 실데이터는 detail[] 아래에 있다
+      const option = coreType[0]?.core_option[0]?.detail[0]?.available_item_option[0];
+      expect(typeof option?.option_grade).toBe('number');
+    });
+
+    it('서버 오류는 NexonServerError로 분류된다 (500)', async () => {
+      server.use(
+        mswHttp.get(`${META}/ko/module.json`, () =>
+          HttpResponse.json(
+            { error: { name: 'OPENAPI00001', message: 'Internal Server Error' } },
+            { status: 500 },
+          ),
+        ),
+      );
+      const { client } = createClient();
+
+      await expect(client.meta.getModule()).rejects.toBeInstanceOf(NexonServerError);
     });
   });
 });
