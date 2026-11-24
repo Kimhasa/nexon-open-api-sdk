@@ -1,4 +1,3 @@
-import { HttpClient } from '../../core/http/HttpClient.js';
 import { AbstractMapleBaseClient } from '../_base/AbstractMapleStoryBaseClient.js';
 import type { OCID } from '../_base/maple-base-types.js';
 import { MapleStoryCharacterClient } from './character/MapleStoryCharacterClient.js';
@@ -147,8 +146,7 @@ export class MapleStoryClient extends AbstractMapleBaseClient {
    * 보내고, 이 메서드는 구 개발자센터에서 발급받은 키를 `x-nxopen-legacy-api-key` 헤더로 보냅니다.
    * 그래서 `NexonClient` 의 `apiKey` 가 아니라 인자로 받은 키를 사용합니다.
    *
-   * 이 요청은 전용 연결로 보내므로 `NexonClient` 에 설정한 `timeoutMs`·`maxRetries`·`logger`·
-   * 인터셉터가 적용되지 않고 SDK 기본값(타임아웃 10초, 429/503 최대 3회 재시도)으로 동작합니다.
+   * `NexonClient` 에 설정한 `timeoutMs`·`maxRetries`·`logger`·인터셉터는 다른 요청과 똑같이 적용됩니다.
    *
    * @param legacyApiKey - 구 개발자센터에서 발급받은 API 키
    *
@@ -168,18 +166,11 @@ export class MapleStoryClient extends AbstractMapleBaseClient {
       'legacyApiKey',
       '구 개발자센터에서 발급받은 API 키를 전달하세요. 현재 포털 키의 ouid는 getOuid() 로 조회합니다.',
     );
-    // HttpClient는 요청별 헤더를 받지 않고 x-nxopen-api-key만 주입한다.
-    // 공유 http에 인터셉터를 걸면 다른 요청에도 영향을 주므로, 이 호출 전용 인스턴스에서 헤더 이름만 바꾼다.
-    const legacyHttp = new HttpClient({ apiKey: legacyApiKey });
-    legacyHttp.addRequestInterceptor((request) => {
-      const { 'x-nxopen-api-key': key, ...headers } = request.headers;
-      return {
-        ...request,
-        headers: { ...headers, 'x-nxopen-legacy-api-key': key ?? legacyApiKey },
-      };
-    });
     const url = this.buildUrl('ouid', 'legacy');
-    const response = await legacyHttp.get<{ ouid: string }>(url, undefined, OUID_SHAPE);
+    // 구 키 전용 경로라 현재 포털 키(x-nxopen-api-key)는 보내지 않는다
+    const response = await this.http.get<{ ouid: string }>(url, undefined, OUID_SHAPE, {
+      headers: { 'x-nxopen-api-key': undefined, 'x-nxopen-legacy-api-key': legacyApiKey },
+    });
     return response.ouid;
   }
 

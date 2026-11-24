@@ -60,7 +60,7 @@ await client.maplestory.getAchievement(); // 계정 업적
 | `getOuid`       | `x-nxopen-api-key`        | `new NexonClient({ apiKey })` 의 현재 포털 키 |
 | `getLegacyOuid` | `x-nxopen-legacy-api-key` | 인자로 넘긴 구 개발자센터 API 키              |
 
-`getLegacyOuid` 는 전용 연결로 요청하므로 `NexonClient` 에 설정한 `timeoutMs`·`maxRetries`·`logger`·인터셉터가 적용되지 않고 SDK 기본값(타임아웃 10초, 429/503 최대 3회 재시도)으로 동작합니다.
+`timeoutMs`·`maxRetries`·`logger`·인터셉터 등 `NexonClient` 설정은 두 메서드에 똑같이 적용됩니다.
 
 ## 캐릭터 (23개)
 

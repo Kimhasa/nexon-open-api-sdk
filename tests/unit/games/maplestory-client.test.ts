@@ -407,7 +407,6 @@ describe('MapleStoryClient', () => {
         logger: { onResponseShapeMismatch: (m) => mismatches.push(m) },
       });
       await call(client);
-      // getLegacyOuid는 전용 HttpClient를 쓰므로 여기서는 검증되지 않는다 (아래 별도 테스트)
       expect(mismatches).toEqual([]);
     });
   });
@@ -580,6 +579,81 @@ describe('MapleStoryClient', () => {
 
       expect(captured.headers().get('x-nxopen-api-key')).toBe(TEST_API_KEY);
       expect(captured.headers().get('x-nxopen-legacy-api-key')).toBeNull();
+    });
+
+    it('기본 핸들러(구 키 헤더만 허용)에서도 성공한다', async () => {
+      // 기본 핸들러는 x-nxopen-api-key 가 함께 오면 400을 돌려준다
+      await expect(createMapleStoryClient().getLegacyOuid('legacy-api-key')).resolves.toBe(
+        legacyOuidFixture.ouid,
+      );
+    });
+
+    it('공유 HttpClient의 인터셉터·로거·재시도 설정이 적용된다', async () => {
+      let calls = 0;
+      server.use(
+        http.get(`${ROOT}/legacy/ouid`, ({ request }) => {
+          calls++;
+          if (calls === 1) {
+            return HttpResponse.json(
+              { error: { name: 'OPENAPI00007', message: 'Too Many Requests' } },
+              { status: 429 },
+            );
+          }
+          // 재시도 요청에도 포털 키가 섞이면 안 된다
+          if (request.headers.get('x-nxopen-api-key')) {
+            return HttpResponse.json(
+              { error: { name: 'OPENAPI00004', message: 'unexpected api key' } },
+              { status: 400 },
+            );
+          }
+          return HttpResponse.json(legacyOuidFixture);
+        }),
+      );
+
+      const requests: string[] = [];
+      const retries: number[] = [];
+      const interceptedHeaders: Array<Record<string, string>> = [];
+      const sharedHttp = new HttpClient({
+        apiKey: TEST_API_KEY,
+        maxRetries: 1,
+        retryBaseDelayMs: 1,
+        logger: {
+          onRequest: (req) => requests.push(req.url),
+          onRetry: (info) => retries.push(info.attempt),
+        },
+      });
+      sharedHttp.addRequestInterceptor((req) => {
+        interceptedHeaders.push(req.headers);
+        return req;
+      });
+
+      const ouid = await new MapleStoryClient(sharedHttp).getLegacyOuid('legacy-api-key');
+
+      expect(ouid).toBe(legacyOuidFixture.ouid);
+      expect(calls).toBe(2);
+      expect(retries).toEqual([1]);
+      expect(requests).toEqual([`${ROOT}/legacy/ouid`]);
+      expect(interceptedHeaders).toEqual([
+        { Accept: 'application/json', 'x-nxopen-legacy-api-key': 'legacy-api-key' },
+      ]);
+    });
+
+    it('설정한 maxRetries 를 넘으면 NexonRateLimitError를 던진다', async () => {
+      let calls = 0;
+      server.use(
+        http.get(`${ROOT}/legacy/ouid`, () => {
+          calls++;
+          return HttpResponse.json(
+            { error: { name: 'OPENAPI00007', message: 'Too Many Requests' } },
+            { status: 429 },
+          );
+        }),
+      );
+
+      await expect(
+        createMapleStoryClient({ maxRetries: 0 }).getLegacyOuid('legacy-api-key'),
+      ).rejects.toBeInstanceOf(NexonRateLimitError);
+      expect(calls).toBe(1);
     });
 
     it('구 API 키가 거부되면 NexonAuthError를 던진다', async () => {

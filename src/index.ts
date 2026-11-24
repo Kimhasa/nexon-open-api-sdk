@@ -440,6 +440,7 @@ export type {
 export { HttpClient } from './core/http/HttpClient.js';
 export type {
   HttpClientConfig,
+  HttpRequestOptions,
   RequestInterceptor,
   ResponseInterceptor,
   RetryInterceptor,
