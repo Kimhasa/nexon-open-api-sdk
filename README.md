@@ -76,6 +76,41 @@ const matchIds = await client.fcOnline.getMatchList({ ouid, matchtype: 50, limit
 const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 ```
 
+### 그 밖의 게임
+
+모든 게임이 같은 패턴입니다: 식별자 조회(`getOcid` / `getOuid`) → 카테고리별 sub-client.
+
+```ts
+// MapleStory Taiwan
+const twOcid = await client.maplestoryTW.getOcid('角色名稱');
+const twBasic = await client.maplestoryTW.character.getBasic({ ocid: twOcid });
+
+// 퍼스트 디센던트
+const tfdOuid = await client.firstDescendant.getOuid('닉네임#1234');
+const tfdUser = await client.firstDescendant.user.getBasic({ ouid: tfdOuid });
+const descendants = await client.firstDescendant.meta.getDescendant('ko'); // 정적 메타데이터
+
+// 마비노기 영웅전
+const heroesOcid = await client.mabinogiHeroes.getOcid('캐릭터명');
+const heroesBasic = await client.mabinogiHeroes.character.getBasic({ ocid: heroesOcid });
+
+// 서든어택
+const saOuid = await client.suddenAttack.getOuid('닉네임');
+const matches = await client.suddenAttack.match.getList({ ouid: saOuid, match_mode: '폭파미션' });
+
+// 마비노기
+const items = await client.mabinogi.auction.listItems({ auction_item_category: '검' });
+
+// 바람의나라 (서버 이름 필요)
+const baramOcid = await client.baram.getOcid('캐릭터명', '연');
+const baramBasic = await client.baram.character.getBasic({ ocid: baramOcid });
+
+// 넥슨 Open API 공지
+const { notice } = await client.platform.getNoticeList();
+```
+
+게임별 전체 API는 아래 [상세 문서](#상세-문서)를 참고하세요.
+
 > API 키는 [Nexon Open API 포털](https://openapi.nexon.com/)에서 발급받을 수 있습니다.
 
 ## 주요 특징
