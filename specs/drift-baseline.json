@@ -1,5 +1,29 @@
 [
   {
+    "operation": "GET /fconline/v1/match-detail",
+    "path": "response.matchInfo[].matchDetail.offsideCount",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 오프사이드 수는 포털의 OffsideCount 대신 offsideCount로 온다."
+  },
+  {
+    "operation": "GET /fconline/v1/match-detail",
+    "path": "response.matchInfo[].player[].status.ballPossesionSuccess",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 선수의 볼 소유 성공 수는 포털의 ballPossesionSuc 대신 ballPossesionSuccess로 온다."
+  },
+  {
+    "operation": "GET /fconline/v1/match-detail",
+    "path": "response.matchInfo[].shootDetail[].assistSpId",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 어시스트 선수 카드 번호는 포털의 assistSpI 대신 assistSpId로 온다."
+  },
+  {
+    "operation": "GET /fconline/v1/ranker-stats",
+    "path": "response[].spid",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 랭커가 쓴 선수 카드 번호는 포털의 spId 대신 spid로 온다."
+  },
+  {
     "operation": "GET /fconline/v1/user/match",
     "path": "response[]",
     "kind": "type-mismatch",

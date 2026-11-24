@@ -13,7 +13,7 @@ export const fcTradeFixture: FcTradeRecord[] = [
 
 export const fcRankerFixture: FcRankerStats[] = [
   {
-    spId: 100167680,
+    spid: 100167680,
     spPosition: 18,
     status: {
       shoot: 0,

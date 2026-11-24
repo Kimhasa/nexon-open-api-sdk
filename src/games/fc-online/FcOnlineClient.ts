@@ -187,7 +187,7 @@ export class FcOnlineClient extends AbstractGameClient {
   /**
    * 내 이적시장 거래 기록(거래한 선수 카드, 강화 등급, 거래 가격)을 조회한다 (최근 거래부터).
    *
-   * API 키를 발급받은 계정의 거래만 조회됩니다. 다른 구단주의 거래는 볼 수 없습니다.
+   * API 키를 발급한 넥슨 계정 본인의 이적시장 거래 기록만 조회됩니다.
    *
    * @param params.tradetype - 거래 종류 (`'buy'`: 구입, `'sell'`: 판매)
    * @param params.offset - 건너뛸 거래 수 (기본값: 0)
@@ -300,7 +300,7 @@ export class FcOnlineClient extends AbstractGameClient {
    *   ],
    * });
    * for (const s of stats) {
-   *   console.log(`spId ${s.spId} — 평균 골 ${s.status.goal}, 패스 ${s.status.passSuccess}`);
+   *   console.log(`선수 카드 ${s.spid} — 평균 골 ${s.status.goal}, 패스 ${s.status.passSuccess}`);
    * }
    * ```
    */

@@ -62,7 +62,8 @@ export const FC_MATCH_DETAIL_SHAPE: ShapeDescriptor = {
 
 export const FC_RANKER_STATS_SHAPE = arrayOf({
   expectedKeys: {
-    spId: 'number',
+    spId: 'optional',
+    spid: 'optional',
     spPosition: 'number',
     status: 'object',
     createDate: 'string',
