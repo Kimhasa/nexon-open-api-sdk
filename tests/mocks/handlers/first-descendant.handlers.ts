@@ -44,6 +44,11 @@ import {
   tfdFellowLevelDetailMetaFixture,
   tfdMasteryRankLevelDetailMetaFixture,
 } from '../../fixtures/first-descendant/meta.fixture.js';
+import {
+  tfdLeaderboardVoidErosionPurgeChallengeFixture,
+  tfdLeaderboardVoidInterceptBattleFixture,
+} from '../../fixtures/first-descendant/leaderboard.fixture.js';
+import { tfdRecommendationModuleFixture } from '../../fixtures/first-descendant/recommendation.fixture.js';
 
 const BASE = 'https://open.api.nexon.com/tfd/v1';
 const META = 'https://open.api.nexon.com/static/tfd/meta';
@@ -139,6 +144,25 @@ export const firstDescendantHandlers: RequestHandler[] = [
   keyed('user/reactor', ['language_code', 'ouid'], tfdUserReactorFixture),
   keyed('user/external-component', ['language_code', 'ouid'], tfdUserExternalComponentFixture),
   keyed('user/arche-tuning', ['ouid', 'descendant_group_id'], tfdUserArcheTuningFixture),
+
+  // ─── 추천 모듈 조회 ───
+  keyed(
+    'recommendation/module',
+    ['descendant_id', 'weapon_id', 'void_battle_id', 'period'],
+    tfdRecommendationModuleFixture,
+  ),
+
+  // ─── 리더보드 정보 조회 ───
+  keyed(
+    'leaderboard/void-intercept-battle',
+    ['leaderboard_type', 'contents_type', 'platform_type'],
+    tfdLeaderboardVoidInterceptBattleFixture,
+  ),
+  keyed(
+    'leaderboard/void-erosion-purge-challenge',
+    ['leaderboard_type', 'platform_type'],
+    tfdLeaderboardVoidErosionPurgeChallengeFixture,
+  ),
 
   // ─── 메타데이터 정보 조회 (정적 파일, API 키 불필요) ───
   http.get(`${META}/:language/:file`, ({ params }) =>

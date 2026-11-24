@@ -27,5 +27,32 @@ export type {
   TfdUserArcheTuning,
 } from './user/types.js';
 
+// Recommendation types
+export type {
+  TfdRecommendationPeriod,
+  TfdRecommendationModuleRequest,
+  TfdRecommendationModuleItem,
+  TfdRecommendationModuleDescendant,
+  TfdRecommendationModuleWeapon,
+  TfdRecommendationModule,
+} from './recommendation/types.js';
+
+// Leaderboard types
+export type {
+  TfdLeaderboardType,
+  TfdLeaderboardSquadUserCount,
+  TfdLeaderboardSoloFilter,
+  TfdLeaderboardSquadFilter,
+  TfdLeaderboardPlatformFilter,
+  TfdLeaderboardVoidInterceptBattleContentsType,
+  TfdLeaderboardVoidInterceptBattleRequest,
+  TfdLeaderboardVoidErosionPurgeChallengeRequest,
+  TfdLeaderboardMember,
+  TfdLeaderboardVoidInterceptBattleEntry,
+  TfdLeaderboardVoidInterceptBattle,
+  TfdLeaderboardVoidErosionPurgeChallengeEntry,
+  TfdLeaderboardVoidErosionPurgeChallenge,
+} from './leaderboard/types.js';
+
 // Meta types — 메타데이터 타입은 70개 가까이 되고 전부 공개 대상이라 파일 단위로 내보낸다
 export type * from './meta/types.js';

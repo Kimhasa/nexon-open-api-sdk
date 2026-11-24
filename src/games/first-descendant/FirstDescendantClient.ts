@@ -1,5 +1,7 @@
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
+import { FirstDescendantLeaderboardClient } from './leaderboard/FirstDescendantLeaderboardClient.js';
 import { FirstDescendantMetaClient } from './meta/FirstDescendantMetaClient.js';
+import { FirstDescendantRecommendationClient } from './recommendation/FirstDescendantRecommendationClient.js';
 import { TFD_OUID_SHAPE } from './shapes.js';
 import type { TfdOuid } from './types.js';
 import { FirstDescendantUserClient } from './user/FirstDescendantUserClient.js';
@@ -26,6 +28,8 @@ export class FirstDescendantClient extends AbstractGameClient {
 
   private _user: FirstDescendantUserClient | undefined;
   private _meta: FirstDescendantMetaClient | undefined;
+  private _recommendation: FirstDescendantRecommendationClient | undefined;
+  private _leaderboard: FirstDescendantLeaderboardClient | undefined;
 
   /**
    * 닉네임으로 계정 식별자(ouid)를 조회한다.
@@ -69,5 +73,17 @@ export class FirstDescendantClient extends AbstractGameClient {
   get meta(): FirstDescendantMetaClient {
     this._meta ??= new FirstDescendantMetaClient(this.http);
     return this._meta;
+  }
+
+  /** 추천 모듈 조회 (계승자·무기·보이드 요격전 조합별 추천 모듈) */
+  get recommendation(): FirstDescendantRecommendationClient {
+    this._recommendation ??= new FirstDescendantRecommendationClient(this.http);
+    return this._recommendation;
+  }
+
+  /** 리더보드 조회 (보이드 요격전, 보이드 침식 정화 - 도전) */
+  get leaderboard(): FirstDescendantLeaderboardClient {
+    this._leaderboard ??= new FirstDescendantLeaderboardClient(this.http);
+    return this._leaderboard;
   }
 }

@@ -54,6 +54,15 @@ import {
   tfdFellowLevelDetailMetaFixture,
   tfdMasteryRankLevelDetailMetaFixture,
 } from '../../fixtures/first-descendant/meta.fixture.js';
+import {
+  tfdLeaderboardVoidErosionPurgeChallengeFixture,
+  tfdLeaderboardVoidInterceptBattleFixture,
+  tfdLeaderboardVoidInterceptBattleNullFixture,
+} from '../../fixtures/first-descendant/leaderboard.fixture.js';
+import {
+  tfdRecommendationModuleEmptyFixture,
+  tfdRecommendationModuleFixture,
+} from '../../fixtures/first-descendant/recommendation.fixture.js';
 
 const BASE = 'https://open.api.nexon.com/tfd/v1';
 const META = 'https://open.api.nexon.com/static/tfd/meta';
@@ -112,6 +121,8 @@ describe('FirstDescendantClient', () => {
 
       expect(client.user).toBe(client.user);
       expect(client.meta).toBe(client.meta);
+      expect(client.recommendation).toBe(client.recommendation);
+      expect(client.leaderboard).toBe(client.leaderboard);
     });
   });
 
@@ -368,6 +379,206 @@ describe('FirstDescendantClient', () => {
       const { client } = createClient();
 
       await expect(client.meta.getModule()).rejects.toBeInstanceOf(NexonServerError);
+    });
+  });
+
+  describe('recommendation', () => {
+    const request = {
+      descendant_id: '101000001',
+      weapon_id: '211011001',
+      void_battle_id: '151000001',
+      period: '1',
+    } as const;
+
+    it('getModule — GET /tfd/v1/recommendation/module (쿼리 4개)', async () => {
+      const { client, urls } = createClient();
+      const result = await client.recommendation.getModule(request);
+
+      expect(result).toEqual(tfdRecommendationModuleFixture);
+      expect(urls).toEqual([`${BASE}/recommendation/module?${query(request)}`]);
+    });
+
+    it('getModule — 기록이 부족하면 빈 추천을 그대로 돌려준다', async () => {
+      server.use(
+        mswHttp.get(`${BASE}/recommendation/module`, () =>
+          HttpResponse.json(tfdRecommendationModuleEmptyFixture),
+        ),
+      );
+      const { client } = createClient();
+      const result = await client.recommendation.getModule({ ...request, period: '2' });
+
+      expect(result.descendant.recommendation).toEqual([]);
+      expect(result.weapon.recommendation).toEqual([]);
+    });
+
+    it('빈 식별자와 잘못된 period는 요청 없이 NexonError를 던진다', async () => {
+      const { client, urls } = createClient();
+
+      await expect(
+        client.recommendation.getModule({ ...request, descendant_id: '' }),
+      ).rejects.toThrow(/descendant_id 값이 비어 있습니다/);
+      await expect(client.recommendation.getModule({ ...request, weapon_id: ' ' })).rejects.toThrow(
+        /getWeapon/,
+      );
+      await expect(
+        client.recommendation.getModule({ ...request, void_battle_id: '' }),
+      ).rejects.toThrow(/getVoidBattle/);
+      await expect(
+        // @ts-expect-error period는 '0' | '1' | '2' 문자열이다
+        client.recommendation.getModule({ ...request, period: '7' }),
+      ).rejects.toThrow(/period 값이 올바르지 않습니다: "7"/);
+      expect(urls).toEqual([]);
+    });
+
+    it('API 키가 없으면 NexonAuthError를 던진다 (403)', async () => {
+      const { client } = createClient('');
+
+      await expect(client.recommendation.getModule(request)).rejects.toBeInstanceOf(NexonAuthError);
+    });
+  });
+
+  describe('leaderboard', () => {
+    it('getVoidInterceptBattle — Solo, 기본값 contents_type=RiskMode · platform_type=All', async () => {
+      const { client, urls } = createClient();
+      const result = await client.leaderboard.getVoidInterceptBattle({
+        leaderboard_type: 'Solo',
+        descendant_id: '101000001',
+      });
+
+      expect(result).toEqual(tfdLeaderboardVoidInterceptBattleFixture);
+      expect(result.leaderboard?.[1]?.ranking).toBeNull();
+      expect(urls).toEqual([
+        `${BASE}/leaderboard/void-intercept-battle?${query({
+          leaderboard_type: 'Solo',
+          descendant_id: '101000001',
+          contents_type: 'RiskMode',
+          platform_type: 'All',
+        })}`,
+      ]);
+    });
+
+    it('getVoidInterceptBattle — Squad는 squad_user_count를 보내고 descendant_id는 뺀다', async () => {
+      const { client, urls } = createClient();
+      await client.leaderboard.getVoidInterceptBattle({
+        leaderboard_type: 'Squad',
+        squad_user_count: 4,
+        platform_type: 'PlayStation',
+      });
+
+      expect(urls).toEqual([
+        `${BASE}/leaderboard/void-intercept-battle?${query({
+          leaderboard_type: 'Squad',
+          squad_user_count: '4',
+          contents_type: 'RiskMode',
+          platform_type: 'PlayStation',
+        })}`,
+      ]);
+    });
+
+    it('getVoidInterceptBattle — leaderboard가 null인 응답을 그대로 돌려준다', async () => {
+      server.use(
+        mswHttp.get(`${BASE}/leaderboard/void-intercept-battle`, () =>
+          HttpResponse.json(tfdLeaderboardVoidInterceptBattleNullFixture),
+        ),
+      );
+      const { client } = createClient();
+      const result = await client.leaderboard.getVoidInterceptBattle({ leaderboard_type: 'Solo' });
+
+      expect(result.leaderboard).toBeNull();
+    });
+
+    it('getVoidErosionPurgeChallenge — GET /tfd/v1/leaderboard/void-erosion-purge-challenge', async () => {
+      const { client, urls } = createClient();
+      const result = await client.leaderboard.getVoidErosionPurgeChallenge({
+        leaderboard_type: 'Squad',
+        squad_user_count: 2,
+        platform_type: 'Xbox',
+      });
+
+      expect(result).toEqual(tfdLeaderboardVoidErosionPurgeChallengeFixture);
+      expect(result.leaderboard[0]?.stage).toBe('30');
+      expect(urls).toEqual([
+        `${BASE}/leaderboard/void-erosion-purge-challenge?${query({
+          leaderboard_type: 'Squad',
+          squad_user_count: '2',
+          platform_type: 'Xbox',
+        })}`,
+      ]);
+    });
+
+    it('getVoidErosionPurgeChallenge — Solo는 contents_type 없이 보낸다', async () => {
+      const { client, urls } = createClient();
+      await client.leaderboard.getVoidErosionPurgeChallenge({ leaderboard_type: 'Solo' });
+
+      expect(urls).toEqual([
+        `${BASE}/leaderboard/void-erosion-purge-challenge?${query({
+          leaderboard_type: 'Solo',
+          platform_type: 'All',
+        })}`,
+      ]);
+    });
+
+    it('모순된 조건은 요청 없이 NexonError를 던지고 고치는 방법을 안내한다', async () => {
+      const { client, urls } = createClient();
+      // 타입이 막는 조합을 JavaScript 호출처럼 그대로 넘겨 런타임 검증을 확인한다
+      const loose = client.leaderboard as unknown as Record<
+        'getVoidInterceptBattle' | 'getVoidErosionPurgeChallenge',
+        (params: unknown) => Promise<unknown>
+      >;
+
+      await expect(
+        loose.getVoidInterceptBattle({
+          leaderboard_type: 'Solo',
+          squad_user_count: 2,
+        }),
+      ).rejects.toThrow(/'Solo' 인데 squad_user_count/);
+      await expect(
+        loose.getVoidErosionPurgeChallenge({
+          leaderboard_type: 'Squad',
+          descendant_id: '101000001',
+        }),
+      ).rejects.toThrow(/'Squad' 인데 descendant_id/);
+      await expect(
+        loose.getVoidErosionPurgeChallenge({
+          leaderboard_type: 'Squad',
+          squad_user_count: 5,
+        }),
+      ).rejects.toThrow(/2, 3, 4 중 하나/);
+      await expect(loose.getVoidInterceptBattle({ leaderboard_type: 'solo' })).rejects.toThrow(
+        NexonError,
+      );
+      await expect(
+        loose.getVoidInterceptBattle({
+          leaderboard_type: 'Solo',
+          platform_type: 'Switch',
+        }),
+      ).rejects.toThrow(/All, Pc, PlayStation, Xbox/);
+      await expect(
+        loose.getVoidInterceptBattle({
+          leaderboard_type: 'Solo',
+          contents_type: 'Normal',
+        }),
+      ).rejects.toThrow(/contents_type 값이 올바르지 않습니다/);
+      await expect(
+        loose.getVoidInterceptBattle({ leaderboard_type: 'Solo', descendant_id: '' }),
+      ).rejects.toThrow(/descendant_id 값이 비어 있습니다/);
+      expect(urls).toEqual([]);
+    });
+
+    it('호출 한도를 넘으면 NexonRateLimitError를 던진다 (429)', async () => {
+      server.use(
+        mswHttp.get(`${BASE}/leaderboard/void-erosion-purge-challenge`, () =>
+          HttpResponse.json(
+            { error: { name: 'OPENAPI00007', message: 'Too Many Requests' } },
+            { status: 429 },
+          ),
+        ),
+      );
+      const { client } = createClient();
+
+      await expect(
+        client.leaderboard.getVoidErosionPurgeChallenge({ leaderboard_type: 'Solo' }),
+      ).rejects.toBeInstanceOf(NexonRateLimitError);
     });
   });
 });
