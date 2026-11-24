@@ -80,6 +80,9 @@
     "test:maplestory-m": "tsx scripts/test-maplestory-m.ts",
     "test:fconline": "tsx scripts/test-fconline.ts",
     "test:maplestory-sea": "tsx scripts/test-maplestory-sea.ts",
+    "specs:fetch": "tsx scripts/specs-fetch.ts",
+    "specs:check": "tsx scripts/specs-check.ts",
+    "specs:coverage": "tsx scripts/specs-coverage.ts",
     "release": "yarn build && yarn test && npm publish",
     "prepare": "husky"
   },
@@ -105,6 +108,7 @@
     "tsx": "^4.21.0",
     "typescript": "^5.7.0",
     "typescript-eslint": "^8.20.0",
-    "vitest": "^3.0.0"
+    "vitest": "^3.0.0",
+    "yaml": "^2.9.1"
   }
 }

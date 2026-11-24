@@ -1,0 +1,3 @@
+# 포털 원문 YAML은 바이트 그대로 보존한다 (CRLF/LF 혼재 파일이 있어 줄바꿈 정규화 금지).
+*.yaml -text
+index.json text eol=lf
