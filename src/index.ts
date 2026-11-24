@@ -385,6 +385,42 @@ export type {
   SEAGuildBasic,
 } from './games/maplestory-sea/guild/types.js';
 
+// ── 신규 게임 ──
+// 공개 Client·타입은 각 게임의 src/games/{dir}/index.ts 가 관리한다 (타입 이름에 게임 prefix 필수).
+
+// MapleStory Taiwan (메이플스토리 대만)
+export * from './games/maplestory-tw/index.js';
+
+// 퍼스트 디센던트 (The First Descendant)
+export * from './games/first-descendant/index.js';
+
+// 마비노기 영웅전
+export * from './games/mabinogi-heroes/index.js';
+
+// 서든어택
+export * from './games/sudden-attack/index.js';
+
+// 카트라이더 러쉬플러스
+export * from './games/kartrider/index.js';
+
+// 바람의나라
+export * from './games/baram/index.js';
+
+// 마비노기
+export * from './games/mabinogi/index.js';
+
+// 바람의나라: 연
+export * from './games/baram-yeon/index.js';
+
+// V4
+export * from './games/v4/index.js';
+
+// 히트2
+export * from './games/hit2/index.js';
+
+// 넥슨 Open API 플랫폼 (Open API 공지)
+export * from './games/platform/index.js';
+
 // HttpClient (for advanced usage)
 export { HttpClient } from './core/http/HttpClient.js';
 export type {

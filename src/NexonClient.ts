@@ -4,6 +4,17 @@ import { MapleStoryClient } from './games/maplestory/MapleStoryClient.js';
 import { FcOnlineClient } from './games/fc-online/FcOnlineClient.js';
 import { MapleStoryMClient } from './games/maplestory-m/MapleStoryMClient.js';
 import { MapleStorySEAClient } from './games/maplestory-sea/MapleStorySEAClient.js';
+import { MapleStoryTWClient } from './games/maplestory-tw/MapleStoryTWClient.js';
+import { FirstDescendantClient } from './games/first-descendant/FirstDescendantClient.js';
+import { MabinogiHeroesClient } from './games/mabinogi-heroes/MabinogiHeroesClient.js';
+import { SuddenAttackClient } from './games/sudden-attack/SuddenAttackClient.js';
+import { KartriderClient } from './games/kartrider/KartriderClient.js';
+import { BaramClient } from './games/baram/BaramClient.js';
+import { MabinogiClient } from './games/mabinogi/MabinogiClient.js';
+import { BaramYeonClient } from './games/baram-yeon/BaramYeonClient.js';
+import { V4Client } from './games/v4/V4Client.js';
+import { Hit2Client } from './games/hit2/Hit2Client.js';
+import { PlatformClient } from './games/platform/PlatformClient.js';
 
 /**
  * NexonClient 생성 옵션.
@@ -31,6 +42,17 @@ export class NexonClient {
   private _fcOnline: FcOnlineClient | undefined;
   private _maplestorym: MapleStoryMClient | undefined;
   private _maplestorySEA: MapleStorySEAClient | undefined;
+  private _maplestoryTW: MapleStoryTWClient | undefined;
+  private _firstDescendant: FirstDescendantClient | undefined;
+  private _mabinogiHeroes: MabinogiHeroesClient | undefined;
+  private _suddenAttack: SuddenAttackClient | undefined;
+  private _kartrider: KartriderClient | undefined;
+  private _baram: BaramClient | undefined;
+  private _mabinogi: MabinogiClient | undefined;
+  private _baramYeon: BaramYeonClient | undefined;
+  private _v4: V4Client | undefined;
+  private _hit2: Hit2Client | undefined;
+  private _platform: PlatformClient | undefined;
 
   constructor(options: NexonClientOptions) {
     if (!options.apiKey) {
@@ -86,5 +108,94 @@ export class NexonClient {
   get maplestorySEA(): MapleStorySEAClient {
     this._maplestorySEA ??= new MapleStorySEAClient(this.http);
     return this._maplestorySEA;
+  }
+
+  /**
+   * MapleStory Taiwan (메이플스토리 대만) 클라이언트.
+   * Timezone: UTC+8 (TST)
+   */
+  get maplestoryTW(): MapleStoryTWClient {
+    this._maplestoryTW ??= new MapleStoryTWClient(this.http);
+    return this._maplestoryTW;
+  }
+
+  /**
+   * 퍼스트 디센던트 (The First Descendant) 클라이언트.
+   */
+  get firstDescendant(): FirstDescendantClient {
+    this._firstDescendant ??= new FirstDescendantClient(this.http);
+    return this._firstDescendant;
+  }
+
+  /**
+   * 마비노기 영웅전 클라이언트.
+   */
+  get mabinogiHeroes(): MabinogiHeroesClient {
+    this._mabinogiHeroes ??= new MabinogiHeroesClient(this.http);
+    return this._mabinogiHeroes;
+  }
+
+  /**
+   * 서든어택 클라이언트.
+   */
+  get suddenAttack(): SuddenAttackClient {
+    this._suddenAttack ??= new SuddenAttackClient(this.http);
+    return this._suddenAttack;
+  }
+
+  /**
+   * 카트라이더 러쉬플러스 클라이언트.
+   */
+  get kartrider(): KartriderClient {
+    this._kartrider ??= new KartriderClient(this.http);
+    return this._kartrider;
+  }
+
+  /**
+   * 바람의나라 클라이언트.
+   */
+  get baram(): BaramClient {
+    this._baram ??= new BaramClient(this.http);
+    return this._baram;
+  }
+
+  /**
+   * 마비노기 클라이언트.
+   */
+  get mabinogi(): MabinogiClient {
+    this._mabinogi ??= new MabinogiClient(this.http);
+    return this._mabinogi;
+  }
+
+  /**
+   * 바람의나라: 연 클라이언트.
+   */
+  get baramYeon(): BaramYeonClient {
+    this._baramYeon ??= new BaramYeonClient(this.http);
+    return this._baramYeon;
+  }
+
+  /**
+   * V4 클라이언트.
+   */
+  get v4(): V4Client {
+    this._v4 ??= new V4Client(this.http);
+    return this._v4;
+  }
+
+  /**
+   * 히트2 클라이언트.
+   */
+  get hit2(): Hit2Client {
+    this._hit2 ??= new Hit2Client(this.http);
+    return this._hit2;
+  }
+
+  /**
+   * 넥슨 Open API 플랫폼 (Open API 공지) 클라이언트.
+   */
+  get platform(): PlatformClient {
+    this._platform ??= new PlatformClient(this.http);
+    return this._platform;
   }
 }

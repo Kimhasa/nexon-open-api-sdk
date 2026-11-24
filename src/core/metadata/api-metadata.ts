@@ -57,6 +57,30 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     endpointCount: 16,
     note: '14 HTTP methods + 2 image URL helpers. E2E script (yarn test:fconline) passed 14/15 with a real API key (PR #2); the failing check was not recorded.',
   },
+
+  // ── 아래 자리는 게임 구현 워커가 채운다: 자기 게임의 [slot] 주석 한 줄을 엔트리로 교체 ──
+
+  // [slot:maplestorytw] MapleStory Taiwan (메이플스토리 대만)
+
+  // [slot:tfd] 퍼스트 디센던트 (The First Descendant)
+
+  // [slot:heroes] 마비노기 영웅전
+
+  // [slot:suddenattack] 서든어택
+
+  // [slot:kartrush] 카트라이더 러쉬플러스
+
+  // [slot:baram] 바람의나라
+
+  // [slot:mabinogi] 마비노기
+
+  // [slot:baramy] 바람의나라: 연
+
+  // [slot:v4] V4
+
+  // [slot:hit2] 히트2
+
+  // [slot:platform] 넥슨 Open API 플랫폼 (Open API 공지)
 };
 
 /**
