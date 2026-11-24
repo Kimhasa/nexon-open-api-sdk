@@ -2,7 +2,7 @@ import { NexonError } from './NexonError.js';
 import type { NexonErrorCode } from './error-codes.js';
 
 /**
- * Nexon 서버 오류 (HTTP 5xx).
+ * Nexon 서버 오류 (HTTP 5xx 또는 아래 에러 코드).
  *
  * - `OPENAPI00001`: 서버 내부 오류
  * - `OPENAPI00008`: 서버 점검 중

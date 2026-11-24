@@ -2,7 +2,7 @@ import { NexonError } from './NexonError.js';
 import { NEXON_ERROR_CODES } from './error-codes.js';
 
 /**
- * 요청 한도 초과 오류 (HTTP 429).
+ * 요청 한도 초과 오류 (HTTP 429 또는 `OPENAPI00007`).
  *
  * Nexon Open API는 분당 요청 수 제한이 있습니다.
  * `retryAfterMs`를 참조해 대기 후 재시도하거나,

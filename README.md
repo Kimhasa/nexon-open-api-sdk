@@ -408,14 +408,12 @@ const client = new NexonClient({
 
 ## Sub-path Import
 
-게임마다 `nexon-open-api/{sub-path}` 진입점이 있고, 그 게임의 Client 클래스와 타입만 내보냅니다. sub-path는 아래 [상세 문서](#상세-문서) 표에 있습니다. 루트(`nexon-open-api`)에서도 같은 이름을 모두 가져올 수 있습니다.
+게임마다 `nexon-open-api/{sub-path}` 진입점이 있고, 그 게임의 Client 클래스와 타입, 그리고 Client를 만드는 데 필요한 `HttpClient` 를 내보냅니다. sub-path만 import해도 클라이언트를 만들 수 있습니다. sub-path는 아래 [상세 문서](#상세-문서) 표에 있습니다. 루트(`nexon-open-api`)에서도 같은 이름을 모두 가져올 수 있습니다.
 
 ```ts
-import { HttpClient } from 'nexon-open-api';
-import { MapleStoryClient } from 'nexon-open-api/maplestory';
+import { HttpClient, MapleStoryClient } from 'nexon-open-api/maplestory';
 import type { CharacterBasic } from 'nexon-open-api/maplestory';
 
-// 게임 Client를 직접 만들 때는 루트의 HttpClient를 넘긴다
 const maplestory = new MapleStoryClient(new HttpClient({ apiKey: 'YOUR_API_KEY' }));
 const ocid = await maplestory.getOcid('캐릭터명');
 const basic: CharacterBasic = await maplestory.character.getBasic({ ocid });
