@@ -2,6 +2,7 @@ import type { OCID } from '../../_base/maple-base-types.js';
 import type {
   AbilityInfo,
   CashItemOption,
+  ClassItemExceptionalOption,
   FinalStat,
   HexaLinkedSkill,
   HexaStatCore,
@@ -191,7 +192,7 @@ export interface BattlePracticePropensity {
 /**
  * 연무장 드래곤·메카닉 장비 정보.
  *
- * 캐릭터 API의 `PresetItemEquipment` 와 달리 슬롯 필드가 `item_equipment_slot`,
+ * 캐릭터 API의 직업 전용 장비와 달리 슬롯 필드가 `item_equipment_slot`,
  * 주문서 잔여 횟수 필드가 `scroll_upgrade_able_count` 다 (스펙 원문 그대로).
  */
 export interface BattlePracticeSubItemEquipment {
@@ -218,7 +219,7 @@ export interface BattlePracticeSubItemEquipment {
   /** 착용 레벨 증가 */
   readonly equipment_level_increase: number;
   /** 장비 특별 옵션 정보 */
-  readonly item_exceptional_option: ItemExceptionalOption;
+  readonly item_exceptional_option: ClassItemExceptionalOption;
   /** 장비 추가 옵션 */
   readonly item_add_option: ItemAddOption;
   /** 성장 경험치 */
@@ -257,6 +258,8 @@ export interface BattlePracticeSubItemEquipment {
 
 /** 연무장 장착 장비 개별 정보 */
 export interface BattlePracticeItemEquipment extends BattlePracticeSubItemEquipment {
+  /** 장비 특별 옵션 정보 */
+  readonly item_exceptional_option: ItemExceptionalOption;
   /** 잠재능력 봉인 여부 ("true": 봉인, "false": 봉인 없음) */
   readonly potential_option_flag: string | null;
   /** 에디셔널 잠재능력 봉인 여부 ("true": 봉인, "false": 봉인 없음) */

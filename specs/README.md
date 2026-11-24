@@ -140,9 +140,11 @@ drift는 직접 HTTP 호출이 있는 SDK 메서드를 JSON 200 응답과 비교
 
 1. 월요일 00:00 UTC의 **API Monitor** 실행 요약과 `specs/auto-update` → `main` PR을 확인한다. PR 생성·갱신에 실패하면 `api-change` 이슈에서 보고서와 비교 링크를 확인한다. 공지 목록은 [넥슨 포털 공지](https://openapi.nexon.com/ko/support/notice/) 페이지가 사용하는 공개 JSON으로 수집한다.
 2. PR 본문의 `specs:diff` 결과를 심각도별로 읽는다. 로컬에서 재검토할 때는 `yarn specs:diff --base origin/main`을 실행한다.
-3. 스펙 갱신 커밋이 있는 브랜치에서 `yarn specs:drift --game <slug>`로 SDK 반영 대상을 확인한다. `yarn specs:coverage`로 누락된 엔드포인트를 점검한다. `--strict`는 로컬 점검에 쓸 수 있다.
+3. 스펙 갱신 커밋이 있는 브랜치에서 `yarn specs:drift --game <slug>`로 SDK 반영 대상을 확인한다. `yarn specs:coverage`로 누락된 엔드포인트를 점검한다.
 4. SDK Auto Update가 제안한 MINOR와 DEPRECATE 수정을 검토한다. MAJOR와 새 게임의 공용 진입점 변경은 직접 판단하고 수정한다.
 5. `CHANGELOG.md`와 [SEMVER.md](../SEMVER.md)에 따른 버전을 검토하고 사람이 머지한다.
+
+CI의 **Spec Drift** 게이트는 커밋된 스펙과 SDK 코드를 로컬에서 읽어 `yarn specs:drift --strict`를 실행한다. 새 drift는 수정하거나 의도적인 차이의 사유를 `specs/drift-baseline.json`에 기록해야 한다. 응답 타입에서 스펙보다 넓게 `null`을 허용하는 경우와 포털에서 제거한 API를 `@deprecated`로 유지하는 경우는 허용한다. 후자는 보고서에서 따로 집계한다.
 
 ### 워크플로 운영
 

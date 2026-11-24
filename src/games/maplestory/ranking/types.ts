@@ -39,7 +39,7 @@ export interface GuildRankingRequest extends RankingBaseRequest {
   readonly guild_name?: string | undefined;
   /**
    * 캐릭터 식별자
-   * @deprecated 포털 스펙의 길드 랭킹에는 `ocid` 파라미터가 없습니다. 특정 길드는 `guild_name` 으로 조회하세요. 다음 MAJOR에서 삭제됩니다.
+   * @deprecated 입력 시 경고만 표시됩니다. 특정 길드는 `guild_name`으로 조회하세요. 다음 MAJOR에서 삭제됩니다.
    */
   readonly ocid?: OCID | undefined;
 }

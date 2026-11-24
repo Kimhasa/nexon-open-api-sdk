@@ -12,21 +12,46 @@ const CLIENT = [
   '  get<T>(_url: string, _query?: object): Promise<T> { throw new Error(); }',
   '}',
   'type Id = string & { readonly brand: unique symbol };',
+  'interface Entry {',
+  '  readonly id: Id;',
+  '  readonly value: number;',
+  '  readonly local: boolean;',
+  '  readonly label: string;',
+  '  /** @deprecated old response key */',
+  '  readonly old?: string;',
+  '}',
+  'interface Request {',
+  '  readonly limit?: number;',
+  '  /** @deprecated old wire query */',
+  '  readonly old?: string;',
+  '  /** @deprecated old SDK-only query */',
+  '  readonly kept?: string;',
+  '}',
   'interface Response {',
-  '  readonly nested?: readonly { readonly id: Id; readonly value: number; readonly local: boolean }[] | null;',
+  '  readonly nested?: readonly Entry[] | null;',
   '}',
   'class Client {',
   "  protected readonly pathPrefix = 'fixture';",
   '  private readonly http = new HttpClient();',
   '  protected buildUrl(path: string, version = "v1"): string { return `/fixture/${version}/${path}`; }',
-  '  async getItems(limit?: number): Promise<Response> {',
+  '  async getItems(params: Request): Promise<Response> {',
   "    const url = this.buildUrl('items', 'openapi/v2');",
-  '    return this.http.get(url, { limit, extra: true });',
+  '    return this.http.get(url, { limit: params.limit, old: params.old, extra: true });',
   '  }',
   '  async getMeta(): Promise<number[]> { return this.http.get(ENDPOINTS.META); }',
   "  async getLiteral(): Promise<string> { return this.http.get('https://api.example.test/fixture/v1/literal'); }",
   '  async getDynamic(path: string): Promise<boolean> { return this.http.get(this.buildUrl(path)); }',
   '  async getGeneric<T>(): Promise<T> { return this.http.get("/fixture/v1/generic"); }',
+  '  /** @deprecated endpoint removed from the portal */',
+  '  async getRetired(): Promise<string> { return this.http.get("/fixture/v1/retired"); }',
+  '  async getId(): Promise<Id> {',
+  '    const data = await this.http.get<{ ocid: string }>("/fixture/v1/id");',
+  '    return data.ocid as Id;',
+  '  }',
+  '  async getExpandedId(): Promise<Id> {',
+  '    const data = await this.http.get<{ ocid: string }>("/fixture/v1/expanded-id");',
+  '    return data.ocid as Id;',
+  '  }',
   '}',
 ].join('\n');
 
@@ -52,6 +77,28 @@ paths:
                         id: { type: string }
                         value: { type: string }
                         portal: { type: boolean }
+                        label: { type: string, nullable: true }
+  /fixture/v1/id:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ocid: { type: string }
+  /fixture/v1/expanded-id:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ocid: { type: string }
+                  newField: { type: string }
   /static/fixture/meta.json:
     get:
       responses:
@@ -99,23 +146,31 @@ describe('SDK drift', () => {
       const baseline = parseBaseline([
         {
           operation: 'GET /fixture/openapi/v2/items',
-          path: 'response.nested',
+          path: 'response.nested[].label',
           kind: 'nullable-mismatch',
-          reason: 'Normalizes missing items',
+          reason: 'Intentionally narrows the label',
         },
       ]);
       const report = buildDriftReport(snapshot, analyzeSdk(root), baseline, 'fixture');
-      expect(report.newCount).toBe(5);
+      expect(report.newCount).toBe(6);
       expect(report.baselineCount).toBe(1);
+      expect(report.deprecatedCount).toBe(4);
       const game = report.games[0];
-      expect(game?.matchedMethods).toBe(4);
+      expect(game?.matchedMethods).toBe(6);
       expect(game?.findings.map(({ path, kind }) => [path, kind])).toEqual([
         ['query.extra', 'missing-spec-query'],
         ['query.limit', 'required-query-mismatch'],
-        ['response.nested', 'nullable-mismatch'],
+        ['response.nested[].label', 'nullable-mismatch'],
         ['response.nested[].local', 'missing-spec-field'],
         ['response.nested[].portal', 'missing-sdk-field'],
         ['response.nested[].value', 'type-mismatch'],
+        ['response', 'type-mismatch'],
+      ]);
+      expect(game?.deprecated.map(({ path, kind }) => [path, kind])).toEqual([
+        ['query.kept', 'missing-spec-query'],
+        ['query.old', 'missing-spec-query'],
+        ['response.nested[].old', 'missing-spec-field'],
+        ['$', 'missing-spec-operation'],
       ]);
       expect(game?.unresolved.map(({ method }) => method)).toEqual([
         'Client.getDynamic',

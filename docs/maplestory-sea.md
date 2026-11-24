@@ -83,7 +83,7 @@ await char.getDojang({ ocid }); // Mu Lung Dojang
 
 `character.getStat()`의 `mentorship_stat`과 캐시 장비의 `skill_info`는 제공될 때 읽을 수 있습니다.
 캐시 장비 스킬의 이름과 레벨은 `skill_info`에서 조회하세요. 기존 `skills`에는 폐지 예정 표시가 붙었습니다.
-Dragon 및 Mechanic 장비의 잠재능력 필드는 포털에서 명세하지 않아 SDK 타입에서 optional로 제공하며 deprecated로 표시합니다.
+Dragon 및 Mechanic 장비의 잠재능력 필드와 `item_exceptional_option.exceptional_upgrade`는 포털에서 명세하지 않아 SDK 타입에서 optional 및 deprecated로 표시합니다.
 
 ### Skill 조회 파라미터
 

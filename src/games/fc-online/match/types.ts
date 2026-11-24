@@ -32,6 +32,8 @@ export interface FcMatchInfo {
   readonly ouid: string;
   /** 유저 닉네임 */
   readonly nickname: string;
+  /** 등급 식별자 */
+  readonly division?: number | undefined;
   /** 매치 결과 상세 */
   readonly matchDetail: FcMatchDetailInfo;
   /** 슈팅 정보 */
