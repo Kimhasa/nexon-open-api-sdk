@@ -18,34 +18,35 @@ const basic = await client.maplestory.character.getBasic({ ocid });
 
 ## 개발 명령어
 
-| 명령어                              | 설명                                                                                              |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `yarn dev`                          | tsup watch 모드                                                                                   |
-| `yarn build`                        | 프로덕션 빌드 (`dist/`)                                                                           |
-| `yarn type-check`                   | `tsc --noEmit` (src) + `tsc -p tsconfig.test.json` (src, tests, scripts)                          |
-| `yarn lint` / `yarn lint:fix`       | ESLint (`src`, `tests`, `scripts`)                                                                |
-| `yarn check:exports`                | 빌드된 패키지의 sub-path별 CJS/ESM 타입 해석 검사 (attw, `yarn build` 후, `exports` 자동 탐색)    |
-| `yarn examples:check`               | 빌드 후 `examples/` 를 배포 타입(`dist`) 기준으로 타입 검사 (`.mjs`·`.cjs` 는 `// @ts-check`)     |
-| `yarn format` / `yarn format:check` | Prettier                                                                                          |
-| `yarn test`                         | Vitest 1회 실행                                                                                   |
-| `yarn test:watch`                   | Vitest watch                                                                                      |
-| `yarn test:coverage`                | Vitest + 커버리지                                                                                 |
-| `yarn test:live`                    | 빌드의 정적 메타데이터, 이미지 및 인증 오류를 실서버에서 확인 (키 불필요)                         |
-| `yarn test:package`                 | npm tarball 오프라인 설치와 CJS·ESM 실호출 및 TypeScript 타입 검사                                |
-| `yarn test:deep`                    | 실 API E2E 중 모든 메서드 반환값을 SDK 응답 타입과 중첩 필드까지 대조 (`.env` 키 필요)            |
-| `yarn test:{game}`                  | 실 API E2E 스크립트 (`scripts/test-*.ts`, `.env`에 API 키 필요)                                   |
-| `yarn specs:fetch`                  | 넥슨 포털의 OpenAPI YAML을 `specs/openapi/`로 수집                                                |
-| `yarn specs:check`                  | 포털 변경 감지 (저장된 스펙과 포털 비교)                                                          |
-| `yarn specs:coverage`               | SDK가 구현한 경로 vs 스펙 경로 커버리지 대조                                                      |
-| `yarn specs:diff`                   | 두 스펙 스냅샷의 구조 비교와 SEMVER 분류 (`--base <ref>`, `--live`, `--json`)                     |
-| `yarn specs:drift`                  | SDK 타입 vs 커밋된 스펙 필드 단위 대조 (`--strict` 는 baseline 밖 drift가 있으면 실패, CI 게이트) |
-| `yarn specs:notices`                | 넥슨 Open API 공지에서 새 공지 수집                                                               |
-| `yarn release`                      | 빌드 + 테스트 + `npm publish` (**버전 범프 없음** — 아래 참고)                                    |
+| 명령어                               | 설명                                                                                                 |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| `yarn dev`                           | tsup watch 모드                                                                                      |
+| `yarn build`                         | 프로덕션 빌드 (`dist/`)                                                                              |
+| `yarn type-check`                    | `tsc --noEmit` (src) + `tsc -p tsconfig.test.json` (src, tests, scripts)                             |
+| `yarn lint` / `yarn lint:fix`        | ESLint (`src`, `tests`, `scripts`)                                                                   |
+| `yarn check:exports`                 | 빌드된 패키지의 sub-path별 CJS/ESM 타입 해석 검사 (attw, `yarn build` 후, `exports` 자동 탐색)       |
+| `yarn docs:llms` / `docs:llms:check` | AI 코딩 도구용 `llms-full.txt` 를 소스(공개 메서드·JSDoc 첫 줄)에서 다시 만든다 / 최신인지 검사 (CI) |
+| `yarn examples:check`                | 빌드 후 `examples/` 를 배포 타입(`dist`) 기준으로 타입 검사 (`.mjs`·`.cjs` 는 `// @ts-check`)        |
+| `yarn format` / `yarn format:check`  | Prettier                                                                                             |
+| `yarn test`                          | Vitest 1회 실행                                                                                      |
+| `yarn test:watch`                    | Vitest watch                                                                                         |
+| `yarn test:coverage`                 | Vitest + 커버리지                                                                                    |
+| `yarn test:live`                     | 빌드의 정적 메타데이터, 이미지 및 인증 오류를 실서버에서 확인 (키 불필요)                            |
+| `yarn test:package`                  | npm tarball 오프라인 설치와 CJS·ESM 실호출 및 TypeScript 타입 검사                                   |
+| `yarn test:deep`                     | 실 API E2E 중 모든 메서드 반환값을 SDK 응답 타입과 중첩 필드까지 대조 (`.env` 키 필요)               |
+| `yarn test:{game}`                   | 실 API E2E 스크립트 (`scripts/test-*.ts`, `.env`에 API 키 필요)                                      |
+| `yarn specs:fetch`                   | 넥슨 포털의 OpenAPI YAML을 `specs/openapi/`로 수집                                                   |
+| `yarn specs:check`                   | 포털 변경 감지 (저장된 스펙과 포털 비교)                                                             |
+| `yarn specs:coverage`                | SDK가 구현한 경로 vs 스펙 경로 커버리지 대조                                                         |
+| `yarn specs:diff`                    | 두 스펙 스냅샷의 구조 비교와 SEMVER 분류 (`--base <ref>`, `--live`, `--json`)                        |
+| `yarn specs:drift`                   | SDK 타입 vs 커밋된 스펙 필드 단위 대조 (`--strict` 는 baseline 밖 drift가 있으면 실패, CI 게이트)    |
+| `yarn specs:notices`                 | 넥슨 Open API 공지에서 새 공지 수집                                                                  |
+| `yarn release`                       | 빌드 + 테스트 + `npm publish` (**버전 범프 없음** — 아래 참고)                                       |
 
 - `yarn test:{game}` 은 구현된 게임마다 하나씩 15개다 (`test:maplestory`, `test:maplestory-m`, `test:maplestory-sea`, `test:maplestory-tw`, `test:fconline`, `test:first-descendant`, `test:mabinogi-heroes`, `test:sudden-attack`, `test:kartrider`, `test:baram`, `test:mabinogi`, `test:baram-yeon`, `test:v4`, `test:hit2`, `test:platform`). 필요한 환경변수는 `.env.example` 참고.
 - `yarn release` 는 `package.json` 의 `version` 을 바꾸지 않는다. 버전은 직접 올리고 태그(`v{version}`)를 만든다. 태그를 push하면 CI도 `npm publish` 를 실행하므로 두 경로를 같은 버전에 함께 쓰지 않는다.
 
-**코드 변경 후 반드시**: `yarn type-check` → `yarn lint` → `yarn test` → `yarn build` → `yarn check:exports` → `yarn examples:check` 순서로 확인. 게임 API를 추가·수정했다면 `yarn specs:coverage` 로 스펙 대비 경로도 확인한다.
+**코드 변경 후 반드시**: `yarn type-check` → `yarn lint` → `yarn test` → `yarn build` → `yarn check:exports` → `yarn examples:check` → `yarn docs:llms:check` 순서로 확인. 공개 메서드나 JSDoc 첫 줄을 바꿨으면 `yarn docs:llms` 로 `llms-full.txt` 를 다시 만든다. 게임 API를 추가·수정했다면 `yarn specs:coverage` 로 스펙 대비 경로도 확인한다.
 
 - 줄 끝은 `.gitattributes` 로 LF 고정이다 (Windows `core.autocrlf=true` 에서도 `format:check` 통과). `specs/openapi/*.yaml` 은 포털 원문을 바이트 그대로 보존하므로 `-text` 이고 Prettier 대상에서도 빠진다 (`.prettierignore`).
 
@@ -152,9 +153,9 @@ AbstractMapleBaseClient extends AbstractGameClient
 
 NexonError (base)
 ├── NexonRateLimitError    (429 / OPENAPI00007 API 호출량 초과)
-├── NexonAuthError         (OPENAPI00005 잘못된 API 키, 00002 권한 없음 — status는 서버 값 그대로)
+├── NexonAuthError         (OPENAPI00005 잘못된 API 키, 00002 권한 없음, 00006 다른 게임용 키 — status는 서버 값 그대로)
 ├── NexonNotFoundError     (400 / OPENAPI00003 유효하지 않은 식별자. 이름 조회의 OPENAPI00004·길드 null도 SDK가 변환 — name-lookup.ts)
-├── NexonBadRequestError   (400 / OPENAPI00004 파라미터 누락·오류, 00006 유효하지 않은 게임·API 경로)
+├── NexonBadRequestError   (400 / OPENAPI00004 파라미터 누락·오류. SDK 입력 검증도 이 에러)
 ├── NexonDataNotReadyError (400 / OPENAPI00009 데이터 준비 중)
 └── NexonServerError       (5xx / OPENAPI00001 서버 내부 오류, 표에 없는 00008)
     └── NexonMaintenanceError (OPENAPI00010 게임 점검 중 400, 00011 API 점검 중 503)
@@ -169,7 +170,8 @@ NexonError (base)
   - **메이플스토리M도 여기에 속한다.** M의 캐릭터·유니온·길드 API는 `date` 파라미터가 없어서(`MOcidRequest` 는 `ocid` 만 가짐) timezone 기반 날짜 변환이 필요 없고, 요청 타입도 KMS 공유 타입(`OcidDateRequest`)과 다르다. PR #2에서 의도적으로 `AbstractMapleBaseClient` 의존을 제거했다. 랭킹의 `date` 는 문자열 그대로 전달한다.
 - **Sub-client** → lazy getter (`??=` 패턴)로 초기화, 미사용 시 할당 비용 0. sub-client는 기반 클래스를 상속하지 않고 `constructor(private readonly http: HttpClient)` 만 받는다
 - **Branded Types** → OCID, GuildId, NexonDate는 `_base/maple-base-types.ts`, OUID는 `fc-online/user/types.ts`에 정의. `core/types/branded.ts`는 `Brand<T,B>` 유틸리티만 보유
-- **HttpClient** → 429/503만 재시도, 나머지 즉시 throw. `x-nxopen-api-key` 헤더 자동 주입
+- **HttpClient** → 429·5xx만 재시도(지수 백오프 + 지터), 나머지 즉시 throw. `x-nxopen-api-key` 헤더 자동 주입. 요청 URL을 `classifyError` 에 넘겨 00006 안내에 게임 이름을 넣는다
+- **식별자 마스킹** → 넥슨이 주는 고유 번호(OCID·OUID·길드)의 뒤 32자는 API 키 뒤 32자와 같을 수 있다(넥슨 AI 가이드). 로그·에러 메시지·E2E 출력에는 `maskIdentifier`/`maskIdentifiers`(`src/core/http/mask.ts`)로 앞 8자만 남긴다
 - **에러 분류** → OPENAPI 에러 코드 기반 서브클래스 분류 (`classify-error.ts`)
 - **SDK 경계 입력 검증** → `src/core/validation/input.ts` 의 공용 헬퍼를 사용한다. 게임별 조건과 상수는 해당 게임에 두고 `NexonBadRequestError` (`OPENAPI00004`)로 알린다.
 - **신규 게임 공개 export** → 게임의 `index.ts` 에 게임별 접두어가 있는 Client, sub-client, 공개 타입을 내보낸다. 루트 진입점도 게임별 `index.ts` 를 재노출한다.

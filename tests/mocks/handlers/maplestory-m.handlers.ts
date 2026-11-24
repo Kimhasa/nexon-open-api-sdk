@@ -35,6 +35,7 @@ import {
   mUnionStatFixture,
 } from '../../fixtures/maplestory-m/union.fixture.js';
 import {
+  M_RANKING_DATE,
   mLevelRankingFixture,
   mDojangRankingFixture,
   mRootOfTimeRankingFixture,
@@ -107,23 +108,23 @@ export const mapleStoryMHandlers = [
   get('/guild/basic', { oguild_id: mGuildIdFixture.oguild_id }, mGuildBasicFixture),
 
   // Ranking
-  get('/ranking/level', { date: '2024-01-01' }, mLevelRankingFixture),
+  get('/ranking/level', { date: M_RANKING_DATE }, mLevelRankingFixture),
   get(
     '/ranking/dojang',
-    { date: '2024-01-01', world_name: '스카니아', page: '2' },
+    { date: M_RANKING_DATE, world_name: '스카니아', page: '2' },
     mDojangRankingFixture,
   ),
-  get('/ranking/root-of-time', { date: '2024-01-01' }, mRootOfTimeRankingFixture),
-  get('/ranking/union', { date: '2024-01-01' }, mUnionRankingFixture),
-  get('/ranking/combat-power', { date: '2024-01-01' }, mCombatPowerRankingFixture),
-  get('/ranking/kerning-m-tower', { date: '2024-01-01' }, mKerningMTowerRankingFixture),
-  get('/ranking/achievement', { date: '2024-01-01' }, mAchievementRankingFixture),
+  get('/ranking/root-of-time', { date: M_RANKING_DATE }, mRootOfTimeRankingFixture),
+  get('/ranking/union', { date: M_RANKING_DATE }, mUnionRankingFixture),
+  get('/ranking/combat-power', { date: M_RANKING_DATE }, mCombatPowerRankingFixture),
+  get('/ranking/kerning-m-tower', { date: M_RANKING_DATE }, mKerningMTowerRankingFixture),
+  get('/ranking/achievement', { date: M_RANKING_DATE }, mAchievementRankingFixture),
   get(
     '/ranking/sharenian-battlefield',
-    { date: '2024-01-01', ocid: mOcidFixture.ocid },
+    { date: M_RANKING_DATE, ocid: mOcidFixture.ocid },
     mSharenianBattlefieldRankingFixture,
   ),
-  get('/ranking/sharenian-waterway', { date: '2024-01-01' }, mSharenianWaterwayRankingFixture),
+  get('/ranking/sharenian-waterway', { date: M_RANKING_DATE }, mSharenianWaterwayRankingFixture),
 
   // Notice
   get('/notice', {}, mNoticeListFixture),

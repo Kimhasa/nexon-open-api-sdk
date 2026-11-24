@@ -6,7 +6,7 @@ import type { NexonDate } from '../../_base/maple-base-types.js';
 export interface HistoryRequest {
   /** 한번에 가져오려는 결과의 개수 (최소 10, 최대 1000) */
   readonly count: number;
-  /** 조회 기준일 (KST, YYYY-MM-DD). date와 cursor 중 1개 이상 필수 */
+  /** 조회 기준일 (KST, YYYY-MM-DD). 오늘을 포함해 최근 2년 이내. date와 cursor 중 1개 이상 필수 */
   readonly date?: NexonDate | string | undefined;
   /** 페이징 처리를 위한 cursor. date와 cursor 중 1개 이상 필수 */
   readonly cursor?: string | undefined;

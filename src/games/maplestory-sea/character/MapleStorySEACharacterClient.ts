@@ -1,3 +1,4 @@
+import { UTC_PLUS_8_OFFSET_MINUTES, snapshotDate } from '../../_base/maple-date.js';
 import { assertNonEmptyString } from '../../../core/validation/input.js';
 import { emitDeprecation } from '../../../core/deprecation/deprecation.js';
 import {
@@ -46,6 +47,13 @@ import type {
   SEASkillRequest,
 } from './types.js';
 
+const SNAPSHOT = {
+  firstDate: '2025-04-20',
+  timezoneOffset: UTC_PLUS_8_OFFSET_MINUTES,
+  language: 'en',
+  apiLabel: 'Character',
+} as const;
+
 /**
  * MapleStory SEA 캐릭터 정보: 스탯·장비·스킬·심볼·V Matrix·HEXA Matrix·Mu Lung Garden 등.
  *
@@ -69,9 +77,9 @@ export class MapleStorySEACharacterClient {
    * 캐릭터 기본 정보(레벨·직업·월드·소속 길드·외형 이미지)를 조회한다. SEA 명칭: Basic character information.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorySEA.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -85,7 +93,7 @@ export class MapleStorySEACharacterClient {
     assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     return this.http.get<SEACharacterBasic>(
       `${MapleStorySEACharacterClient.BASE}/character/basic`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       SEA_CHARACTER_BASIC_SHAPE,
     );
   }
@@ -96,9 +104,9 @@ export class MapleStorySEACharacterClient {
    * 캐릭터 인기도를 조회한다. SEA 명칭: Popularity.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorySEA.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -112,7 +120,7 @@ export class MapleStorySEACharacterClient {
     assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     return this.http.get<SEACharacterPopularity>(
       `${MapleStorySEACharacterClient.BASE}/character/popularity`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       SEA_CHARACTER_POPULARITY_SHAPE,
     );
   }
@@ -123,9 +131,9 @@ export class MapleStorySEACharacterClient {
    * 캐릭터 정보창의 스탯(종합 능력치)을 조회한다. 스탯 이름·값 목록으로 온다. SEA 명칭: Comprehensive stats.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorySEA.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -143,7 +151,7 @@ export class MapleStorySEACharacterClient {
       `${MapleStorySEACharacterClient.BASE}/character/stat`,
       {
         ocid: params.ocid,
-        date: params.date as string | undefined,
+        date: snapshotDate(params.date, SNAPSHOT),
       },
       SEA_CHARACTER_STAT_SHAPE,
     );
@@ -155,9 +163,9 @@ export class MapleStorySEACharacterClient {
    * 하이퍼 스탯을 조회한다. 프리셋별 스탯 레벨과 상승량, 남은 포인트가 들어 있다. SEA 명칭: Hyper Stat.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorySEA.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -174,7 +182,7 @@ export class MapleStorySEACharacterClient {
     assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     return this.http.get<SEACharacterHyperStat>(
       `${MapleStorySEACharacterClient.BASE}/character/hyper-stat`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       SEA_CHARACTER_HYPER_STAT_SHAPE,
     );
   }
@@ -185,9 +193,9 @@ export class MapleStorySEACharacterClient {
    * 성향 6종(카리스마·감성·통찰력·의지·손재주·매력)의 레벨을 조회한다. SEA 명칭: Traits.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorySEA.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -201,7 +209,7 @@ export class MapleStorySEACharacterClient {
     assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     return this.http.get<SEACharacterPropensity>(
       `${MapleStorySEACharacterClient.BASE}/character/propensity`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       SEA_CHARACTER_PROPENSITY_SHAPE,
     );
   }
@@ -212,9 +220,9 @@ export class MapleStorySEACharacterClient {
    * 어빌리티(등급과 옵션, 프리셋 포함)와 보유 명성치를 조회한다. SEA 명칭: Ability.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorySEA.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -231,7 +239,7 @@ export class MapleStorySEACharacterClient {
     assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     return this.http.get<SEACharacterAbility>(
       `${MapleStorySEACharacterClient.BASE}/character/ability`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       SEA_CHARACTER_ABILITY_SHAPE,
     );
   }
@@ -242,9 +250,9 @@ export class MapleStorySEACharacterClient {
    * 장비창의 장착 장비(프리셋 포함, 캐시 장비 제외)를 조회한다. 스타포스·잠재능력·에디셔널 잠재능력·추가 옵션과 칭호가 함께 온다. SEA 명칭: Equipped equipment (excluding cash items).
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorySEA.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -260,7 +268,7 @@ export class MapleStorySEACharacterClient {
     assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     const response = await this.http.get<SEACharacterItemEquipment>(
       `${MapleStorySEACharacterClient.BASE}/character/item-equipment`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       SEA_CHARACTER_ITEM_EQUIPMENT_SHAPE,
     );
     const equipment = [response?.dragon_equipment, response?.mechanic_equipment];
@@ -279,9 +287,9 @@ export class MapleStorySEACharacterClient {
    * 장착 중인 캐시 장비(코디, 프리셋 포함)를 조회한다. SEA 명칭: Equipped cash items.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorySEA.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -297,7 +305,7 @@ export class MapleStorySEACharacterClient {
     assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     const response = await this.http.get<SEACharacterCashItemEquipment>(
       `${MapleStorySEACharacterClient.BASE}/character/cashitem-equipment`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       SEA_CHARACTER_CASHITEM_EQUIPMENT_SHAPE,
     );
     const equipment = [
@@ -325,9 +333,9 @@ export class MapleStorySEACharacterClient {
    * 장착한 심볼(아케인심볼·어센틱심볼)의 레벨·성장치·증가 스탯을 조회한다. SEA 명칭: Equipped symbols.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorySEA.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -343,7 +351,7 @@ export class MapleStorySEACharacterClient {
     assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     return this.http.get<SEACharacterSymbolEquipment>(
       `${MapleStorySEACharacterClient.BASE}/character/symbol-equipment`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       SEA_CHARACTER_SYMBOL_EQUIPMENT_SHAPE,
     );
   }
@@ -354,9 +362,9 @@ export class MapleStorySEACharacterClient {
    * 적용 중인 세트 효과(세트 이름, 착용 세트 수, 옵션)를 조회한다. SEA 명칭: Set item effects.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorySEA.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -372,7 +380,7 @@ export class MapleStorySEACharacterClient {
     assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     return this.http.get<SEACharacterSetEffect>(
       `${MapleStorySEACharacterClient.BASE}/character/set-effect`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       SEA_CHARACTER_SET_EFFECT_SHAPE,
     );
   }
@@ -383,9 +391,9 @@ export class MapleStorySEACharacterClient {
    * 헤어·성형·피부(믹스 염색 포함)를 조회한다. SEA 명칭: Hair, face, and skin.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorySEA.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -400,7 +408,7 @@ export class MapleStorySEACharacterClient {
     assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     return this.http.get<SEACharacterBeautyEquipment>(
       `${MapleStorySEACharacterClient.BASE}/character/beauty-equipment`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       SEA_CHARACTER_BEAUTY_EQUIPMENT_SHAPE,
     );
   }
@@ -411,9 +419,9 @@ export class MapleStorySEACharacterClient {
    * 장착 안드로이드(외형·캐시 장비·프리셋)를 조회한다. SEA 명칭: Android.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorySEA.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -427,7 +435,7 @@ export class MapleStorySEACharacterClient {
     assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     return this.http.get<SEACharacterAndroidEquipment>(
       `${MapleStorySEACharacterClient.BASE}/character/android-equipment`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       SEA_CHARACTER_ANDROID_EQUIPMENT_SHAPE,
     );
   }
@@ -438,9 +446,9 @@ export class MapleStorySEACharacterClient {
    * 장착 펫(최대 3마리)과 펫 장비·펫 스킬(자동 버프)을 조회한다. SEA 명칭: Pets.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorySEA.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -454,7 +462,7 @@ export class MapleStorySEACharacterClient {
     assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     return this.http.get<SEACharacterPetEquipment>(
       `${MapleStorySEACharacterClient.BASE}/character/pet-equipment`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       SEA_CHARACTER_PET_EQUIPMENT_SHAPE,
     );
   }
@@ -465,10 +473,10 @@ export class MapleStorySEACharacterClient {
    * 전직 차수별 스킬 또는 하이퍼 스킬(스킬 레벨·효과)을 조회한다. SEA 명칭: Skills and Hyper Skills.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorySEA.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    * @param params.character_skill_grade - 전직 차수 ("0"~"6", "1.5", "2.5") 또는 하이퍼 스킬 ("hyperpassive", "hyperactive")
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -495,7 +503,7 @@ export class MapleStorySEACharacterClient {
       `${MapleStorySEACharacterClient.BASE}/character/skill`,
       {
         ocid: params.ocid,
-        date: params.date as string | undefined,
+        date: snapshotDate(params.date, SNAPSHOT),
         character_skill_grade: params.character_skill_grade,
       },
       SEA_CHARACTER_SKILL_SHAPE,
@@ -508,9 +516,9 @@ export class MapleStorySEACharacterClient {
    * 장착 링크 스킬(프리셋 포함)과 이 캐릭터가 주는 링크 스킬을 조회한다. SEA 명칭: Link Skills.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorySEA.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -526,7 +534,7 @@ export class MapleStorySEACharacterClient {
     assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     return this.http.get<SEACharacterLinkSkill>(
       `${MapleStorySEACharacterClient.BASE}/character/link-skill`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       SEA_CHARACTER_LINK_SKILL_SHAPE,
     );
   }
@@ -537,9 +545,9 @@ export class MapleStorySEACharacterClient {
    * V매트릭스(5차)에 장착한 V코어와 슬롯 정보를 조회한다. SEA 명칭: V Matrix, Nodes.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorySEA.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -555,7 +563,7 @@ export class MapleStorySEACharacterClient {
     assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     return this.http.get<SEACharacterVMatrix>(
       `${MapleStorySEACharacterClient.BASE}/character/vmatrix`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       SEA_CHARACTER_VMATRIX_SHAPE,
     );
   }
@@ -566,9 +574,9 @@ export class MapleStorySEACharacterClient {
    * HEXA 매트릭스(6차)에 장착한 HEXA 코어(이름·레벨·타입)를 조회한다. SEA 명칭: HEXA Nodes.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorySEA.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -584,7 +592,7 @@ export class MapleStorySEACharacterClient {
     assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     return this.http.get<SEACharacterHexaMatrix>(
       `${MapleStorySEACharacterClient.BASE}/character/hexamatrix`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       SEA_CHARACTER_HEXAMATRIX_SHAPE,
     );
   }
@@ -595,9 +603,9 @@ export class MapleStorySEACharacterClient {
    * HEXA 매트릭스에 설정한 HEXA 스탯(메인·서브 스탯 레벨)을 조회한다. SEA 명칭: HEXA Stats.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorySEA.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -613,7 +621,7 @@ export class MapleStorySEACharacterClient {
     assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     return this.http.get<SEACharacterHexaMatrixStat>(
       `${MapleStorySEACharacterClient.BASE}/character/hexamatrix-stat`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       SEA_CHARACTER_HEXAMATRIX_STAT_SHAPE,
     );
   }
@@ -624,9 +632,9 @@ export class MapleStorySEACharacterClient {
    * 무릉도장 최고 기록(최고 층수와 클리어 시간)을 조회한다. SEA 명칭: Mu Lung Garden.
    *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestorySEA.getOcid('CharacterName')` 으로 얻는다
-   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20 데이터부터 있다. 생략하면 가장 최근 데이터(약 15분 뒤 반영). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(UTC+8)부터 조회할 수 있다
+   * @param params.date - 조회 기준일 (싱가포르 시간 UTC+8, YYYY-MM-DD). 2025-04-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    *
-   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank. Use a valid date from 2025-04-20 through yesterday in Singapore time.
    * @throws {NexonAuthError} Invalid API key
    *
    * @example
@@ -640,7 +648,7 @@ export class MapleStorySEACharacterClient {
     assertNonEmptyString(params.ocid, 'ocid', undefined, 'trim-truthy');
     return this.http.get<SEACharacterDojang>(
       `${MapleStorySEACharacterClient.BASE}/character/dojang`,
-      { ocid: params.ocid, date: params.date as string | undefined },
+      { ocid: params.ocid, date: snapshotDate(params.date, SNAPSHOT) },
       SEA_CHARACTER_DOJANG_SHAPE,
     );
   }

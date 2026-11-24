@@ -89,8 +89,10 @@ export const seaUnionArtifactFixture: SEAUnionArtifact = {
   union_artifact_remain_ap: null,
 };
 
+export const SEA_UNION_CHAMPION_DATE = '2025-12-18';
+
 export const seaUnionChampionFixture: SEAUnionChampion = {
-  date: '2025-04-21T00:00+08:00',
+  date: `${SEA_UNION_CHAMPION_DATE}T00:00+08:00`,
   union_champion: [
     {
       champion_name: 'ExampleChampion',

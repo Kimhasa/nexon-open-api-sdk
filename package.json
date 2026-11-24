@@ -207,13 +207,17 @@
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "llms.txt",
+    "llms-full.txt"
   ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "type-check": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
     "examples:check": "yarn build && tsc -p tsconfig.examples.json",
+    "docs:llms": "tsx scripts/build-llms.ts",
+    "docs:llms:check": "tsx scripts/build-llms.ts --check",
     "check:exports": "attw --pack . --profile node16",
     "lint": "eslint src tests scripts",
     "lint:fix": "eslint src tests scripts --fix",

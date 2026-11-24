@@ -1,6 +1,6 @@
 import { NexonBadRequestError } from '../../../src/core/errors/NexonBadRequestError.js';
 import { http, HttpResponse } from 'msw';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Mock } from 'vitest';
 import type { HttpRequestInfo } from '../../../src/core/http/http-types.js';
 import type { ShapeMismatch } from '../../../src/core/validation/response-shape.js';
@@ -243,6 +243,12 @@ const snapshotCases = [
 ];
 
 describe('MapleStoryTWClient', () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2026-01-01T00:00:00Z'));
+  });
+  afterEach(() => vi.useRealTimers());
+
   it('reuses each sub-client', () => {
     const { client } = createClient();
     expect(client.character).toBe(client.character);
@@ -317,18 +323,20 @@ describe('MapleStoryTWClient', () => {
     );
   });
 
-  it('resolves today in Taiwan time', async () => {
-    vi.useFakeTimers({ toFake: ['Date'] });
+  it('accepts a Date once the Taiwan calendar day has ended', async () => {
+    const { client, onRequest } = createClient();
+    const date = new Date('2025-12-18T15:59:59.999Z');
+    vi.setSystemTime(date);
+    await expect(client.union.getChampion({ ocid: TEST_OCID, date })).rejects.toThrow(/Omit date/);
+    expect(onRequest).not.toHaveBeenCalled();
     vi.setSystemTime(new Date('2025-12-18T16:00:00Z'));
-    try {
-      const { client, onRequest } = createClient();
-      await client.union.getChampion({ ocid: TEST_OCID, date: 'today' });
-      expect(onRequest).toHaveBeenCalledExactlyOnceWith(
-        expect.objectContaining({ params: { ocid: TEST_OCID, date: '2025-12-19' } }),
-      );
-    } finally {
-      vi.useRealTimers();
-    }
+    await expect(client.union.getChampion({ ocid: TEST_OCID, date: 'today' })).rejects.toThrow(
+      /Omit date/,
+    );
+    await client.union.getChampion({ ocid: TEST_OCID, date });
+    expect(onRequest).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({ params: { ocid: TEST_OCID, date: '2025-12-18' } }),
+    );
   });
 
   it('accepts October 14 for Union and rejects it for character and guild snapshots', async () => {

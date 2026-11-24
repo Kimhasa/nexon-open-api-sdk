@@ -8,6 +8,10 @@ export { MapleStoryNoticeClient } from './notice/MapleStoryNoticeClient.js';
 export { MapleStoryBattlePracticeClient } from './battle-practice/MapleStoryBattlePracticeClient.js';
 export { MapleStorySchedulerClient } from './scheduler/MapleStorySchedulerClient.js';
 
+// 창작자 도우미: 외형 이미지 주소, 잠재능력·장비 옵션 합산
+export * from './helpers/character-image.js';
+export * from './helpers/item-options.js';
+
 // 식별자·공유 요청 타입
 export type {
   OCID,

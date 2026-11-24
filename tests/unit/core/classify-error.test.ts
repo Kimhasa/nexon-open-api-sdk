@@ -76,9 +76,9 @@ const PORTAL_TABLE: ReadonlyArray<{
     code: 'OPENAPI00006',
     status: 400,
     meaning: '유효하지 않은 게임 또는 API PATH',
-    cls: NexonBadRequestError,
+    cls: NexonAuthError,
     expectedStatus: 400,
-    hint: ['게임 또는 API 주소를 찾지 못했습니다', '최신 버전', 'issues'],
+    hint: ['게임마다 따로 발급', '조회하려는 게임의 애플리케이션', '최신 버전'],
   },
   {
     code: 'OPENAPI00007',
@@ -139,6 +139,50 @@ describe('classifyError', () => {
         expect(classifyError(status, makePayload(code)).message).not.toContain('오전 1시');
       }
     });
+  });
+
+  describe('다른 게임용 키 또는 유효하지 않은 API 주소 (OPENAPI00006)', () => {
+    it.each([
+      ['maplestory', '메이플스토리'],
+      ['maplestorym', '메이플스토리M'],
+      ['maplestorysea', 'MapleStory SEA'],
+      ['maplestorytw', 'MapleStory Taiwan'],
+      ['fconline', 'FC 온라인'],
+      ['tfd', '퍼스트 디센던트'],
+      ['heroes', '마비노기 영웅전'],
+      ['suddenattack', '서든어택'],
+      ['kartrush', '카트라이더 러쉬플러스'],
+      ['baram', '바람의나라'],
+      ['mabinogi', '마비노기'],
+      ['baramy', '바람의나라: 연'],
+      ['v4', 'V4'],
+      ['hit2', '히트2'],
+      ['platform', '넥슨 Open API 공지'],
+    ])('/%s 경로가 거부되면 %s 이름을 안내한다', (prefix, game) => {
+      const payload = makePayload('OPENAPI00006', 'Invalid game or path');
+      const err = classifyError(403, payload, undefined, {
+        url: `https://open.api.nexon.com/${prefix}/v1/id`,
+      });
+
+      expect(err).toBeInstanceOf(NexonAuthError);
+      expect(err.status).toBe(403);
+      expect(err.code).toBe('OPENAPI00006');
+      expect(err.nexonMessage).toBe('Invalid game or path');
+      expect(err.message).toContain(`${game} API`);
+      expect(err.message).toContain(`${game}용 애플리케이션`);
+      expect(err.message).toContain('https://openapi.nexon.com/ko/my-application/');
+    });
+
+    it.each([undefined, 'not-a-url', 'https://open.api.nexon.com/unknown/maplestory'])(
+      '첫 경로에서 게임을 알 수 없으면 일반 안내를 표시한다 (%s)',
+      (url) => {
+        const err = classifyError(400, makePayload('OPENAPI00006'), undefined, { url });
+
+        expect(err).toBeInstanceOf(NexonAuthError);
+        expect(err.message).toContain('이 API 키로는 이 API를 부를 수 없습니다');
+        expect(err.message).not.toContain('메이플스토리');
+      },
+    );
   });
 
   describe('점검 (OPENAPI00010, OPENAPI00011)', () => {

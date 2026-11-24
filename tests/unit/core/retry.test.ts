@@ -28,31 +28,11 @@ describe('computeRetryDelay', () => {
 });
 
 describe('isRetryableStatus', () => {
-  it('429는 재시도 가능하다', () => {
-    expect(isRetryableStatus(429)).toBe(true);
+  it.each([429, 500, 502, 503, 504, 599])('%i은 재시도 가능하다', (status) => {
+    expect(isRetryableStatus(status)).toBe(true);
   });
 
-  it('503은 재시도 가능하다', () => {
-    expect(isRetryableStatus(503)).toBe(true);
-  });
-
-  it('400은 재시도 불가하다', () => {
-    expect(isRetryableStatus(400)).toBe(false);
-  });
-
-  it('401은 재시도 불가하다', () => {
-    expect(isRetryableStatus(401)).toBe(false);
-  });
-
-  it('403은 재시도 불가하다', () => {
-    expect(isRetryableStatus(403)).toBe(false);
-  });
-
-  it('500은 재시도 불가하다', () => {
-    expect(isRetryableStatus(500)).toBe(false);
-  });
-
-  it('200은 재시도 불가하다', () => {
-    expect(isRetryableStatus(200)).toBe(false);
+  it.each([200, 400, 401, 403, 428, 430, 499, 600])('%i은 재시도 불가하다', (status) => {
+    expect(isRetryableStatus(status)).toBe(false);
   });
 });

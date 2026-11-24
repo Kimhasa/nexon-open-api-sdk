@@ -4,6 +4,8 @@ export type { NexonClientOptions } from './NexonClient.js';
 
 // Game clients (also available via sub-path imports)
 export { MapleStoryClient } from './games/maplestory/MapleStoryClient.js';
+export * from './games/maplestory/helpers/character-image.js';
+export * from './games/maplestory/helpers/item-options.js';
 export { FcOnlineClient } from './games/fc-online/FcOnlineClient.js';
 export { MapleStoryMClient } from './games/maplestory-m/MapleStoryMClient.js';
 export { MapleStorySEAClient } from './games/maplestory-sea/MapleStorySEAClient.js';
@@ -22,6 +24,7 @@ export {
   classifyError,
 } from './core/errors/index.js';
 export type { NexonErrorCode, NexonErrorPayload } from './core/errors/index.js';
+export { maskIdentifier, maskIdentifiers } from './core/http/mask.js';
 
 // Types
 export type { OCID, NexonDate, GuildId } from './games/_base/maple-base-types.js';

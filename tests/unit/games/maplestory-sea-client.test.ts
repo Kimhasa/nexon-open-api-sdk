@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 import { http, HttpResponse } from 'msw';
 import { _resetDeprecationWarnings } from '../../../src/core/deprecation/deprecation.js';
 import { NexonAuthError } from '../../../src/core/errors/NexonAuthError.js';
@@ -25,6 +25,7 @@ import {
   seaCharacterDojangFixture,
 } from '../../fixtures/maplestory-sea/character.fixture.js';
 import {
+  SEA_UNION_CHAMPION_DATE,
   seaUnionRaiderFixture,
   seaUnionArtifactFixture,
   seaUnionChampionFixture,
@@ -55,6 +56,12 @@ const TEST_GUILD_ID = seaGuildIdFixture.oguild_id as GuildId;
 const query = { ocid: TEST_OCID, date: '2025-04-21' };
 
 describe('MapleStorySEAClient', () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2026-01-01T00:00:00Z'));
+  });
+  afterEach(() => vi.useRealTimers());
+
   describe('lazy getters', () => {
     it('character getter는 MapleStorySEACharacterClient를 반환한다', () => {
       const client = createClient();
@@ -179,22 +186,25 @@ describe('MapleStorySEAClient', () => {
 
   describe('union', () => {
     it.each([
-      { name: 'getRaider', fixture: seaUnionRaiderFixture },
-      { name: 'getArtifact', fixture: seaUnionArtifactFixture },
-      { name: 'getChampion', fixture: seaUnionChampionFixture },
-    ] as const)('$name returns the response without shape warnings', async ({ name, fixture }) => {
-      const onResponseShapeMismatch = vi.fn();
-      const client = new MapleStorySEAClient(
-        new HttpClient({
-          apiKey: TEST_API_KEY,
-          responseValidation: true,
-          logger: { onResponseShapeMismatch },
-        }),
-      );
-      const result = await client.union[name](query);
-      expect(result).toEqual(fixture);
-      expect(onResponseShapeMismatch).not.toHaveBeenCalled();
-    });
+      { name: 'getRaider', date: query.date, fixture: seaUnionRaiderFixture },
+      { name: 'getArtifact', date: query.date, fixture: seaUnionArtifactFixture },
+      { name: 'getChampion', date: SEA_UNION_CHAMPION_DATE, fixture: seaUnionChampionFixture },
+    ] as const)(
+      '$name returns the response without shape warnings',
+      async ({ name, date, fixture }) => {
+        const onResponseShapeMismatch = vi.fn();
+        const client = new MapleStorySEAClient(
+          new HttpClient({
+            apiKey: TEST_API_KEY,
+            responseValidation: true,
+            logger: { onResponseShapeMismatch },
+          }),
+        );
+        const result = await client.union[name]({ ...query, date });
+        expect(result).toEqual(fixture);
+        expect(onResponseShapeMismatch).not.toHaveBeenCalled();
+      },
+    );
 
     it('getUnion — 유니온 정보를 반환한다', async () => {
       const client = createClient();
@@ -295,6 +305,34 @@ describe('MapleStorySEAClient', () => {
     } finally {
       warning.mockRestore();
     }
+  });
+
+  it('uses Singapore midnight and accepts the first character snapshot date', async () => {
+    const onRequest = vi.fn();
+    const client = new MapleStorySEAClient(
+      new HttpClient({ apiKey: TEST_API_KEY, logger: { onRequest } }),
+    );
+    const ocid = TEST_OCID;
+    vi.setSystemTime(new Date('2025-04-20T15:59:59.999Z'));
+    await expect(client.character.getBasic({ ocid, date: '2025-04-19' })).rejects.toThrow(
+      /2025-04-20.*empty data/,
+    );
+    await expect(client.character.getBasic({ ocid, date: '2025-04-20' })).rejects.toMatchObject({
+      code: 'OPENAPI00004',
+      message: expect.stringContaining('Omit date'),
+    });
+    expect(onRequest).not.toHaveBeenCalled();
+    vi.setSystemTime(new Date('2025-04-20T16:00:00Z'));
+    await client.character.getBasic({ ocid, date: '2025-04-20' });
+    expect(onRequest).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({ params: { ocid, date: '2025-04-20' } }),
+    );
+  });
+
+  it('rejects dates before Union Champion data starts', async () => {
+    await expect(
+      createClient().union.getChampion({ ocid: TEST_OCID, date: '2025-12-17' }),
+    ).rejects.toThrow(/2025-12-18/);
   });
 
   it('rejects a blank identifier before making a request', async () => {

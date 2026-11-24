@@ -1,144 +1,45 @@
 # nexon-open-api
 
-> 넥슨 게임 데이터로 팬사이트·디스코드 봇·전적 검색기를 만드는 분들을 위한 TypeScript/JavaScript 라이브러리
+> 넥슨 Open API로 디스코드 봇·팬사이트·계산기 같은 도구를 만들 때, **내 코드에 설치해서 쓰는** TypeScript/JavaScript 라이브러리(npm 패키지)입니다.
 
 [![npm version](https://img.shields.io/npm/v/nexon-open-api.svg)](https://www.npmjs.com/package/nexon-open-api)
 [![CI](https://github.com/Kimhasa/nexon-open-api-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/Kimhasa/nexon-open-api-sdk/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org/)
 
-캐릭터 이름만 알면 레벨, 장비, 전적, 랭킹을 코드 몇 줄로 가져옵니다. [넥슨 Open API](https://openapi.nexon.com/)가 제공하는 **14개 게임과 Open API 공지**를 모두 지원하는 비공식 라이브러리입니다.
-
-## 무엇을 만들 수 있나요
-
-- **메이플스토리** — 캐릭터 이름으로 레벨·전투력·장착 장비·유니온을 조회하는 스펙 검색기, 스타포스·큐브 기록 분석
-- **FC 온라인** — 닉네임으로 최근 공식경기 전적과 역대 최고 등급을 보여 주는 전적 검색기
-- **마비노기** — 경매장 시세 알림, 거대한 외침의 뿔피리 모아 보기
-- **퍼스트 디센던트** — 계승자·무기·모듈 도감 (이 데이터는 API 키 없이도 받을 수 있습니다)
-- **서든어택·마비노기 영웅전·바람의나라 등** — 디스코드 봇의 `!정보 캐릭터명` 같은 명령에 답하기
-
-게임별로 할 수 있는 일은 [지원 게임](#지원-게임)에 있습니다.
-
-## 시작하기
-
-개발이 처음이라면 준비물부터 차근차근 설명하는 [시작 가이드](docs/getting-started.md)를 먼저 보세요.
-
-### ① 설치
-
-Node.js 18 이상이 필요합니다.
-
-```bash
-npm install nexon-open-api
-```
-
-### ② API 키 받기
-
-[넥슨 Open API](https://openapi.nexon.com/)에 넥슨 ID로 로그인하고 애플리케이션을 등록하면 API 키가 발급됩니다. 자세한 순서는 [시작 가이드의 API 키 발급](docs/getting-started.md#2-api-키-발급받기)에 있습니다.
-
-**API 키는 게임마다 따로입니다.** 애플리케이션을 등록할 때 게임을 고르기 때문에, 메이플스토리로 받은 키로는 FC 온라인을 조회할 수 없습니다.
-
-받은 키는 프로젝트 폴더의 `.env` 파일에 적어 둡니다.
-
-```
-NEXON_API_KEY=발급받은_키
-```
-
-### ③ 첫 코드: 메이플스토리 캐릭터 요약
-
-아래 내용을 `index.mjs` 로 저장합니다. 파일 확장자가 `.mjs` 여야 `import` 와 맨 바깥의 `await` 를 그대로 쓸 수 있습니다.
+완성된 앱이나 웹사이트가 아닙니다. 캐릭터 이름으로 레벨·장비·전적·랭킹을 가져오는 **부품**이고, 화면과 기능은 만드는 분이 정합니다. [넥슨 Open API](https://openapi.nexon.com/)의 14개 게임과 Open API 공지를 다루는 비공식 라이브러리입니다.
 
 ```js
-import { NexonClient, NexonError } from 'nexon-open-api';
+import { NexonClient } from 'nexon-open-api';
 
-const apiKey = process.env.NEXON_API_KEY;
-if (!apiKey) {
-  console.error('NEXON_API_KEY 가 비어 있습니다. .env 파일을 확인하세요.');
-  process.exit(1);
-}
-
-const client = new NexonClient({ apiKey });
-const characterName = process.argv[2] ?? '캐릭터명';
-
-try {
-  // 1단계: 캐릭터 이름으로 고유 번호(OCID)를 받는다
-  const ocid = await client.maplestory.getOcid(characterName);
-
-  // 2단계: 고유 번호로 원하는 정보를 조회한다
-  const [basic, stat, union] = await Promise.all([
-    client.maplestory.character.getBasic({ ocid }), // 기본 정보
-    client.maplestory.character.getStat({ ocid }), // 종합 능력치
-    client.maplestory.union.getUnion({ ocid }), // 유니온
-  ]);
-  const combatPower = stat.final_stat.find((s) => s.stat_name === '전투력')?.stat_value;
-
-  console.log(`${basic.character_name} (${basic.world_name} · ${basic.character_class})`);
-  console.log(`레벨 ${basic.character_level} (${basic.character_exp_rate}%)`);
-  console.log(`전투력 ${combatPower ? Number(combatPower).toLocaleString('ko-KR') : '정보 없음'}`);
-  console.log(`유니온 Lv.${union.union_level} (${union.union_grade})`);
-  console.log(`길드 ${basic.character_guild_name || '없음'}`);
-} catch (err) {
-  if (err instanceof NexonError) {
-    // 메시지에 무엇이 틀렸고 어떻게 고치는지 들어 있다
-    console.error(`조회하지 못했습니다: ${err.message}`);
-  } else {
-    throw err;
-  }
-}
+const client = new NexonClient({ apiKey: process.env.NEXON_API_KEY ?? '' });
+const ocid = await client.maplestory.getOcid('캐릭터명'); // 캐릭터 이름 → 고유 번호
+const basic = await client.maplestory.character.getBasic({ ocid }); // 기본 정보
+console.log(`${basic.character_name} Lv.${basic.character_level} ${basic.character_class}`);
 ```
 
-조회할 캐릭터 이름을 붙여서 실행합니다 (`--env-file` 은 Node.js 20.6 이상. 그보다 낮으면 [시작 가이드](docs/getting-started.md#3-env-파일로-키-관리하기) 참고).
+## 왜 직접 fetch하거나 AI가 짠 코드 대신 쓰나요?
 
-```bash
-node --env-file=.env index.mjs 캐릭터명
-```
+- **실제 응답에 맞춘 타입입니다.** 넥슨 문서와 실제 응답은 다른 곳이 있습니다. 실제 키로 263개 조회를 대조했을 때 처음에는 127개에서 600종이 넘는 차이가 나왔고, 모두 실제 응답에 맞췄습니다. → [문서대로 짜면 터지는 곳](docs/why.md#같은-일-두-가지-코드)
+- **넥슨이 직접 경고한 함정을 대신 처리합니다.** 넥슨의 [AI 에이전트 가이드](https://openapi.nexon.com/ko/guide/ai-agent/)가 꼽은 문제(없는 캐릭터에 "파라미터 오류", 조용히 무시되는 필터, 재시도하면 안 되는 에러)를 라이브러리가 맡습니다. → [가이드 항목별 대응표](docs/why.md#넥슨-ai-가이드와-이-라이브러리)
+- **14개 게임이 한 패키지이고 의존성이 0개입니다.** 에디터에서 `client.` 만 입력하면 게임, 조회 항목, 응답 필드가 게임 용어 설명과 함께 자동완성됩니다. → [다른 라이브러리와 비교](docs/why.md#다른-라이브러리와-비교)
 
-```
-캐릭터명 (스카니아 · 아크메이지(불,독))
-레벨 275 (42.31%)
-전투력 123,456,789
-유니온 Lv.8500 (그랜드 마스터 유니온 1)
-길드 길드명
-```
+AI에게 코드를 맡길 때도 쓸 수 있습니다. "nexon-open-api 로 짜 줘"라고 하면 AI가 검증된 필드 이름과 에러 처리를 그대로 씁니다 ([AI와 함께 쓰기](docs/ai-guide.md)).
 
-더 많은 완성 예제는 [`examples/`](examples/README.md)에 있습니다.
+## 이런 걸 만들 때 씁니다
 
-## 기본 원리: 이름 → 고유 번호 → 정보
-
-넥슨 API는 캐릭터 이름으로 바로 정보를 주지 않습니다. 대부분의 게임에서 **두 단계**를 거칩니다.
-
-1. **이름으로 고유 번호를 받는다.** 캐릭터마다 붙는 번호는 OCID, 계정(닉네임)마다 붙는 번호는 OUID라고 부릅니다. 닉네임을 바꿔도 같은 캐릭터를 가리키기 위한 번호입니다.
-2. **고유 번호로 정보를 조회한다.** 기본 정보, 장비, 전적 등 원하는 것을 고유 번호를 넣어 부릅니다.
-
-게임마다 이름을 넣는 방법이 조금씩 다릅니다. 아래는 위의 `client` 가 있다고 가정한 조각입니다.
-
-```js
-// 메이플스토리: 캐릭터 이름만
-const ocid = await client.maplestory.getOcid('캐릭터명');
-const equipment = await client.maplestory.character.getItemEquipment({ ocid }); // 장착 장비
-
-// 메이플스토리M: 월드 이름이 먼저 온다
-const mOcid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
-
-// 바람의나라: 캐릭터 이름 뒤에 서버 이름
-const baramOcid = await client.baram.getOcid('캐릭터명', '연');
-
-// FC 온라인: 구단주 닉네임 → 계정 번호(OUID) → 최근 공식경기(matchtype 50) 10판
-const ouid = await client.fcOnline.getOuid('닉네임');
-const matchIds = await client.fcOnline.getMatchList({ ouid, matchtype: 50, limit: 10 });
-
-// 퍼스트 디센던트: '#' 뒤 태그까지 포함한 닉네임
-const tfdOuid = await client.firstDescendant.getOuid('닉네임#1234');
-
-// 마비노기 경매장처럼 캐릭터와 상관없는 정보는 고유 번호 없이 바로 조회한다
-const auction = await client.mabinogi.auction.listItems({ auction_item_category: '검' });
-```
-
-- 넥슨 안내에 따르면 게임 콘텐츠 변경으로 고유 번호가 바뀔 수 있습니다. 오래 저장해 둔 번호로 조회가 안 되면 이름으로 다시 받으세요.
-- 키가 게임마다 따로이므로, 여러 게임을 다루면 `new NexonClient({ apiKey })` 도 게임 키마다 하나씩 만듭니다.
+| 만들고 싶은 것                          | 여기서 시작하세요                                                                                                            |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| 환산 계산기 (장비·잠재능력 옵션 모으기) | [레시피](docs/recipes/)                                                                                                      |
+| 코디 카드 (캐릭터 외형 이미지)          | [레시피](docs/recipes/)                                                                                                      |
+| 디스코드 봇의 `!정보 캐릭터명`          | [캐릭터 카드 예제](examples/maplestory-character-card.mjs), [봇 형태로 쓰기](docs/getting-started.md#6-디스코드-봇처럼-쓰기) |
+| 전적 검색기                             | [FC 온라인 전적 예제](examples/fconline-recent-matches.mjs)                                                                  |
+| 경매장 시세 도구                        | [마비노기 경매장 예제](examples/mabinogi-auction-price.mjs)                                                                  |
+| 랭킹 페이지, 도감, 뿔피리 모아 보기     | [예제 전체 목록](examples/README.md)                                                                                         |
 
 ## 지원 게임
 
-넥슨 Open API 포털의 **14개 게임 전부와 Open API 공지**를 지원합니다 (2026-11-24 포털 기준, API 270개). 넥슨 API가 바뀌면 SDK도 빠르게 따라갑니다. 매주 포털의 변경을 자동으로 확인합니다.
+넥슨 Open API 포털의 **14개 게임 전부와 Open API 공지**를 지원합니다 (2026-11-24 포털 기준, 조회 270개). 넥슨 API가 바뀌는지 매주 자동으로 확인합니다.
 
 <!-- 아이콘 파일: docs/assets/games/{game}.png -->
 <!-- prettier-ignore-start -->
@@ -171,70 +72,73 @@ const auction = await client.mabinogi.auction.listItems({ auction_item_category:
 </table>
 <!-- prettier-ignore-end -->
 
-던전앤파이터와 사이퍼즈는 넥슨 Open API가 아니라 [네오플 Developers](https://developers.neople.co.kr/)에서 따로 제공합니다. 주소와 API 키가 달라 이 라이브러리로는 조회할 수 없습니다.
+코드에서 부르는 이름(`client.maplestory` 등)은 [문서](#문서)의 표에 있습니다. 던전앤파이터와 사이퍼즈는 [네오플 Developers](https://developers.neople.co.kr/)에서 따로 제공하므로 이 라이브러리로는 조회할 수 없습니다.
+
+## 시작하기
+
+개발이 처음이라면 준비물부터 차근차근 설명하는 [시작 가이드](docs/getting-started.md)를 보세요.
+
+**① 설치** — Node.js 18 이상이 필요합니다.
+
+```bash
+npm install nexon-open-api
+```
+
+**② API 키 받기** — [넥슨 Open API](https://openapi.nexon.com/)에 로그인해 애플리케이션을 등록하면 키가 발급됩니다 ([발급 순서](docs/getting-started.md#2-api-키-발급받기)). **키는 게임마다 따로입니다.** 메이플스토리로 받은 키로는 FC 온라인을 조회할 수 없습니다. 받은 키는 프로젝트 폴더의 `.env` 파일에 적습니다.
+
+```
+NEXON_API_KEY=발급받은_키
+```
+
+**③ 실행** — 맨 위의 코드를 `index.mjs` 로 저장하고 실행합니다 (`--env-file` 은 Node.js 20.6 이상).
+
+```bash
+node --env-file=.env index.mjs
+```
+
+```
+캐릭터명 Lv.275 아크메이지(불,독)
+```
+
+**기본 원리는 "이름 → 고유 번호 → 정보" 두 단계입니다.** 캐릭터마다 붙는 번호를 OCID, 계정(닉네임)마다 붙는 번호를 OUID라고 부릅니다. 게임마다 이름과 함께 넣는 것이 조금씩 다릅니다.
+
+```js
+const mOcid = await client.maplestorym.getOcid('스카니아', '캐릭터명'); // 메이플스토리M: 월드 이름이 먼저
+const baramOcid = await client.baram.getOcid('캐릭터명', '연'); // 바람의나라: 뒤에 서버 이름
+const ouid = await client.fcOnline.getOuid('닉네임'); // FC 온라인: 구단주 닉네임
+const matchIds = await client.fcOnline.getMatchList({ ouid, matchtype: 50, limit: 10 }); // 공식경기 10판
+```
+
+에러 처리까지 넣은 완성 예제는 [시작 가이드](docs/getting-started.md#4-첫-실행-메이플스토리-캐릭터-정보-출력)와 [`examples/`](examples/README.md)에 있습니다.
 
 ## 에러 처리
 
-조회에 실패하면 상황에 맞는 에러가 던져집니다. 에러 종류로 나눠서 사용자에게 알맞은 안내를 보여 주세요. 모든 에러의 `message` 에는 무엇이 틀렸고 어떻게 고치는지가 들어 있습니다.
+조회에 실패하면 상황에 맞는 에러가 던져집니다. 모든 에러는 `NexonError` 를 상속하고, `message` 에 무엇이 틀렸고 어떻게 고치는지가 들어 있습니다.
 
-| 이런 상황                                                               | 이런 에러                                                | 이렇게 하세요                                                                                 |
-| ----------------------------------------------------------------------- | -------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| 캐릭터명 오타, 없는 캐릭터·길드                                         | `NexonNotFoundError` (이름 조회는 `OPENAPI00004`)        | "캐릭터를 찾을 수 없어요"라고 답하고 이름·월드를 다시 확인하게 한다                           |
-| 이름이 빈칸, 달력에 없는 날짜, 허용되지 않는 서버명, API 키가 비어 있음 | `NexonBadRequestError` (`OPENAPI00004`)                  | 넥슨에 요청을 보내기 전에 걸러진다. `err.message` 에 고치는 방법이 있다                       |
-| 그 날짜의 데이터가 아직 없음                                            | `NexonDataNotReadyError` (`OPENAPI00009`)                | 날짜를 하루 전으로 바꾸거나 잠시 뒤 다시 조회한다                                             |
-| 게임 또는 넥슨 Open API가 점검 중                                       | `NexonMaintenanceError` (`OPENAPI00010`, `OPENAPI00011`) | 점검이 끝난 뒤 다시 조회한다. "지금은 점검 중이에요"라고 답한다                               |
-| 키가 잘못됨 (잘못 복사, 앞뒤 공백·따옴표)                               | `NexonAuthError` (`OPENAPI00005`)                        | `.env` 의 키를 넥슨 Open API의 애플리케이션 상세 페이지에 있는 키와 비교한다                  |
-| 이 키로는 이 API를 쓸 수 없음                                           | `NexonAuthError` (`OPENAPI00002`)                        | 키를 발급받은 게임과 조회하려는 게임이 같은지 확인한다                                        |
-| 너무 자주 호출함                                                        | `NexonRateLimitError` (`OPENAPI00007`)                   | SDK가 먼저 자동으로 다시 시도한다(기본 3회). 그래도 실패하면 호출을 줄이고 결과를 저장해 둔다 |
-| 넥슨 서버 오류                                                          | `NexonServerError` (`OPENAPI00001`, HTTP 5xx)            | 잠시 뒤 다시 시도한다                                                                         |
-| 인터넷 끊김, 응답 시간 초과                                             | `NexonError` (코드 없음)                                 | 네트워크를 확인하거나 `timeoutMs` 를 늘린다                                                   |
-
-모든 에러는 `NexonError` 를 상속하고 `code`(넥슨 에러 코드)와 `status` 를 가집니다. 에러 종류는 넥슨 에러 코드로 정해집니다. 예를 들어 잘못된 키에 넥슨 서버는 `OPENAPI00005` 를 돌려주고, SDK는 이를 `NexonAuthError` 로 알려 줍니다. 예외가 하나 있습니다. 이름으로 캐릭터·계정·길드를 찾았는데 없으면 넥슨은 `OPENAPI00004`(파라미터 오류)를 돌려주지만, SDK는 알아보기 쉽게 `NexonNotFoundError` 로 바꿔 알려 줍니다 (`err.code` 는 넥슨이 준 값 그대로). `NexonMaintenanceError` 는 `NexonServerError` 의 한 종류이므로, 점검을 따로 안내하려면 `NexonMaintenanceError` 를 먼저 검사합니다.
-
-### 디스코드 봇 응답 예제
-
-`!정보 캐릭터명` 같은 명령에 답할 문장을 만드는 함수입니다. 위의 `client` 가 있다고 가정합니다.
+| 이런 상황                                               | 이런 에러                | 이렇게 하세요                                                  |
+| ------------------------------------------------------- | ------------------------ | -------------------------------------------------------------- |
+| 캐릭터명 오타, 없는 캐릭터·길드                         | `NexonNotFoundError`     | "캐릭터를 찾을 수 없어요"라고 답한다                           |
+| 빈 이름, 조회할 수 없는 날짜, 허용되지 않는 서버명·분류 | `NexonBadRequestError`   | 넥슨에 보내기 전에 걸러진다. `err.message` 대로 고친다         |
+| 그 날짜의 데이터가 아직 없음                            | `NexonDataNotReadyError` | 날짜를 하루 전으로 바꾸거나 잠시 뒤 다시 조회한다              |
+| 게임 또는 넥슨 Open API가 점검 중                       | `NexonMaintenanceError`  | "지금은 점검 중이에요"라고 답한다                              |
+| 키가 잘못됐거나, 다른 게임으로 받은 키                  | `NexonAuthError`         | `.env` 의 키와, 키를 발급받은 게임을 확인한다                  |
+| 너무 자주 호출함                                        | `NexonRateLimitError`    | 자동 재시도 뒤에도 실패한 것이다. 결과를 저장해 두고 다시 쓴다 |
+| 넥슨 서버 오류                                          | `NexonServerError`       | 자동 재시도 뒤에도 실패한 것이다. 잠시 뒤 다시 시도한다        |
+| 인터넷 끊김, 응답 시간 초과                             | `NexonError`             | 네트워크를 확인하거나 `timeoutMs` 를 늘린다                    |
 
 ```js
-import {
-  NexonNotFoundError,
-  NexonBadRequestError,
-  NexonDataNotReadyError,
-  NexonMaintenanceError,
-  NexonRateLimitError,
-} from 'nexon-open-api';
+import { NexonNotFoundError } from 'nexon-open-api';
 
-async function replyCharacterInfo(characterName) {
-  try {
-    const ocid = await client.maplestory.getOcid(characterName);
-    const basic = await client.maplestory.character.getBasic({ ocid });
-    return `${basic.character_name} · ${basic.world_name} · Lv.${basic.character_level} ${basic.character_class}`;
-  } catch (err) {
-    if (err instanceof NexonNotFoundError) {
-      return `'${characterName}' 캐릭터를 찾을 수 없어요. 이름을 다시 확인해 주세요.`;
-    }
-    if (err instanceof NexonBadRequestError) {
-      return '캐릭터 이름을 입력해 주세요. 예: !정보 캐릭터명';
-    }
-    if (err instanceof NexonDataNotReadyError) {
-      return '아직 데이터가 준비되지 않았어요. 잠시 뒤 다시 시도해 주세요.';
-    }
-    if (err instanceof NexonRateLimitError) {
-      return '지금 조회가 몰리고 있어요. 조금 뒤 다시 시도해 주세요.';
-    }
-    if (err instanceof NexonMaintenanceError) {
-      return '지금은 게임 점검 중이에요. 점검이 끝나면 다시 시도해 주세요.';
-    }
-    console.error(err); // 키 문제, 넥슨 서버 오류 등은 운영자가 확인한다
-    return '조회 중 문제가 생겼어요. 잠시 뒤 다시 시도해 주세요.';
-  }
+try {
+  const ocid = await client.maplestory.getOcid('캐릭터명');
+  console.log(await client.maplestory.character.getBasic({ ocid }));
+} catch (err) {
+  if (err instanceof NexonNotFoundError) console.log('캐릭터를 찾을 수 없어요.');
+  else throw err;
 }
-
-console.log(await replyCharacterInfo('캐릭터명'));
-// 캐릭터명 · 스카니아 · Lv.275 아크메이지(불,독)
 ```
 
-상황별 원인과 해결은 [FAQ](docs/faq.md)에 더 있습니다.
+`NexonMaintenanceError` 는 `NexonServerError` 의 한 종류라서, 점검을 따로 안내하려면 먼저 검사합니다. 상황별 원인과 해결은 [FAQ](docs/faq.md)에, 상황마다 다른 답을 하는 봇 예제는 [`examples/error-handling.mjs`](examples/error-handling.mjs)에 있습니다.
 
 ## 설정 옵션
 
@@ -244,34 +148,23 @@ console.log(await replyCharacterInfo('캐릭터명'));
 | -------------------- | ------- | --------------------------------------------------------------------------------------------------- |
 | `apiKey`             | (필수)  | 넥슨 Open API에서 발급받은 키                                                                       |
 | `timeoutMs`          | `10000` | 넥슨 서버 응답을 기다리는 시간(밀리초). 넘으면 에러                                                 |
-| `maxRetries`         | `3`     | 호출이 너무 잦거나(429) 서버가 잠시 응답하지 못할 때(503) 자동으로 다시 시도하는 횟수               |
+| `maxRetries`         | `3`     | 호출이 너무 잦거나(429) 넥슨 서버에 오류가 났을 때(5xx) 자동으로 다시 시도하는 횟수                 |
 | `retryBaseDelayMs`   | `500`   | 다시 시도하기 전에 기다리는 기본 시간(밀리초). 시도할 때마다 두 배로 늘어난다 (최대 30초)           |
-| `debug`              | `false` | `true` 면 요청·응답·재시도를 콘솔에 출력한다. 문제를 찾을 때 켠다                                   |
+| `debug`              | `false` | `true` 면 요청·응답·재시도를 콘솔에 출력한다. 고유 번호(OCID 등)는 가려서 출력한다                  |
 | `responseValidation` | `false` | `true` 면 넥슨 응답의 구조가 SDK가 아는 것과 다를 때 알려 준다 (`debug` 또는 `logger` 와 함께 사용) |
 | `logger`             | 없음    | 요청·응답·재시도 때 부를 함수를 직접 지정한다. `debug: true` 이면 무시된다                          |
 
-```js
-import { NexonClient } from 'nexon-open-api';
-
-const client = new NexonClient({
-  apiKey: process.env.NEXON_API_KEY ?? '',
-  maxRetries: 5, // 방문자가 많은 서비스라면 재시도를 늘린다
-  debug: true, // 개발 중에 요청과 응답을 콘솔에서 확인한다
-});
-```
-
-## API 키와 보안
-
-- **키는 서버·봇(Node.js)에서만 씁니다.** 웹페이지(브라우저)에서 실행되는 코드에 키를 넣으면 방문자 누구나 키를 볼 수 있습니다. 웹사이트를 만든다면 내 서버가 넥슨 API를 부르고, 웹페이지는 내 서버에 요청하게 합니다 ([FAQ](docs/faq.md#웹페이지에서-바로-부르고-싶어요)).
-- **키를 코드에 직접 적지 않습니다.** `.env` 파일에 두고 `process.env` 로 읽습니다.
-- **`.env` 를 GitHub에 올리지 않습니다.** `.gitignore` 파일에 `.env` 한 줄을 추가합니다. 키가 노출됐다면 넥슨 Open API의 애플리케이션 상세 페이지에서 새 키를 발급받아 교체합니다.
-- **키는 게임마다 따로입니다.** 여러 게임을 다루면 `NEXON_MAPLESTORY_API_KEY`, `NEXON_FC_ONLINE_API_KEY` 처럼 이름을 나눠 저장하고 게임마다 `NexonClient` 를 따로 만듭니다.
+API 키는 서버나 봇(Node.js)에만 두고, 웹페이지(브라우저) 코드와 GitHub에는 올리지 않습니다. 호출 한도, 출처 표기처럼 공개 전에 챙길 것은 [서비스에 올리기 전 체크리스트](docs/service-checklist.md)에 모았습니다.
 
 ## 문서
 
 - [시작 가이드](docs/getting-started.md) — 설치, API 키 발급, 첫 실행, 디스코드 봇 형태로 쓰는 법, CommonJS·TypeScript
+- [왜 이 라이브러리인가](docs/why.md) — 직접 짠 코드와의 비교, 넥슨 AI 가이드 대응표, 다른 라이브러리와의 비교
+- [서비스에 올리기 전 체크리스트](docs/service-checklist.md) — 키 보관, 호출 한도, 캐시, 출처 표기
+- [레시피](docs/recipes/) — 환산 계산기 재료 모으기, 코디 카드
 - [FAQ](docs/faq.md) — "캐릭터를 못 찾아요", "오늘 데이터가 안 나와요" 같은 상황별 해결
 - [`examples/`](examples/README.md) — 복사해서 바로 실행하는 예제
+- [AI와 함께 쓰기](docs/ai-guide.md) — AI 코딩 도구에 이 라이브러리를 알려 주는 법 ([`llms.txt`](llms.txt))
 - [CHANGELOG.md](CHANGELOG.md) — 버전별 변경 내용
 
 | 게임                  | 코드에서                 | 문서                             | 다루는 내용                                                            |
@@ -292,30 +185,18 @@ const client = new NexonClient({
 | 히트2                 | `client.hit2`            | [문서](docs/hit2.md)             | 기본 정보                                                              |
 | 넥슨 Open API 공지    | `client.platform`        | [문서](docs/platform.md)         | 점검·API 변경 공지                                                     |
 
-`client.maplestorym` 의 `m` 은 소문자입니다. VS Code 같은 에디터에서는 `client.` 뒤에서 자동완성으로 게임과 조회 항목, 응답 필드를 확인할 수 있습니다.
+`client.maplestorym` 의 `m` 은 소문자입니다.
 
 ## 실서버 검증 현황
 
-이 라이브러리가 실제 넥슨 서버와 어디까지 맞춰 봤는지 구분해서 적습니다.
+2026-11-24에 게임별 개발 단계 키로 실제 넥슨 서버와 맞춰 봤습니다.
 
-- **모든 API는 넥슨 포털의 공식 스펙을 기준으로 만들고, 실제 응답으로 다시 맞췄습니다.** 조회 항목과 입력값은 공식 스펙을 따릅니다. 포털 스펙과 실제 응답이 다른 곳(필드 이름, `null`, 타입)은 실제 응답을 따르고, 그 근거를 기록해 둡니다. 어긋나면 자동 검사가 알려 줍니다.
-- **API 키 없이 열리는 데이터는 실제 응답과 맞춰 봤습니다** (2026-11-24). 실제 응답이 스펙과 다른 곳은 실제 응답에 맞췄습니다.
-  - 게임 기본 데이터(매치 종류, 계급·티어, 계승자·무기 도감 등) **44/44** 통과 (FC 온라인 8, 서든어택 4, 퍼스트 디센던트 32). 퍼스트 디센던트 한국어·영어를 포함해 실제 호출은 68건입니다.
-  - 실제 응답과 SDK의 응답 필드를 안쪽 필드까지 비교한 결과, 빠지거나 남거나 형식이 다른 필드가 **0건**이었습니다.
-  - 15개 게임 모두에서 잘못된 키를 넣으면 `NexonAuthError`(`OPENAPI00005`)와 안내 메시지가 나오고, 재시도 없이 끝났습니다.
-  - npm에서 설치한 패키지를 `require` 와 `import` 양쪽으로 실제 호출했고, TypeScript 타입 검사도 통과했습니다.
-  - FC 온라인 선수 이미지는 선수에 따라 두 가지 주소(시즌 포함 번호 / 선수 번호) 중 한쪽에만 있습니다. 없는 쪽은 넥슨 이미지 서버가 403을 돌려줍니다 ([FC 온라인 문서](docs/fc-online.md)).
-- **API 키가 필요한 API도 실제 키로 맞춰 봤습니다** (2026-11-24, 게임별 개발 단계 키).
-  - 게임마다 직업·레벨·월드가 다른 공개 캐릭터 2~6명, 모두 42명으로 실제 API를 불렀습니다. 그렇게 **263개 API**의 응답을 SDK 타입과 안쪽 필드까지 비교했습니다.
-  - 처음에는 포털 스펙과 다른 곳이 600종 넘게 나왔습니다. SDK 타입을 실제 응답에 맞춰 **0건**이 됐습니다. 예를 들어 메이플스토리 장비의 업그레이드 가능 횟수는 실제로 `scroll_upgradeable_count` 로 오고, 장착하지 않은 펫 장비는 `null` 로 옵니다.
-  - 이름으로 캐릭터를 찾았는데 없으면 넥슨은 "파라미터 오류"(`OPENAPI00004`)를 돌려줍니다. SDK는 이 경우를 `NexonNotFoundError` 로 알려 줍니다 (14개 게임 확인).
-  - 확인하지 못한 것도 있습니다.
-    - FC 온라인 이적시장 거래 기록: 키를 발급한 계정 본인의 기록만 나옵니다.
-    - 메이플스토리 `getLegacyOuid`: 구 개발자센터 키가 필요합니다.
-    - FC 온라인 `getAllMatchList`: 넥슨이 제공을 끝냈습니다.
-  - 캐릭터마다 가진 데이터가 달라서 처음 보는 구성에서는 또 다른 `null` 이 나올 수 있습니다. 응답이 실제 게임이나 문서와 다르면 [이슈](https://github.com/Kimhasa/nexon-open-api-sdk/issues)로 알려 주세요 ([FAQ](docs/faq.md#응답이-실제-게임과-달라요)).
+- 공개 캐릭터 42명(게임별 2~6명)으로 **조회 267개 중 263개**를 부르고, 응답을 타입과 안쪽 필드까지 비교했습니다.
+- 처음에는 127개 조회에서 600종이 넘는 차이가 나왔습니다. 넥슨 문서와 실제 응답이 다른 곳입니다. 모두 실제 응답에 맞춰 **0건**이 됐습니다.
+- 부르지 못한 4개는 FC 온라인 이적시장 거래 기록(키 계정 본인 기록만 나옴), 메이플스토리 `getLegacyOuid`(구 키 필요), FC 온라인 `getAllMatchList`(넥슨이 제공 종료), FC 온라인 `getSeasonIdMeta`(키 없이 열리는 파일로 따로 확인)입니다.
+- 캐릭터마다 가진 데이터가 달라서 처음 보는 구성에서는 다른 `null` 이 나올 수 있습니다. 응답이 실제와 다르면 [이슈](https://github.com/Kimhasa/nexon-open-api-sdk/issues)로 알려 주세요.
 
-같은 확인을 직접 다시 해 보는 방법은 [CONTRIBUTING.md](CONTRIBUTING.md#실서버-확인)에 있습니다.
+무엇이 달랐는지와 확인 방법은 [왜 이 라이브러리인가](docs/why.md#실서버-검증-내용)에 있습니다.
 
 ## 고급
 

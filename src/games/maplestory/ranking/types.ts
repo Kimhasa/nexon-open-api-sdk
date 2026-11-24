@@ -5,7 +5,7 @@ import type { WorldName } from '../guild/types.js';
 
 /** 랭킹 기본 요청 파라미터 */
 export interface RankingBaseRequest {
-  /** 조회 기준일 (KST, YYYY-MM-DD) */
+  /** 랭킹 기준일 (KST, YYYY-MM-DD, 필수). 2023-12-22부터 오늘까지의 날짜 중 최근 2년 이내. */
   readonly date: NexonDate | string;
   /** 캐릭터 식별자 (특정 캐릭터 랭킹 조회 시) */
   readonly ocid?: OCID | undefined;

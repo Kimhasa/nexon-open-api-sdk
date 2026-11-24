@@ -29,6 +29,7 @@ jobs:
           - { name: Type Check, command: type-check } # SDK와 테스트 소스
           - { name: Lint, command: lint }
           - { name: Examples, command: 'examples:check' }
+          - { name: LLM Docs, command: 'docs:llms:check' }
           - { name: Format, command: 'format:check' }
           - { name: Spec Drift, command: 'specs:drift --strict' }
     steps:

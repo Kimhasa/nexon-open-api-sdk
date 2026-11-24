@@ -18,13 +18,10 @@ export function computeRetryDelay(attempt: number, baseDelayMs: number): number 
 /**
  * 해당 HTTP 상태 코드가 재시도 가능한지 여부를 반환한다.
  *
- * Nexon Open API 재시도 정책:
- * - 429 (Rate Limit): 재시도 가능
- * - 503 (Maintenance/Overload): 재시도 가능
- * - 그 외: 재시도 불가 (400/401/403/500 등)
+ * 호출량 초과(429)와 서버 오류(500~599)를 재시도한다.
  */
 export function isRetryableStatus(status: number): boolean {
-  return status === 429 || status === 503;
+  return status === 429 || (status >= 500 && status < 600);
 }
 
 /**

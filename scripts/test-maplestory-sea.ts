@@ -6,7 +6,7 @@
  *   2. yarn test:maplestory-sea 실행
  */
 import 'dotenv/config';
-import { NexonClient } from '../src/index.js';
+import { maskIdentifier, maskIdentifiers, NexonClient } from '../src/index.js';
 import type { OCID, GuildId } from '../src/games/_base/maple-base-types.js';
 
 const apiKey = process.env['NEXON_MAPLESTORY_SEA_API_KEY'];
@@ -21,7 +21,10 @@ if (!apiKey || !characterName) {
 const client = new NexonClient({
   apiKey,
   responseValidation: true,
-  logger: { onResponseShapeMismatch: (mismatch) => console.warn(mismatch) },
+  logger: {
+    onResponseShapeMismatch: (mismatch) =>
+      console.warn({ ...mismatch, url: maskIdentifiers(mismatch.url) }),
+  },
 });
 
 let passed = 0;
@@ -47,7 +50,7 @@ await test('getOcid', async () => {
   const result = await client.maplestorySEA.getOcid(characterName);
   ocid = result;
   if (!ocid) throw new Error('ocid가 비어있음');
-  console.log(`    ocid: ${ocid}`);
+  console.log(`    ocid: ${maskIdentifier(ocid)}`);
 });
 
 // ─── 2. Character ────────────────────────────────────────────────────────────
@@ -200,7 +203,7 @@ if (guildName) {
   await test('guild.getId', async () => {
     guildId = await client.maplestorySEA.guild.getId(guildName, worldName);
     if (!guildId) throw new Error('guildId가 비어있음');
-    console.log(`    guildId: ${guildId}`);
+    console.log(`    guildId: ${maskIdentifier(guildId)}`);
   });
 
   if (guildId) {

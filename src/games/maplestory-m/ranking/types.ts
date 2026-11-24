@@ -5,7 +5,7 @@ import type { MWorldName } from '../guild/types.js';
 
 /** 랭킹 기본 요청 파라미터 */
 export interface MRankingBaseRequest {
-  /** 조회 기준일 (KST, YYYY-MM-DD) */
+  /** 랭킹 기준일 (KST, YYYY-MM-DD, 필수). 2025-11-27부터 오늘까지의 날짜 중 최근 2년 이내. */
   readonly date: NexonDate | string;
   /** 캐릭터 식별자 (특정 캐릭터 랭킹 조회 시, 샤레니안 랭킹은 길드 마스터의 캐릭터 식별자) */
   readonly ocid?: OCID | undefined;
@@ -85,8 +85,8 @@ export interface MLevelRankingItem {
   readonly character_class: string;
   /** 캐릭터 레벨 */
   readonly character_level: number;
-  /** 길드 명 */
-  readonly guild_name: string;
+  /** 길드 명. 길드에 가입하지 않았으면 null (2026-11-25 실측) */
+  readonly guild_name: string | null;
   /** 길드 마크 아이콘 */
   readonly guild_mark_icon: string;
 }

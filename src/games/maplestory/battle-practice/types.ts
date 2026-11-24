@@ -556,8 +556,8 @@ export interface BattlePracticeSkillInfo extends Omit<LinkSkillInfo, 'skill_effe
 export interface BattlePracticeUnionRaider {
   /** 유니온 공격대원 효과 */
   readonly union_raider_stat: readonly string[];
-  /** 유니온 공격대 점령 효과 */
-  readonly union_occupied_stat: readonly string[];
+  /** 유니온 공격대 점령 효과. 2026-11-25 리플레이 실제 응답에는 없는 경우가 있었다 */
+  readonly union_occupied_stat?: readonly string[] | undefined;
   /** 적용 중인 유니온 스탯 효과. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
   readonly union_state_stat?: readonly string[] | undefined;
 }

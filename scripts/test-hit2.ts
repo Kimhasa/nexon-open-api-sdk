@@ -6,7 +6,7 @@
  *   2. yarn test:hit2 실행
  */
 import 'dotenv/config';
-import { NexonClient } from '../src/index.js';
+import { maskIdentifier, NexonClient } from '../src/index.js';
 import type { Hit2OCID } from '../src/games/hit2/types.js';
 
 const apiKey = process.env['NEXON_HIT2_API_KEY'];
@@ -40,7 +40,7 @@ let ocid: Hit2OCID | undefined;
 await test('getOcid', async () => {
   ocid = await client.hit2.getOcid(characterName);
   if (!ocid) throw new Error('ocid가 비어있음');
-  console.log(`    ocid: ${ocid}`);
+  console.log(`    ocid: ${maskIdentifier(ocid)}`);
 });
 
 // ─── 2. Character ────────────────────────────────────────────────────────────
