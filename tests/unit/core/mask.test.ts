@@ -55,3 +55,21 @@ describe('maskIdentifiers', () => {
     expect(maskIdentifiers('https://[invalid]?ocid=secret-identifier')).toBe('?…');
   });
 });
+
+describe('readableUrl', () => {
+  it('로그용으로 쿼리의 퍼센트 인코딩을 푼다', async () => {
+    const { readableUrl } = await import('../../../src/core/http/mask.js');
+    const url = `https://open.api.nexon.com/maplestory/v1/id?${new URLSearchParams({ character_name: '메이플 용사', ocid: '01234567…' })}`;
+    expect(readableUrl(url)).toBe(
+      'https://open.api.nexon.com/maplestory/v1/id?character_name=메이플 용사&ocid=01234567…',
+    );
+  });
+
+  it('쿼리가 없거나 풀 수 없는 값은 그대로 둔다', async () => {
+    const { readableUrl } = await import('../../../src/core/http/mask.js');
+    expect(readableUrl('https://open.api.nexon.com/static/x.json')).toBe(
+      'https://open.api.nexon.com/static/x.json',
+    );
+    expect(readableUrl('https://h/?a=%E0%A4%A')).toBe('https://h/?a=%E0%A4%A');
+  });
+});

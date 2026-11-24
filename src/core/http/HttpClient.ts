@@ -4,7 +4,7 @@ import { NexonError } from '../errors/NexonError.js';
 import { invalidInput } from '../validation/input.js';
 import { validateShape } from '../validation/response-shape.js';
 import type { ShapeDescriptor, ShapeMismatch } from '../validation/response-shape.js';
-import { maskIdentifiers } from './mask.js';
+import { maskIdentifiers, readableUrl } from './mask.js';
 import { computeRetryDelay, isRetryableStatus, sleep } from './retry.js';
 import type {
   HttpClientConfig,
@@ -282,7 +282,7 @@ function cleanParams(
 /** `debug: true` 시 사용하는 기본 콘솔 로거 */
 const defaultDebugLogger: Partial<HttpLogger> = {
   onRequest: (info) => {
-    console.debug(`[nexon-sdk] → ${info.method} ${maskIdentifiers(info.url)}`);
+    console.debug(`[nexon-sdk] → ${info.method} ${readableUrl(maskIdentifiers(info.url))}`);
   },
   onResponse: (info) => {
     console.debug(`[nexon-sdk] ← ${info.status} (${info.durationMs}ms)`);
@@ -308,7 +308,7 @@ const defaultDebugLogger: Partial<HttpLogger> = {
       );
     }
     console.warn(
-      `[nexon-sdk] ⚠ Response shape mismatch for ${maskIdentifiers(mismatch.url)}\n  ${parts.join('\n  ')}`,
+      `[nexon-sdk] ⚠ Response shape mismatch for ${readableUrl(maskIdentifiers(mismatch.url))}\n  ${parts.join('\n  ')}`,
     );
   },
 };

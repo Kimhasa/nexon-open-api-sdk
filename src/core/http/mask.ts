@@ -69,3 +69,27 @@ export function maskIdentifiers(url: string): string {
   parsed.search = params.toString();
   return parsed.toString();
 }
+
+/**
+ * 로그 출력용으로 URL 쿼리의 퍼센트 인코딩을 풀어 사람이 읽기 쉽게 만든다 (SDK 내부용).
+ *
+ * `character_name=%EC%BA%90…` 대신 `character_name=캐릭터` 처럼 보이게 한다.
+ * 식별자 마스킹은 하지 않으므로 {@link maskIdentifiers} 를 먼저 거친 URL에 쓴다.
+ * 디코딩할 수 없는 값은 그대로 둔다.
+ */
+export function readableUrl(url: string): string {
+  const query = url.indexOf('?');
+  if (query < 0) return url;
+  const readable = url
+    .slice(query + 1)
+    .split('&')
+    .map((pair) => {
+      try {
+        return decodeURIComponent(pair.replace(/\+/g, ' '));
+      } catch {
+        return pair;
+      }
+    })
+    .join('&');
+  return `${url.slice(0, query)}?${readable}`;
+}

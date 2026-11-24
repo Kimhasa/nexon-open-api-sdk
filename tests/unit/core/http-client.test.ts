@@ -155,10 +155,8 @@ describe('HttpClient', () => {
           { expectedKeys: { character_name: 'string' } },
         );
 
-        const query = new URLSearchParams({
-          ocid: '01234567…',
-          character_name: characterName,
-        }).toString();
+        // 로그는 사람이 읽기 쉽게 퍼센트 인코딩을 풀어 보여 준다
+        const query = `ocid=01234567…&character_name=${characterName}`;
         expect(matchingRequest).toHaveBeenCalledOnce();
         expect(debug).toHaveBeenCalledWith(`[nexon-sdk] → GET ${TEST_URL}?${query}`);
         expect(warn).toHaveBeenCalledWith(
