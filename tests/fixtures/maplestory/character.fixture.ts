@@ -1357,10 +1357,10 @@ export const characterAndroidEquipmentFixture: CharacterAndroidEquipment = {
     android_grade: '레전드리',
     android_skin: {
       skin_name: '샘플 피부',
-      color_style: '샘플',
-      hue: 1,
-      saturation: 1,
-      brightness: 1,
+      color_style: null,
+      hue: null,
+      saturation: null,
+      brightness: null,
     },
     android_hair: {
       hair_name: '샘플 안드로이드 헤어',
@@ -1473,8 +1473,8 @@ export const characterPetEquipmentFixture: CharacterPetEquipment = {
   pet_1_auto_skill: {
     skill_1: '샘플',
     skill_1_icon: 'https://open.api.nexon.com/static/maplestory/item/icon/SAMPLE',
-    skill_2: '샘플',
-    skill_2_icon: 'https://open.api.nexon.com/static/maplestory/item/icon/SAMPLE',
+    skill_2: null,
+    skill_2_icon: null,
   },
   pet_1_pet_type: '샘플',
   pet_1_skill: ['샘플'],
@@ -1486,9 +1486,9 @@ export const characterPetEquipmentFixture: CharacterPetEquipment = {
   pet_2_icon: 'https://open.api.nexon.com/static/maplestory/item/icon/SAMPLE',
   pet_2_description: '설명 텍스트',
   pet_2_equipment: {
-    item_name: '샘플 아이템',
-    item_icon: 'https://open.api.nexon.com/static/maplestory/item/icon/SAMPLE',
-    item_description: '설명 텍스트',
+    item_name: null,
+    item_icon: null,
+    item_description: null,
     item_option: [
       {
         option_type: '공격력 +10',
@@ -1532,12 +1532,7 @@ export const characterPetEquipmentFixture: CharacterPetEquipment = {
     item_shape_icon: 'https://open.api.nexon.com/static/maplestory/item/icon/SAMPLE',
     item_date_expire: '2026-11-23T00:00+09:00',
   },
-  pet_3_auto_skill: {
-    skill_1: '샘플',
-    skill_1_icon: 'https://open.api.nexon.com/static/maplestory/item/icon/SAMPLE',
-    skill_2: '샘플',
-    skill_2_icon: 'https://open.api.nexon.com/static/maplestory/item/icon/SAMPLE',
-  },
+  pet_3_auto_skill: null,
   pet_3_pet_type: '샘플',
   pet_3_skill: ['샘플'],
   pet_3_date_expire: '2023-12-21T17:00+09:00',

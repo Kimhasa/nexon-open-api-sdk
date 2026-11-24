@@ -268,10 +268,10 @@ export interface BattlePracticeItemEquipment extends BattlePracticeSubItemEquipm
   readonly potential_option_grade: string | null;
   /** 에디셔널 잠재능력 등급 */
   readonly additional_potential_option_grade: string | null;
-  /** 소울 잠재능력 등급 */
-  readonly soul_potential_grade: string | null;
-  /** 소울 증폭 단계 */
-  readonly soul_potential_amplified_grade: number | null;
+  /** 소울 잠재능력 등급. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly soul_potential_grade?: string | null | undefined;
+  /** 소울 증폭 단계. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly soul_potential_amplified_grade?: number | null | undefined;
   /** 잠재능력 첫 번째 옵션 */
   readonly potential_option_1: string | null;
   /** 잠재능력 두 번째 옵션 */
@@ -284,18 +284,18 @@ export interface BattlePracticeItemEquipment extends BattlePracticeSubItemEquipm
   readonly additional_potential_option_2: string | null;
   /** 에디셔널 잠재능력 세 번째 옵션 */
   readonly additional_potential_option_3: string | null;
-  /** 소울 잠재능력 첫 번째 옵션 */
-  readonly soul_potential_option_1: string | null;
-  /** 소울 잠재능력 두 번째 옵션 */
-  readonly soul_potential_option_2: string | null;
-  /** 소울 잠재능력 세 번째 옵션 */
-  readonly soul_potential_option_3: string | null;
-  /** 소울 공격력 증가 옵션 */
-  readonly soul_pad: string | null;
-  /** 소울 마력 증가 옵션 */
-  readonly soul_mad: string | null;
-  /** 소울 활성 여부 ("0": 비활성, "1": 활성) */
-  readonly soul_active: string | null;
+  /** 소울 잠재능력 첫 번째 옵션. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly soul_potential_option_1?: string | null | undefined;
+  /** 소울 잠재능력 두 번째 옵션. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly soul_potential_option_2?: string | null | undefined;
+  /** 소울 잠재능력 세 번째 옵션. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly soul_potential_option_3?: string | null | undefined;
+  /** 소울 공격력 증가 옵션. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly soul_pad?: string | null | undefined;
+  /** 소울 마력 증가 옵션. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly soul_mad?: string | null | undefined;
+  /** 소울 활성 여부 ("0": 비활성, "1": 활성). 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly soul_active?: string | null | undefined;
 }
 
 /** 연무장 칭호 정보 */
@@ -380,16 +380,18 @@ export interface BattlePracticeCashItem {
   readonly cash_item_equipment_base: readonly BattlePracticeCashItemEquipment[];
   /** 제로인 경우 베타, 엔젤릭버스터인 경우 드레스 업 모드에서 장착 중인 캐시 장비 */
   readonly additional_cash_item_equipment_base: readonly BattlePracticeCashItemEquipment[];
-  /** 월드 공유 마스터라벨 슬롯 활성화 여부 ("0": 미활성, "1": 활성) */
-  readonly world_share_master_label_activate_flag: string;
-  /** 월드 공유 마스터라벨 장착 장비 */
-  readonly world_share_master_label_base: readonly BattlePracticeWorldShareMasterLabelItem[];
+  /** 월드 공유 마스터라벨 슬롯 활성화 여부 ("0": 미활성, "1": 활성). 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_master_label_activate_flag?: string | undefined;
+  /** 월드 공유 마스터라벨 장착 장비. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_master_label_base?:
+    | readonly BattlePracticeWorldShareMasterLabelItem[]
+    | undefined;
 }
 
 /** 연무장 펫 정보 (펫 미장착 슬롯은 null) */
 export interface BattlePracticePet {
-  /** 활성화된 펫 유형 ("0": 캐릭터 펫, "1": 월드 공유 펫) */
-  readonly pet_activate_flag: string;
+  /** 활성화된 펫 유형 ("0": 캐릭터 펫, "1": 월드 공유 펫). 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly pet_activate_flag?: string | undefined;
   /** 펫1 명 */
   readonly pet_1_name: string | null;
   /** 펫1 닉네임 */
@@ -444,62 +446,62 @@ export interface BattlePracticePet {
   readonly pet_3_skill: readonly string[];
   /** 펫3 마법의 시간 (KST, 시간 단위 데이터로 분은 일괄 0으로 표기) */
   readonly pet_3_date_expire: string | null;
-  /** 월드 공유 펫1 명 */
-  readonly world_share_pet_1_name: string | null;
-  /** 월드 공유 펫1 닉네임 */
-  readonly world_share_pet_1_nickname: string | null;
-  /** 월드 공유 펫1 아이콘 */
-  readonly world_share_pet_1_icon: string | null;
-  /** 월드 공유 펫1 설명 */
-  readonly world_share_pet_1_description: string | null;
-  /** 월드 공유 펫1 원더 펫 종류 */
-  readonly world_share_pet_1_pet_type: string | null;
-  /** 월드 공유 펫1 장착 정보 */
-  readonly world_share_pet_1_equipment: PetEquipmentItem | null;
-  /** 월드 공유 펫1 버프 자동스킬 정보 */
-  readonly world_share_pet_1_auto_skill: PetAutoSkill | null;
-  /** 월드 공유 펫1 펫 보유 스킬 */
-  readonly world_share_pet_1_skill: readonly string[];
-  /** 월드 공유 펫1 마법의 시간 (KST, 시간 단위 데이터로 분은 일괄 0으로 표기) */
-  readonly world_share_pet_1_date_expire: string | null;
-  /** 월드 공유 펫2 명 */
-  readonly world_share_pet_2_name: string | null;
-  /** 월드 공유 펫2 닉네임 */
-  readonly world_share_pet_2_nickname: string | null;
-  /** 월드 공유 펫2 아이콘 */
-  readonly world_share_pet_2_icon: string | null;
-  /** 월드 공유 펫2 설명 */
-  readonly world_share_pet_2_description: string | null;
-  /** 월드 공유 펫2 원더 펫 종류 */
-  readonly world_share_pet_2_pet_type: string | null;
-  /** 월드 공유 펫2 장착 정보 */
-  readonly world_share_pet_2_equipment: PetEquipmentItem | null;
-  /** 월드 공유 펫2 버프 자동스킬 정보 */
-  readonly world_share_pet_2_auto_skill: PetAutoSkill | null;
-  /** 월드 공유 펫2 펫 보유 스킬 */
-  readonly world_share_pet_2_skill: readonly string[];
-  /** 월드 공유 펫2 마법의 시간 (KST, 시간 단위 데이터로 분은 일괄 0으로 표기) */
-  readonly world_share_pet_2_date_expire: string | null;
-  /** 월드 공유 펫3 명 */
-  readonly world_share_pet_3_name: string | null;
-  /** 월드 공유 펫3 닉네임 */
-  readonly world_share_pet_3_nickname: string | null;
-  /** 월드 공유 펫3 아이콘 */
-  readonly world_share_pet_3_icon: string | null;
-  /** 월드 공유 펫3 설명 */
-  readonly world_share_pet_3_description: string | null;
-  /** 월드 공유 펫3 원더 펫 종류 */
-  readonly world_share_pet_3_pet_type: string | null;
-  /** 월드 공유 펫3 장착 정보 */
-  readonly world_share_pet_3_equipment: PetEquipmentItem | null;
-  /** 월드 공유 펫3 버프 자동스킬 정보 */
-  readonly world_share_pet_3_auto_skill: PetAutoSkill | null;
-  /** 월드 공유 펫3 펫 보유 스킬 */
-  readonly world_share_pet_3_skill: readonly string[];
-  /** 월드 공유 펫3 마법의 시간 (KST, 시간 단위 데이터로 분은 일괄 0으로 표기) */
-  readonly world_share_pet_3_date_expire: string | null;
-  /** 루나 쁘띠 펫 스킬 정보 */
-  readonly petite_luna_pet_skill: readonly PetiteLunaPetSkill[];
+  /** 월드 공유 펫1 명. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_1_name?: string | null | undefined;
+  /** 월드 공유 펫1 닉네임. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_1_nickname?: string | null | undefined;
+  /** 월드 공유 펫1 아이콘. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_1_icon?: string | null | undefined;
+  /** 월드 공유 펫1 설명. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_1_description?: string | null | undefined;
+  /** 월드 공유 펫1 원더 펫 종류. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_1_pet_type?: string | null | undefined;
+  /** 월드 공유 펫1 장착 정보. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_1_equipment?: PetEquipmentItem | null | undefined;
+  /** 월드 공유 펫1 버프 자동스킬 정보. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_1_auto_skill?: PetAutoSkill | null | undefined;
+  /** 월드 공유 펫1 펫 보유 스킬. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_1_skill?: readonly string[] | undefined;
+  /** 월드 공유 펫1 마법의 시간 (KST, 시간 단위 데이터로 분은 일괄 0으로 표기). 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_1_date_expire?: string | null | undefined;
+  /** 월드 공유 펫2 명. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_2_name?: string | null | undefined;
+  /** 월드 공유 펫2 닉네임. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_2_nickname?: string | null | undefined;
+  /** 월드 공유 펫2 아이콘. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_2_icon?: string | null | undefined;
+  /** 월드 공유 펫2 설명. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_2_description?: string | null | undefined;
+  /** 월드 공유 펫2 원더 펫 종류. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_2_pet_type?: string | null | undefined;
+  /** 월드 공유 펫2 장착 정보. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_2_equipment?: PetEquipmentItem | null | undefined;
+  /** 월드 공유 펫2 버프 자동스킬 정보. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_2_auto_skill?: PetAutoSkill | null | undefined;
+  /** 월드 공유 펫2 펫 보유 스킬. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_2_skill?: readonly string[] | undefined;
+  /** 월드 공유 펫2 마법의 시간 (KST, 시간 단위 데이터로 분은 일괄 0으로 표기). 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_2_date_expire?: string | null | undefined;
+  /** 월드 공유 펫3 명. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_3_name?: string | null | undefined;
+  /** 월드 공유 펫3 닉네임. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_3_nickname?: string | null | undefined;
+  /** 월드 공유 펫3 아이콘. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_3_icon?: string | null | undefined;
+  /** 월드 공유 펫3 설명. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_3_description?: string | null | undefined;
+  /** 월드 공유 펫3 원더 펫 종류. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_3_pet_type?: string | null | undefined;
+  /** 월드 공유 펫3 장착 정보. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_3_equipment?: PetEquipmentItem | null | undefined;
+  /** 월드 공유 펫3 버프 자동스킬 정보. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_3_auto_skill?: PetAutoSkill | null | undefined;
+  /** 월드 공유 펫3 펫 보유 스킬. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_3_skill?: readonly string[] | undefined;
+  /** 월드 공유 펫3 마법의 시간 (KST, 시간 단위 데이터로 분은 일괄 0으로 표기). 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly world_share_pet_3_date_expire?: string | null | undefined;
+  /** 루나 쁘띠 펫 스킬 정보. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly petite_luna_pet_skill?: readonly PetiteLunaPetSkill[] | undefined;
 }
 
 /** 연무장 HEXA 코어 개별 정보 */
@@ -544,14 +546,20 @@ export interface BattlePracticeRingReserveSkill {
   readonly special_ring_reserve_description: string | null;
 }
 
+/** 연무장 스킬 개별 정보. 일반 캐릭터 조회의 스킬과 달리 효과 설명이 비어 올 수 있다. */
+export interface BattlePracticeSkillInfo extends Omit<LinkSkillInfo, 'skill_effect'> {
+  /** 스킬 효과 (효과 설명이 없는 스킬이면 null) */
+  readonly skill_effect: string | null;
+}
+
 /** 연무장 유니온 공격대 정보 */
 export interface BattlePracticeUnionRaider {
   /** 유니온 공격대원 효과 */
   readonly union_raider_stat: readonly string[];
   /** 유니온 공격대 점령 효과 */
   readonly union_occupied_stat: readonly string[];
-  /** 적용 중인 유니온 스탯 효과 */
-  readonly union_state_stat: readonly string[];
+  /** 적용 중인 유니온 스탯 효과. 일반 캐릭터 조회에는 있지만 2026-11-24 연무장 리플레이 실제 응답에는 없었다 */
+  readonly union_state_stat?: readonly string[] | undefined;
 }
 
 /** 연무장 유니온 아티팩트 효과 정보 */
@@ -599,7 +607,7 @@ export interface BattlePracticeCharacterInfo {
   /** 스킬 정보 */
   readonly skill_object: {
     /** 스킬 정보 */
-    readonly character_skill: readonly LinkSkillInfo[];
+    readonly character_skill: readonly BattlePracticeSkillInfo[];
   };
   /** 링크 스킬 정보 */
   readonly link_skill_object: {
