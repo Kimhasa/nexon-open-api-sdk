@@ -49,6 +49,10 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
   - 봇 에러 안내, CommonJS, TypeScript
 - `yarn examples:check` — 빌드된 패키지로 예제를 타입 검사한다 (CI Examples 게이트, SDK 자동 반영 게이트)
 - `yarn test:deep` — 실 API E2E를 돌리며 호출된 모든 public 메서드의 반환값을 SDK 응답 타입과 중첩 필드까지 대조한다 (`scripts/lib/deep-check.ts`). 예상하지 못한 `null`, 타입에 없는 필드, 응답에 없는 필수 필드, 타입 차이를 메서드·경로별로 출력한다 (`.env` 의 게임별 키 필요)
+- 식별자 마스킹 `maskIdentifier()`·`maskIdentifiers()` — 넥슨이 주는 고유 번호(OCID·OUID·길드)는 뒤 32자가 API 키 뒤 32자와 같을 수 있어(넥슨 AI 에이전트 가이드) 로그에 원문을 남기면 안 된다. `debug: true` 의 기본 로거는 이제 고유 번호를 앞 8자만 보여 주고, 직접 만든 `logger` 에서도 이 함수로 가릴 수 있다
+- AI 코딩 도구용 `llms.txt`·`llms-full.txt` (npm 패키지에 포함) — 코드 생성 규칙과 15개 게임 공개 메서드 시그니처를 소스에서 자동 생성한다 (`yarn docs:llms`, CI LLM Docs 게이트). 창작자용 [`docs/ai-guide.md`](docs/ai-guide.md): AI 도구에 넣을 지침, 요청 예, 생성된 코드 점검표
+- [`docs/why.md`](docs/why.md) — 직접 fetch한 코드와의 비교, 넥슨 AI 에이전트 가이드 항목별로 SDK가 처리하는 것과 창작자 몫, 다른 라이브러리와의 비교
+- [`docs/service-checklist.md`](docs/service-checklist.md) — 서비스 공개 전 체크리스트 (호출 한도, 캐시, 출처 표기 "Data based on NEXON Open API", 30일 갱신 의무, 식별자 노출 금지)
 - **실 API 키 검증 (2026-11-24, 게임별 개발 단계 키)** — 직업·레벨·월드가 다른 공개 캐릭터 42명(게임별 2~6명)으로 HTTP 메서드 263/267개를 불러 응답을 SDK 타입과 대조했다. 처음 600종이 넘던 차이를 아래 Fixed·Changed 항목으로 정정해 0건이 됐다. 부르지 못한 메서드는 다음과 같다
   - FC `getTradeList`: 키 계정 본인의 거래 기록만 나온다
   - 메이플스토리 `getLegacyOuid`: 구 개발자센터 키가 필요하다
@@ -130,6 +134,9 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 ### Changed
 
 - **BREAKING** FC 온라인 `getMaxDivision()` 반환 타입 `FcMaxDivision` → `readonly FcMaxDivision[]`. 역대 최고 등급은 매치 종류별로 존재하며, 응답이 단일 객체여도 배열로 정규화한다
+- **동작 변경** 다른 게임용 API 키로 부를 때 오는 `OPENAPI00006` 을 `NexonBadRequestError` 대신 `NexonAuthError` 로 알리고, 안내에 게임 이름을 넣는다 (예: "이 API 키로는 메이플스토리 API를 부를 수 없습니다"). 넥슨 AI 에이전트 가이드에 따르면 다른 게임 키는 이 코드로 온다
+- 재시도 범위를 429·503에서 429·5xx(500~599)로 넓혔다. 넥슨 가이드는 서버 내부 오류(`OPENAPI00001`, 500)를 백오프 후 재시도하라고 안내한다. 400대(00003·00004·00006 등)는 여전히 재시도하지 않는다
+- README 첫 화면을 "무엇·누구·왜·어떻게" 순서로 다시 짰다 (360줄 → 240줄대). 한 줄 설명, 첫 코드, 왜 직접 fetch하거나 AI가 짠 코드 대신 쓰는지(실측 근거), 만들 수 있는 것과 시작점
 - **BREAKING** 실제 응답과 타입이 달랐던 필드를 실제 타입으로 바꿨다 (2026-11-24 실측)
   - 메이플스토리 `CharacterPetEquipment.world_share_pet_equipment_preset`: 객체 → 배열
   - 메이플스토리M: `MCashItemEquipmentItem.cash_item_gender` 숫자 → 문자열. `MEmblemInfo.emblem_level`, `MLinkSkillInfo.skill_level`, `MEquipmentSkill.equipment_skill_set`, 지하 수로 랭킹 `season_score` 는 문자열 → 숫자
