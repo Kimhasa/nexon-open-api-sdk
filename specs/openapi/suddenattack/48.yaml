@@ -1,0 +1,225 @@
+openapi: 3.0.3
+info:
+  title: 서든어택 API
+  version: 1.0.0
+  contact:
+    name: help_openapi@nexon.co.kr
+      
+servers:
+  - url: 'https://open.api.nexon.com'
+  
+tags:
+  - name: MetaData
+    description: 메타데이터 정보 조회
+
+paths:
+  /static/suddenattack/meta/logo:
+    get:
+      tags:
+        - MetaData
+      summary: 로고 메타데이터 조회
+      description: 서든어택 로고 메타데이터를 조회합니다. 
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+
+  /static/suddenattack/meta/grade:
+    get:
+      tags:
+        - MetaData
+      summary: 통합 계급 메타데이터 조회
+      description: 통합 계급 메타데이터를 조회합니다. 
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GradeResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/suddenattack/meta/season_grade:
+    get:
+      tags:
+        - MetaData
+      summary: 시즌 계급 메타데이터 조회
+      description: 시즌 계급 메타데이터를 조회합니다.
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeasonGradeResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/suddenattack/meta/tier:
+    get:
+      tags:
+        - MetaData
+      summary: 티어 메타데이터 조회
+      description: 티어 메타데이터를 조회합니다.
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TierResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+components:
+  schemas:          
+    LogoResponse:
+      type: object
+      properties:
+        logo_image:
+          type: string
+          description: 서든어택 로고 이미지
+
+    GradeResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          grade:
+            type: string
+            description: 통합 계급 이름
+          grade_image:
+            type: string
+            description: 통합 계급 이미지
+
+    SeasonGradeResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          season_grade:
+            type: string
+            description: 시즌 계급 이름
+          season_grade_image:
+            type: string
+            description: 시즌 계급 이미지
+
+    TierResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          tier:
+            type: string
+            description: 랭크전 티어 이름
+          tier_image:
+            type: string
+            description: 랭크전 티어 이미지
+
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              description: 에러 명
+            message:
+              type: string
+              description: 에러 설명

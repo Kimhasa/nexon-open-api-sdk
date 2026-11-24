@@ -1,0 +1,277 @@
+openapi: 3.0.3
+info:
+  title: 메이플스토리M API
+  version: 1.0.0
+  contact:
+    name: help_openapi@nexon.co.kr
+  description: |-
+    - 메이플스토리M의 길드 데이터는 평균 15분 후 확인 가능합니다.
+
+servers:
+  - url: 'https://open.api.nexon.com'
+tags:
+  - name: Guild
+    description: 길드 정보 조회
+
+paths:
+  /maplestorym/v1/guild/id:
+    get:
+      tags:
+        - Guild
+      summary: 길드 식별자(oguild_id) 정보 조회
+      description: 길드 식별자(oguild_id) 정보를 조회합니다.
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: guild_name
+          in: query
+          description: 길드 명
+          required: true
+          schema:
+            type: string
+        - name: world_name
+          in: query
+          description: 월드 명
+          required: true
+          schema:
+            type: string
+            default: 아케인
+            enum:
+              - 아케인
+              - 크로아
+              - 엘리시움
+              - 루나
+              - 스카니아
+              - 유니온
+              - 제니스
+              - 챌린저스
+
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Guild'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /maplestorym/v1/guild/basic:
+    get:
+      tags:
+        - Guild
+      summary: 기본 정보 조회
+      description: 기본 정보를 조회합니다.
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: oguild_id
+          in: query
+          description: 길드 식별자
+          required: true
+          schema:
+            type: string       
+
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GuildBasic'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+
+
+
+components:
+  schemas:              
+    Guild:
+      type: object
+      properties:
+        oguild_id:
+          type: string
+          description: 길드 식별자
+
+    GuildBasic:
+      type: object
+      properties:
+        guild_name:
+          type: string
+          description: 길드 명
+        world_name:
+          type: string
+          description: 길드 명        
+        guild_level:
+          type: number
+          format: int64
+          description: 길드 레벨
+        world_create_date:
+          type: string
+          description: 길드 생성일
+        guild_keyword:
+          type: array
+          description: 길드 키워드
+          items:
+            type: string
+        guild_mark_icon:
+          type: string
+          description: 길드 마크 아이콘
+        guild_master_name:
+          type: string
+          description: 길드 마스터 캐릭터 명
+        guild_member_count:
+          type: number
+          format: int64
+          description: 길드원 수  
+        guild_member:
+          type: array
+          description: 길드원 정보  
+          items:
+            properties:
+              character_name:
+                type: string
+                description: 캐릭터 명
+              character_level:
+                type: number
+                format: int64
+                description: 캐릭터 레벨
+              guild_activity:
+                type: number
+                format: int64
+                description: 길드 활동량
+              guild_personal_skill:
+                type: array
+                description: 길드 개인 스킬 정보
+                items:
+                  properties:
+                    skill_name:
+                      type: string
+                      description: 스킬 명
+                    skill_level:
+                      type: number
+                      format: int64
+                      description: 스킬 레벨
+                    skill_option:
+                      type: string
+                      description: 스킬 옵션
+                    skill_icon:
+                      type: string
+                      description: 스킬 아이콘
+        guild_building:
+          type: array
+          description: 길드 시설물 정보
+          items:
+            properties:
+              building_name:
+                type: string
+                description: 시설물 명
+              building_level:
+                type: number
+                format: int64
+                description: 시설물 레벨
+        guild_skill:
+          type: array
+          description: 길드 스킬 정보
+          items:
+            properties:
+              skill_name:
+                type: string
+                description: 스킬 명
+              skill_level:
+                type: number
+                format: int64
+                description: 스킬 레벨
+              skill_option:
+                type: string
+                description: 스킬 옵션
+              skill_icon:
+                type: string
+                description: 스킬 아이콘
+        guild_ability:
+          type: array
+          description: 길드 어빌리티 정보
+          items:
+            properties:
+              ability_no:
+                type: number
+                format: int64
+                description: 어빌리티 차수
+              ability_name:
+                type: string
+                description: 어빌리티 명
+              ability_level:
+                type: number
+                format: int64
+                description: 어빌리티 레벨
+              ability_option:
+                type: string
+                description: 어빌리티 옵션
+              ability_icon:
+                type: string
+                description: 어빌리티 아이콘
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              description: 에러 명
+            message:
+              type: string
+              description: 에러 설명

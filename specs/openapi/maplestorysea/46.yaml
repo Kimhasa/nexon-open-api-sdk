@@ -1,0 +1,834 @@
+openapi: 3.0.3
+info:
+  title: MapleStorySEA API
+  version: 1.0.0
+  contact:
+    name: help_openapi@nexon.co.kr
+  description: |-
+    - MapleStory game data can be verified approximately 15 minutes after updates.
+    - Data is available starting from April 20, 2025. 
+    - Historical data can be queried by specifying the desired date, and data from the previous day can be accessed starting at 2 AM the next day. (For example, when querying data for December 22, data from 00:00 to 24:00 on December 22 will be retrieved.)
+    - Due to game content changes, the ocid may be updated. Please pay attention to this when updating services based on ocid.
+    - This API provides data for MapleStory SEA.
+servers:
+  - url: 'https://open.api.nexon.com'
+tags:
+  - name: Union
+    description: Retrieve Union information
+
+paths:
+  /maplestorysea/v1/user/union:
+    get:
+      tags:
+        - Union
+      summary: Retrieve Union information
+      description: Retrieves Union level and Union rank information.
+      operationId: maplestory_get_union
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: Character identifier
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: Reference date for query (SGT, YYYY-MM-DD)
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Union'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /maplestorysea/v1/user/union-raider:
+    get:
+      tags:
+        - Union
+      summary: Retrieve Union Raider information
+      description: Retrieves detailed information about raid member effects and capture effects deployed in the Union.
+      operationId: maplestory_get_union_raider
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: Character identifier
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: Reference date for query (SGT, YYYY-MM-DD)
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnionRaider'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /maplestorysea/v1/user/union-artifact:
+    get:
+      tags:
+        - Union
+      summary: Retrieve Union Artifact information
+      description: Retrieves Union Artifact information.
+      operationId: maplestory_get_union_artifact
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: Character identifier
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: Reference date for query (SGT, YYYY-MM-DD)
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnionArtifact'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /maplestorysea/v1/user/union-champion:
+    get:
+      tags:
+        - Union
+      summary: Retrieve Union Champion information
+      description: |-
+        Retrieves Union Champion information.
+        <br>You can view data starting from December 18, 2025.
+      operationId: maplestory_get_union_champion
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: Character identifier
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: Reference date for query (KST, YYYY-MM-DD)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnionChampion'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+components:
+  schemas:
+    Union:
+      type: object
+      properties:
+        date:
+          type: string
+          description: Reference date for query (SGT, daily data with hours and minutes set to 0)
+          example: "2025-01-21T00:00+08:00"
+        union_level:
+          type: number
+          format: int64
+          description: Union level
+        union_grade:
+          type: string
+          description: Union grade
+        union_artifact_level:
+          type: number
+          format: int64
+          description: Artifact level
+        union_artifact_exp:
+          type: number
+          format: int64
+          description: Earned Artifact EXP 
+        union_artifact_point:
+          type: number
+          format: int64
+          description: Earned Artifact Points  
+    UnionRaider:
+      type: object
+      properties:
+        date:
+          type: string
+          description: Reference date for query (SGT, daily data with hours and minutes set to 0)
+          example: "2025-01-21T00:00+08:00"
+        union_raider_stat:
+          type: array
+          description: Union raid member effects
+          items:
+            type: string
+        union_occupied_stat:
+          type: array
+          description: Union raid capture effects
+          items:
+            type: string
+        union_inner_stat:
+          type: array
+          description: Union raider deployment
+          items:
+            type: object
+            properties:
+              stat_field_id:
+                type: string
+                description: Raider deployment position (0 to 7, clockwise from 11 o'clock)
+              stat_field_effect:
+                type: string
+                description: Occupation effects over the area
+        union_block:
+          type: array
+          description: Union Legion Block
+          items:
+            type: object
+            properties:
+              block_type:
+                type: string
+                description: Block shapes (Warrior, Magician, Bowman, Thief, Pirate, Maple M, Hybrid)
+              block_class:
+                type: string
+                description: Character class corresponding to the block
+              block_level:
+                type: string
+                description: Character level corresponding to the block
+              block_control_point:
+                type: object
+                description: |
+                  Coordinates of the block's reference point:
+                  - The bottom-right square among the four central squares is positioned at x: 0, y: 0.
+                  - Moving one square to the left decreases x by 1.
+                  - Moving one square to the right increases x by 1.
+                  - Moving one square downward decreases y by 1.
+                  - Moving one square upward increases y by 1.
+                properties:
+                  x:
+                    type: number
+                    format: int64
+                    description: Block reference point X-coordinate
+                  y:
+                    type: number
+                    format: int64
+                    description: Block reference point Y-coordinate
+              block_position:
+                type: array
+                description: Coordinates of the area occupied by the block (null if not placed)
+                items:
+                  type: object
+                  properties:
+                    x:
+                      type: number
+                      format: int64
+                      description: Block X-coordinate
+                    y:
+                      type: number
+                      format: int64
+                      description: Block Y-coordinate
+        use_preset_no:
+          type: number
+          format: int64
+          description: Number of the preset currently in use
+        union_raider_preset_1:
+          type: object
+          description: Information for Union Preset 1 
+          properties: 
+            union_raider_stat:
+              type: array
+              description: Union raid member effects
+              items:
+                type: string
+            union_occupied_stat:
+              type: array
+              description: Union raid capture effects
+              items:
+                type: string
+            union_inner_stat:
+              type: array
+              description: Union raider deployment
+              items:
+                type: object
+                properties:
+                  stat_field_id:
+                    type: string
+                    description: Raider deployment position (0 to 7, clockwise from 11 o'clock)
+                  stat_field_effect:
+                    type: string
+                    description: Occupation effects over the area
+            union_block:
+              type: array
+              description: Information about Legion Blocks
+              items:
+                type: object
+                properties:
+                  block_type:
+                    type: string
+                    description: Block shapes (Warrior, Magician, Bowman, Thief, Pirate, Maple M, Hybrid)
+                  block_class:
+                    type: string
+                    description: Character class corresponding to the block
+                  block_level:
+                    type: string
+                    description: Character level corresponding to the block
+                  block_control_point:
+                    type: object
+                    description: |
+                      Coordinates of the block's reference point:
+                      - The bottom-right square among the four central squares is positioned at x: 0, y: 0.
+                      - Moving one square to the left decreases x by 1.
+                      - Moving one square to the right increases x by 1.
+                      - Moving one square downward decreases y by 1.
+                      - Moving one square upward increases y by 1.
+                    properties:
+                      x:
+                        type: number
+                        format: int64
+                        description: Block reference point X-coordinate
+                      y:
+                        type: number
+                        format: int64
+                        description: Block reference point Y-coordinate
+                  block_position:
+                    type: array
+                    description: Coordinates of the area occupied by the block (null if not placed)
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          type: number
+                          format: int64
+                          description: Block X-coordinate
+                        y:
+                          type: number
+                          format: int64
+                          description: Block Y-coordinate
+        union_raider_preset_2:
+          type: object
+          description: Information for Union Preset 2 
+          properties: 
+            union_raider_stat:
+              type: array
+              description: Union raid member effects
+              items:
+                type: string
+            union_occupied_stat:
+              type: array
+              description: Union raid capture effects
+              items:
+                type: string
+            union_inner_stat:
+              type: array
+              description: Union raider deployment
+              items:
+                type: object
+                properties:
+                  stat_field_id:
+                    type: string
+                    description: Raider deployment position (0 to 7, clockwise from 11 o'clock)
+                  stat_field_effect:
+                    type: string
+                    description: Occupation effects over the area
+            union_block:
+              type: array
+              description: Information about Legion Blocks
+              items:
+                type: object
+                properties:
+                  block_type:
+                    type: string
+                    description: Block shapes (Warrior, Magician, Bowman, Thief, Pirate, Maple M, Hybrid)
+                  block_class:
+                    type: string
+                    description: Character class corresponding to the block
+                  block_level:
+                    type: string
+                    description: Character level corresponding to the block
+                  block_control_point:
+                    type: object
+                    description: |
+                      Coordinates of the block's reference point:
+                      - The bottom-right square among the four central squares is positioned at x: 0, y: 0.
+                      - Moving one square to the left decreases x by 1.
+                      - Moving one square to the right increases x by 1.
+                      - Moving one square downward decreases y by 1.
+                      - Moving one square upward increases y by 1.
+                    properties:
+                      x:
+                        type: number
+                        format: int64
+                        description: Block reference point X-coordinate
+                      y:
+                        type: number
+                        format: int64
+                        description: Block reference point Y-coordinate
+                  block_position:
+                    type: array
+                    description: Coordinates of the area occupied by the block (null if not placed)
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          type: number
+                          format: int64
+                          description: Block X-coordinate
+                        y:
+                          type: number
+                          format: int64
+                          description: Block Y-coordinate
+        union_raider_preset_3:
+          type: object
+          description: Information for Union Preset 3
+          properties: 
+            union_raider_stat:
+              type: array
+              description: Union raid member effects
+              items:
+                type: string
+            union_occupied_stat:
+              type: array
+              description: Union raid capture effects
+              items:
+                type: string
+            union_inner_stat:
+              type: array
+              description: Union raider deployment
+              items:
+                type: object
+                properties:
+                  stat_field_id:
+                    type: string
+                    description: Raider deployment position (0 to 7, clockwise from 11 o'clock)
+                  stat_field_effect:
+                    type: string
+                    description: Occupation effects over the area
+            union_block:
+              type: array
+              description: Information about Legion Blocks
+              items:
+                type: object
+                properties:
+                  block_type:
+                    type: string
+                    description: Block shapes (Warrior, Magician, Bowman, Thief, Pirate, Maple M, Hybrid)
+                  block_class:
+                    type: string
+                    description: Character class corresponding to the block
+                  block_level:
+                    type: string
+                    description: Character level corresponding to the block
+                  block_control_point:
+                    type: object
+                    description: |
+                      Coordinates of the block's reference point:
+                      - The bottom-right square among the four central squares is positioned at x: 0, y: 0.
+                      - Moving one square to the left decreases x by 1.
+                      - Moving one square to the right increases x by 1.
+                      - Moving one square downward decreases y by 1.
+                      - Moving one square upward increases y by 1.
+                    properties:
+                      x:
+                        type: number
+                        format: int64
+                        description: Block reference point X-coordinate
+                      y:
+                        type: number
+                        format: int64
+                        description: Block reference point Y-coordinate
+                  block_position:
+                    type: array
+                    description: Coordinates of the area occupied by the block (null if not placed)
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          type: number
+                          format: int64
+                          description: Block X-coordinate
+                        y:
+                          type: number
+                          format: int64
+                          description: Block Y-coordinate
+        union_raider_preset_4:
+          type: object
+          description: Information for Union Preset 4
+          properties: 
+            union_raider_stat:
+              type: array
+              description: Union raid member effects
+              items:
+                type: string
+            union_occupied_stat:
+              type: array
+              description: Union raid capture effects
+              items:
+                type: string
+            union_inner_stat:
+              type: array
+              description: Union raider deployment
+              items:
+                type: object
+                properties:
+                  stat_field_id:
+                    type: string
+                    description: Raider deployment position (0 to 7, clockwise from 11 o'clock)
+                  stat_field_effect:
+                    type: string
+                    description: Occupation effects over the area
+            union_block:
+              type: array
+              description: Information about Legion Blocks
+              items:
+                type: object
+                properties:
+                  block_type:
+                    type: string
+                    description: Block shapes (Warrior, Magician, Bowman, Thief, Pirate, Maple M, Hybrid)
+                  block_class:
+                    type: string
+                    description: Character class corresponding to the block
+                  block_level:
+                    type: string
+                    description: Character level corresponding to the block
+                  block_control_point:
+                    type: object
+                    description: |
+                      Coordinates of the block's reference point:
+                      - The bottom-right square among the four central squares is positioned at x: 0, y: 0.
+                      - Moving one square to the left decreases x by 1.
+                      - Moving one square to the right increases x by 1.
+                      - Moving one square downward decreases y by 1.
+                      - Moving one square upward increases y by 1.
+                    properties:
+                      x:
+                        type: number
+                        format: int64
+                        description: Block reference point X-coordinate
+                      y:
+                        type: number
+                        format: int64
+                        description: Block reference point Y-coordinate
+                  block_position:
+                    type: array
+                    description: Coordinates of the area occupied by the block (null if not placed)
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          type: number
+                          format: int64
+                          description: Block X-coordinate
+                        y:
+                          type: number
+                          format: int64
+                          description: Block Y-coordinate
+        union_raider_preset_5:
+          type: object
+          description: Information for Union Preset 5
+          properties: 
+            union_raider_stat:
+              type: array
+              description: Union raid member effects
+              items:
+                type: string
+            union_occupied_stat:
+              type: array
+              description: Union raid capture effects
+              items:
+                type: string
+            union_inner_stat:
+              type: array
+              description: Union raider deployment
+              items:
+                type: object
+                properties:
+                  stat_field_id:
+                    type: string
+                    description: Raider deployment position (0 to 7, clockwise from 11 o'clock)
+                  stat_field_effect:
+                    type: string
+                    description: Occupation effects over the area
+            union_block:
+              type: array
+              description: Information about Legion Blocks
+              items:
+                type: object
+                properties:
+                  block_type:
+                    type: string
+                    description: Block shapes (Warrior, Magician, Bowman, Thief, Pirate, Maple M, Hybrid)
+                  block_class:
+                    type: string
+                    description: Character class corresponding to the block
+                  block_level:
+                    type: string
+                    description: Character level corresponding to the block
+                  block_control_point:
+                    type: object
+                    description: |
+                      Coordinates of the block's reference point:
+                      - The bottom-right square among the four central squares is positioned at x: 0, y: 0.
+                      - Moving one square to the left decreases x by 1.
+                      - Moving one square to the right increases x by 1.
+                      - Moving one square downward decreases y by 1.
+                      - Moving one square upward increases y by 1.
+                    properties:
+                      x:
+                        type: number
+                        format: int64
+                        description: Block reference point X-coordinate
+                      y:
+                        type: number
+                        format: int64
+                        description: Block reference point Y-coordinate
+                  block_position:
+                    type: array
+                    description: Coordinates of the area occupied by the block (null if not placed)
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          type: number
+                          format: int64
+                          description: Block X-coordinate
+                        y:
+                          type: number
+                          format: int64
+                          description: Block Y-coordinate
+
+
+    UnionArtifact:
+      type: object
+      properties:
+        date:
+          type: string
+          description: Reference date for query (SGT, daily data with hours and minutes set to 0)
+          example: "2025-01-21T00:00+08:00"
+        union_artifact_effect:
+          type: array
+          description: Artifact effect information
+          items:
+            type: object
+            properties: 
+              name:
+                type: string
+                description: Name of the artifact effect 
+              level:
+                type: number
+                format: int64
+                description: Level of the artifact effect 
+        union_artifact_crystal:
+          type: array
+          description: Artifact crystal information
+          items:
+            type: object
+            properties: 
+              name: 
+                type: string
+                description: Name of the artifact crystal 
+              validity_flag:
+                type: string
+                description: Validity of the stat (0:Valid, 1:Invalid)
+              date_expire:
+                type: string
+                description: Expiration date of the stat (SGT)
+                example: "2023-12-21T17:28+08:00"
+              level:
+                type: number
+                format: int64
+                description: Grade of the artifact crystal
+              crystal_option_name_1: 
+                type: string
+                description: First option of the artifact crystal
+              crystal_option_name_2: 
+                type: string
+                description: Second option of the artifact crystal              
+              crystal_option_name_3: 
+                type: string
+                description: Third option of the artifact crystal  
+        union_artifact_remain_ap:
+          type: number
+          format: int64
+          description: Remaining artifact AP           
+    UnionChampion:
+      type: object
+      properties:
+        date:
+          type: string
+          description: Reference date for query (SGT, daily data with hours and minutes set to 0)
+          example: "2025-01-21T17:28+08:00"
+        union_champion:
+          type: array
+          description: Union Champion information
+          items:
+            type: object
+            properties:
+              champion_name:
+                type: string
+                description: Union Champion character name 
+              champion_slot:
+                type: number
+                format: int64
+                description: Union Champion slot
+              champion_grade:
+                type: string
+                description: Union Champion level
+              champion_class:
+                type: string
+                description: Union Champion character's job
+              champion_badge_info:
+                type: array
+                description: Union Champion Insignia information
+                items:
+                  type: object
+                  properties:
+                    stat:
+                      type: string
+                      description: Union Champion Insignia information
+        champion_badge_total_info:
+          type: array
+          description: Champion Insignia effects
+          items:
+            type: object
+            properties:
+              stat:
+                type: string
+                description: Union Champion Insignia effects
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Error name
+            message:
+              type: string
+              description: Error description

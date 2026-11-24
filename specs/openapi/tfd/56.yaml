@@ -1,0 +1,275 @@
+openapi: 3.0.3
+info:
+  title: The First Descendant API
+  version: 1.0.0
+  contact:
+    name: help_openapi@nexon.co.kr
+  description: |-
+    - 리더보드 데이터는 평균 1시간 단위로 갱신됩니다.
+    - 게임 콘텐츠 변경으로 ouid가 변경될 수 있습니다. ouid 기반 서비스 갱신 시 유의해 주시길 바랍니다.
+    - 계승자 등 각종 id 값에 대한 해석은 별도 제공되는 메타데이터 API (/meta/)를 참고하시기 바랍니다.
+servers:
+  - url: 'https://open.api.nexon.com'
+tags:
+  - name: leaderboard
+    description: 리더보드 정보 조회
+paths:
+  /tfd/v1/leaderboard/void-intercept-battle:
+    get:
+      tags:
+        - leaderboard
+      summary: 보이드 요격전 리더보드 조회
+      description: 보이드 요격전 리더보드를 조회합니다.<br>현재 콘텐츠 - 임계점 돌파 라바 시타델
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: leaderboard_type
+          in: query
+          description: "리더보드 유형"
+          required: true
+          schema:
+            type: string
+            enum: [Solo, Squad]
+        - name: descendant_id
+          in: query
+          description: "계승자 식별자 (리더보드 유형이 Solo인 경우 입력)"
+          required: false
+          schema:
+            type: string
+        - name: squad_user_count
+          in: query
+          description: "스쿼드 인원 수 (리더보드 유형이 Squad인 경우 입력)"
+          required: false
+          schema:
+            type: integer
+            format: int64
+            enum: [2, 3, 4]
+        - name: contents_type
+          in: query
+          description: "리더보드 콘텐츠 타입"
+          required: true
+          schema:
+            type: string
+            enum: [RiskMode]
+        - name: platform_type
+          in: query
+          description: "플랫폼 타입"
+          required: true
+          schema:
+            type: string
+            enum: [All, Pc, PlayStation, Xbox]
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoidInterceptBattleLeaderboard'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /tfd/v1/leaderboard/void-erosion-purge-challenge:
+    get:
+      tags:
+        - leaderboard
+      summary: 보이드 침식 정화 - 도전 리더보드 조회
+      description: 보이드 침식 정화 - 도전의 리더보드를 조회합니다.
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: leaderboard_type
+          in: query
+          description: '리더보드 유형'
+          required: true
+          schema:
+            type: string
+            enum:
+              - Solo
+              - Squad
+        - name: descendant_id
+          in: query
+          description: '계승자 식별자 (리더보드 유형이 Solo인 경우 입력)'
+          required: false
+          schema:
+            type: string
+        - name: squad_user_count
+          in: query
+          description: '스쿼드 인원 수 (리더보드 유형이 Squad인 경우 입력)'
+          required: false
+          schema:
+            type: integer
+            format: int64
+            enum:
+              - 2
+              - 3
+              - 4
+        - name: platform_type
+          in: query
+          description: '플랫폼 타입'
+          required: true
+          schema:
+            type: string
+            enum:
+              - All
+              - Pc
+              - PlayStation
+              - Xbox
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoidErosionPurgeChallengeLeaderboard'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+components:
+  schemas:
+    VoidInterceptBattleLeaderboard:
+      type: object
+      properties:
+        leaderboard:
+          type: array
+          nullable: true
+          description: "리더보드 목록"
+          items:
+            type: object
+            properties:
+              ranking:
+                type: number
+                format: int64
+                description: "순위"
+                nullable: true
+              score:
+                type: string
+                description: "기록 (클리어 타임)"
+                nullable: true
+              member:
+                type: array
+                description: "맴버 목록"
+                items:
+                  type: object
+                  properties:
+                    user_name:
+                      type: string
+                      description: "닉네임"
+                      nullable: true
+                    mastery_rank_level:
+                      type: number
+                      format: int64
+                      description: "마스터리 랭크"
+                      nullable: true
+                    descendant_id:
+                      type: string
+                      description: "계승자 식별자"
+                      nullable: true
+                    platform_type:
+                      type: string
+                      description: "플랫폼 유형"
+                      nullable: true
+    VoidErosionPurgeChallengeLeaderboard:
+      type: object
+      properties:
+        leaderboard:
+          type: array
+          description: 리더보드 목록
+          items:
+            type: object
+            properties:
+                ranking:
+                  type: number
+                  format: int64
+                  description: 순위
+                score:
+                  type: string
+                  description: '기록 (클리어 타임)'
+                stage:
+                  type: string
+                  description: '단계'
+                member:
+                  type: array
+                  description: "맴버 목록"
+                  items:
+                    type: object
+                    properties:
+                      user_name:
+                        type: string
+                        description: "닉네임"
+                        nullable: true
+                      mastery_rank_level:
+                        type: number
+                        format: int64
+                        description: "마스터리 랭크"
+                        nullable: true
+                      descendant_id:
+                        type: string
+                        description: "계승자 식별자 (리더보드 유형이 Solo인 경우 입력, 계승자 메타데이터의 `descendant_id 참조`"
+                        nullable: true
+                      platform_type:
+                        type: string
+                        description: "플랫폼 유형"
+                        nullable: true
+     
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              description: 에러 명
+            message:
+              type: string
+              description: 에러 설명

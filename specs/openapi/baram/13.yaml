@@ -1,0 +1,514 @@
+openapi: 3.0.3
+info:
+  title: 바람의나라 API
+  version: 1.0.0
+  contact:
+    name: NXOpenAPI팀
+  description: |-
+   - 바람의나라의 게임 데이터는 평균 10분 후 확인 가능합니다.
+   - 2022년 1월 1일 이후 데이터를 조회할 수 있습니다. (단, 2022년 1월 이전에 발생한 데이터는 응답 결과에 포함되지 않을 수 있음)
+   - 게임 콘텐츠 변경으로 ocid가 변경될 수 있습니다. ocid 기반 서비스 갱신 시 유의해 주시길 바랍니다. 
+  
+servers:
+  - url: 'https://open.api.nexon.com'
+tags:
+  - name: Character 
+    description: 캐릭터 정보 조회
+
+paths:
+  /baram/v1/id:
+    get:
+      tags:
+        - Character
+      summary: 캐릭터 식별자(ocid) 조회
+      description: 캐릭터 식별자(ocid)를 조회합니다.
+      operationId: baram_get_id
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: character_name
+          in: query
+          description: 캐릭터 명
+          required: true
+          schema:
+            type: string
+        - name: server_name
+          in: query
+          description: 서버 명
+          required: true
+          schema:
+            type: string
+            default: 연
+            enum:
+              - 연
+              - 무휼
+              - 유리
+              - 진
+              - 하자
+              - 호동
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /baram/v1/character/basic:
+    get:
+      tags:
+        - Character
+      summary: 기본 정보 조회
+      description: 기본 정보를 조회합니다.<br>버프, 아이템 사용 등으로 적용된 효과로 경험치 또는 레벨이 게임 내 데이터와 상이할 수 있습니다.
+      operationId: baram_get_character_basic
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacterBasic'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+                
+  /baram/v1/character/title:
+    get:
+      tags:
+        - Character
+      summary: 칭호 보유 정보 조회
+      description: 칭호 보유 정보를 조회합니다.
+      operationId: baram_get_character_title
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacterTitle'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /baram/v1/character/title-equipment:
+    get:
+      tags:
+        - Character
+      summary: 장착 칭호 정보 조회
+      description: 장착 칭호 정보를 조회합니다.
+      operationId: baram_get_character_title-equipment
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacterTitleEquipment'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+                
+  /baram/v1/character/item-equipment:
+    get:
+      tags:
+        - Character
+      summary: 장착 아이템 정보 조회
+      description: 장착 아이템 정보를 조회합니다.
+      operationId: baram_get_character_item-equipment
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacterItemEquipment'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /baram/v1/character/stat:
+    get:
+      tags:
+        - Character
+      summary: 능력치 정보 조회
+      description: 능력치 정보를 조회합니다.
+      operationId: baram_get_character_stat
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacterStat'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /baram/v1/character/guild:
+    get:
+      tags:
+        - Character
+      summary: 가입한 길드 정보 조회
+      description: 가입한 길드(문파) 정보를 조회합니다.
+      operationId: baram_get_character_guild
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacterGuild'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+components:
+  schemas:
+    Character:
+      type: object
+      properties:
+        ocid:
+          type: string
+          description: 캐릭터 식별자
+    CharacterBasic:
+      type: object
+      properties:
+        character_name:
+          type: string
+          description: 캐릭터 명
+        character_date_create:
+          type: string
+          description: 캐릭터 생성 일(시) (UTC0)
+          example: "2023-12-14T08:28:35Z"
+        character_create_type_name:
+          type: string
+          description: 캐릭터 생성 타입 명
+        character_class_name:
+          type: string
+          description: 캐릭터 직업 명
+        character_nation_name:
+          type: string
+          description: 캐릭터 국가 명
+        character_gender:
+          type: string
+          description: 캐릭터 성별
+        character_exp:
+          type: number
+          format: int64
+          description: 캐릭터 경험치
+        character_level:
+          type: number
+          format: int64
+          description: 캐릭터 레벨
+          
+    CharacterTitle: 
+      type: object
+      properties:
+        title:
+          type: array
+          description: 칭호 정보
+          items:
+            properties:
+              title_id:
+                type: string
+                description: 칭호 명
+              date_expire:
+                type: string
+                description: 칭호 만료 일(시) (UTC0)  
+                example: "2023-12-14T08:28:35Z"
+
+    CharacterTitleEquipment: 
+      type: object
+      properties:
+        title_equipment:
+          type: array
+          description: 장착 칭호 정보
+          items:
+            properties:
+              title_id:
+                type: string
+                description: 장착 칭호 명
+              date_expire:
+                type: string
+                description: 장착 칭호 만료 일(시) (UTC0)
+                example: "2023-12-14T08:28:35Z"
+                
+    CharacterItemEquipment:
+      type: object
+      properties:
+        item_equipment:
+          type: array
+          description: 장착 아이템 정보
+          items:
+            properties:
+              item_id:
+                type: string
+                description: 장착 아이템 명
+              item_equipment_slot_name:
+                type: string
+                description: 장착 아이템 페이지 슬롯 명
+    CharacterStat: 
+      type: object
+      properties:
+        stat:
+          type: array
+          description: 능력치 정보
+          items:
+            properties:
+              stat_name:
+                type: string
+                description: 능력치 명
+              stat_value:
+                type: string
+                description: 능력치 값  
+
+    CharacterGuild:
+      type: object
+      properties:
+        guild_name:
+          type: string
+          description: 가입한 문파(길드) 명
+          
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              description: 에러 명
+            message:
+              type: string
+              description: 에러 설명 

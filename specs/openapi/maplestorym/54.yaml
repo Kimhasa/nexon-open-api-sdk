@@ -1,0 +1,1133 @@
+openapi: 3.0.3
+info:
+  title: 메이플스토리M API
+  version: 1.0.0
+  contact:
+    name: help_openapi@nexon.co.kr
+  description: |-
+    - 2025년 11월 27일 데이터부터 조회할 수 있습니다.
+    - 랭킹은 매일 오전 2시 30분 경에 1일 1회 집계되어 제공됩니다.
+    - 전체 월드 랭킹 기준으로 1만등까지의 랭킹이 제공됩니다.
+    - 최대 2년 전의 데이터를 조회할 수 있습니다.
+
+servers:
+  - url: 'https://open.api.nexon.com'
+tags:
+  - name: Ranking
+    description: 랭킹 정보 조회
+
+paths:
+  /maplestorym/v1/ranking/level:
+    get:
+      tags:
+        - Ranking
+      summary: 레벨 랭킹 정보 조회
+      description: 레벨 랭킹 정보를 조회합니다.
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: 조회 기준일 (KST). 
+          example: "2025-11-27"
+          required: true
+          schema:
+            type: string
+        - name: world_name
+          in: query
+          description: 월드 명<br>월드 명과 캐릭터 식별자는 동시에 사용할 수 없습니다.  
+          required: false
+          schema:
+            type: string
+            enum:
+              - 아케인
+              - 크로아
+              - 엘리시움
+              - 루나
+              - 스카니아
+              - 유니온
+              - 제니스
+              - 챌린저스
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자<br>월드 명과 캐릭터 식별자는 동시에 사용할 수 없습니다.       
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: 페이지 번호<br>한 page에 200개의 결과가 응답됩니다.    
+          required: false
+          schema:
+            type: number
+            format: int64            
+
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LevelRanking'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /maplestorym/v1/ranking/dojang:
+    get:
+      tags:
+        - Ranking
+      summary: 무릉도장 랭킹 정보 조회
+      description: 무릉도장 랭킹 정보를 조회합니다.
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: 조회 기준일 (KST). 
+          example: "2025-11-27"
+          required: true
+          schema:
+            type: string
+        - name: world_name
+          in: query
+          description: 월드 명<br>월드 명과 캐릭터 식별자는 동시에 사용할 수 없습니다.  
+          required: false
+          schema:
+            type: string
+            enum:
+              - 아케인
+              - 크로아
+              - 엘리시움
+              - 루나
+              - 스카니아
+              - 유니온
+              - 제니스
+              - 챌린저스
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자<br>월드 명과 캐릭터 식별자는 동시에 사용할 수 없습니다.       
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: 페이지 번호<br>한 page에 200개의 결과가 응답됩니다.    
+          required: false
+          schema:
+            type: number
+            format: int64
+               
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DojangRanking'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /maplestorym/v1/ranking/root-of-time:
+    get:
+      tags:
+        - Ranking
+      summary: 시간의 근원 랭킹 정보 조회
+      description: 시간의 근원 랭킹 정보를 조회합니다.
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: 조회 기준일 (KST). 
+          example: "2025-11-27"
+          required: true
+          schema:
+            type: string
+        - name: world_name
+          in: query
+          description: 월드 명<br>월드 명과 캐릭터 식별자는 동시에 사용할 수 없습니다.  
+          required: false
+          schema:
+            type: string
+            enum:
+              - 아케인
+              - 크로아
+              - 엘리시움
+              - 루나
+              - 스카니아
+              - 유니온
+              - 제니스
+              - 챌린저스
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자<br>월드 명과 캐릭터 식별자는 동시에 사용할 수 없습니다.       
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: 페이지 번호<br>한 page에 200개의 결과가 응답됩니다.    
+          required: false
+          schema:
+            type: number
+            format: int64
+               
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RootofTimeRanking'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /maplestorym/v1/ranking/union:
+    get:
+      tags:
+        - Ranking
+      summary: 유니온 랭킹 정보 조회
+      description: 유니온 랭킹 정보를 조회합니다.
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: 조회 기준일 (KST). 
+          example: "2025-11-27"
+          required: true
+          schema:
+            type: string
+        - name: world_name
+          in: query
+          description: 월드 명<br>월드 명과 캐릭터 식별자는 동시에 사용할 수 없습니다.
+          required: false
+          schema:
+            type: string
+            enum:
+              - 아케인
+              - 크로아
+              - 엘리시움
+              - 루나
+              - 스카니아
+              - 유니온
+              - 제니스
+              - 챌린저스
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자<br>월드 명과 캐릭터 식별자는 동시에 사용할 수 없습니다.
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: 페이지 번호<br>한 page에 200개의 결과가 응답됩니다.
+          required: false
+          schema:
+            type: number
+            format: int64
+               
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnionRanking'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /maplestorym/v1/ranking/combat-power:
+    get:
+      tags:
+        - Ranking
+      summary: 전투력 랭킹 정보 조회
+      description: 전투력 랭킹 정보를 조회합니다.
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: 조회 기준일 (KST). 
+          example: "2025-11-27"
+          required: true
+          schema:
+            type: string
+        - name: world_name
+          in: query
+          description: 월드 명<br>월드 명과 캐릭터 식별자는 동시에 사용할 수 없습니다.
+          required: false
+          schema:
+            type: string
+            enum:
+              - 아케인
+              - 크로아
+              - 엘리시움
+              - 루나
+              - 스카니아
+              - 유니온
+              - 제니스
+              - 챌린저스
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자<br>월드 명과 캐릭터 식별자는 동시에 사용할 수 없습니다.
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: 페이지 번호<br>한 page에 200개의 결과가 응답됩니다.
+          required: false
+          schema:
+            type: number
+            format: int64
+               
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CombatPowerRanking'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /maplestorym/v1/ranking/kerning-m-tower:
+    get:
+      tags:
+        - Ranking
+      summary: 커닝M타워 랭킹 정보 조회
+      description: 커닝M타워 랭킹 정보를 조회합니다.
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: 조회 기준일 (KST). 
+          example: "2025-11-27"
+          required: true
+          schema:
+            type: string
+        - name: world_name
+          in: query
+          description: 월드 명<br>월드 명과 캐릭터 식별자는 동시에 사용할 수 없습니다.
+          required: false
+          schema:
+            type: string
+            enum:
+              - 아케인
+              - 크로아
+              - 엘리시움
+              - 루나
+              - 스카니아
+              - 유니온
+              - 제니스
+              - 챌린저스
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자<br>월드 명과 캐릭터 식별자는 동시에 사용할 수 없습니다.
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: 페이지 번호<br>한 page에 200개의 결과가 응답됩니다.
+          required: false
+          schema:
+            type: number
+            format: int64
+               
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KerningMTowerRanking'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /maplestorym/v1/ranking/achievement:
+    get:
+      tags:
+        - Ranking
+      summary: 업적 랭킹 정보 조회
+      description: 업적 랭킹 정보를 조회합니다.
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: 조회 기준일 (KST). 
+          example: "2025-11-27"
+          required: true
+          schema:
+            type: string
+        - name: world_name
+          in: query
+          description: 월드 명<br>월드 명과 캐릭터 식별자는 동시에 사용할 수 없습니다.
+          required: false
+          schema:
+            type: string
+            enum:
+              - 아케인
+              - 크로아
+              - 엘리시움
+              - 루나
+              - 스카니아
+              - 유니온
+              - 제니스
+              - 챌린저스
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자<br>월드 명과 캐릭터 식별자는 동시에 사용할 수 없습니다.
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: 페이지 번호<br>한 page에 200개의 결과가 응답됩니다.
+          required: false
+          schema:
+            type: number
+            format: int64
+               
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AchievementRanking'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /maplestorym/v1/ranking/sharenian-battlefield:
+    get:
+      tags:
+        - Ranking
+      summary: 샤레니안의 전장 랭킹 정보 조회
+      description: 샤레니안의 전장 랭킹 정보를 조회합니다.
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: 조회 기준일 (KST). 
+          example: "2025-11-27"
+          required: true
+          schema:
+            type: string
+        - name: world_name
+          in: query
+          description: 월드 명<br>월드 명과 길드 마스터의 캐릭터 식별자는 동시에 사용할 수 없습니다.
+          required: false
+          schema:
+            type: string
+            enum:
+              - 아케인
+              - 크로아
+              - 엘리시움
+              - 루나
+              - 스카니아
+              - 유니온
+              - 제니스
+              - 챌린저스
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자<br>월드 명과 길드 마스터의 캐릭터 식별자는 동시에 사용할 수 없습니다.
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: 페이지 번호<br>한 page에 200개의 결과가 응답됩니다.
+          required: false
+          schema:
+            type: number
+            format: int64
+               
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SharenianBattlefieldRanking'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /maplestorym/v1/ranking/sharenian-waterway:
+    get:
+      tags:
+        - Ranking
+      summary: 샤레니안의 지하수로 랭킹 정보 조회
+      description: 샤레니안의 지하수로 랭킹 정보를 조회합니다.
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: 조회 기준일 (KST). 
+          example: "2025-11-27"
+          required: true
+          schema:
+            type: string
+        - name: world_name
+          in: query
+          description: 월드 명<br>월드 명과 길드 마스터의 캐릭터 식별자는 동시에 사용할 수 없습니다.
+          required: false
+          schema:
+            type: string
+            enum:
+              - 아케인
+              - 크로아
+              - 엘리시움
+              - 루나
+              - 스카니아
+              - 유니온
+              - 제니스
+              - 챌린저스
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자<br>월드 명과 길드 마스터의 캐릭터 식별자는 동시에 사용할 수 없습니다.
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: 페이지 번호<br>한 page에 200개의 결과가 응답됩니다.
+          required: false
+          schema:
+            type: number
+            format: int64
+               
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SharenianWaterwayRanking'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+
+components:
+  schemas:
+    LevelRanking:
+      type: object
+      properties:
+        ranking:
+          type: array
+          description: 레벨 랭킹 정보
+          items:
+            properties:
+              date:
+                type: string
+                description: 랭킹 업데이트 일자 (KST)
+              ranking:
+                type: number
+                format: int64
+                description: 전체 월드 랭킹 순위
+              world_ranking:
+                type: number
+                format: int64
+                description: 소속 월드 랭킹 순위
+              character_name:
+                type: string
+                description: 캐릭터 명
+              world_name:
+                type: string
+                description: 월드 명
+              character_class:
+                type: string
+                description: 캐릭터 직업 명
+              character_level:
+                type: number
+                format: int64
+                description: 캐릭터 레벨
+              guild_name:
+                type: string
+                description: 길드 명
+              guild_mark_icon:
+                type: string
+                description: 길드 마크 아이콘
+
+    DojangRanking:
+      type: object
+      properties:
+        ranking:
+          type: array
+          description: 무릉도장 랭킹 정보
+          items:
+            properties:
+              date:
+                type: string
+                description: 랭킹 업데이트 일자 (KST)
+              ranking:
+                type: number
+                format: int64
+                description: 전체 월드 랭킹 순위
+              world_ranking:
+                type: number
+                format: int64
+                description: 소속 월드 랭킹 순위
+              character_name:
+                type: string
+                description: 캐릭터 명
+              world_name:
+                type: string
+                description: 월드 명
+              character_class:
+                type: string
+                description: 캐릭터 직업 명
+              character_level:
+                type: number
+                format: int64
+                description: 캐릭터 레벨
+              dojang_floor:
+                type: number
+                format: int64
+                description: 무릉도장 클리어 최고 층 수
+              guild_name:
+                type: string
+                description: 길드 명
+
+    RootofTimeRanking:
+      type: object
+      properties:
+        ranking:
+          type: array
+          description: 시간의 근원 랭킹 정보
+          items:
+            properties:
+              date:
+                type: string
+                description: 랭킹 업데이트 일자 (KST)
+              ranking:
+                type: number
+                format: int64
+                description: 전체 월드 랭킹 순위
+              world_ranking:
+                type: number
+                format: int64
+                description: 소속 월드 랭킹 순위
+              character_name:
+                type: string
+                description: 캐릭터 명
+              world_name:
+                type: string
+                description: 월드 명
+              character_class:
+                type: string
+                description: 캐릭터 직업 명
+              character_level:
+                type: number
+                format: int64
+                description: 캐릭터 레벨
+              max_damage:
+                type: number
+                format: int64
+                description: 최고 데미지
+              guild_name:
+                type: string
+                description: 길드 명
+
+    UnionRanking:
+      type: object
+      properties:
+        ranking:
+          type: array
+          description: 유니온 랭킹 정보
+          items:
+            properties:
+              date:
+                type: string
+                description: 랭킹 업데이트 일자 (KST)
+              ranking:
+                type: number
+                format: int64
+                description: 전체 월드 랭킹 순위
+              world_ranking:
+                type: number
+                format: int64
+                description: 소속 월드 랭킹 순위
+              character_name:
+                type: string
+                description: 캐릭터 명
+              world_name:
+                type: string
+                description: 월드 명
+              character_class:
+                type: string
+                description: 캐릭터 직업 명
+              union_grade:
+                type: string
+                description: 유니온 등급
+              union_grade_icon:
+                type: string
+                description: 유니온 등급 아이콘
+              union_level:
+                type: number
+                format: int64
+                description: 유니온 레벨 총합
+              guild_name:
+                type: string
+                description: 길드 명
+
+    CombatPowerRanking:
+      type: object
+      properties:
+        ranking:
+          type: array
+          description: 전투력 랭킹 정보
+          items:
+            properties:
+              date:
+                type: string
+                description: 랭킹 업데이트 일자 (KST)
+              ranking:
+                type: number
+                format: int64
+                description: 전체 월드 랭킹 순위
+              world_ranking:
+                type: number
+                format: int64
+                description: 소속 월드 랭킹 순위
+              character_name:
+                type: string
+                description: 캐릭터 명
+              world_name:
+                type: string
+                description: 월드 명
+              character_class:
+                type: string
+                description: 캐릭터 직업 명
+              character_level:
+                type: number
+                format: int64
+                description: 캐릭터 레벨
+              character_combat_power:
+                type: number
+                format: int64
+                description: 캐릭터 전투력
+              guild_name:
+                type: string
+                description: 길드 명
+
+    KerningMTowerRanking:
+      type: object
+      properties:
+        ranking:
+          type: array
+          description: 커닝M타워 랭킹 정보
+          items:
+            properties:
+              date:
+                type: string
+                description: 랭킹 업데이트 일자 (KST)
+              ranking:
+                type: number
+                format: int64
+                description: 전체 월드 랭킹 순위
+              world_ranking:
+                type: number
+                format: int64
+                description: 소속 월드 랭킹 순위
+              character_name:
+                type: string
+                description: 캐릭터 명
+              world_name:
+                type: string
+                description: 월드 명
+              character_class:
+                type: string
+                description: 캐릭터 직업 명
+              character_level:
+                type: number
+                format: int64
+                description: 캐릭터 레벨
+              tower_floor:
+                type: number
+                format: int64
+                description: 최고 도달 층
+              guild_name:
+                type: string
+                description: 길드 명
+
+    AchievementRanking:
+      type: object
+      properties:
+        ranking:
+          type: array
+          description: 업적 랭킹 정보
+          items:
+            properties:
+              date:
+                type: string
+                description: 랭킹 업데이트 일자 (KST)
+              ranking:
+                type: number
+                format: int64
+                description: 전체 월드 랭킹 순위
+              world_ranking:
+                type: number
+                format: int64
+                description: 소속 월드 랭킹 순위
+              character_name:
+                type: string
+                description: 캐릭터 명
+              world_name:
+                type: string
+                description: 월드 명
+              achievement_score:
+                type: number
+                format: int64
+                description: 업적 점수
+              achievement_grade_name:
+                type: string
+                description: 업적 등급 명
+              achievement_grade_icon:
+                type: string
+                description: 업적 등급 아이콘
+              main_honor_badge:
+                type: array
+                description: 대표 명예 배지 정보
+                items:
+                  properties:
+                    badge_no:
+                      type: number
+                      format: int64
+                      description: 대표 명예 뱃지 번호
+                    badge_name:
+                      type: string
+                      description: 대표 명예 배지 명
+                    badge_option:
+                      type: string
+                      description: 대표 명예 배지 착용 옵션
+                    badge_icon:
+                      type: string
+                      description: 대표 명예 배지 아이콘
+
+    SharenianBattlefieldRanking:
+      type: object
+      properties:
+        ranking:
+          type: array
+          description: 샤레니안의 전장 랭킹 정보
+          items:
+            properties:
+              date:
+                type: string
+                description: 랭킹 업데이트 일자 (KST)
+              ranking:
+                type: number
+                format: int64
+                description: 전체 월드 랭킹 순위
+              world_ranking:
+                type: number
+                format: int64
+                description: 소속 월드 랭킹 순위
+              guild_name:
+                type: string
+                description: 길드 명
+              world_name:
+                type: string
+                description: 월드 명
+              guild_master_name:
+                type: string
+                description: 길드 마스터 캐릭터 명
+              guild_mark_icon:
+                type: string
+                description: 길드 아이콘
+              season_score:
+                type: string
+                description: 시즌 점수
+              grade_icon:
+                type: string
+                description: 등급 아이콘
+
+    SharenianWaterwayRanking:
+      type: object
+      properties:
+        ranking:
+          type: array
+          description: 샤레니안의 지하수로 랭킹 정보
+          items:
+            properties:
+              date:
+                type: string
+                description: 랭킹 업데이트 일자 (KST)
+              ranking:
+                type: number
+                format: int64
+                description: 전체 월드 랭킹 순위
+              world_ranking:
+                type: number
+                format: int64
+                description: 소속 월드 랭킹 순위
+              guild_name: 
+                type: string
+                description: 길드 명
+              world_name:
+                type: string
+                description: 월드 명
+              guild_master_name:
+                type: string
+                description: 길드 마스터 캐릭터 명
+              guild_mark_icon:
+                type: string
+                description: 길드 아이콘
+              season_score:
+                type: string
+                description: 시즌 점수
+              grade_icon:
+                type: string
+                description: 등급 아이콘
+                
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              description: 에러 명
+            message:
+              type: string
+              description: 에러 설명
