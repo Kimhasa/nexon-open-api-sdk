@@ -6,7 +6,7 @@
 
 const BASE = 'https://open.api.nexon.com/fconline/v1';
 const STATIC = 'https://open.api.nexon.com/static/fconline/meta';
-const CDN = 'https://open.api.nexon.com/live/externalAssets/common';
+const CDN = 'https://fco.dn.nexoncdn.co.kr/live/externalAssets/common';
 
 // ─── User (계정 정보 조회) ─────────────────────────────────────────
 export const FC_USER_ENDPOINTS = {
@@ -44,6 +44,10 @@ export const FC_METADATA_ENDPOINTS = {
   SPID: `${STATIC}/spid.json`,
   /** 시즌 아이디(seasonId) 메타데이터 */
   SEASON_ID: `${STATIC}/seasonid.json`,
+  /** 공식경기 시즌 메타데이터 */
+  SEASON: `${STATIC}/season.json`,
+  /** 선수 클래스 메타데이터 */
+  CLASS: `${STATIC}/class.json`,
   /** 선수 포지션(spposition) 메타데이터 */
   SP_POSITION: `${STATIC}/spposition.json`,
   /** 등급 식별자(division) 메타데이터 */

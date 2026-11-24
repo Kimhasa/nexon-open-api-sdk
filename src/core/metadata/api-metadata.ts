@@ -52,10 +52,10 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
   fconline: {
     game: 'EA SPORTS FC Online',
     pathPrefix: 'fconline',
-    lastVerifiedAt: '2026-03-05',
-    sdkVersionAtVerification: '0.1.1',
-    endpointCount: 16,
-    note: '14 HTTP methods + 2 image URL helpers. E2E script (yarn test:fconline) passed 14/15 with a real API key (PR #2); the failing check was not recorded.',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 18,
+    note: 'Portal OpenAPI spec (specs/openapi/fconline/, 2026-11-24). Public static metadata and image CDN checked without a key. Authenticated endpoints verified with MSW fixtures.',
   },
 };
 

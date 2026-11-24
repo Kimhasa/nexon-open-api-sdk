@@ -18,11 +18,16 @@ export const fcUserBasicFixture: FcUserBasic = {
 
 // ─── Max Division ────────────────────────────────────────────────────────────
 
-export const fcMaxDivisionFixture: FcMaxDivision = {
+export const fcMaxDivisionObjectFixture: FcMaxDivision = {
   matchType: 50,
   division: 800,
   achievementDate: '2024-01-15T12:00:00',
 };
+
+export const fcMaxDivisionFixture: FcMaxDivision[] = [
+  fcMaxDivisionObjectFixture,
+  { matchType: 52, division: 1100, achievementDate: '2024-01-16T13:30:00' },
+];
 
 // ─── Match List ──────────────────────────────────────────────────────────────
 
