@@ -219,6 +219,7 @@ export type {
   MCharacterGuild,
   MCharacterItemEquipment,
   MItemEquipment,
+  MItemMasteryInfo,
   MItemOption,
   MSoulInfo,
   MEmblemInfo,
@@ -238,22 +239,30 @@ export type {
   MAndroidEquipmentInfo,
   MHeartEquipment,
   MAndroidHeartPreset,
-  // 스펙 확인 필요
   MCharacterJewel,
   MCharacterBeautyEquipment,
   MCharacterPetEquipment,
   MCharacterSkillEquipment,
   MCharacterLinkSkill,
   MCharacterVMatrix,
+  MVCoreEquipment,
   MCharacterHexaMatrixSkill,
+  MHexaMatrixSkillInfo,
   MCharacterHexaMatrixStat,
 } from './games/maplestory-m/character/types.js';
 
 // MapleStory M common types
 export type { MOcidRequest, MGuildIdRequest } from './games/maplestory-m/types.js';
 
-// MapleStory M union types (스펙 확인 필요)
-export type { MUnion, MUnionRaider } from './games/maplestory-m/union/types.js';
+// MapleStory M union types
+export type {
+  MUnion,
+  MUnionRaider,
+  MUnionOption,
+  MUnionStat,
+  MUnionStatEntry,
+  MUnionStatPreset,
+} from './games/maplestory-m/union/types.js';
 
 // MapleStory M guild types
 export type {

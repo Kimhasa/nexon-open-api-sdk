@@ -7,63 +7,63 @@ import type { MWorldName } from '../guild/types.js';
 export interface MRankingBaseRequest {
   /** 조회 기준일 (KST, YYYY-MM-DD) */
   readonly date: NexonDate | string;
-  /** 캐릭터 식별자 (특정 캐릭터 랭킹 조회 시) */
+  /** 캐릭터 식별자 (특정 캐릭터 랭킹 조회 시, 샤레니안 랭킹은 길드 마스터의 캐릭터 식별자) */
   readonly ocid?: OCID | undefined;
-  /** 페이지 번호 */
+  /** 페이지 번호 (페이지당 200개 결과) */
   readonly page?: number | undefined;
 }
 
 /** 레벨 랭킹 요청 파라미터 */
 export interface MLevelRankingRequest extends MRankingBaseRequest {
-  /** 월드 명 */
+  /** 월드 명 (`ocid`와 함께 지정할 수 없음) */
   readonly world_name?: MWorldName | undefined;
 }
 
 /** 무릉도장 랭킹 요청 파라미터 */
 export interface MDojangRankingRequest extends MRankingBaseRequest {
-  /** 월드 명 */
+  /** 월드 명 (`ocid`와 함께 지정할 수 없음) */
   readonly world_name?: MWorldName | undefined;
 }
 
 /** 시간의 근원 랭킹 요청 파라미터 */
 export interface MRootOfTimeRankingRequest extends MRankingBaseRequest {
-  /** 월드 명 */
+  /** 월드 명 (`ocid`와 함께 지정할 수 없음) */
   readonly world_name?: MWorldName | undefined;
 }
 
 /** 유니온 랭킹 요청 파라미터 */
 export interface MUnionRankingRequest extends MRankingBaseRequest {
-  /** 월드 명 */
+  /** 월드 명 (`ocid`와 함께 지정할 수 없음) */
   readonly world_name?: MWorldName | undefined;
 }
 
 /** 전투력 랭킹 요청 파라미터 */
 export interface MCombatPowerRankingRequest extends MRankingBaseRequest {
-  /** 월드 명 */
+  /** 월드 명 (`ocid`와 함께 지정할 수 없음) */
   readonly world_name?: MWorldName | undefined;
 }
 
 /** 커닝M타워 랭킹 요청 파라미터 */
 export interface MKerningMTowerRankingRequest extends MRankingBaseRequest {
-  /** 월드 명 */
+  /** 월드 명 (`ocid`와 함께 지정할 수 없음) */
   readonly world_name?: MWorldName | undefined;
 }
 
 /** 업적 랭킹 요청 파라미터 */
 export interface MAchievementRankingRequest extends MRankingBaseRequest {
-  /** 월드 명 */
+  /** 월드 명 (`ocid`와 함께 지정할 수 없음) */
   readonly world_name?: MWorldName | undefined;
 }
 
 /** 샤레니안의 전장 랭킹 요청 파라미터 */
 export interface MSharenianBattlefieldRankingRequest extends MRankingBaseRequest {
-  /** 월드 명 */
+  /** 월드 명 (`ocid`와 함께 지정할 수 없음) */
   readonly world_name?: MWorldName | undefined;
 }
 
 /** 샤레니안의 지하수로 랭킹 요청 파라미터 */
 export interface MSharenianWaterwayRankingRequest extends MRankingBaseRequest {
-  /** 월드 명 */
+  /** 월드 명 (`ocid`와 함께 지정할 수 없음) */
   readonly world_name?: MWorldName | undefined;
 }
 

@@ -36,10 +36,10 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
   maplestorym: {
     game: 'MapleStory M',
     pathPrefix: 'maplestorym',
-    lastVerifiedAt: '2026-03-05',
-    sdkVersionAtVerification: '0.1.1',
-    endpointCount: 37,
-    note: 'E2E script (yarn test:maplestory-m) passed 37/37 with a real API key (PR #2). Not re-verified since.',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 38,
+    note: 'Portal OpenAPI spec (specs/openapi/maplestorym/, 2026-11-24) and spec-based fixtures. Not verified with a real API key for this update.',
   },
   maplestorysea: {
     game: 'MapleStory SEA',
