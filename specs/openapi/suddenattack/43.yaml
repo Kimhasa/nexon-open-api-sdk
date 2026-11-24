@@ -1,0 +1,399 @@
+openapi: 3.0.3
+info:
+  title: 서든어택 API
+  version: 1.0.0
+  contact:
+    name: help_openapi@nexon.co.kr
+  description: |-
+    - 서든어택의 게임 데이터는 평균 10분 후 확인 가능합니다.
+    - 2025년 1월 24일 이후 데이터를 조회할 수 있습니다.
+    - 게임 콘텐츠 변경으로 ouid가 변경될 수 있습니다. ouid 기반 서비스 갱신 시 유의해 주시길 바랍니다.
+      
+servers:
+  - url: 'https://open.api.nexon.com'
+  
+tags:
+  - name: User 
+    description: 계정 정보 조회
+
+paths:
+  /suddenattack/v1/id:
+    get:
+      tags:
+        - User
+      summary: 계정 식별자(ouid) 조회
+      description: 계정 식별자(ouid)를 조회합니다.
+      operationId: suddenattack_get_id
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: user_name
+          in: query
+          description: 닉네임
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+                
+  /suddenattack/v1/user/basic:
+    get:
+      tags:
+        - User
+      summary: 기본 정보 조회
+      description: 계정 기본 정보를 조회합니다.
+      operationId: suddenattack_get_user_basic
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ouid
+          in: query
+          description: 계정 식별자 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBasic'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /suddenattack/v1/user/rank:
+    get:
+      tags:
+        - User
+      summary: 계급 정보 조회
+      description: 유저의 계급 정보를 조회합니다.<br>- 계급 정보는 게임 접속 종료 시 갱신됩니다.
+      operationId: suddenattack_get_user_rank
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ouid
+          in: query
+          description: 계정 식별자 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRank'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /suddenattack/v1/user/tier:
+    get:
+      tags:
+        - User
+      summary: 티어 정보 조회
+      description: 유저의 티어 정보를 조회합니다.<br>- 티어 정보는 게임 접속 종료 시 갱신됩니다.
+      operationId: suddenattack_get_user_tier
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ouid
+          in: query
+          description: 계정 식별자 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTier'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /suddenattack/v1/user/recent-info:
+    get:
+      tags:
+        - User
+      summary: 최근 동향 정보 조회
+      description: 유저의 최근 동향 정보를 조회합니다.<br>- 최근 동향 정보는 매치 종료 시 갱신됩니다. 
+      operationId: suddenattack_get_user_recent_information
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ouid
+          in: query
+          description: 계정 식별자 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRecentInformation'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        ouid:
+          type: string
+          description: 계정 식별자
+          
+    UserBasic:
+      type: object
+      properties:
+        user_name:
+          type: string
+          description: 닉네임
+        user_date_create:
+          type: string
+          description: 계정 생성 일(시) (UTC0)
+          example: "2023-12-14T08:28:35Z"
+        title_name:
+          type: string
+          description: 장착 칭호 명
+        clan_name:
+          type: string
+          description: 소속 클랜 명
+        manner_grade:
+          type: string
+          description: 매너 등급
+
+    UserRank:
+      type: object
+      properties:
+        user_name:
+          type: string
+          description: 닉네임
+        grade:
+          type: string
+          description: 통합 계급
+        grade_exp:
+          type: number
+          format: int64
+          description: 통합 계급 경험치
+        grade_ranking:
+          type: number
+          format: int64
+          description: 통합 계급 랭킹
+        season_grade:
+          type: string
+          description: 시즌 계급
+        season_grade_exp:
+          type: number
+          format: int64
+          description: 시즌 계급 경험치
+        season_grade_ranking:
+          type: number
+          format: int64
+          description: 시즌 계급 랭킹
+
+    UserTier:
+      type: object
+      properties:
+        user_name:
+          type: string
+          description: 닉네임
+        solo_rank_match_tier:
+          type: number
+          format: int64
+          description:   솔로 랭크전 티어
+        solo_rank_match_score:
+          type: number
+          format: int64
+          description: 솔로 랭크전 점수 
+        party_rank_match_tier:
+          type: number
+          format: int64
+          description: 파티 랭크전 티어
+        party_rank_match_score:
+          type: number
+          format: int64
+          description: 파티 랭크전 점수
+
+    UserRecentInformation:
+      type: object
+      properties:
+        user_name:
+          type: string
+          description: 닉네임
+        recent_win_rate:
+          type: number
+          format: double
+          description:   최근 승률
+        recent_kill_death_rate:
+          type: number
+          format: double
+          description: 최근 킬데스
+        recent_assault_rate:
+          type: number
+          format: double
+          description: 최근 돌격소총 킬데스  
+        recent_sniper_rate:
+          type: number
+          format: double
+          description: 최근 저격소총 킬데스  
+        recent_special_rate:
+          type: number
+          format: double
+          description: 최근 특수총 킬데스
+
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              description: 에러 명
+            message:
+              type: string
+              description: 에러 설명

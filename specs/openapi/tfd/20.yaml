@@ -1,0 +1,820 @@
+openapi: 3.0.3
+info:
+  title: The First Descendant API
+  version: 1.0.0
+  contact:
+    name: help_openapi@nexon.co.kr
+  description: |-
+    - 퍼스트 디센던트의 게임 데이터는 평균 10분 후 확인 가능합니다.
+    - 게임 콘텐츠 변경으로 ouid가 변경될 수 있습니다. ouid 기반 서비스 갱신 시 유의해 주시길 바랍니다.
+    - 계승자, 무기 등 각종 id 값에 대한 해석은 별도 제공되는 메타데이터 API (/meta/)를 참고하시기 바랍니다.
+    - 닉네임은 대소문자를 구분해서 입력해야 합니다.
+    - 게임에 접속한 지 6개월 이상 경과한 경우 데이터가 정상적으로 조회되지 않을 수 있습니다. 이 경우 게임에 로그인해 주시기 바랍니다.
+
+servers:
+  - url: 'https://open.api.nexon.com'
+tags:
+  - name: User
+    description: 계정 정보 조회
+
+paths:
+  /tfd/v1/id:
+    get:
+      tags:
+        - User
+      summary: 계정 식별자(ouid) 조회
+      description: 계정 식별자(ouid)를 조회합니다.
+      operationId: thefirstdescendant_get_user_id
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+          description: API KEY
+        - name: user_name
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 닉네임
+          example: 닉네임#1234
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /tfd/v1/user/basic:
+    get:
+      tags:
+        - User
+      summary: 기본 정보 조회
+      description: 기본 정보를 조회합니다.
+      operationId: thefirstdescendant_get_user_basic
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+          description: API KEY
+        - name: ouid
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 계정 식별자
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBasic'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /tfd/v1/user/descendant:
+    get:
+      tags:
+        - User
+      summary: 장착 계승자 정보 조회
+      description: 장착한 계승자 정보를 조회합니다.<br>- 장착 모듈 및 커스터마이징 정보의 경우 게임을 재접속하거나 매칭이 존재하는 콘텐츠를 완료한 후에 갱신됩니다.
+      operationId: thefirstdescendant_get_user_descendant
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+          description: API KEY
+        - name: ouid
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 계정 식별자
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDescendant'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /tfd/v1/user/weapon:
+    get:
+      tags:
+       - User
+      summary: 장착 무기 정보 조회
+      description: 장착한 모든 슬롯의 무기를 조회합니다.<br>- 장착 모듈 정보의 경우 게임을 재접속하거나 매칭이 존재하는 콘텐츠를 완료한 후에 갱신됩니다.
+      operationId: thefirstdescendant_get_user_weapon
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+          description: API KEY
+        - name: language_code
+          in: query
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+        - name: ouid
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 계정 식별자
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWeapon'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /tfd/v1/user/reactor:
+    get:
+      tags:
+       - User
+      summary: 장착 반응로 정보 조회
+      description: 장착한 반응로 정보를 조회합니다.
+      operationId: thefirstdescendant_get_user_reactor
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+          description: API KEY
+        - name: language_code
+          in: query
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+        - name: ouid
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 계정 식별자
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserReactor'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /tfd/v1/user/external-component:
+    get:
+      tags:
+       - User
+      summary: 장착 외장 부품 정보 조회
+      description: 장착한 모든 슬롯의 외장 부품 정보를 조회합니다.
+      operationId: thefirstdescendant_get_user_external-component
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+          description: API KEY
+        - name: language_code
+          in: query
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+        - name: ouid
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 계정 식별자
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserExternalComponent'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /tfd/v1/user/arche-tuning:
+    get:
+      tags:
+        - User
+      summary: 아르케 조율 정보 조회
+      description: |-
+        아르케 조율 정보를 조회합니다.
+        - 계승자 그룹별로 활성화한 노드와 해당 노드의 좌표를 조회합니다.
+      operationId: thefirstdescendant_get_user_arche_tuning
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+          description: API KEY
+        - name: ouid
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 계정 식별자
+        - name: descendant_group_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 계승자 그룹 식별자 (/meta/descendant-group API 참고)
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserArcheTuning'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+                
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        ouid:
+          type: string
+          description: 계정 식별자
+    UserBasic:
+      type: object
+      properties:
+        ouid:
+          type: string
+          description: 계정 식별자
+        user_name:
+          type: string
+          description: 닉네임
+          example: 닉네임#1234
+        platform_type:
+          type: string
+          description: 플랫폼 유형
+        mastery_rank_level:
+          type: number
+          format: int64
+          description: 마스터리 랭크
+        mastery_rank_exp:
+          type: number
+          format: int64
+          description: 마스터리 랭크 경험치
+        title_prefix_id:
+          type: string
+          description: 접두 칭호 식별자 (/meta/title API 참고)
+        title_suffix_id:
+          type: string
+          description: 접미 칭호 식별자 (/meta/title API 참고)
+        os_language:
+          type: string
+          description: OS 언어
+        game_language:
+          type: string
+          description: 게임 설정 언어
+        medal_id:
+          type: string
+          description: 훈장 식별자
+        medal_level:
+          type: number
+          format: int64
+          description: 훈장 단계
+    UserDescendant:
+      type: object
+      properties:
+        ouid:
+          type: string
+          description: 계정 식별자
+        user_name:
+          type: string
+          description: 닉네임
+          example: 닉네임#1234
+        descendant_id:
+          type: string
+          description: 장착중인 계승자 식별자 (/meta/descendant API 참고)
+        descendant_slot_id:
+          type: string
+          description: 계승자 슬롯 식별자
+        descendant_level:
+          type: number
+          format: int64
+          description: 장착중인 계승자 레벨
+        module_max_capacity:
+          type: number
+          format: int64
+          description: 장착 가능한 최대 모듈 수용량
+        module_capacity:
+          type: number
+          format: int64
+          description: 실제 적용된 수용량
+        energy_activator_use_count:
+          type: number
+          format: int64
+          description: 에너지 활성체 사용 횟수
+        module:
+          type: array
+          description: 모듈 정보
+          items:
+            type: object
+            properties:
+              module_slot_id:
+                type: string
+                description: 모듈 슬롯 식별자
+              module_id:
+                type: string
+                description: 모듈 식별자 (/meta/module API 참고)
+              module_enchant_level:
+                type: number
+                format: int64
+                description: 모듈 강화 레벨
+        customizing:
+          type: array
+          description: 커스터마이징 정보
+          items:
+            type: object
+            properties:
+              customizing_item_slot_id:
+                type: string
+                description: 커스터마이징 슬롯 식별자
+              customizing_item_type:
+                type: string
+                description: 커스터마이징 아이템 유형
+              customizing_item_id:
+                type: string
+                description: 커스터마이징 아이템 식별자 (/meta/customizing-item API 참고)
+              customizing_item_evolution_stage:
+                type: number
+                format: int64
+                description: 커스터마이징 아이템의 진화 단계
+              customizing_item_current_evolution_stage:
+                type: number
+                format: int64
+                description: 커스터마이징 아이템의 현재 선택된 진화 단계
+              paint:
+                type: array
+                description: 염색 정보
+                items:
+                  type: object
+                  properties:
+                    customizing_item_slot_id:
+                      type: string
+                      description: 염색 커스터마이징 슬롯 식별자
+                    customizing_item_type:
+                      type: string
+                      description: 염색 커스터마이징 아이템 유형
+                    customizing_item_id:
+                      type: string
+                      description: 염색 커스터마이징 아이템 식별자 (/meta/customizing-item API 참고)
+    UserWeapon:
+      type: object
+      properties:
+        ouid:
+          type: string
+          description: 계정 식별자
+        user_name:
+          type: string
+          description: 닉네임
+          example: 닉네임#1234
+        weapon:
+          type: array
+          description: 무기 정보
+          items:
+            type: object
+            properties:
+              module_max_capacity:
+                type: number
+                format: int64
+                description: 장착 가능한 최대 모듈 수용량
+              module_capacity:
+                type: number
+                format: int64
+                description: 실제 적용된 수용량
+              energy_activator_use_count:
+                type: number
+                format: int64
+                description: 에너지 활성체 사용 횟수
+              weapon_slot_id:
+                type: string
+                description: 무기 슬롯 식별자
+              weapon_id:
+                type: string
+                description: 무기 식별자 (/meta/weapon API 참고)
+              weapon_level:
+                type: number
+                format: int64
+                description: 무기 레벨
+              perk_ability_enchant_level:
+                type: number
+                format: int64
+                description: 무기 고유 능력 강화 단계
+              weapon_additional_stat:
+                type: array
+                description: 무기 랜덤 옵션 정보
+                items:
+                  type: object
+                  properties:
+                    additional_stat_name:
+                      type: string
+                      description: 무기 랜덤 옵션 이름
+                    additional_stat_value:
+                      type: string
+                      description: 무기 랜덤 옵션 값
+              module:
+                type: array
+                description: 모듈 정보
+                items:
+                  type: object
+                  properties:
+                    module_slot_id:
+                      type: string
+                      description: 모듈 슬롯 식별자
+                    module_id:
+                      type: string
+                      description: 모듈 식별자 (/meta/module API 참고)
+                    module_enchant_level:
+                      type: number
+                      format: int64
+                      description: 모듈 강화 레벨
+              core_unlock_flag:
+                type: string
+                description: 코어 개방 여부 (0:잠금 | 1:개방)
+              core:
+                type: array
+                description: 코어 옵션 정보
+                items:
+                  type: object
+                  properties:
+                    core_slot_id:
+                      type: string
+                      description: 코어 슬롯 식별자
+                    core_option_name:
+                      type: string
+                      description: 코어 옵션 이름
+                    core_option_value:
+                      type: string
+                      description: 코어 옵션 값
+    UserReactor:
+      type: object
+      properties:
+        ouid:
+          type: string
+          description: 계정 식별자
+        user_name:
+          type: string
+          description: 닉네임
+          example: 닉네임#1234
+        reactor_id:
+          type: string
+          description: 반응로 식별자 (/meta/reactor API 참고)
+        reactor_slot_id:
+          type: string
+          description: 반응로 슬롯 식별자
+        reactor_level:
+          type: number
+          format: int64
+          description: 반응로 레벨
+        reactor_additional_stat:
+          type: array
+          description: 반응로 랜덤 옵션
+          items:
+            type: object
+            properties:
+              additional_stat_name:
+                type: string
+                description: 반응로 랜덤 옵션 이름
+              additional_stat_value:
+                type: string
+                description: 반응로 랜덤 옵션 값
+        reactor_enchant_level:
+          type: number
+          format: int64
+          description: 반응로 강화 단계
+    UserExternalComponent:
+      type: object
+      properties:
+        ouid:
+          type: string
+          description: 계정 식별자
+        user_name:
+          type: string
+          description: 닉네임
+          example: 닉네임#1234
+        external_component:
+          type: array
+          description: 외장 부품 정보
+          items:
+            type: object
+            properties:
+              external_component_slot_id:
+                type: string
+                description: 외장 부품 슬롯 식별자
+              external_component_id:
+                type: string
+                description: 외장 부품 식별자 (/meta/external-component API 참고)
+              external_component_level:
+                type: number
+                format: int64
+                description: 외장 부품 레벨
+              external_component_additional_stat:
+                type: array
+                description: 외장 부품 랜덤 옵션
+                items:
+                  type: object
+                  properties:
+                    additional_stat_name:
+                      type: string
+                      description: 외장 부품 랜덤 옵션 이름
+                    additional_stat_value:
+                      type: string
+                      description: 외장 부품 랜덤 옵션 값
+              core_unlock_flag:
+                type: string
+                description: 코어 개방 여부 (0:잠금 | 1:개방)
+              core:
+                type: array
+                description: 코어 옵션 정보
+                items:
+                  type: object
+                  properties:
+                    core_slot_id:
+                      type: string
+                      description: 코어 슬롯 식별자
+                    core_option_name:
+                      type: string
+                      description: 코어 옵션 이름
+                    core_option_value:
+                      type: string
+                      description: 코어 옵션 값
+    UserArcheTuning:
+      type: object
+      properties:
+        ouid:
+          type: string
+          description: 계정 식별자
+        descendant_group_id:
+          type: string
+          description: 계승자 그룹 식별자 (/meta/descendant-group API 참고)
+        arche_tuning_board_group_id:
+          type: string
+          description: 아르케 조율 보드 그룹 식별자 (/meta/arche-tuning-board-group API 참고)
+        arche_tuning:
+          type: array
+          description: 아르케 조율 목록
+          items:
+            type: object
+            properties:
+              slot_id:
+                type: string
+                description: 슬롯 식별자
+              arche_tuning_board:
+                type: array
+                description: 아르케 조율 보드 목록
+                items:
+                  type: object
+                  properties:
+                    arche_tuning_board_id:
+                      type: string
+                      description: 아르케 조율 보드 식별자 (/meta/arche-tuning-board API 참고)
+                    node:
+                      type: array
+                      description: 노드 목록
+                      items:
+                        type: object
+                        properties:
+                          node_id:
+                            type: string
+                            description: 노드 식별자 (/meta/arche-tuning-node API 참고)
+                          position_row:
+                            type: string
+                            description: 노드의 행 좌표
+                          position_column:
+                            type: string
+                            description: 노드의 열 좌표
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              description: 에러 명
+            message:
+              type: string
+              description: 에러 설명

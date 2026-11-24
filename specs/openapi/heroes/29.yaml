@@ -1,0 +1,970 @@
+openapi: 3.0.3
+info:
+  title: 마비노기 영웅전 API
+  version: 1.0.0
+  contact:
+    name: help_openapi@nexon.co.kr
+  description: |-
+    - 마비노기 영웅전의 게임 데이터는 평균 10분 후 확인 가능합니다.
+    - 2022년 1월 1일 이후 데이터를 조회할 수 있습니다. (단, 2022년 1월 이전에 발생한 데이터는 응답 결과에 포함되지 않을 수 있음)
+    - 게임 콘텐츠 변경으로 ocid가 변경될 수 있습니다. ocid 기반 서비스 갱신 시 유의해 주시길 바랍니다.
+      
+servers:
+  - url: 'https://open.api.nexon.com'
+  
+tags:
+  - name: Character 
+    description: 캐릭터 정보 조회 V2
+  - name: MetaData 
+    description: 메타데이터 정보 조회
+
+paths:
+  /heroes/v2/id:
+  
+    get:
+      tags:
+        - Character
+      summary: 캐릭터 식별자(ocid) 조회
+      description: 캐릭터 식별자(ocid)를 조회합니다.
+      operationId: heroes_get_id
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: character_name
+          in: query
+          description: 영웅(캐릭터) 명
+          required: true
+          schema:
+            type: string
+            
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+                
+  /heroes/v2/character/basic:
+    get:
+      tags:
+        - Character
+      summary: 기본 정보 조회
+      description: 기본 정보를 조회합니다. <br>
+        버프, 아이템 사용 등으로 적용된 효과로 경험치 또는 레벨이 게임 내 데이터와 상이할 수 있습니다.
+
+      operationId: heroes_get_character_basic
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacterBasic'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+                
+  /heroes/v2/character/title:
+    get:
+      tags:
+        - Character
+      summary: 타이틀/문양 보유 정보 조회
+      description: 타이틀/문양 보유 정보를 조회합니다.<br>타이틀 타입(title_type)은 2023년 11월 23일 이후 획득(장착)한 타이틀/문양에 한해 조회할 수 있습니다.
+      operationId: heroes_get_character_title
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacterTitle'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /heroes/v2/character/title-equipment:
+    get:
+      tags:
+        - Character
+      summary: 장착 타이틀/문양 정보 조회
+      description: 장착 타이틀/문양 정보를 조회합니다.<br>타이틀 타입(title_type)은 2023년 11월 23일 이후 획득(장착)한 타이틀/문양에 한해 조회할 수 있습니다.
+      operationId: heroes_get_character_title-equipment
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacterTitleEquipment'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /heroes/v2/character/item-equipment:
+    get:
+      tags:
+        - Character
+      summary: 장착 아이템 정보 조회
+      description: 장착 아이템 정보를 조회합니다.
+      operationId: heroes_get_character_item_equipment
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacterItemEquipment'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /heroes/v2/character/stat:
+    get:
+      tags:
+        - Character
+      summary: 능력치 정보 조회
+      description: 능력치 정보를 조회합니다.
+      operationId: heroes_get_character_stat
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacterStat'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /heroes/v2/character/guild:
+    get:
+      tags:
+        - Character
+      summary: 가입/신청한 길드 정보 조회
+      description: 가입/신청한 길드 정보를 조회합니다.
+      operationId: heroes_get_character_guild
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacterGuild'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /heroes/v2/meta/enchant:
+    get:
+      tags:
+        - MetaData
+      summary: 인챈트 메타 데이터 조회
+      description: 인챈트 명을 입력하여 인챈트 등급 및 능력치를 조회합니다.
+      operationId: heroes_get_meta_enchant
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: enchant_type
+          in: query
+          description: |
+            접두/접미 타입
+            - 0 : 접두 인챈트
+            - 1 : 접미 인챈트
+          required: true
+          schema:
+            type: string
+            enum:
+              - "0"
+              - "1"            
+        - name: enchant_name
+          in: query
+          description: 인챈트 명
+          required: true
+          schema:
+            type: string
+
+
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnchantMeta'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+
+components:
+  schemas:
+    Character:
+      type: object
+      properties:
+        ocid:
+          type: string
+          description: 캐릭터 식별자
+          
+    CharacterBasic:
+      type: object
+      properties:
+        character_name:
+          type: string
+          description: 영웅(캐릭터) 명
+        character_date_create:
+          type: string
+          description: 영웅(캐릭터) 생성 일(시) (UTC0)
+          example: "2023-12-14T08:28:35Z"      
+        access_flag:
+          type: string
+          description: 최근 7일간 접속 여부 (true 접속, false 미접속)
+          example: "true"
+        character_class_name:
+          type: string
+          description: 영웅(캐릭터) 직업 명
+        character_gender:
+          type: string
+          description: 영웅(캐릭터) 성별
+        character_exp:
+          type: number
+          format: int64
+          description: 영웅(캐릭터) 경험치
+        character_level:
+          type: number
+          format: int64
+          description: 영웅(캐릭터) 레벨
+        cairde_name:
+          type: string
+          description: 카르제 이름
+        title_count:
+          type: number
+          format: int64
+          description: 획득한 내 타이틀 개수       
+        id_title_count:
+          type: number
+          format: int64
+          description: 내 타이틀로 획득하지 않은 ID 타이틀 개수   
+        total_title_count:
+          type: number
+          format: int64
+          description: 획득한 모든 타이틀 총 개수   
+        title_stat:
+          type: array
+          description: 타이틀로 오른 능력치의 합계 정보 
+          items:
+            type: object
+            properties:
+              stat_name:
+                type: string
+                description: 타이틀로 오른 능력치 명  
+              stat_value:
+                type: string
+                description: 타이틀로 오른 능력치 값    
+        skill_awakening:
+          type: array
+          description: 각성의 돌이 적용된 스킬 목록과 스킬 별 각성의 돌 정보  
+          items:
+            type: object
+            properties:
+              skill_name:
+                type: string
+                description: 스킬 명
+              item_name:
+                type: string
+                description: 사용된 각성의 돌  
+        dress_point:
+          type: object
+          description: 드레스 수집 포인트 정보
+          properties:
+            total_point:
+              type: number
+              format: int64
+              description: 드레스 수집 포인트
+            avatar_point:
+              type: number
+              format: int64
+              description: 아바타 수집 포인트
+            back_point:
+              type: number
+              format: int64
+              description: 등 수집 포인트
+            tail_point:
+              type: number
+              format: int64
+              description: 꼬리 수집 포인트
+            object_point:
+              type: number
+              format: int64
+              description: 오브젝트 수집 포인트
+          
+    CharacterTitle: 
+      type: object
+      properties:
+        title:
+          type: array
+          description: 타이틀/문양 정보
+          items:
+            type: object
+            properties:
+              title_type:
+                type: string
+                description: 타이틀 타입 (title:타이틀, pattern:문양)
+              title_name:
+                type: string
+                description: 타이틀/문양 명
+            
+    CharacterTitleEquipment: 
+      type: object
+      properties:
+        title_equipment:
+          type: array
+          description: 장착 타이틀/문양 정보
+          items:
+            properties:
+              title_equipment_type_name:
+                type: string
+                description: 장착 타이틀/문양 장착 위치 명
+              title_type:
+                type: string
+                description: 장착 타이틀 타입 (title:타이틀, pattern:문양)
+              title_name:
+                type: string
+                description: 장착 타이틀/문양 명
+
+    CharacterItemEquipment:
+      type: object
+      properties:
+        item_equipment:
+          type: array
+          description: 장착 아이템 정보
+          items:
+            type: object
+            properties:
+              item_equipment_page:
+                type: string
+                description: 장착 아이템 장착 페이지 (Bag:장착소지품, Cash:캐시소지품)
+              item_equipment_slot_name:
+                type: string
+                description: 장착 아이템 슬롯 명
+              item_name:
+                type: string
+                description: 장착 아이템 명
+              item_option:
+                type: object
+                description: 아이템 옵션 정보
+                properties:
+                  enhancement_level:
+                    type: number
+                    format: int64
+                    description: 강화 단계
+                  tuning_stat:
+                    type: array
+                    description: 아이템 연마 능력치
+                    items:
+                      type: object
+                      properties:
+                        stat_name:
+                          type: string
+                          description: 능력치 명
+                        stat_value:
+                          type: string
+                          description: 능력치 증가량
+                  ability_name:
+                    type: string
+                    description: 장비에 부여된 어빌리티 명
+                  prefix_enchant_use_preset_no:
+                    type: number
+                    format: int64
+                    description: |
+                      활성화된 접두 인챈트 프리셋  
+                      - 프리셋 정보는 장비를 장착 또는, 게임 재접속시 갱신됩니다. 
+                  suffix_enchant_use_preset_no:
+                    type: number
+                    format: int64
+                    description: |
+                      활성화된 접미 인챈트 프리셋  
+                      - 프리셋 정보는 장비를 장착 또는, 게임 재접속시 갱신됩니다. 
+                  prefix_enchant_preset_1:
+                    type: string
+                    description: 1번 프리셋 접두 인챈트 명
+                  suffix_enchant_preset_1:
+                    type: string
+                    description: 1번 프리셋 접미 인챈트 명
+                  prefix_enchant_preset_2:
+                    type: string
+                    description: 2번 프리셋 접두 인챈트 명
+                  suffix_enchant_preset_2:
+                    type: string
+                    description: 2번 프리셋 접미 인챈트 명
+                  power_infusion_use_preset_no:
+                    type: number
+                    format: int64
+                    description: |
+                      활성화된 정령합성 프리셋  
+                      - 프리셋 정보는 장비를 장착 또는, 게임 재접속시 갱신됩니다. 
+                  power_infusion_preset_1:
+                    type: array
+                    description: 1번 프리셋 정령합성 능력치
+                    items:
+                      type: object
+                      properties:
+                        stat_name:
+                          type: string
+                          description: 능력치 명
+                        stat_value:
+                          type: string
+                          description: 능력치 증가량
+                  power_infusion_preset_2:
+                    type: array
+                    description: 2번 프리셋 정령합성 능력치
+                    items:
+                      type: object
+                      properties:
+                        stat_name:
+                          type: string
+                          description: 능력치 명
+                        stat_value:
+                          type: string
+                          description: 능력치 증가량
+                  cash_item_color:
+                    type: object
+                    description: 캐시 아이템 및 이너아머 색상 정보  
+                    properties:
+                      color_1:
+                        type: string
+                        description: 색상 파트 1
+                      color_2:
+                        type: string
+                        description: 색상 파트 2
+                      color_3:
+                        type: string
+                        description: 색상 파트 3
+                      color_4:
+                        type: string
+                        description: 색상 파트 4
+                      color_5:
+                        type: string
+                        description: 색상 파트 5
+                  avatar_color_use_preset_no:
+                    type: number
+                    format: int64
+                    description: 사용 중인 아바타 및 아바타 하의 이너아머 아이템 색상 정보 프리셋
+                  avatar_color_preset_1:
+                    type: object
+                    description: 1번 아바타 색상 정보 프리셋   
+                    properties:
+                      color_1:
+                        type: string
+                        description: 색상 파트 1
+                      color_2:
+                        type: string
+                        description: 색상 파트 2
+                      color_3:
+                        type: string
+                        description: 색상 파트 3
+                      color_4:
+                        type: string
+                        description: 색상 파트 4
+                      color_5:
+                        type: string
+                        description: 색상 파트 5
+                  avatar_color_preset_2:
+                    type: object
+                    description: 2번 아바타 색상 정보 프리셋  
+                    properties:
+                      color_1:
+                        type: string
+                        description: 색상 파트 1
+                      color_2:
+                        type: string
+                        description: 색상 파트 2
+                      color_3:
+                        type: string
+                        description: 색상 파트 3
+                      color_4:
+                        type: string
+                        description: 색상 파트 4
+                      color_5:
+                        type: string
+                        description: 색상 파트 5
+                  avatar_color_preset_3:
+                    type: object
+                    description: 3번 아바타 색상 정보 프리셋    
+                    properties:
+                      color_1:
+                        type: string
+                        description: 색상 파트 1
+                      color_2:
+                        type: string
+                        description: 색상 파트 2
+                      color_3:
+                        type: string
+                        description: 색상 파트 3
+                      color_4:
+                        type: string
+                        description: 색상 파트 4
+                      color_5:
+                        type: string
+                        description: 색상 파트 5
+                  avatar_color_preset_4:
+                    type: object
+                    description: 4번 아바타 색상 정보 프리셋    
+                    properties:
+                      color_1:
+                        type: string
+                        description: 색상 파트 1
+                      color_2:
+                        type: string
+                        description: 색상 파트 2
+                      color_3:
+                        type: string
+                        description: 색상 파트 3
+                      color_4:
+                        type: string
+                        description: 색상 파트 4
+                      color_5:
+                        type: string
+                        description: 색상 파트 5
+                  avatar_color_preset_5:
+                    type: object
+                    description: 5번 아바타 색상 정보 프리셋    
+                    properties:
+                      color_1:
+                        type: string
+                        description: 색상 파트 1
+                      color_2:
+                        type: string
+                        description: 색상 파트 2
+                      color_3:
+                        type: string
+                        description: 색상 파트 3
+                      color_4:
+                        type: string
+                        description: 색상 파트 4
+                      color_5:
+                        type: string
+                        description: 색상 파트 5
+                  avatar_inner_armor_color_preset_1:
+                    type: object
+                    description: 1번 아바타 하의 이너아머 색상 정보 프리셋     
+                    properties:
+                      color_1:
+                        type: string
+                        description: 색상 파트 1
+                      color_2:
+                        type: string
+                        description: 색상 파트 2
+                      color_3:
+                        type: string
+                        description: 색상 파트 3
+                      color_4:
+                        type: string
+                        description: 색상 파트 4
+                      color_5:
+                        type: string
+                        description: 색상 파트 5
+                      default_color_flag:
+                        type: string
+                        description: 기본 색상 여부 (0:기본 색상 미적용, 1:기본 색상 적용)                        
+                  avatar_inner_armor_color_preset_2:
+                    type: object
+                    description: 2번 아바타 하의 이너아머 색상 정보 프리셋    
+                    properties:
+                      color_1:
+                        type: string
+                        description: 색상 파트 1
+                      color_2:
+                        type: string
+                        description: 색상 파트 2
+                      color_3:
+                        type: string
+                        description: 색상 파트 3
+                      color_4:
+                        type: string
+                        description: 색상 파트 4
+                      color_5:
+                        type: string
+                        description: 색상 파트 5
+                      default_color_flag:
+                        type: string
+                        description: 기본 색상 여부 (0:기본 색상 미적용, 1:기본 색상 적용)                                
+                  avatar_inner_armor_color_preset_3:
+                    type: object
+                    description: 3번 아바타 하의 이너아머 색상 정보 프리셋    
+                    properties:
+                      color_1:
+                        type: string
+                        description: 색상 파트 1
+                      color_2:
+                        type: string
+                        description: 색상 파트 2
+                      color_3:
+                        type: string
+                        description: 색상 파트 3
+                      color_4:
+                        type: string
+                        description: 색상 파트 4
+                      color_5:
+                        type: string
+                        description: 색상 파트 5
+                      default_color_flag:
+                        type: string
+                        description: 기본 색상 여부 (0:기본 색상 미적용, 1:기본 색상 적용)        
+                  avatar_inner_armor_color_preset_4:
+                    type: object
+                    description: 4번 아바타 하의 이너아머 색상 정보 프리셋    
+                    properties:
+                      color_1:
+                        type: string
+                        description: 색상 파트 1
+                      color_2:
+                        type: string
+                        description: 색상 파트 2
+                      color_3:
+                        type: string
+                        description: 색상 파트 3
+                      color_4:
+                        type: string
+                        description: 색상 파트 4
+                      color_5:
+                        type: string
+                        description: 색상 파트 5
+                      default_color_flag:
+                        type: string
+                        description: 기본 색상 여부 (0:기본 색상 미적용, 1:기본 색상 적용)       
+                  avatar_inner_armor_color_preset_5:
+                    type: object
+                    description: 5번 아바타 하의 이너아머 색상 정보 프리셋    
+                    properties:
+                      color_1:
+                        type: string
+                        description: 색상 파트 1
+                      color_2:
+                        type: string
+                        description: 색상 파트 2
+                      color_3:
+                        type: string
+                        description: 색상 파트 3
+                      color_4:
+                        type: string
+                        description: 색상 파트 4
+                      color_5:
+                        type: string
+                        description: 색상 파트 5
+                      default_color_flag:
+                        type: string
+                        description: 기본 색상 여부 (0:기본 색상 미적용, 1:기본 색상 적용)       
+
+    CharacterStat: 
+      type: object
+      properties:
+        stat:
+          type: array
+          description: 능력치 정보
+          items:
+            type: object
+            properties:
+              stat_name:
+                type: string
+                description: 능력치 명
+              stat_value:
+                type: string
+                description: 능력치 값  
+
+    CharacterGuild:
+      type: object
+      properties:
+        guild_name:
+          type: string
+          description: 가입/신청한 길드 명
+
+    EnchantMeta:
+      type: object
+      properties:
+        enchant_grade:
+          type: number
+          format: int64
+          description: 인챈트 등급
+        enchant_available_slot_name:
+          type: array
+          description: 인챈트 가능 부위
+          items:
+            type: string
+        enchant_stat:
+          type: array
+          description: 인챈트 능력치
+          items:
+            type: string
+
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              description: 에러 명
+              example: string
+            message:
+              type: string
+              description: 에러 설명
+              example: string

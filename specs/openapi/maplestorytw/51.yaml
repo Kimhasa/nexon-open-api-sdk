@@ -1,0 +1,250 @@
+openapi: 3.0.3
+info:
+  title: 楓之谷東南亞 API
+  version: 1.0.0
+  contact:
+    name: help_openapi@nexon.co.kr
+  description: |-
+    - 楓之谷遊戲資料平均在 15 分鐘後即可使用。
+    - 您可以從 2025 年 10 月 15 日起搜尋資料。
+    - 您可以輸入所需日期以搜尋過往資料。前一日的資料將於翌日凌晨 2:00 起提供。(當您搜尋 10 月 15 日的資料時，將會擷取從 15 日 00:00 到 16 日 00:00 的資料。)
+    - 由於遊戲內容變動，OCID 可能會有所變更。在更新以 OCID 為基礎的服務時，請務必留意。
+    - 此 API 提供來自楓之谷台灣的資料。
+servers:
+  - url: 'https://open.api.nexon.com'
+tags:
+  - name: 公會
+    description: 檢視公會資訊
+
+paths:
+  /maplestorytw/v1/guild/id:
+    get:
+      tags:
+        - 公會
+      summary: 檢視公會識別碼 (oguild_id) 資訊
+      description: 檢視公會識別碼 (oguild_id) 資訊。
+      operationId: maplestory_get_oguild_id
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: guild_name
+          in: query
+          description: 公會名稱
+          required: true
+          schema:
+            type: string
+        - name: world_name
+          in: query
+          description: |
+            世界名稱
+          required: true
+          schema:
+            type: string
+            enum:
+              - 艾麗亞
+              - 普力特
+              - 琉德
+              - 優依娜
+              - 愛麗西亞
+              - 米特拉
+              - 挑戰者
+              - 殺人鯨
+              - 賽蓮
+
+      responses:
+          '200':
+            description: SUCCESS
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Guild'
+          '400':
+            description: Bad Request
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+          '403':
+            description: Forbidden
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+          '429':
+            description: Too Many Requests
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+          '500':
+            description: Internal Server Error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+
+  /maplestorytw/v1/guild/basic:
+    get:
+      tags:
+        - 公會
+      summary: 檢視基本資訊
+      description: 檢視基本資訊。
+      operationId: maplestory_get_guild_basic
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: oguild_id
+          in: query
+          description: 公會識別碼
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: 要搜尋的日期 (TST，YYYY-MM-DD)
+          schema:
+            type: string
+
+      responses:
+          '200':
+            description: SUCCESS
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/GuildBasic'
+          '400':
+            description: Bad Request
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+          '403':
+            description: Forbidden
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+          '429':
+            description: Too Many Requests
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+          '500':
+            description: Internal Server Error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+
+
+components:
+  schemas:
+    Guild:
+      type: object
+      properties:
+        oguild_id:
+          type: string
+          description: 公會識別碼 
+    GuildBasic:
+      type: object
+      properties:
+        date:
+          type: string
+          description: 要搜尋的日期 (TST，每日資料中的小時與分鐘將顯示為 0)
+          example: "2025-10-15T00:00+08:00"
+        world_name:
+          type: string
+          description: 世界名稱
+        guild_name:
+          type: string
+          description: 公會名稱
+        guild_level:
+          type: number
+          format: int64
+          description: 公會等級
+        guild_fame:
+          type: number
+          format: int64
+          description: 公會名聲值
+        guild_point:
+          type: number
+          format: int64
+          description: 公會點數 (GP)
+        guild_master_name:
+          type: string
+          description: 公會會長角色名稱
+        guild_member_count:
+          type: number
+          format: int64
+          description: 公會成員人數
+        guild_member:
+          type: array
+          description: 公會成員清單
+          items:
+            type: string
+        guild_skill:
+          type: array
+          description: 公會技能清單
+          items:
+            type: object
+            properties:
+              skill_name:
+                type: string
+                description: 技能名稱
+              skill_description:
+                type: string
+                description: 技能描述
+              skill_level:
+                type: number
+                format: int64
+                description: 技能等級
+              skill_effect:
+                type: string
+                description: 技能等級的效果
+              skill_icon:
+                type: string
+                description: 技能圖示
+        guild_noblesse_skill:
+          type: array
+          description: 貴族技能清單
+          items:
+            type: object
+            properties:
+              skill_name:
+                type: string
+                description: 技能名稱
+              skill_description:
+                type: string
+                description: 技能描述
+              skill_level:
+                type: number
+                format: int64
+                description: 技能等級
+              skill_effect:
+                type: string
+                description: 技能等級的效果
+              skill_icon:
+                type: string
+                description: 技能圖示
+
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              description: 錯誤名稱
+            message:
+              type: string
+              description: 錯誤描述

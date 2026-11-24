@@ -1,0 +1,142 @@
+openapi: 3.0.3
+info:
+  title: The First Descendant API
+  version: 1.0.0
+  contact:
+    name: help_openapi@nexon.co.kr
+  description: |-
+    - 퍼스트 디센던트의 게임 데이터는 평균 10분 후 확인 가능합니다.
+    - 게임 콘텐츠 변경으로 ouid가 변경될 수 있습니다. ouid 기반 서비스 갱신 시 유의해 주시길 바랍니다.
+    - 계승자, 무기 등 각종 id 값에 대한 해석은 별도 제공되는 메타데이터 API (/meta/)를 참고하시기 바랍니다.
+    - 추천 모듈 조회는 보이드 요격전 성공 기록을 바탕으로 제공됩니다. 따라서 검색 조건에 해당하는 기록이 부족할 경우 빈 값으로 응답될 수 있습니다.
+servers:
+  - url: 'https://open.api.nexon.com'
+tags:
+  - name: Recommendation
+    description: 모듈 추천
+
+paths:
+  /tfd/v1/recommendation/module:
+    get:
+      tags:
+        - Recommendation
+      summary: 모듈 추천
+      description: 사용자에게 적합한 모듈을 추천합니다.
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          required: true
+          schema:
+            type: string
+          description: API KEY
+        - name: descendant_id
+          in: query
+          schema:
+            type: string
+          required: true
+          description: 계승자 식별자 (/meta/descendant API 참고)
+        - name: weapon_id
+          in: query
+          schema:
+            type: string
+          required: true
+          description: 무기 식별자 (/meta/weapon API 참고)
+        - name: void_battle_id
+          in: query
+          schema:
+            type: string
+          required: true
+          description: 보이드 요격전 식별자 (/meta/void-battle API 참고)
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum:
+            - 0
+            - 1
+            - 2
+          required: true
+          description: |
+            조회 기간
+            - 0: 최근 7일
+            - 1: 최근 30일
+            - 2: 전체
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModuleRecommendationResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+components:
+  schemas:
+    ModuleRecommendationResponse:
+      type: object
+      properties:
+        descendant:
+          type: object
+          properties:
+            descendant_id:
+              type: string
+              description: 계승자 식별자 (/meta/descendant API 참고)
+            recommendation:
+              type: array
+              description: 추천 정보
+              items:
+                type: object
+                properties:
+                  module_id:
+                    type: string
+                    description: 모듈 식별자 (/meta/module API 참고)
+        weapon:
+          type: object
+          properties:
+            weapon_id:
+              type: string
+              description: 무기 식별자 (/meta/weapon API 참고)
+            recommendation:
+              type: array
+              description: 추천 정보
+              items:
+                type: object
+                properties:
+                  module_id:
+                    type: string
+                    description: 모듈 식별자 (/meta/module API 참고)
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              description: 에러 명
+            message:
+              type: string
+              description: 에러 설명

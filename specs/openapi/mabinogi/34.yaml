@@ -1,0 +1,112 @@
+openapi: 3.0.3
+info:
+  title: 마비노기 API
+  version: 1.0.0
+  contact:
+    name: help_openapi@nexon.co.kr
+  description: |-
+    - 마비노기의 게임 데이터는 평균 10분 후 확인 가능합니다.
+    - 거대한 외침의 뿔피리 내역은 조회 시점 기준 최근 1시간, 최대 1000개의 정보를 제공합니다.
+    - 거대한 외침의 뿔피리로 입력한 문구의 경우 큰따옴표(")와 역슬래시(\\)는 제거된 후 제공됩니다.
+
+servers:
+  - url: 'https://open.api.nexon.com'
+
+tags:
+  - name: Horn Bugle - World
+    description: 거대한 외침의 뿔피리 내역 조회
+
+paths:
+  /mabinogi/v1/horn-bugle-world/history:
+    get:
+      tags:
+        - Horn Bugle - World
+      summary: 거대한 외침의 뿔피리 내역 조회
+      description: 거대한 외침의 뿔피리 아이템을 사용해 서버 내 모든 채널에 전송한 대화 내역 조회
+      operationId: mabinogi_get_horn_bugle_world_history
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: server_name
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - 류트
+              - 만돌린
+              - 하프
+              - 울프
+          description: 서버 이름
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HornBugleWorldHistory'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+components:
+  schemas:
+    HornBugleWorldHistory:
+      type: object
+      properties:
+        horn_bugle_world_history:
+            type: array
+            description: 거대한 외침의 뿔피리 내역
+            items:
+              type: object
+              properties:
+                character_name:
+                  type: string
+                  description: 발화한 유저의 캐릭터명
+                message:
+                  type: string
+                  description: 발화한 거대한 외침의 뿔피리 내용
+                date_send:
+                  type: string
+                  example: "2024-09-01T08:28:350Z"
+                  description: 발화한 시각 (UTC0)
+
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              description: 에러 명
+              example: string
+            message:
+              type: string
+              description: 에러 설명
+              example: string

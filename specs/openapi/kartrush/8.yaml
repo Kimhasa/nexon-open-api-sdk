@@ -1,0 +1,247 @@
+openapi: 3.0.3
+info:
+  title: 카트라이더 러쉬플러스 API
+  version: 1.0.0
+  contact:
+    name: help_openapi@nexon.co.kr
+  description: |-
+    - 카트라이더 러쉬플러스의 게임 데이터는 평균 10분 후 확인 가능합니다.
+    - 2022년 1월 1일 이후 데이터를 조회할 수 있습니다. (단, 2022년 1월 이전에 발생한 데이터는 응답 결과에 포함되지 않을 수 있음)
+    - 게임 콘텐츠 변경으로 ouid가 변경될 수 있습니다. ouid 기반 서비스 갱신 시 유의해 주시길 바랍니다. 
+
+servers:
+  - url: 'https://open.api.nexon.com'
+
+tags:
+  - name: User
+    description: 계정 정보 조회
+
+paths:
+  /kartrush/v1/id:
+    get:
+      tags:
+        - User
+      summary: 계정 식별자(ouid) 조회
+      description: 계정 식별자(ouid)를 조회합니다.<br> 라이더(계정) 명에 특수문자 '|'를 포함하는 경우 '_'로 변환 후 입력해주시길 바랍니다.<br> 예시) |카러플라이더| → \_카러플라이더\_
+      operationId: kartrush_get_id
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: racer_name
+          in: query
+          description: 라이더(계정) 명
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+                
+  /kartrush/v1/user/basic:
+    get:
+      tags:
+        - User
+      summary: 기본 정보 조회
+      description: 기본 정보를 조회합니다.
+      operationId: kartrush_get_user_basic
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ouid
+          in: query
+          description: 계정 식별자
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBasic'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+                
+  /kartrush/v1/user/title-equipment:
+    get:
+      tags:
+        - User
+      summary: 장착 칭호 정보 조회
+      description: 장착 칭호 정보를 조회합니다.
+      operationId: kartrush_get_user_title-equipment
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ouid
+          in: query
+          description: 계정 식별자
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTitleEquipment'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        ouid_info:
+          type: array
+          description: 계정 식별자 정보
+          items:
+            properties:
+              ouid:
+                type: string
+                description: 계정 식별자 
+              racer_date_create:
+                type: string
+                description: 라이더(계정) 생성 일(시) (UTC0)
+                example: "2023-12-14T08:28:35Z"
+              racer_level:
+                type: string
+                format: int64
+                description: 라이더(계정) 레벨
+
+    UserBasic:
+      type: object
+      properties:
+        racer_name:
+          type: string
+          description: 라이더(계정) 명
+        racer_date_create:
+          type: string
+          description: 라이더(계정) 생성 일(시) (UTC0)
+          example: "2023-12-14T08:28:35Z"
+        racer_date_last_login:
+          type: string
+          description: 라이더(계정) 마지막 로그인 일(시) (UTC0)
+          example: "2023-12-14T08:28:35Z"
+        racer_date_last_logout:
+          type: string
+          description: 라이더(계정) 마지막 로그아웃 일(시) (UTC0)
+          example: "2023-12-14T08:28:35Z"
+        racer_level:
+          type: number
+          format: int64
+          description: 라이더(계정) 레벨
+
+    UserTitleEquipment: 
+      type: object
+      properties:
+        title_equipment:
+          type: array
+          description: 장착 칭호 정보
+          items:
+            properties:
+              title_name:
+                type: string
+                description: 장착 칭호 명
+
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              description: 에러 명
+              example: string
+            message:
+              type: string
+              description: 에러 설명
+              example: stirng

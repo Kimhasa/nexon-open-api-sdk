@@ -1,0 +1,2546 @@
+{
+  "games": [
+    {
+      "categories": [
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "baram/13.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/baram/13_ko_script20241017011213.yaml",
+          "id": 13,
+          "language": "ko",
+          "name": "캐릭터 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "baram_get_character_basic",
+              "path": "/baram/v1/character/basic",
+              "summary": "기본 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "baram_get_character_guild",
+              "path": "/baram/v1/character/guild",
+              "summary": "가입한 길드 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "baram_get_character_item-equipment",
+              "path": "/baram/v1/character/item-equipment",
+              "summary": "장착 아이템 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "baram_get_character_stat",
+              "path": "/baram/v1/character/stat",
+              "summary": "능력치 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "baram_get_character_title",
+              "path": "/baram/v1/character/title",
+              "summary": "칭호 보유 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "baram_get_character_title-equipment",
+              "path": "/baram/v1/character/title-equipment",
+              "summary": "장착 칭호 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "baram_get_id",
+              "path": "/baram/v1/id",
+              "summary": "캐릭터 식별자(ocid) 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "71992981c3daca0c99312a4c525b25775b06f553a6628ae7bc82a6e110b87e82",
+          "timestamp": "20241017011213"
+        }
+      ],
+      "external": false,
+      "externalUrl": null,
+      "name": "바람의나라",
+      "nameEng": "The Kingdom of the Winds",
+      "slug": "baram"
+    },
+    {
+      "categories": [
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "baramy/7.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/baramy/7_script00000000000000.yaml",
+          "id": 7,
+          "language": "ko",
+          "name": "캐릭터 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "baramy_get_character_basic",
+              "path": "/baramy/v1/character/basic",
+              "summary": "기본 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "baramy_get_character_title",
+              "path": "/baramy/v1/character/title",
+              "summary": "칭호 보유 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "baramy_get_character_title_equipment",
+              "path": "/baramy/v1/character/title-equipment",
+              "summary": "장착 칭호 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "baramy_get_id",
+              "path": "/baramy/v1/id",
+              "summary": "캐릭터 식별자(ocid) 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "c84ce13683baa3b36f790916d22a72ba9fbcbfc87308c344ab4219a11785fe4e",
+          "timestamp": "00000000000000"
+        }
+      ],
+      "external": false,
+      "externalUrl": null,
+      "name": "바람의나라: 연",
+      "nameEng": "THE KINGDOM OF THE WINDS: LEGENDS",
+      "slug": "baramy"
+    },
+    {
+      "categories": [],
+      "external": true,
+      "externalUrl": "https://developers.neople.co.kr/contents/apiDocs/cyphers",
+      "name": "사이퍼즈",
+      "nameEng": "CYPHERS",
+      "slug": "cyphers"
+    },
+    {
+      "categories": [],
+      "external": true,
+      "externalUrl": "https://developers.neople.co.kr/contents/apiDocs/df",
+      "name": "던전앤파이터",
+      "nameEng": "DUNGEON&FIGHTER",
+      "slug": "df"
+    },
+    {
+      "categories": [
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "fconline/2.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/fconline/2_script00000000000000.yaml",
+          "id": 2,
+          "language": "ko",
+          "name": "계정 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "fconline_get_user_by_nickname",
+              "path": "/fconline/v1/id",
+              "summary": "계정 식별자(ouid) 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "fconline_get_user_by_id",
+              "path": "/fconline/v1/user/basic",
+              "summary": "기본 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "fconline_get_match_by_id (중복되지 않아야 합니다.)",
+              "path": "/fconline/v1/user/match",
+              "summary": "유저의 매치 기록 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "fconline_get_maxdivision_by_id",
+              "path": "/fconline/v1/user/maxdivision",
+              "summary": "역대 최고 등급 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "fconline_get_market_by_tradetype",
+              "path": "/fconline/v1/user/trade",
+              "summary": "유저의 거래 기록 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "2fdce6b8d53b2f3288f34a5f0dcc71742282003c270069496819d5bceee900cb",
+          "timestamp": "00000000000000"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "fconline/3.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/fconline/3_ko_script20261105065745.yaml",
+          "id": 3,
+          "language": "ko",
+          "name": "매치 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "fconline_get_match_by_matchid",
+              "path": "/fconline/v1/match-detail",
+              "summary": "매치 상세 기록 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "7039770c107bc1bf359ba205011e634b1098036cdb364015e1bec7f7b807b728",
+          "timestamp": "20261105065745"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "fconline/4.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/fconline/4_script00000000000000.yaml",
+          "id": 4,
+          "language": "ko",
+          "name": "랭커 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "fconline_get_ranker_stat",
+              "path": "/fconline/v1/ranker-stats",
+              "summary": "TOP 10,000 랭커 유저가 사용한 선수의 20경기"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "10baab8c384073a9d46cfdc969ddd34e2c8a5c05f9d1e8622b62ccf1d65f79db",
+          "timestamp": "00000000000000"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "fconline/5.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/fconline/5_ko_script20261105065717.yaml",
+          "id": 5,
+          "language": "ko",
+          "name": "메타데이터 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "fconline_get_class",
+              "path": "/static/fconline/meta/class.json",
+              "summary": "클래스(class) 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "fconline_get_division_volta",
+              "path": "/static/fconline/meta/division-volta.json",
+              "summary": "볼타 공식경기 등급 식별자 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "fconline_get_division",
+              "path": "/static/fconline/meta/division.json",
+              "summary": "등급 식별자(division) 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "fconline_get_matchtype",
+              "path": "/static/fconline/meta/matchtype.json",
+              "summary": "매치 종류(matchtype) 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "fconline_get_season",
+              "path": "/static/fconline/meta/season.json",
+              "summary": "시즌(season) 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "fconline_get_seasonid",
+              "path": "/static/fconline/meta/seasonid.json",
+              "summary": "시즌 아이디(seasonId) 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "fconline_get_spid",
+              "path": "/static/fconline/meta/spid.json",
+              "summary": "선수 고유 식별자(spid) 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "fconline_get_spposition",
+              "path": "/static/fconline/meta/spposition.json",
+              "summary": "선수 포지션(spposition) 메타데이터 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "16627c8c2d66df6240d931feb3b360d1aba4a0e20589569ecf0ccb00d2c3cc2b",
+          "timestamp": "20261105065717"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "fconline/6.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/fconline/6_script00000000000000.yaml",
+          "id": 6,
+          "language": "ko",
+          "name": "이미지 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "fconline_get_img_by_pid",
+              "path": "/live/externalAssets/common/players/p{pid}.png",
+              "summary": "선수 식별자(pid)로 선수 이미지 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "fconline_get_img_by_spid",
+              "path": "/live/externalAssets/common/players/p{spid}.png",
+              "summary": "선수 고유 식별자(spid)로 선수 이미지 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "fconline_get_action_img_by_pid",
+              "path": "/live/externalAssets/common/playersAction/p{pid}.png",
+              "summary": "선수 식별자(pid)로 선수 액션샷 이미지 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "fconline_get_action_img_by_spid",
+              "path": "/live/externalAssets/common/playersAction/p{spid}.png",
+              "summary": "선수 고유 식별자(spid)로 선수 액션샷 이미지 조회"
+            }
+          ],
+          "servers": [
+            "https://fco.dn.nexoncdn.co.kr"
+          ],
+          "sha256": "fa509e05095e68c24b13e5965dd1a67a9de84520a2625199af32adb67bd0df70",
+          "timestamp": "00000000000000"
+        }
+      ],
+      "external": false,
+      "externalUrl": null,
+      "name": "EA SPORTS FC 온라인",
+      "nameEng": "EA SPORTS™ FC Online",
+      "slug": "fconline"
+    },
+    {
+      "categories": [
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "heroes/28.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/heroes/31_ko_script20240718041747.yaml",
+          "id": 28,
+          "language": "ko",
+          "name": "공지 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "heroes_get_notice",
+              "path": "/heroes/v1/notice",
+              "summary": "공지사항 목록 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "heroes_get_event_notice",
+              "path": "/heroes/v1/notice-event",
+              "summary": "이벤트&샵 목록 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "heroes_get_event_notice_detail",
+              "path": "/heroes/v1/notice-event/detail",
+              "summary": "이벤트&샵 상세 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "heroes_get_patch_notice",
+              "path": "/heroes/v1/notice-patch",
+              "summary": "패치노트 목록 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "heroes_get_patch_notice_detail",
+              "path": "/heroes/v1/notice-patch/detail",
+              "summary": "패치노트 상세 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "heroes_get_notice_detail",
+              "path": "/heroes/v1/notice/detail",
+              "summary": "공지사항 상세 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "82a92372e83834f6917dd686557a598ef992c1f810e9a295717d30fbf940f44d",
+          "timestamp": "20240718041747"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "heroes/29.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/heroes/32_ko_script20260507010048.yaml",
+          "id": 29,
+          "language": "ko",
+          "name": "캐릭터 정보 조회 V2",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "heroes_get_character_basic",
+              "path": "/heroes/v2/character/basic",
+              "summary": "기본 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "heroes_get_character_guild",
+              "path": "/heroes/v2/character/guild",
+              "summary": "가입/신청한 길드 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "heroes_get_character_item_equipment",
+              "path": "/heroes/v2/character/item-equipment",
+              "summary": "장착 아이템 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "heroes_get_character_stat",
+              "path": "/heroes/v2/character/stat",
+              "summary": "능력치 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "heroes_get_character_title",
+              "path": "/heroes/v2/character/title",
+              "summary": "타이틀/문양 보유 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "heroes_get_character_title-equipment",
+              "path": "/heroes/v2/character/title-equipment",
+              "summary": "장착 타이틀/문양 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "heroes_get_id",
+              "path": "/heroes/v2/id",
+              "summary": "캐릭터 식별자(ocid) 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "heroes_get_meta_enchant",
+              "path": "/heroes/v2/meta/enchant",
+              "summary": "인챈트 메타 데이터 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "64070b1d392b8c0f1f0eca7ba47fae2197b58d7d0f2539fb969afddee6a64faf",
+          "timestamp": "20260507010048"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "heroes/30.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/heroes/34_ko_script20250102005953.yaml",
+          "id": 30,
+          "language": "ko",
+          "name": "거래소 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "heroes_get_gold_market_buy_top_30",
+              "path": "/heroes/v2/marketplace/gold-market-buy-top-30",
+              "summary": "최근 1주 골드 구매 상위 30명의 구매량 정보"
+            },
+            {
+              "method": "GET",
+              "operationId": "heroes_get_gold_market_sell_top_30",
+              "path": "/heroes/v2/marketplace/gold-market-sell-top-30",
+              "summary": "최근 1주 골드 판매 상위 30명의 판매량 정보"
+            },
+            {
+              "method": "GET",
+              "operationId": "heroes_get_marketplace_history",
+              "path": "/heroes/v2/marketplace/market-history",
+              "summary": "최근 1주 아이템 거래 기록 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "65779e1a4f7b0d456e72a43f8f73547e0c5800bb39989dae11334bb059fb77c5",
+          "timestamp": "20250102005953"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "heroes/31.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/heroes/33_ko_script20240905023046.yaml",
+          "id": 31,
+          "language": "ko",
+          "name": "랭킹 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "heroes_get_ranking_hall_of_honor",
+              "path": "/heroes/v2/ranking/hall-of-honor",
+              "summary": "명예의 전당 랭킹 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "heroes_get_ranking_real_time",
+              "path": "/heroes/v2/ranking/real-time",
+              "summary": "실시간 랭킹 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "08336118d36b83a4e2ac63144fea6aac04aade7096366ad76893c1af797a6a2e",
+          "timestamp": "20240905023046"
+        }
+      ],
+      "external": false,
+      "externalUrl": null,
+      "name": "마비노기 영웅전",
+      "nameEng": "Mabinogi: Heroes",
+      "slug": "heroes"
+    },
+    {
+      "categories": [
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "hit2/10.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/hit2/10_ko_script20241010014516.yaml",
+          "id": 10,
+          "language": "ko",
+          "name": "캐릭터 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "hit2_get_character_basic",
+              "path": "/hit2/v1/character/basic",
+              "summary": "기본 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "hit2_get_id",
+              "path": "/hit2/v1/id",
+              "summary": "캐릭터 식별자(ocid) 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "4b36e5ba5dcf3a27983305a713bda56069e61283be24c5f5e2d0293363e07b06",
+          "timestamp": "20241010014516"
+        }
+      ],
+      "external": false,
+      "externalUrl": null,
+      "name": "히트2",
+      "nameEng": "HIT2",
+      "slug": "hit2"
+    },
+    {
+      "categories": [
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "kartrush/8.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/kartrush/8_ko_script20240627052656.yaml",
+          "id": 8,
+          "language": "ko",
+          "name": "계정 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "kartrush_get_id",
+              "path": "/kartrush/v1/id",
+              "summary": "계정 식별자(ouid) 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "kartrush_get_user_basic",
+              "path": "/kartrush/v1/user/basic",
+              "summary": "기본 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "kartrush_get_user_title-equipment",
+              "path": "/kartrush/v1/user/title-equipment",
+              "summary": "장착 칭호 정보 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "6a3eeb8e7b410efbaa642b4cc3ea38d6861b1e989e508921ae45d0109654ad2c",
+          "timestamp": "20240627052656"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "kartrush/27.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/kartrush/30_ko_script20240718041616.yaml",
+          "id": 27,
+          "language": "ko",
+          "name": "공지 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "kartrush_get_notice",
+              "path": "/kartrush/v1/notice",
+              "summary": "공지사항 목록 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "kartrush_get_event_notice",
+              "path": "/kartrush/v1/notice-event",
+              "summary": "이벤트&대회 공지 목록 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "kartrush_get_event_notice_detail",
+              "path": "/kartrush/v1/notice-event/detail",
+              "summary": "이벤트&대회 공지 상세 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "kartrush_get_season_notice",
+              "path": "/kartrush/v1/notice-season",
+              "summary": "시즌 알림판 목록 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "kartrush_get_season_notice_detail",
+              "path": "/kartrush/v1/notice-season/detail",
+              "summary": "시즌 알림판 상세 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "kartrush_get_notice_detail",
+              "path": "/kartrush/v1/notice/detail",
+              "summary": "공지사항 상세 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "45213314a22bd2baf0fc8b3a565fe0608463c421e3ddb4f76b344edaa585ddaf",
+          "timestamp": "20240718041616"
+        }
+      ],
+      "external": false,
+      "externalUrl": null,
+      "name": "카트라이더 러쉬플러스",
+      "nameEng": "KartRider Rush+",
+      "slug": "kartrush"
+    },
+    {
+      "categories": [
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "mabinogi/32.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/mabinogi/35_ko_script20241024033006.yaml",
+          "id": 32,
+          "language": "ko",
+          "name": "NPC 상점 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "mabinogi_get_npcshop_list",
+              "path": "/mabinogi/v1/npcshop/list",
+              "summary": "NPC 상점 카탈로그 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "bf9f5a8fbd328431dce8e8c3b5f2bd01960d4736bea572f647fe79384ffbb516",
+          "timestamp": "20241024033006"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "mabinogi/33.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/mabinogi/36_ko_script20250410023004.yaml",
+          "id": 33,
+          "language": "ko",
+          "name": "경매장 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "mabinogi_get_auction_history",
+              "path": "/mabinogi/v1/auction/history",
+              "summary": "경매장 거래 내역 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "mabinogi_get_keyword_search",
+              "path": "/mabinogi/v1/auction/keyword-search",
+              "summary": "경매장 매물 키워드 검색"
+            },
+            {
+              "method": "GET",
+              "operationId": "mabinogi_get_auction_list",
+              "path": "/mabinogi/v1/auction/list",
+              "summary": "경매장 매물 검색"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "4f0cf8c7fce8c68e6d6070ad70d9357357db6e242992159d3b43f39c07dd7d5a",
+          "timestamp": "20250410023004"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "mabinogi/34.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/mabinogi/37_ko_script20241017040929.yaml",
+          "id": 34,
+          "language": "ko",
+          "name": "거대한 외침의 뿔피리 내역 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "mabinogi_get_horn_bugle_world_history",
+              "path": "/mabinogi/v1/horn-bugle-world/history",
+              "summary": "거대한 외침의 뿔피리 내역 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "d3038e54b15cc0bc69308711ccba43432bd4701e77b0b8767dc7a46e62caca8d",
+          "timestamp": "20241017040929"
+        }
+      ],
+      "external": false,
+      "externalUrl": null,
+      "name": "마비노기",
+      "nameEng": "Mabinogi",
+      "slug": "mabinogi"
+    },
+    {
+      "categories": [
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "maplestory/14.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/maplestory/14_ko_script20261119040046.yaml",
+          "id": 14,
+          "language": "ko",
+          "name": "캐릭터 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/ability",
+              "summary": "어빌리티 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/android-equipment",
+              "summary": "장착 안드로이드 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/basic",
+              "summary": "기본 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/beauty-equipment",
+              "summary": "장착 헤어, 성형, 피부 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/cashitem-equipment",
+              "summary": "장착 캐시 장비 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/dojang",
+              "summary": "무릉도장 최고 기록 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/hexamatrix",
+              "summary": "HEXA 코어 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/hexamatrix-stat",
+              "summary": "HEXA 매트릭스 설정 HEXA 스탯 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/hyper-stat",
+              "summary": "하이퍼스탯 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/item-equipment",
+              "summary": "장착 장비 정보 조회 (캐시 장비 제외)"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/link-skill",
+              "summary": "장착 링크 스킬 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/list",
+              "summary": "캐릭터 목록 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/other-stat",
+              "summary": "기타 능력치 영향 요소 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/pet-equipment",
+              "summary": "장착 펫 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/popularity",
+              "summary": "인기도 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/propensity",
+              "summary": "성향 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/ring-exchange-skill-equipment",
+              "summary": "링 익스체인지 스킬 등록 장비 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/ring-reserve-skill-equipment",
+              "summary": "예비 특수 반지 장착 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/set-effect",
+              "summary": "적용 세트 효과 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/skill",
+              "summary": "스킬 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/stat",
+              "summary": "종합 능력치 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/symbol-equipment",
+              "summary": "장착 심볼 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/character/vmatrix",
+              "summary": "V매트릭스 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/id",
+              "summary": "캐릭터 식별자(ocid) 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/user/achievement",
+              "summary": "업적 정보 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "3aeca09216479b52135d7398e0e3e6e46af89a29664dab8eb89612e257094178",
+          "timestamp": "20261119040046"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "maplestory/15.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/maplestory/15_ko_script20260618050040.yaml",
+          "id": 15,
+          "language": "ko",
+          "name": "유니온 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_union",
+              "path": "/maplestory/v1/user/union",
+              "summary": "유니온 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_union_artifact",
+              "path": "/maplestory/v1/user/union-artifact",
+              "summary": "유니온 아티팩트 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_union_champion",
+              "path": "/maplestory/v1/user/union-champion",
+              "summary": "유니온 챔피언 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_union_raider",
+              "path": "/maplestory/v1/user/union-raider",
+              "summary": "유니온 공격대 정보 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "dc1be7d7599d37eb0188dcc7ae8524ee5ca1ecba6d4aaf703ca269f766f20263",
+          "timestamp": "20260618050040"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "maplestory/16.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/maplestory/16_ko_script20260723040144.yaml",
+          "id": 16,
+          "language": "ko",
+          "name": "길드 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/guild/basic",
+              "summary": "기본 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/guild/id",
+              "summary": "길드 식별자(oguild_id) 정보 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "d9c40e2acc813dd76d22bf6cce1beb956964b5cdcb47d0575d3bd670aa4bc58e",
+          "timestamp": "20260723040144"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "maplestory/17.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/maplestory/17_ko_script20261022040249.yaml",
+          "id": 17,
+          "language": "ko",
+          "name": "확률 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/legacy/ouid",
+              "summary": "계정 식별자(ouid) 조회 (구 API KEY 사용)"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_cube_histories",
+              "path": "/maplestory/v1/history/cube",
+              "summary": "큐브 및 특수 재화 사용 결과 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_potential_histories",
+              "path": "/maplestory/v1/history/potential",
+              "summary": "잠재능력 재설정 이용 결과 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_soul_potential_histories",
+              "path": "/maplestory/v1/history/soul-potential",
+              "summary": "소울 잠재능력 재설정 이용 결과 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "get_meta",
+              "path": "/maplestory/v1/history/starforce",
+              "summary": "스타포스 강화 결과 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/ouid",
+              "summary": "계정 식별자(ouid) 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "49aabbdf34185e39a8d67f5ce8c431a2d1451a0b38012254f1ecf3bb32876765",
+          "timestamp": "20261022040249"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "maplestory/18.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/maplestory/18_ko_script20261022021131.yaml",
+          "id": 18,
+          "language": "ko",
+          "name": "랭킹 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "get_achv_ranking",
+              "path": "/maplestory/v1/ranking/achievement",
+              "summary": "업적 랭킹 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "get_dojang_ranking",
+              "path": "/maplestory/v1/ranking/dojang",
+              "summary": "무릉도장 랭킹 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "get_guild_ranking",
+              "path": "/maplestory/v1/ranking/guild",
+              "summary": "길드 랭킹 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "get_overall_ranking",
+              "path": "/maplestory/v1/ranking/overall",
+              "summary": "종합 랭킹 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "get_theseed_ranking",
+              "path": "/maplestory/v1/ranking/theseed",
+              "summary": "더 시드 랭킹 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "get_union_ranking",
+              "path": "/maplestory/v1/ranking/union",
+              "summary": "유니온 랭킹 정보 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "bd49bb3f879e49e8ce75362965e8908762836e3ae40779e0222740a0758fb0c6",
+          "timestamp": "20261022021131"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "maplestory/24.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/maplestory/27_ko_script20251218035959.yaml",
+          "id": 24,
+          "language": "ko",
+          "name": "공지 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_notice",
+              "path": "/maplestory/v1/notice",
+              "summary": "공지사항 목록 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_cashshop_notice",
+              "path": "/maplestory/v1/notice-cashshop",
+              "summary": "캐시샵 공지 목록 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_cashshop_notice_detail",
+              "path": "/maplestory/v1/notice-cashshop/detail",
+              "summary": "캐시샵 공지 상세 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_event_notice",
+              "path": "/maplestory/v1/notice-event",
+              "summary": "진행 중 이벤트 목록 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_event_notice_detail",
+              "path": "/maplestory/v1/notice-event/detail",
+              "summary": "진행 중 이벤트 상세 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_update_notice",
+              "path": "/maplestory/v1/notice-update",
+              "summary": "업데이트 목록 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_update_notice_detail",
+              "path": "/maplestory/v1/notice-update/detail",
+              "summary": "업데이트 상세 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_notice_detail",
+              "path": "/maplestory/v1/notice/detail",
+              "summary": "공지사항 상세 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "2f0102975552aa3aacd7d4ecde8b5b372b7c7f579a8ddd7bf6834e07e14e4978",
+          "timestamp": "20251218035959"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "maplestory/55.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/maplestory/59_ko_script20261022041825.yaml",
+          "id": 55,
+          "language": "ko",
+          "name": "연무장 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/battle-practice/character-info",
+              "summary": "연무장 입장 시 캐릭터 능력치 관련 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/battle-practice/replay-id",
+              "summary": "연무장 리플레이 식별자 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/battle-practice/result",
+              "summary": "연무장 측정 결과 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/battle-practice/skill-timeline",
+              "summary": "연무장 스킬 사용 내역 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "a222537a1d8abb45e66a059bda72a33c13274e4f8296cb93d6521936f1f78e68",
+          "timestamp": "20261022041825"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "maplestory/57.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/maplestory/62_ko_script20260821005015.yaml",
+          "id": 57,
+          "language": "ko",
+          "name": "스케줄러 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestory/v1/scheduler/character-state",
+              "summary": "캐릭터의 스케줄러 정보 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "946f72816633c722c2767f2d58920e0f85775a124039a6d0fdce92baf5218e2a",
+          "timestamp": "20260821005015"
+        }
+      ],
+      "external": false,
+      "externalUrl": null,
+      "name": "메이플스토리",
+      "nameEng": "MapleStory",
+      "slug": "maplestory"
+    },
+    {
+      "categories": [
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "maplestorym/1.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/maplestorym/1_ko_script20261015010017.yaml",
+          "id": 1,
+          "language": "ko",
+          "name": "캐릭터 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/character/android-equipment",
+              "summary": "장착 안드로이드 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestorym_get_character_basic",
+              "path": "/maplestorym/v1/character/basic",
+              "summary": "기본 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestorym_get_character_beauty_equipment",
+              "path": "/maplestorym/v1/character/beauty-equipment",
+              "summary": "장착 헤어, 성형, 피부 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/character/cashitem-equipment",
+              "summary": "장착 캐시 아이템 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestorym_get_character_guild",
+              "path": "/maplestorym/v1/character/guild",
+              "summary": "가입한 길드 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/character/hexamatrix-skill",
+              "summary": "HEXA매트릭스 스킬 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/character/hexamatrix-stat",
+              "summary": "HEXA매트릭스 스탯 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/character/hyper-stat",
+              "summary": "하이퍼 스탯 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestorym_get_character_item-equipment",
+              "path": "/maplestorym/v1/character/item-equipment",
+              "summary": "장착 아이템 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/character/jewel",
+              "summary": "장착 쥬얼 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/character/link-skill",
+              "summary": "장착 링크 스킬 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestorym_get_character_pet_equipment",
+              "path": "/maplestorym/v1/character/pet-equipment",
+              "summary": "장착 펫 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/character/set-effect",
+              "summary": "적용 세트 효과 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestorym_get_character_skill_equipment",
+              "path": "/maplestorym/v1/character/skill-equipment",
+              "summary": "장착 스킬 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestorym_get_character_stat",
+              "path": "/maplestorym/v1/character/stat",
+              "summary": "스탯 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/character/symbol",
+              "summary": "장착 심볼 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestorym_get_character_vmatrix",
+              "path": "/maplestorym/v1/character/vmatrix",
+              "summary": "V매트릭스 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestorym_get_id",
+              "path": "/maplestorym/v1/id",
+              "summary": "캐릭터 식별자(ocid) 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "f335f6ea469b34c3f00e291578504ddda7e155e567449dc50ecb7214930d50ca",
+          "timestamp": "20261015010017"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "maplestorym/25.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/maplestorym/28_ko_script20250414070823.yaml",
+          "id": 25,
+          "language": "ko",
+          "name": "공지 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "maplestorym_get_notice",
+              "path": "/maplestorym/v1/notice",
+              "summary": "공지사항 목록 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestorym_get_event_notice",
+              "path": "/maplestorym/v1/notice-event",
+              "summary": "진행 중 이벤트 목록 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestorym_get_event_notice_detail",
+              "path": "/maplestorym/v1/notice-event/detail",
+              "summary": "진행 중 이벤트 상세 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestorym_get_patch_notice",
+              "path": "/maplestorym/v1/notice-patch",
+              "summary": "패치노트 목록 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestorym_get_patch_notice_detail",
+              "path": "/maplestorym/v1/notice-patch/detail",
+              "summary": "패치노트 상세 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestorym_get_notice_detail",
+              "path": "/maplestorym/v1/notice/detail",
+              "summary": "공지사항 상세 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "f849a1542da5b3d9af1f49a777ac96588479958d5b41c2d58df562266b23eb9c",
+          "timestamp": "20250414070823"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "maplestorym/52.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/maplestorym/57_ko_script20260730023028.yaml",
+          "id": 52,
+          "language": "ko",
+          "name": "길드 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/guild/basic",
+              "summary": "기본 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/guild/id",
+              "summary": "길드 식별자(oguild_id) 정보 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "35f0296761e104809d6a5a4e11e31852648296fca1f1b2816ae11eb4f4cded13",
+          "timestamp": "20260730023028"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "maplestorym/53.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/maplestorym/56_ko_script20261015010045.yaml",
+          "id": 53,
+          "language": "ko",
+          "name": "유니온 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/user/union",
+              "summary": "유니온 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/user/union-raider",
+              "summary": "유니온 공격대 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/user/union-stat",
+              "summary": "유니온 스탯 정보 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "dfe0aae519aa9cf41def307ec28237ee26bfa82ddab7fe87a97ab9f11f0b7091",
+          "timestamp": "20261015010045"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "maplestorym/54.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/maplestorym/58_ko_script20261103052238.yaml",
+          "id": 54,
+          "language": "ko",
+          "name": "랭킹 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/ranking/achievement",
+              "summary": "업적 랭킹 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/ranking/combat-power",
+              "summary": "전투력 랭킹 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/ranking/dojang",
+              "summary": "무릉도장 랭킹 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/ranking/kerning-m-tower",
+              "summary": "커닝M타워 랭킹 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/ranking/level",
+              "summary": "레벨 랭킹 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/ranking/root-of-time",
+              "summary": "시간의 근원 랭킹 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/ranking/sharenian-battlefield",
+              "summary": "샤레니안의 전장 랭킹 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/ranking/sharenian-waterway",
+              "summary": "샤레니안의 지하수로 랭킹 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorym/v1/ranking/union",
+              "summary": "유니온 랭킹 정보 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "a62953bf495ed56f81970ff8e8ecfa9d76443dd3826785e269cfad0583706cc2",
+          "timestamp": "20261103052238"
+        }
+      ],
+      "external": false,
+      "externalUrl": null,
+      "name": "메이플스토리M",
+      "nameEng": "MapleStory M",
+      "slug": "maplestorym"
+    },
+    {
+      "categories": [
+        {
+          "availableLanguages": [
+            "en"
+          ],
+          "file": "maplestorysea/45.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/maplestorysea/49_en_script20261111072104.yaml",
+          "id": 45,
+          "language": "en",
+          "name": "캐릭터 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_ability",
+              "path": "/maplestorysea/v1/character/ability",
+              "summary": "Retrieve Ability information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_android_equipment",
+              "path": "/maplestorysea/v1/character/android-equipment",
+              "summary": "Retrieve equipped android information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_basic",
+              "path": "/maplestorysea/v1/character/basic",
+              "summary": "Retrieve basic character information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_beauty_equipment",
+              "path": "/maplestorysea/v1/character/beauty-equipment",
+              "summary": "Retrieve equipped hair, face, and skin information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_cashitem_equipment",
+              "path": "/maplestorysea/v1/character/cashitem-equipment",
+              "summary": "Retrieve equipped cash item information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_dojang",
+              "path": "/maplestorysea/v1/character/dojang",
+              "summary": "Retrieve Mu Lung Garden highest record information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_hexamatrix",
+              "path": "/maplestorysea/v1/character/hexamatrix",
+              "summary": "Retrieve HEXA Node information."
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_hexamatrix_stat",
+              "path": "/maplestorysea/v1/character/hexamatrix-stat",
+              "summary": "Retrieve HEXA Matrix configured HEXA stats information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_hyper_stat",
+              "path": "/maplestorysea/v1/character/hyper-stat",
+              "summary": "Retrieve Hyper Stat information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_item_equipment",
+              "path": "/maplestorysea/v1/character/item-equipment",
+              "summary": "Retrieve equipped equipment information (excluding cash items)"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_link_skill",
+              "path": "/maplestorysea/v1/character/link-skill",
+              "summary": "Retrieve equipped Link Skill information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_pet_equipment",
+              "path": "/maplestorysea/v1/character/pet-equipment",
+              "summary": "Retrieve equipped pet information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_popularity",
+              "path": "/maplestorysea/v1/character/popularity",
+              "summary": "Retrieve popularity information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_propensity",
+              "path": "/maplestorysea/v1/character/propensity",
+              "summary": "Retrieve traits information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_set_effect",
+              "path": "/maplestorysea/v1/character/set-effect",
+              "summary": "Retrieve information about equipped set item effects"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_skill",
+              "path": "/maplestorysea/v1/character/skill",
+              "summary": "Retrieve skill information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_stat",
+              "path": "/maplestorysea/v1/character/stat",
+              "summary": "Retrieve comprehensive stats information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_symbol_equipment",
+              "path": "/maplestorysea/v1/character/symbol-equipment",
+              "summary": "Retrieve equipped symbol information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_vmatrix",
+              "path": "/maplestorysea/v1/character/vmatrix",
+              "summary": "Retrieve V Matrix information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_id",
+              "path": "/maplestorysea/v1/id",
+              "summary": "Retrieve character identifier (ocid)"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "168f4e67494a16bda33cb86641fe0549ef82432f0b2b9de3c1345a730977c104",
+          "timestamp": "20261111072104"
+        },
+        {
+          "availableLanguages": [
+            "en"
+          ],
+          "file": "maplestorysea/46.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/maplestorysea/50_en_script20251218051255.yaml",
+          "id": 46,
+          "language": "en",
+          "name": "유니온 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_union",
+              "path": "/maplestorysea/v1/user/union",
+              "summary": "Retrieve Union information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_union_artifact",
+              "path": "/maplestorysea/v1/user/union-artifact",
+              "summary": "Retrieve Union Artifact information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_union_champion",
+              "path": "/maplestorysea/v1/user/union-champion",
+              "summary": "Retrieve Union Champion information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_union_raider",
+              "path": "/maplestorysea/v1/user/union-raider",
+              "summary": "Retrieve Union Raider information"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "3b865969e7d6a149ee62d91b6ff83d863477bbc9af9996529a3a0c2bc699d40f",
+          "timestamp": "20251218051255"
+        },
+        {
+          "availableLanguages": [
+            "en"
+          ],
+          "file": "maplestorysea/47.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/maplestorysea/51_en_script20250421041451.yaml",
+          "id": 47,
+          "language": "en",
+          "name": "길드 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_guild_basic",
+              "path": "/maplestorysea/v1/guild/basic",
+              "summary": "Retrieve basic information"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_oguild_id",
+              "path": "/maplestorysea/v1/guild/id",
+              "summary": "Retrieve guild identifier (oguild_id) information"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "b8a89c6f99e1cdcdf330cd3c19e5a6fba8bbb3b3d262a8b8a94ba42b1c65005d",
+          "timestamp": "20250421041451"
+        }
+      ],
+      "external": false,
+      "externalUrl": null,
+      "name": "MapleStorySEA",
+      "nameEng": "MapleStorySEA",
+      "slug": "maplestorysea"
+    },
+    {
+      "categories": [
+        {
+          "availableLanguages": [
+            "zh-cht"
+          ],
+          "file": "maplestorytw/49.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/maplestorytw/53_zh-cht_script20261021040707.yaml",
+          "id": 49,
+          "language": "zh-cht",
+          "name": "檢視角色資訊",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_ability",
+              "path": "/maplestorytw/v1/character/ability",
+              "summary": "檢視能力資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_android_equipment",
+              "path": "/maplestorytw/v1/character/android-equipment",
+              "summary": "檢視已裝備機器人資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_basic",
+              "path": "/maplestorytw/v1/character/basic",
+              "summary": "檢視基本資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_beauty_equipment",
+              "path": "/maplestorytw/v1/character/beauty-equipment",
+              "summary": "檢視已裝備的髮型、臉型與膚色資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_cashitem_equipment",
+              "path": "/maplestorytw/v1/character/cashitem-equipment",
+              "summary": "檢視已裝備現金道具資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_dojang",
+              "path": "/maplestorytw/v1/character/dojang",
+              "summary": "檢視武陵道場最高紀錄資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/maplestorytw/v1/character/familiar",
+              "summary": "檢視萌獸資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_hexamatrix",
+              "path": "/maplestorytw/v1/character/hexamatrix",
+              "summary": "檢視 HEXA 核心資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_hexamatrix_stat",
+              "path": "/maplestorytw/v1/character/hexamatrix-stat",
+              "summary": "檢視在 HEXA 矩陣中設定的 HEXA 屬性資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_hyper_stat",
+              "path": "/maplestorytw/v1/character/hyper-stat",
+              "summary": "檢視極限屬性資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_item_equipment",
+              "path": "/maplestorytw/v1/character/item-equipment",
+              "summary": "檢視已裝備道具資訊 (不含現金道具)"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_link_skill",
+              "path": "/maplestorytw/v1/character/link-skill",
+              "summary": "檢視已裝備連結技能資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_pet_equipment",
+              "path": "/maplestorytw/v1/character/pet-equipment",
+              "summary": "檢視已裝備寵物資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_popularity",
+              "path": "/maplestorytw/v1/character/popularity",
+              "summary": "檢視名聲資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_propensity",
+              "path": "/maplestorytw/v1/character/propensity",
+              "summary": "檢視性向資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_set_effect",
+              "path": "/maplestorytw/v1/character/set-effect",
+              "summary": "檢視已套用的套裝效果資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_skill",
+              "path": "/maplestorytw/v1/character/skill",
+              "summary": "檢視技能資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_stat",
+              "path": "/maplestorytw/v1/character/stat",
+              "summary": "檢視綜合能力值資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_symbol_equipment",
+              "path": "/maplestorytw/v1/character/symbol-equipment",
+              "summary": "檢視已裝備符文資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_vmatrix",
+              "path": "/maplestorytw/v1/character/vmatrix",
+              "summary": "檢視 V 矩陣資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_character_id",
+              "path": "/maplestorytw/v1/id",
+              "summary": "檢視角色辨識器 (OCID)"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "3b28d46f1bd086afa1ab6818ffd857f5d286b874635b595e6e0ac4c90956e1a2",
+          "timestamp": "20261021040707"
+        },
+        {
+          "availableLanguages": [
+            "zh-cht"
+          ],
+          "file": "maplestorytw/50.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/maplestorytw/54_zh-cht_script20251218052234.yaml",
+          "id": 50,
+          "language": "zh-cht",
+          "name": "檢視聯盟資訊",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_union",
+              "path": "/maplestorytw/v1/user/union",
+              "summary": "檢視戰地資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_union_artifact",
+              "path": "/maplestorytw/v1/user/union-artifact",
+              "summary": "檢視戰地神器資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_union_champion",
+              "path": "/maplestorytw/v1/user/union-champion",
+              "summary": "聯盟冠軍資訊查詢"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_union_raider",
+              "path": "/maplestorytw/v1/user/union-raider",
+              "summary": "檢視戰地攻擊隊資訊"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "9025945328967e639693310b707d6c91c802269ffe2b1342f5eb6fd506d429de",
+          "timestamp": "20251218052234"
+        },
+        {
+          "availableLanguages": [
+            "zh-cht"
+          ],
+          "file": "maplestorytw/51.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/maplestorytw/55_zh-cht_script20251013004425.yaml",
+          "id": 51,
+          "language": "zh-cht",
+          "name": "檢視公會資訊",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_guild_basic",
+              "path": "/maplestorytw/v1/guild/basic",
+              "summary": "檢視基本資訊"
+            },
+            {
+              "method": "GET",
+              "operationId": "maplestory_get_oguild_id",
+              "path": "/maplestorytw/v1/guild/id",
+              "summary": "檢視公會識別碼 (oguild_id) 資訊"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "797adfb422352081b33f7d96d34a84b9955da7ac1981adc71b9dc10a7545cbfc",
+          "timestamp": "20251013004425"
+        }
+      ],
+      "external": false,
+      "externalUrl": null,
+      "name": "MapleStoryTaiwan",
+      "nameEng": "MapleStoryTaiwan",
+      "slug": "maplestorytw"
+    },
+    {
+      "categories": [
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "platform/19.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/platform/19_script00000000000000.yaml",
+          "id": 19,
+          "language": "ko",
+          "name": "공지 사항 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "open_api_get_notice",
+              "path": "/platform/openapi/v1/notice",
+              "summary": "NEXON Open API 공지 사항"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "595b4e6d7a3c150bc2510b1f04918b9e6c7583907fd95f82236b278dad707d0d",
+          "timestamp": "00000000000000"
+        }
+      ],
+      "external": false,
+      "externalUrl": null,
+      "name": "플랫폼",
+      "nameEng": "Platform",
+      "slug": "platform"
+    },
+    {
+      "categories": [
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "suddenattack/43.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/suddenattack/47_ko_script20250324012941.yaml",
+          "id": 43,
+          "language": "ko",
+          "name": "계정 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "suddenattack_get_id",
+              "path": "/suddenattack/v1/id",
+              "summary": "계정 식별자(ouid) 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "suddenattack_get_user_basic",
+              "path": "/suddenattack/v1/user/basic",
+              "summary": "기본 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "suddenattack_get_user_rank",
+              "path": "/suddenattack/v1/user/rank",
+              "summary": "계급 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "suddenattack_get_user_recent_information",
+              "path": "/suddenattack/v1/user/recent-info",
+              "summary": "최근 동향 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "suddenattack_get_user_tier",
+              "path": "/suddenattack/v1/user/tier",
+              "summary": "티어 정보 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "d8df029bd159dbc5319451a5deb4f9ed303e7739ac6d1ee12304422a48b992fe",
+          "timestamp": "20250324012941"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "suddenattack/44.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/suddenattack/48_ko_script20250529012921.yaml",
+          "id": 44,
+          "language": "ko",
+          "name": "매치 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "suddenattack_get_match",
+              "path": "/suddenattack/v1/match",
+              "summary": "매치 목록 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "suddenattack_get_match_detail",
+              "path": "/suddenattack/v1/match-detail",
+              "summary": "매치 상세 기록 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "0c891c59a46a3f1dcb72ba412c2b2d08b59b24225a42340cee560417ab41a736",
+          "timestamp": "20250529012921"
+        },
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "suddenattack/48.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/suddenattack/52_ko_script20250529004346.yaml",
+          "id": 48,
+          "language": "ko",
+          "name": "메타데이터 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/suddenattack/meta/grade",
+              "summary": "통합 계급 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/suddenattack/meta/logo",
+              "summary": "로고 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/suddenattack/meta/season_grade",
+              "summary": "시즌 계급 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/suddenattack/meta/tier",
+              "summary": "티어 메타데이터 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "b86c2841f1a631d392036d4288937c5d2aa3ba7e4f3081bd3a32c83201699ce5",
+          "timestamp": "20250529004346"
+        }
+      ],
+      "external": false,
+      "externalUrl": null,
+      "name": "서든어택",
+      "nameEng": "SUDDEN ATTACK",
+      "slug": "suddenattack"
+    },
+    {
+      "categories": [
+        {
+          "availableLanguages": [
+            "ko",
+            "en"
+          ],
+          "file": "tfd/20.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/tfd/21_ko_script20250814011156.yaml",
+          "id": 20,
+          "language": "ko",
+          "name": "계정 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "thefirstdescendant_get_user_id",
+              "path": "/tfd/v1/id",
+              "summary": "계정 식별자(ouid) 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "thefirstdescendant_get_user_arche_tuning",
+              "path": "/tfd/v1/user/arche-tuning",
+              "summary": "아르케 조율 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "thefirstdescendant_get_user_basic",
+              "path": "/tfd/v1/user/basic",
+              "summary": "기본 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "thefirstdescendant_get_user_descendant",
+              "path": "/tfd/v1/user/descendant",
+              "summary": "장착 계승자 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "thefirstdescendant_get_user_external-component",
+              "path": "/tfd/v1/user/external-component",
+              "summary": "장착 외장 부품 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "thefirstdescendant_get_user_reactor",
+              "path": "/tfd/v1/user/reactor",
+              "summary": "장착 반응로 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "thefirstdescendant_get_user_weapon",
+              "path": "/tfd/v1/user/weapon",
+              "summary": "장착 무기 정보 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "3a4042ba61bbf4db6da1572f540c85168d8e600f2b1b7cb60759ec2a11954c7b",
+          "timestamp": "20250814011156"
+        },
+        {
+          "availableLanguages": [
+            "ko",
+            "en"
+          ],
+          "file": "tfd/21.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/tfd/44_ko_script20260716020031.yaml",
+          "id": 21,
+          "language": "ko",
+          "name": "메타 데이터 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/adapt-level.json",
+              "summary": "적응도 레벨 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/amorphous-reward.json",
+              "summary": "비정형 물질 오픈 보상 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/arche-tuning-board-group.json",
+              "summary": "아르케 조율 보드 그룹 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/arche-tuning-board.json",
+              "summary": "아르케 조율 보드 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/core-slot.json",
+              "summary": "코어 슬롯 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/descendant-level-detail.json",
+              "summary": "계승자 레벨별 경험치 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/fellow-level-detail.json",
+              "summary": "조력자 레벨별 경험치 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/mastery-rank-level-detail.json",
+              "summary": "마스터리 랭크별 경험치 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/acquisition-detail.json",
+              "summary": "획득처 정보 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/arche-tuning-node.json",
+              "summary": "아르케 조율 노드 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/collectible-item.json",
+              "summary": "수집형 아이템 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/consumable-material.json",
+              "summary": "소비 아이템 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/core-type.json",
+              "summary": "코어 타입 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/customizing-item.json",
+              "summary": "커스터마이징 아이템 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/descendant-group.json",
+              "summary": "계승자 그룹 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/descendant.json",
+              "summary": "계승자 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/external-component.json",
+              "summary": "외장 부품 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/fellow.json",
+              "summary": "조력자 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/medal.json",
+              "summary": "훈장 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/module.json",
+              "summary": "모듈 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/node-item.json",
+              "summary": "변이 세포 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/node-socket-type.json",
+              "summary": "변이 세포 소켓 타입 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/reactor.json",
+              "summary": "반응로 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/research.json",
+              "summary": "연구 정보 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/reward.json",
+              "summary": "난이도 보상 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/stat.json",
+              "summary": "기본 스탯 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/tier.json",
+              "summary": "등급 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/title.json",
+              "summary": "타이틀 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/vehicle.json",
+              "summary": "탈것 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/void-battle.json",
+              "summary": "보이드 요격전 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/weapon-type.json",
+              "summary": "무기 유형 메타데이터 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/static/tfd/meta/{language_code}/weapon.json",
+              "summary": "무기 메타데이터 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "287a641985890201e8c0a4ce6eb6f224980854823f6036c91402621045348a0b",
+          "timestamp": "20260716020031"
+        },
+        {
+          "availableLanguages": [
+            "ko",
+            "en"
+          ],
+          "file": "tfd/22.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/tfd/25_ko_script20240703050434.yaml",
+          "id": 22,
+          "language": "ko",
+          "name": "추천 모듈 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/tfd/v1/recommendation/module",
+              "summary": "모듈 추천"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "dd0923ed3b99b816f1943af41eead7d62a32a5ae407703ff71015fcc15ce8f07",
+          "timestamp": "20240703050434"
+        },
+        {
+          "availableLanguages": [
+            "ko",
+            "en"
+          ],
+          "file": "tfd/56.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/tfd/60_ko_script20260716020051.yaml",
+          "id": 56,
+          "language": "ko",
+          "name": "리더보드 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/tfd/v1/leaderboard/void-erosion-purge-challenge",
+              "summary": "보이드 침식 정화 - 도전 리더보드 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": null,
+              "path": "/tfd/v1/leaderboard/void-intercept-battle",
+              "summary": "보이드 요격전 리더보드 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "d6ea89ec21a3cccb7bf2ef224e238c94b9dea920d4af198caa218b973b3148da",
+          "timestamp": "20260716020051"
+        }
+      ],
+      "external": false,
+      "externalUrl": null,
+      "name": "퍼스트 디센던트",
+      "nameEng": "The First Descendant",
+      "slug": "tfd"
+    },
+    {
+      "categories": [
+        {
+          "availableLanguages": [
+            "ko"
+          ],
+          "file": "v4/9.yaml",
+          "fileUrl": "https://openapi.nexon.com/static/api/v4/9_ko_script20241010014446.yaml",
+          "id": 9,
+          "language": "ko",
+          "name": "캐릭터 정보 조회",
+          "operations": [
+            {
+              "method": "GET",
+              "operationId": "v4_get_character_basic",
+              "path": "/v4/v1/character/basic",
+              "summary": "기본 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "v4_get_character_honor",
+              "path": "/v4/v1/character/honor",
+              "summary": "명예 보유 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "v4_get_character_honor-euipment",
+              "path": "/v4/v1/character/honor-equipment",
+              "summary": "장착 명예 정보 조회"
+            },
+            {
+              "method": "GET",
+              "operationId": "v4_get_id",
+              "path": "/v4/v1/id",
+              "summary": "캐릭터 식별자(ocid) 조회"
+            }
+          ],
+          "servers": [
+            "https://open.api.nexon.com"
+          ],
+          "sha256": "03f5f2c5403203aa17fba86ea7e15836733179fc4c0d9ec4b3cb0f303df43a7e",
+          "timestamp": "20241010014446"
+        }
+      ],
+      "external": false,
+      "externalUrl": null,
+      "name": "V4",
+      "nameEng": "V4",
+      "slug": "v4"
+    }
+  ],
+  "schemaVersion": 1,
+  "source": "https://openapi.nexon.com/ko/game/{slug}/"
+}

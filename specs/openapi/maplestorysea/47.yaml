@@ -1,0 +1,246 @@
+openapi: 3.0.3
+info:
+  title: MapleStorySEA API
+  version: 1.0.0
+  contact:
+    name: help_openapi@nexon.co.kr
+  description: |-
+    - MapleStory game data can be verified approximately 15 minutes after updates.
+    - Data is available starting from April 20, 2025. 
+    - Historical data can be queried by specifying the desired date, and data from the previous day can be accessed starting at 2 AM the next day. (For example, when querying data for December 22, data from 00:00 to 24:00 on December 22 will be retrieved.)
+    - Due to game content changes, the ocid may be updated. Please pay attention to this when updating services based on ocid.
+    - This API provides data for MapleStory SEA.
+servers:
+  - url: 'https://open.api.nexon.com'
+tags:
+  - name: Guild
+    description: Retrieve guild information
+
+paths:
+  /maplestorysea/v1/guild/id:
+    get:
+      tags:
+        - Guild
+      summary: Retrieve guild identifier (oguild_id) information
+      description: Retrieves information for the guild identifier (oguild_id).
+      operationId: maplestory_get_oguild_id
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: guild_name
+          in: query
+          description: Guild name
+          required: true
+          schema:
+            type: string
+        - name: world_name
+          in: query
+          description: |
+            World name
+          required: true
+          schema:
+            type: string
+            enum:
+              - Aquila
+              - Bootes
+              - Cassiopeia
+              - Draco
+              - Burning
+
+      responses:
+          '200':
+            description: SUCCESS
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Guild'
+          '400':
+            description: Bad Request
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+          '403':
+            description: Forbidden
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+          '429':
+            description: Too Many Requests
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+          '500':
+            description: Internal Server Error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+
+  /maplestorysea/v1/guild/basic:
+    get:
+      tags:
+        - Guild
+      summary: Retrieve basic information
+      description: Retrieves basic information.
+      operationId: maplestory_get_guild_basic
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: oguild_id
+          in: query
+          description: Guild identifier
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: Reference date for query (SGT, YYYY-MM-DD)
+          schema:
+            type: string
+
+      responses:
+          '200':
+            description: SUCCESS
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/GuildBasic'
+          '400':
+            description: Bad Request
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+          '403':
+            description: Forbidden
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+          '429':
+            description: Too Many Requests
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+          '500':
+            description: Internal Server Error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+
+
+components:
+  schemas:
+    Guild:
+      type: object
+      properties:
+        oguild_id:
+          type: string
+          description: Guild identifier 
+    GuildBasic:
+      type: object
+      properties:
+        date:
+          type: string
+          description: Reference date for query (SGT, daily data with hours and minutes set to 0)
+          example: "2025-01-21T00:00+08:00"
+        world_name:
+          type: string
+          description: World name
+        guild_name:
+          type: string
+          description: Guild name
+        guild_level:
+          type: number
+          format: int64
+          description: Guild level
+        guild_fame:
+          type: number
+          format: int64
+          description: Honor EXP
+        guild_point:
+          type: number
+          format: int64
+          description: Guild Points (GP)
+        guild_master_name:
+          type: string
+          description: Character name of the Guild Master
+        guild_member_count:
+          type: number
+          format: int64
+          description: Number of guild members
+        guild_member:
+          type: array
+          description: List of guild members
+          items:
+            type: string
+        guild_skill:
+          type: array
+          description: List of guild skills
+          items:
+            type: object
+            properties:
+              skill_name:
+                type: string
+                description: Skill name
+              skill_description:
+                type: string
+                description: Skill description
+              skill_level:
+                type: number
+                format: int64
+                description: Skill level
+              skill_effect:
+                type: string
+                description: Effects by skill level
+              skill_icon:
+                type: string
+                description: Skill icon
+        guild_noblesse_skill:
+          type: array
+          description: List of Noblesse Guild Skills
+          items:
+            type: object
+            properties:
+              skill_name:
+                type: string
+                description: Skill name
+              skill_description:
+                type: string
+                description: Skill description
+              skill_level:
+                type: number
+                format: int64
+                description: Skill level
+              skill_effect:
+                type: string
+                description: Effects by skill level
+              skill_icon:
+                type: string
+                description: Skill icon
+
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Error name
+            message:
+              type: string
+              description: Error description

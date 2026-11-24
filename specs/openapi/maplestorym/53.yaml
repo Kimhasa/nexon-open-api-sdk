@@ -1,0 +1,266 @@
+openapi: 3.0.3
+info:
+  title: 메이플스토리M API
+  version: 1.0.0
+  contact:
+    name: help_openapi@nexon.co.kr
+  description: |-
+    - 메이플스토리M의 게임 데이터는 평균 10분 후 확인 가능합니다.
+    - 2025년 10월 30일 이후 데이터를 조회할 수 있습니다. (API마다 다소 차이가 있을 수 있어 데이터가 올바르게 조회되지 않는다면 게임에 재접속을 해주세요.)
+    - 게임 콘텐츠 변경으로 ocid가 변경될 수 있습니다. ocid 기반 서비스 갱신 시 유의해 주시길 바랍니다. 
+
+servers:
+  - url: 'https://open.api.nexon.com'
+tags:
+  - name: Union
+    description: 캐릭터 정보 조회
+
+paths:
+  /maplestorym/v1/user/union:
+    get:
+      tags:
+        - Union
+      summary: 유니온 정보 조회
+      description: 유니온 정보를 조회합니다.
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Union'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /maplestorym/v1/user/union-raider:
+    get:
+      tags:
+        - Union
+      summary: 유니온 공격대 정보 조회
+      description: 유니온에 배치된 공격대원 효과 정보를 조회합니다.
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자
+          required: true
+          schema:
+            type: string       
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnionRaider'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /maplestorym/v1/user/union-stat:
+    get:
+      tags:
+        - Union
+      summary: 유니온 스탯 정보 조회
+      description: |-
+        유니온 스탯 정보를 조회합니다.
+        - 유니온 스탯 정보는 2026년 10월 15일 이후 데이터를 조회할 수 있습니다.
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnionStat'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+components:
+  schemas:              
+    Union:
+      type: object
+      properties:
+        union_level:
+          type: number
+          format: int64
+          description: 캐릭터 직업
+        union_grade:
+          type: string
+          description: 유니온 등급
+        union_level_total_option:
+          type: string
+          description: 레벨 총합 누적 효과
+        union_grade_icon:
+          type: string
+          description: 유니온 등급 아이콘
+
+    UnionRaider:
+      type: object
+      properties:
+        use_union_raider_option:
+          type: array
+          description: 적용 중인 공격대원 효과 정보
+          items:
+            properties:
+              option_name:
+                type: string
+                description: 적용 중인 공격대원 옵션 명
+              option_value:
+                type: string
+                description: 적용 중인 공격대원 옵션 값
+
+    UnionStat:
+      type: object
+      properties:
+        use_preset_no:
+          type: number
+          format: int64
+          description: 적용 중인 유니온 스탯 프리셋 번호
+        use_union_stat:
+          type: array
+          description: 적용 중인 유니온 스탯 정보
+          items:
+            properties:
+              stat_name:
+                type: string
+                description: 스탯 명
+              stat_point:
+                type: number
+                format: int64
+                description: 분배한 유니온 포인트
+              stat_value:
+                type: string
+                description: 스탯 값
+        union_stat_preset:
+          type: array
+          description: 프리셋 별 유니온 스탯 정보
+          items:
+            properties:
+              preset_no:
+                type: number
+                format: int64
+                description: 프리셋 번호
+              union_stat:
+                type: array
+                description: 유니온 스탯 정보
+                items:
+                  properties:
+                    stat_name:
+                      type: string
+                      description: 스탯 명
+                    stat_point:
+                      type: number
+                      format: int64
+                      description: 분배한 유니온 포인트
+                    stat_value:
+                      type: string
+                      description: 스탯 값
+
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              description: 에러 명
+            message:
+              type: string
+              description: 에러 설명
