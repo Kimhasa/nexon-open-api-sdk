@@ -453,3 +453,11 @@ yarn specs:fetch        포털 → specs/openapi/{slug}/{categoryId}.yaml, index
 yarn type-check && yarn lint && yarn test && yarn build
 yarn specs:coverage   # 대상 게임의 SDK 경로 = 스펙 경로인지 확인
 ```
+
+### 포털 변경 대응
+
+1. **API Monitor**가 만든 `specs/auto-update` → `main` PR 또는 `api-change` 이슈와 포털 공지를 확인한다. `yarn specs:diff --base origin/main`으로 분류를 확인하고 `yarn specs:drift --game <slug>`로 SDK 반영 대상을 좁힌다.
+2. MINOR는 호환되는 공개 API로 반영한다. DEPRECATE는 `@deprecated`, optional 또는 메서드 런타임 경고를 적용한다. MAJOR와 새 게임의 공용 진입점 변경은 사람이 판단한다.
+3. SDK Auto Update는 포털 텍스트를 데이터로 취급하고 제한된 파일·명령으로 수정과 검증을 수행한다. 별도 게시 job이 검증된 패치를 커밋하고 CI를 실행한다. 변경은 사람이 검토하고 머지하며 `CHANGELOG.md`와 버전도 검토한다.
+
+운영에는 **Allow GitHub Actions to create and approve pull requests** 설정과 Claude 시크릿(`CLAUDE_CODE_OAUTH_TOKEN` 또는 `ANTHROPIC_API_KEY`)이 필요하다. `SDK_AUTO_IMPLEMENT=false`를 설정하면 스펙 갱신만 동작한다. 등록과 수동 검증 절차는 [specs/README.md](specs/README.md#포털-변경-대응-절차)를 확인한다.

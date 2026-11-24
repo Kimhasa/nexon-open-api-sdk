@@ -1,0 +1,69 @@
+openapi: 3.0.3
+paths:
+  /fixture/v1/sample:
+    parameters:
+      - name: overridden
+        in: query
+        schema: { type: string }
+    get:
+      parameters:
+        - name: overridden
+          in: query
+          schema: { type: integer }
+        - $ref: '#/components/parameters/Pagination'
+        - name: newlyRequired
+          in: query
+          required: true
+          schema: { type: boolean }
+        - name: newlyOptional
+          in: query
+          schema: { type: number }
+        - name: nowOptional
+          in: query
+          schema: { type: string }
+        - name: mode
+          in: query
+          schema: { type: integer, format: int32, enum: [2] }
+      responses:
+        '200': { $ref: '#/components/responses/Sample' }
+  /fixture/v1/new:
+    post: {}
+  /fixture/v1/stable:
+    put: {}
+components:
+  parameters:
+    Pagination:
+      name: cursor
+      in: query
+      required: true
+      schema: { type: string }
+  responses:
+    Sample:
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Sample' }
+  schemas:
+    Sample:
+      type: object
+      properties:
+        status: { type: string, enum: [two, one, three] }
+        date: { type: string, format: date-time }
+        presence: { type: number }
+        entries:
+          type: array
+          items: { $ref: '#/components/schemas/Entry~1Item' }
+        item:
+          type: object
+          properties:
+            key: { type: number }
+        recursive: { $ref: '#/components/schemas/Sample' }
+        new_response: { type: string }
+    Entry/Item:
+      type: object
+      properties:
+        id: { type: string }
+        label: { type: string, nullable: true }
+        flags:
+          type: array
+          items: { type: integer }
+        new_nested: { type: string }
