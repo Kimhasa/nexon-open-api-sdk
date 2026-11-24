@@ -514,5 +514,41 @@
     "path": "response.solo_rank_match_tier",
     "kind": "type-mismatch",
     "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 솔로 랭크전 티어는 포털에 적힌 number가 아니라 string으로 온다."
+  },
+  {
+    "operation": "GET /maplestorytw/v1/character/pet-equipment",
+    "path": "response.pet_1_potential[].potential_increase1",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 1번 펫 잠재능력 증가량은 포털 이름 potential_increase_1 대신 potential_increase1로 제공된다. 값이 없으면 null이다."
+  },
+  {
+    "operation": "GET /maplestorytw/v1/character/pet-equipment",
+    "path": "response.pet_1_potential[].potential_increase2",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 1번 펫 잠재능력 증가량은 포털 이름 potential_increase_2 대신 potential_increase2로 제공된다. 값이 없으면 null이다."
+  },
+  {
+    "operation": "GET /maplestorytw/v1/character/pet-equipment",
+    "path": "response.pet_2_potential[].potential_increase1",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 1번 펫 잠재능력 증가량은 포털 이름 potential_increase_1 대신 potential_increase1로 제공된다. 값이 없으면 null이다. 1번 펫과 같은 잠재능력 원소 타입을 적용한다."
+  },
+  {
+    "operation": "GET /maplestorytw/v1/character/pet-equipment",
+    "path": "response.pet_2_potential[].potential_increase2",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 1번 펫 잠재능력 증가량은 포털 이름 potential_increase_2 대신 potential_increase2로 제공된다. 값이 없으면 null이다. 1번 펫과 같은 잠재능력 원소 타입을 적용한다."
+  },
+  {
+    "operation": "GET /maplestorytw/v1/character/pet-equipment",
+    "path": "response.pet_3_potential[].potential_increase1",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 1번 펫 잠재능력 증가량은 포털 이름 potential_increase_1 대신 potential_increase1로 제공된다. 값이 없으면 null이다. 1번 펫과 같은 잠재능력 원소 타입을 적용한다."
+  },
+  {
+    "operation": "GET /maplestorytw/v1/character/pet-equipment",
+    "path": "response.pet_3_potential[].potential_increase2",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 1번 펫 잠재능력 증가량은 포털 이름 potential_increase_2 대신 potential_increase2로 제공된다. 값이 없으면 null이다. 1번 펫과 같은 잠재능력 원소 타입을 적용한다."
   }
 ]

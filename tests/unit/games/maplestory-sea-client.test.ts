@@ -144,6 +144,29 @@ describe('MapleStorySEAClient', () => {
       expect(onResponseShapeMismatch).not.toHaveBeenCalled();
     });
 
+    it('accepts a null HEXA core list before the character unlocks HEXA', async () => {
+      const onResponseShapeMismatch = vi.fn();
+      const client = new MapleStorySEAClient(
+        new HttpClient({
+          apiKey: TEST_API_KEY,
+          responseValidation: true,
+          logger: { onResponseShapeMismatch },
+        }),
+      );
+      const response: typeof seaCharacterHexaMatrixFixture = {
+        date: null,
+        character_hexa_core_equipment: null,
+      };
+      server.use(
+        http.get('https://open.api.nexon.com/maplestorysea/v1/character/hexamatrix', () =>
+          HttpResponse.json(response),
+        ),
+      );
+
+      await expect(client.character.getHexaMatrix({ ocid: TEST_OCID })).resolves.toEqual(response);
+      expect(onResponseShapeMismatch).not.toHaveBeenCalled();
+    });
+
     it('getBasic — 캐릭터 기본 정보를 반환한다', async () => {
       const client = createClient();
       const result = await client.character.getBasic({ ocid: TEST_OCID });
@@ -189,13 +212,22 @@ describe('MapleStorySEAClient', () => {
       expect(guildId).toBe(seaGuildIdFixture.oguild_id);
     });
 
-    it('getBasic — 길드 기본 정보를 반환한다', async () => {
-      const client = createClient();
+    it('getBasic — 최신 길드 정보의 기준일은 null이다', async () => {
+      const onResponseShapeMismatch = vi.fn();
+      const client = new MapleStorySEAClient(
+        new HttpClient({
+          apiKey: TEST_API_KEY,
+          responseValidation: true,
+          logger: { onResponseShapeMismatch },
+        }),
+      );
       const result = await client.guild.getBasic({ oguild_id: TEST_GUILD_ID });
 
       expect(result.guild_name).toBe(seaGuildBasicFixture.guild_name);
       expect(result.guild_level).toBe(seaGuildBasicFixture.guild_level);
       expect(result.guild_member_count).toBe(seaGuildBasicFixture.guild_member_count);
+      expect(result.date).toBeNull();
+      expect(onResponseShapeMismatch).not.toHaveBeenCalled();
     });
   });
 

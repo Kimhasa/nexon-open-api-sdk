@@ -41,8 +41,8 @@ export interface TWGuildSkill {
 
 /** 길드 기본 정보 — `client.maplestoryTW.guild.getBasic()` 의 응답. */
 export interface TWGuildBasic {
-  /** Reference date for query (TST, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(대만 시간). 날짜를 생략해 최신 길드 정보를 조회하면 null. */
+  readonly date: string | null;
   /** World name */
   readonly world_name: string;
   /** Guild name */

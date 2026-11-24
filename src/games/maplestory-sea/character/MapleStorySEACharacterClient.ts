@@ -575,7 +575,7 @@ export class MapleStorySEACharacterClient {
    * ```ts
    * const ocid = await client.maplestorySEA.getOcid('CharacterName');
    * const hexa = await client.maplestorySEA.character.getHexaMatrix({ ocid });
-   * for (const core of hexa.character_hexa_core_equipment) {
+   * for (const core of hexa.character_hexa_core_equipment ?? []) {
    *   console.log(`${core.hexa_core_name} Lv.${core.hexa_core_level} (${core.hexa_core_type})`);
    * }
    * ```

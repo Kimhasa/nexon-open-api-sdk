@@ -13,7 +13,7 @@ export const twCharacterFamiliarFixture: TWCharacterFamiliar = {
       slot_id: '2',
       familiar_name: null,
       active_flag: 'false',
-      expire_date: '2026-12-31T00:00+08:00',
+      expire_date: null,
     },
   ],
   familiar_info: [
@@ -24,7 +24,7 @@ export const twCharacterFamiliarFixture: TWCharacterFamiliar = {
       familiar_state: 'Active',
       familiar_level: 1,
       familiar_exp: 1,
-      skill_name: 'Fixture skill',
+      skill_name: null,
       option_level: 1,
       option: [
         {
@@ -33,8 +33,8 @@ export const twCharacterFamiliarFixture: TWCharacterFamiliar = {
           option_value: 'option value',
         },
       ],
-      familiar_grade: 'Epic',
-      look_name: 'Fixture Familiar',
+      familiar_grade: null,
+      look_name: null,
       summoned_flag: 'true',
       slot_id: '1',
     },

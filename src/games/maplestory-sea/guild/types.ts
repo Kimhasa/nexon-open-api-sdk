@@ -26,8 +26,8 @@ export interface SEAGuildSkill {
 
 /** 길드 기본 정보 — `client.maplestorySEA.guild.getBasic()` 의 응답. */
 export interface SEAGuildBasic {
-  /** Reference date for query (SGT, daily data with hours and minutes set to 0) */
-  readonly date: string;
+  /** 조회 기준일(싱가포르 시간). 날짜를 생략해 최신 길드 정보를 조회하면 null. */
+  readonly date: string | null;
   /** World name */
   readonly world_name: string;
   /** Guild name */

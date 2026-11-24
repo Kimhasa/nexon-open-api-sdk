@@ -151,6 +151,14 @@ export const mapleStorySEAHandlers = [
   http.get(`${BASE}/guild/basic`, ({ request }) => {
     const authError = checkApiKey(request);
     if (authError) return authError;
-    return HttpResponse.json(seaGuildBasicFixture);
+    const { searchParams } = new URL(request.url);
+    return HttpResponse.json(
+      searchParams.has('date')
+        ? seaGuildBasicFixture
+        : {
+            ...seaGuildBasicFixture,
+            date: null,
+          },
+    );
   }),
 ];

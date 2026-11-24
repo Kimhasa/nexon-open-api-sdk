@@ -130,8 +130,8 @@ export interface SEAUnionArtifact {
   readonly union_artifact_effect: readonly SEAUnionArtifactEffect[];
   /** Artifact crystal information */
   readonly union_artifact_crystal: readonly SEAUnionArtifactCrystal[];
-  /** Remaining artifact AP */
-  readonly union_artifact_remain_ap: number;
+  /** 남아 있는 유니온 아티팩트 포인트. 값이 없으면 null. */
+  readonly union_artifact_remain_ap: number | null;
 }
 
 // ─── GET /maplestorysea/v1/user/union-champion ────────────────────────────────
