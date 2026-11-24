@@ -11,6 +11,35 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 
 ## [Unreleased]
 
+### Added
+
+- 넥슨 포털 OpenAPI 스펙 저장소: `yarn specs:fetch` 가 포털의 카테고리별 OpenAPI YAML을 `specs/openapi/{slug}/{categoryId}.yaml` 로 수집하고 `specs/openapi/index.json` 색인을 만든다 (2026-11-24 기준 15개 게임, 270개 오퍼레이션)
+- `yarn specs:check` — 저장된 스펙과 포털을 비교해 게임·카테고리·오퍼레이션 추가/삭제, YAML 수정(시각·해시)을 감지
+- `yarn specs:coverage` — SDK가 호출하는 경로와 스펙 경로를 게임별로 대조
+- `yarn check:exports` — 빌드된 패키지의 sub-path별 CJS/ESM 타입 해석 검사 (`@arethetypeswrong/cli`)
+- 메이플스토리 `GuildBasic.guild_user_count` (포털 스펙 반영, optional)
+- `API_METADATA` 에 `fconline` 엔트리
+
+### Fixed
+
+- CommonJS(`require`) TypeScript 소비자가 패키지 타입을 해석하지 못하던 문제 (TS1471) — `exports` 에 조건별 `types` (`.d.ts` / `.d.cts`) 지정
+- 메이플스토리 `GuildBasic.guild_member_count` 설명 정정 (길드원 수 → 길드 캐릭터 전체 수)
+- 테스트 파일이 타입 검사에서 빠져 있던 문제 (`tsconfig.test.json` 이 상속한 `exclude`) 와 그로 인해 숨어 있던 테스트 타입 오류 16개
+- Windows(`core.autocrlf=true`) 체크아웃에서 `format:check` 가 실패하던 문제 — `.gitattributes` 로 LF 고정
+- API 모니터가 2026-04부터 실패하던 문제 — 존재하지 않는 `api-change` 라벨, 잘못된 slug 4개, lockfile 미사용, 같은 변경의 반복 보고. `specs:check` 기반으로 재작성
+- CI가 이미 게시된 버전을 다시 `npm publish` 하려다 실패하던 문제 — 게시 전 버전 존재 확인
+
+### Changed
+
+- CI: GitHub Actions 메이저 버전 갱신(Node 24 런타임), 테스트 매트릭스 Node 22/24/26 (`engines` 는 `>=18` 유지), npm Trusted Publishing(OIDC·provenance) 준비
+- `yarn type-check` 가 `tests`, `scripts` 까지, `yarn lint` 가 `scripts` 까지 검사
+- 문서(CLAUDE.md, README, docs, CHANGELOG)의 게임 목록·path prefix·엔드포인트 수를 실제와 일치시킴 — 크레이지 아케이드 제거(포털에서 삭제됨), `platform` 추가, 던전앤파이터·사이퍼즈는 네오플 API라 범위 외로 표기
+
+### Removed
+
+- `scripts/api-monitor.ts`, `scripts/api-snapshot.json` → `yarn specs:check` 와 `specs/openapi/index.json` 으로 대체
+- `specs/maplestory-sea.md` (포털 화면 복사본) → `specs/openapi/maplestorysea/` 로 대체
+
 ## [0.1.1] - 2026-03-18
 
 ### Added
