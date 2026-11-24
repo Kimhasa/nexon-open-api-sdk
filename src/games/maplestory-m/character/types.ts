@@ -186,8 +186,8 @@ export interface MItemEquipment {
   readonly soul_info: MSoulInfo | null;
   /** 문장 정보. 문장이 없으면 null */
   readonly emblem_info: MEmblemInfo | null;
-  /** 프리스타일 쿠폰 적용 여부 (0:미적용, 1:적용) */
-  readonly freestyle_coupon_flag?: string | undefined;
+  /** 프리스타일 쿠폰 적용 여부 (0:미적용, 1:적용). 프리셋 장비에서는 null 이 올 수 있다 (2026-11-24 실측) */
+  readonly freestyle_coupon_flag?: string | null | undefined;
   /** 마스터리 정보. 값이 없으면 null */
   readonly mastery_info?: MItemMasteryInfo | null | undefined;
 }
@@ -198,8 +198,8 @@ export interface MEquipmentPreset {
   readonly preset_no: number;
   /** 아이템 정보 */
   readonly item_equipment: MItemEquipment[];
-  /** 소울 세트 옵션 */
-  readonly soul_set_option: string;
+  /** 소울 세트 옵션. 세트 효과가 없는 프리셋이면 null (2026-11-24 실측) */
+  readonly soul_set_option: string | null;
 }
 
 /** 장착 장비(캐시 아이템 제외) — `client.maplestorym.character.getItemEquipment()` 의 응답. */
@@ -382,8 +382,8 @@ export interface MAndroidCashItem {
 export interface MAndroidEquipmentInfo {
   /** 안드로이드 명 */
   readonly android_name: string;
-  /** 안드로이드 닉네임 */
-  readonly android_nickname: string;
+  /** 안드로이드 닉네임. 닉네임을 정하지 않았으면 null (2026-11-24 실측) */
+  readonly android_nickname: string | null;
   /** 안드로이드 아이콘 */
   readonly android_icon: string;
   /** 안드로이드 설명 */
@@ -472,8 +472,8 @@ export interface MJewelEquipmentPage {
 export interface MCharacterJewel {
   /** 적용 중인 쥬얼 페이지 번호 */
   readonly use_jewel_page_no: number;
-  /** 적용 중인 쥬얼 세트 옵션 */
-  readonly use_jewel_set_option: string;
+  /** 적용 중인 쥬얼 세트 옵션. 세트 효과가 없으면 null (2026-11-24 실측) */
+  readonly use_jewel_set_option: string | null;
   /** 쥬얼 장착 정보 */
   readonly jewel_equipment: MJewelEquipmentPage[];
 }

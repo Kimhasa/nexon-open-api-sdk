@@ -105,7 +105,7 @@ export const M_CHARACTER_ANDROID_EQUIPMENT_SHAPE: ShapeDescriptor = {
 export const M_CHARACTER_JEWEL_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     use_jewel_page_no: 'number',
-    use_jewel_set_option: 'string',
+    use_jewel_set_option: 'any', // 세트 효과가 없으면 null
     jewel_equipment: 'array',
   },
 };

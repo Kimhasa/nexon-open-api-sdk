@@ -258,8 +258,8 @@ export interface TfdUserArcheTuning {
   readonly ouid: TfdOuid;
   /** 계승자 그룹 식별자 (`meta.getDescendantGroup()` 참고) */
   readonly descendant_group_id: string;
-  /** 아르케 조율 보드 그룹 식별자 (`meta.getArcheTuningBoardGroup()` 참고) */
-  readonly arche_tuning_board_group_id: string;
+  /** 아르케 조율 보드 그룹 식별자 (`meta.getArcheTuningBoardGroup()` 참고). 아르케 조율을 하지 않은 계승자면 null (2026-11-24 실측) */
+  readonly arche_tuning_board_group_id: string | null;
   /** 아르케 조율 목록 */
   readonly arche_tuning: readonly TfdUserArcheTuningSlot[];
 }
