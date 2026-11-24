@@ -1,6 +1,7 @@
 import { classifyError } from '../errors/classify-error.js';
 import type { NexonErrorPayload } from '../errors/NexonError.js';
 import { NexonError } from '../errors/NexonError.js';
+import { invalidInput } from '../validation/input.js';
 import { validateShape } from '../validation/response-shape.js';
 import type { ShapeDescriptor, ShapeMismatch } from '../validation/response-shape.js';
 import { computeRetryDelay, isRetryableStatus, sleep } from './retry.js';
@@ -41,7 +42,18 @@ export class HttpClient {
   private readonly retryInterceptors: RetryInterceptor[] = [];
 
   constructor(config: HttpClientConfig) {
-    this.apiKey = config.apiKey;
+    // JavaScript에서는 타입과 달리 undefined 가 올 수 있다 (process.env 값이 없을 때)
+    const apiKey: unknown = (config as HttpClientConfig | undefined)?.apiKey;
+    if (typeof apiKey !== 'string' || apiKey.trim() === '') {
+      invalidInput(
+        'API 키가 비어 있습니다.',
+        '.env 파일에 NEXON_API_KEY=발급받은_키 를 적고 node --env-file=.env 로 실행했는지, ' +
+          '코드의 process.env 이름과 .env 의 이름이 같은지 확인하세요. ' +
+          '키는 https://openapi.nexon.com/ 에 로그인해 애플리케이션을 등록하면 발급됩니다 (게임마다 따로 발급).',
+      );
+    }
+    // 보내는 값은 다듬지 않는다. 앞뒤 공백이 섞인 키는 서버의 OPENAPI00005 안내로 알린다
+    this.apiKey = apiKey;
     this.timeoutMs = config.timeoutMs ?? DEFAULT_TIMEOUT_MS;
     this.maxRetries = config.maxRetries ?? DEFAULT_MAX_RETRIES;
     this.retryBaseDelayMs = config.retryBaseDelayMs ?? DEFAULT_RETRY_BASE_DELAY_MS;

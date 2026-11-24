@@ -6,6 +6,8 @@ import { NexonError } from '../../../src/core/errors/NexonError.js';
 import { NexonRateLimitError } from '../../../src/core/errors/NexonRateLimitError.js';
 import { NexonAuthError } from '../../../src/core/errors/NexonAuthError.js';
 import { NexonServerError } from '../../../src/core/errors/NexonServerError.js';
+import { NexonMaintenanceError } from '../../../src/core/errors/NexonMaintenanceError.js';
+import { NexonBadRequestError } from '../../../src/core/errors/NexonBadRequestError.js';
 
 const TEST_URL = 'https://test-api.example.com/test';
 const TEST_API_KEY = 'test-api-key-123';
@@ -14,6 +16,63 @@ const createClient = (overrides: Record<string, unknown> = {}): HttpClient =>
   new HttpClient({ apiKey: TEST_API_KEY, ...overrides });
 
 describe('HttpClient', () => {
+  describe('apiKey 검증', () => {
+    it.each([
+      ['누락 (undefined)', undefined],
+      ['빈 문자열', ''],
+      ['공백뿐인 문자열', '   '],
+    ])('apiKey 가 %s 이면 NexonBadRequestError(OPENAPI00004)를 던진다', (_label, apiKey) => {
+      let caught: unknown;
+      try {
+        new HttpClient({ apiKey: apiKey as string });
+      } catch (err) {
+        caught = err;
+      }
+      expect(caught).toBeInstanceOf(NexonBadRequestError);
+      expect((caught as NexonBadRequestError).code).toBe('OPENAPI00004');
+      expect((caught as NexonBadRequestError).message).toContain('API 키가 비어 있습니다');
+      expect((caught as NexonBadRequestError).message).toContain('--env-file=.env');
+    });
+
+    it('앞뒤 공백이 섞인 키는 다듬지 않고 그대로 보낸다', async () => {
+      let sentKey: string | null = null;
+      server.use(
+        http.get(TEST_URL, ({ request }) => {
+          sentKey = request.headers.get('x-nxopen-api-key');
+          return HttpResponse.json({});
+        }),
+      );
+
+      await new HttpClient({ apiKey: 'key-with-inner space' }).get(TEST_URL);
+
+      expect(sentKey).toBe('key-with-inner space');
+    });
+  });
+
+  describe('503 점검 응답', () => {
+    it('OPENAPI00011 은 재시도 뒤 NexonMaintenanceError 로 분류된다', async () => {
+      let calls = 0;
+      server.use(
+        http.get(TEST_URL, () => {
+          calls++;
+          return HttpResponse.json(
+            { error: { name: 'OPENAPI00011', message: 'Under maintenance' } },
+            { status: 503 },
+          );
+        }),
+      );
+
+      const client = createClient({ maxRetries: 1, retryBaseDelayMs: 1 });
+      const err: unknown = await client.get(TEST_URL).catch((e: unknown) => e);
+
+      expect(err).toBeInstanceOf(NexonMaintenanceError);
+      expect(err).toBeInstanceOf(NexonServerError);
+      expect((err as NexonMaintenanceError).status).toBe(503);
+      expect((err as NexonMaintenanceError).nexonMessage).toBe('Under maintenance');
+      expect(calls).toBe(2); // 최초 1회 + 재시도 1회 (재시도 정책은 그대로)
+    });
+  });
+
   describe('성공적인 요청', () => {
     it('JSON 응답을 파싱하여 반환한다', async () => {
       server.use(http.get(TEST_URL, () => HttpResponse.json({ name: 'test', value: 42 })));
