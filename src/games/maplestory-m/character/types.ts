@@ -117,6 +117,22 @@ export interface MEmblemInfo {
   readonly emblem_option: string;
 }
 
+/** 마스터리 정보 */
+export interface MItemMasteryInfo {
+  /** 마스터리 레벨 */
+  readonly mastery_level: number;
+  /** 마스터리 경험치 */
+  readonly mastery_exp: number;
+  /** 기본 옵션 보너스 포인트 */
+  readonly base_option_point: number;
+  /** 잠재 옵션 보너스 포인트 */
+  readonly potential_option_point: number;
+  /** 추가 옵션 보너스 포인트 */
+  readonly additional_option_point: number;
+  /** 에디셔널 잠재 옵션 보너스 포인트 */
+  readonly additional_potential_option_point: number;
+}
+
 /** 장착 장비 개별 정보 */
 export interface MItemEquipment {
   /** 장착 아이템 명 */
@@ -170,6 +186,10 @@ export interface MItemEquipment {
   readonly soul_info: MSoulInfo;
   /** 문장 정보 */
   readonly emblem_info: MEmblemInfo;
+  /** 프리스타일 쿠폰 적용 여부 (0:미적용, 1:적용) */
+  readonly freestyle_coupon_flag?: string | undefined;
+  /** 마스터리 정보 */
+  readonly mastery_info?: MItemMasteryInfo | undefined;
 }
 
 /** 장비 프리셋 정보 */
@@ -246,6 +266,8 @@ export interface MCashItemEquipmentItem {
   readonly cash_item_label: string;
   /** 캐시 아이템 컬러링프리즘 정보 (null: 미적용) */
   readonly cash_item_coloring_prism: MCashItemColoringPrism | null;
+  /** 프리스타일 쿠폰 적용 여부 (0:미적용, 1:적용) */
+  readonly freestyle_coupon_flag?: string | undefined;
 }
 
 /** 캐시 아이템 프리셋 정보 */
@@ -350,6 +372,8 @@ export interface MAndroidCashItem {
   readonly cash_item_label: string;
   /** 안드로이드 캐시 아이템 컬러링프리즘 정보 */
   readonly cash_item_coloring_prism: MCashItemColoringPrism | null;
+  /** 프리스타일 쿠폰 적용 여부 (0:미적용, 1:적용) */
+  readonly freestyle_coupon_flag?: string | undefined;
 }
 
 /** 안드로이드 장착 정보 */
@@ -416,8 +440,6 @@ export interface MCharacterAndroidEquipment {
   readonly android_heart_equipment_preset: MAndroidHeartPreset[];
 }
 
-// ─── 아래 엔드포인트는 실제 API 스펙 확인 후 구현 예정 ────────────────────────
-
 // ─── GET /maplestorym/v1/character/jewel ─────────────────────────────────────
 
 /** 쥬얼 개별 정보 */
@@ -438,7 +460,7 @@ export interface MJewelInfo {
 
 /** 쥬얼 페이지별 장착 정보 */
 export interface MJewelEquipmentPage {
-  /** 장착 아이템 명 */
+  /** 쥬얼 페이지 번호 */
   readonly jewel_page_no: number;
   /** 쥬얼 정보 */
   readonly jewel_info: MJewelInfo[];
@@ -466,6 +488,8 @@ export interface MHairInfo {
   readonly mix_color: string;
   /** 헤어 믹스 컬러의 염색 비율 */
   readonly mix_rate: string;
+  /** 프리스타일 쿠폰 적용 여부 (0:미적용, 1:적용) */
+  readonly freestyle_coupon_flag?: string | undefined;
 }
 
 /** 성형 정보 */
@@ -478,6 +502,8 @@ export interface MFaceInfo {
   readonly mix_color: string;
   /** 성형 믹스 컬러의 염색 비율 */
   readonly mix_rate: string;
+  /** 프리스타일 쿠폰 적용 여부 (0:미적용, 1:적용) */
+  readonly freestyle_coupon_flag?: string | undefined;
 }
 
 /** GET /maplestorym/v1/character/beauty-equipment 응답 */
@@ -666,22 +692,38 @@ export interface MCharacterLinkSkill {
 
 /** V코어 개별 정보 */
 export interface MVCoreEquipment {
-  /** 슬롯 인덱스 */
-  readonly slot_id: string;
-  /** 슬롯 레벨 */
-  readonly slot_level: number;
-  /** 코어 명 */
-  readonly vcore_name: string;
+  /** @deprecated 현재 포털 스펙에서 제거된 필드입니다. */
+  readonly slot_id?: string | undefined;
+  /** @deprecated 현재 포털 스펙에서 제거된 필드입니다. */
+  readonly slot_level?: number | undefined;
+  /** @deprecated 현재 포털 스펙에서 제거된 필드입니다. */
+  readonly vcore_name?: string | undefined;
   /** 코어 타입 */
   readonly vcore_type: string;
   /** 코어 레벨 */
   readonly vcore_level: number;
-  /** 코어에 해당하는 스킬 명 */
-  readonly vcore_skill_name_1: string;
-  /** (강화 코어) 두 번째 스킬 명 */
-  readonly vcore_skill_name_2: string;
-  /** (강화 코어) 세 번째 스킬 명 */
-  readonly vcore_skill_name_3: string;
+  /** @deprecated 현재 포털 스펙에서 제거된 필드입니다. `vcore_skill_name1`을 사용하세요. */
+  readonly vcore_skill_name_1?: string | undefined;
+  /** @deprecated 현재 포털 스펙에서 제거된 필드입니다. `vcore_skill_name2`을 사용하세요. */
+  readonly vcore_skill_name_2?: string | undefined;
+  /** @deprecated 현재 포털 스펙에서 제거된 필드입니다. `vcore_skill_name3`을 사용하세요. */
+  readonly vcore_skill_name_3?: string | undefined;
+  /** 코어 점수 */
+  readonly vcore_score?: number | undefined;
+  /** 스킬 명 1 */
+  readonly vcore_skill_name1?: string | undefined;
+  /** 스킬 명 2 */
+  readonly vcore_skill_name2?: string | undefined;
+  /** 스킬 명 3 */
+  readonly vcore_skill_name3?: string | undefined;
+  /** 스킬 명 4 */
+  readonly vcore_skill_name4?: string | undefined;
+  /** 기간제 여부 (0:영구, 1:기간제) */
+  readonly vcore_expire_flag?: string | undefined;
+  /** 만료 시간 (UTC0) */
+  readonly vcore_expire_date?: string | undefined;
+  /** 장착 여부 (0:미장착, 1:장착) */
+  readonly vcore_equipment_flag?: string | undefined;
 }
 
 /** GET /maplestorym/v1/character/vmatrix 응답 */
@@ -690,6 +732,8 @@ export interface MCharacterVMatrix {
   readonly character_class: string;
   /** V코어 정보 */
   readonly character_v_core_equipment: MVCoreEquipment[];
+  /** V매트릭스 합산 점수 */
+  readonly vmatrix_total_score?: number | undefined;
 }
 
 // ─── GET /maplestorym/v1/character/hexamatrix-skill ──────────────────────────
@@ -708,6 +752,8 @@ export interface MHexaMatrixSkillInfo {
   readonly skill_description: string;
   /** 스킬 아이콘 */
   readonly skill_icon: string;
+  /** 코어 점수 */
+  readonly skill_score?: number | undefined;
 }
 
 /** GET /maplestorym/v1/character/hexamatrix-skill 응답 */
@@ -716,6 +762,8 @@ export interface MCharacterHexaMatrixSkill {
   readonly character_class: string;
   /** HEXA매트릭스 스킬 정보 */
   readonly hexamatrix_skill: MHexaMatrixSkillInfo[];
+  /** HEXA매트릭스 합산 점수 */
+  readonly hexamatrix_total_score?: number | undefined;
 }
 
 // ─── GET /maplestorym/v1/character/hexamatrix-stat ───────────────────────────

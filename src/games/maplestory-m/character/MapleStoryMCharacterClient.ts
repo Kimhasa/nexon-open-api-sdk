@@ -1,3 +1,4 @@
+import { emitDeprecation } from '../../../core/deprecation/deprecation.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { MOcidRequest } from '../types.js';
 import {
@@ -38,6 +39,7 @@ import type {
   MCharacterHexaMatrixSkill,
   MCharacterHexaMatrixStat,
 } from './types.js';
+import { assertOcid } from '../validation.js';
 
 /**
  * 메이플스토리M 캐릭터 API 클라이언트.
@@ -61,13 +63,22 @@ export class MapleStoryMCharacterClient {
   /**
    * 기본 정보를 조회한다.
    *
+   * @param params - 캐릭터 식별자(`ocid`)
+   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+   *
    * const basic = await client.maplestorym.character.getBasic({ ocid });
    * console.log(basic.character_name, basic.character_level);
    * ```
    */
   async getBasic(params: MOcidRequest): Promise<MCharacterBasic> {
+    assertOcid(params.ocid);
     return this.http.get<MCharacterBasic>(
       `${MapleStoryMCharacterClient.BASE}/character/basic`,
       { ocid: params.ocid },
@@ -78,8 +89,16 @@ export class MapleStoryMCharacterClient {
   /**
    * 스탯 정보를 조회한다.
    *
+   * @param params - 캐릭터 식별자(`ocid`)
+   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+   *
    * const stat = await client.maplestorym.character.getStat({ ocid });
    * for (const s of stat.stat) {
    *   console.log(`${s.stat_name}: ${s.stat_value}`);
@@ -87,6 +106,7 @@ export class MapleStoryMCharacterClient {
    * ```
    */
   async getStat(params: MOcidRequest): Promise<MCharacterStat> {
+    assertOcid(params.ocid);
     return this.http.get<MCharacterStat>(
       `${MapleStoryMCharacterClient.BASE}/character/stat`,
       { ocid: params.ocid },
@@ -97,13 +117,22 @@ export class MapleStoryMCharacterClient {
   /**
    * 하이퍼 스탯 정보를 조회한다.
    *
+   * @param params - 캐릭터 식별자(`ocid`)
+   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+   *
    * const hyperStat = await client.maplestorym.character.getHyperStat({ ocid });
    * console.log(`프리셋 ${hyperStat.use_preset_no} 사용 중`);
    * ```
    */
   async getHyperStat(params: MOcidRequest): Promise<MCharacterHyperStat> {
+    assertOcid(params.ocid);
     return this.http.get<MCharacterHyperStat>(
       `${MapleStoryMCharacterClient.BASE}/character/hyper-stat`,
       { ocid: params.ocid },
@@ -114,13 +143,22 @@ export class MapleStoryMCharacterClient {
   /**
    * 가입한 길드 정보를 조회한다.
    *
+   * @param params - 캐릭터 식별자(`ocid`)
+   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+   *
    * const guild = await client.maplestorym.character.getGuild({ ocid });
    * console.log(`길드: ${guild.guild_name}`);
    * ```
    */
   async getGuild(params: MOcidRequest): Promise<MCharacterGuild> {
+    assertOcid(params.ocid);
     return this.http.get<MCharacterGuild>(
       `${MapleStoryMCharacterClient.BASE}/character/guild`,
       { ocid: params.ocid },
@@ -131,15 +169,24 @@ export class MapleStoryMCharacterClient {
   /**
    * 장착 아이템 정보를 조회한다.
    *
+   * @param params - 캐릭터 식별자(`ocid`)
+   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+   *
    * const equip = await client.maplestorym.character.getItemEquipment({ ocid });
    * for (const item of equip.item_equipment) {
-   *   console.log(`${item.item_equipment_part}: ${item.item_name}`);
+   *   console.log(`${item.item_equipment_slot_name}: ${item.item_name}`);
    * }
    * ```
    */
   async getItemEquipment(params: MOcidRequest): Promise<MCharacterItemEquipment> {
+    assertOcid(params.ocid);
     return this.http.get<MCharacterItemEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/item-equipment`,
       { ocid: params.ocid },
@@ -150,15 +197,24 @@ export class MapleStoryMCharacterClient {
   /**
    * 장착 캐시 아이템 정보를 조회한다.
    *
+   * @param params - 캐릭터 식별자(`ocid`)
+   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+   *
    * const cash = await client.maplestorym.character.getCashItemEquipment({ ocid });
-   * for (const item of cash.cash_item_equipment_base) {
-   *   console.log(`${item.cash_item_equipment_part}: ${item.cash_item_name}`);
+   * for (const item of cash.cash_item_equipment) {
+   *   console.log(`${item.cash_item_equipment_slot_name}: ${item.cash_item_name}`);
    * }
    * ```
    */
   async getCashItemEquipment(params: MOcidRequest): Promise<MCharacterCashItemEquipment> {
+    assertOcid(params.ocid);
     return this.http.get<MCharacterCashItemEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/cashitem-equipment`,
       { ocid: params.ocid },
@@ -169,15 +225,24 @@ export class MapleStoryMCharacterClient {
   /**
    * 장착 심볼 정보를 조회한다.
    *
+   * @param params - 캐릭터 식별자(`ocid`)
+   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+   *
    * const symbol = await client.maplestorym.character.getSymbol({ ocid });
-   * for (const s of symbol.symbol) {
+   * for (const s of [...symbol.arcane_symbol, ...symbol.authentic_symbol]) {
    *   console.log(`${s.symbol_name} Lv.${s.symbol_level}`);
    * }
    * ```
    */
   async getSymbol(params: MOcidRequest): Promise<MCharacterSymbolEquipment> {
+    assertOcid(params.ocid);
     return this.http.get<MCharacterSymbolEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/symbol`,
       { ocid: params.ocid },
@@ -188,15 +253,24 @@ export class MapleStoryMCharacterClient {
   /**
    * 적용 세트 효과 정보를 조회한다.
    *
+   * @param params - 캐릭터 식별자(`ocid`)
+   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+   *
    * const setEffect = await client.maplestorym.character.getSetEffect({ ocid });
-   * for (const s of setEffect.set_effect) {
-   *   console.log(`${s.set_name} (${s.total_set_count}세트)`);
+   * for (const s of setEffect.set_info) {
+   *   console.log(`${s.set_name} (${s.set_count}세트)`);
    * }
    * ```
    */
   async getSetEffect(params: MOcidRequest): Promise<MCharacterSetEffect> {
+    assertOcid(params.ocid);
     return this.http.get<MCharacterSetEffect>(
       `${MapleStoryMCharacterClient.BASE}/character/set-effect`,
       { ocid: params.ocid },
@@ -207,13 +281,22 @@ export class MapleStoryMCharacterClient {
   /**
    * 장착 안드로이드 정보를 조회한다.
    *
+   * @param params - 캐릭터 식별자(`ocid`)
+   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+   *
    * const android = await client.maplestorym.character.getAndroidEquipment({ ocid });
-   * console.log(`${android.android_name} (${android.android_grade})`);
+   * console.log(`${android.android_equipment.android_name} (${android.android_equipment.android_grade})`);
    * ```
    */
   async getAndroidEquipment(params: MOcidRequest): Promise<MCharacterAndroidEquipment> {
+    assertOcid(params.ocid);
     return this.http.get<MCharacterAndroidEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/android-equipment`,
       { ocid: params.ocid },
@@ -224,15 +307,24 @@ export class MapleStoryMCharacterClient {
   /**
    * 장착 쥬얼 정보를 조회한다.
    *
+   * @param params - 캐릭터 식별자(`ocid`)
+   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+   *
    * const jewel = await client.maplestorym.character.getJewel({ ocid });
-   * for (const j of jewel.jewel) {
+   * for (const j of jewel.jewel_equipment.flatMap((page) => page.jewel_info)) {
    *   console.log(`${j.jewel_name} (${j.jewel_grade}): ${j.jewel_option}`);
    * }
    * ```
    */
   async getJewel(params: MOcidRequest): Promise<MCharacterJewel> {
+    assertOcid(params.ocid);
     return this.http.get<MCharacterJewel>(
       `${MapleStoryMCharacterClient.BASE}/character/jewel`,
       { ocid: params.ocid },
@@ -243,13 +335,22 @@ export class MapleStoryMCharacterClient {
   /**
    * 장착 헤어, 성형, 피부 정보를 조회한다.
    *
+   * @param params - 캐릭터 식별자(`ocid`)
+   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+   *
    * const beauty = await client.maplestorym.character.getBeautyEquipment({ ocid });
    * console.log(`헤어: ${beauty.character_hair.hair_name}`);
    * ```
    */
   async getBeautyEquipment(params: MOcidRequest): Promise<MCharacterBeautyEquipment> {
+    assertOcid(params.ocid);
     return this.http.get<MCharacterBeautyEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/beauty-equipment`,
       { ocid: params.ocid },
@@ -260,13 +361,22 @@ export class MapleStoryMCharacterClient {
   /**
    * 장착 펫 정보를 조회한다.
    *
+   * @param params - 캐릭터 식별자(`ocid`)
+   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+   *
    * const pet = await client.maplestorym.character.getPetEquipment({ ocid });
-   * console.log(`펫1: ${pet.pet_1_name} (${pet.pet_1_nickname})`);
+   * console.log(`펫1: ${pet.pet_1_name} (${pet.pet_1_pet_type})`);
    * ```
    */
   async getPetEquipment(params: MOcidRequest): Promise<MCharacterPetEquipment> {
+    assertOcid(params.ocid);
     return this.http.get<MCharacterPetEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/pet-equipment`,
       { ocid: params.ocid },
@@ -277,15 +387,24 @@ export class MapleStoryMCharacterClient {
   /**
    * 장착 스킬 정보를 조회한다.
    *
+   * @param params - 캐릭터 식별자(`ocid`)
+   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+   *
    * const skill = await client.maplestorym.character.getSkillEquipment({ ocid });
-   * for (const s of skill.character_skill) {
-   *   console.log(`${s.skill_name} Lv.${s.skill_level}`);
+   * for (const s of skill.skill.equipment_skill) {
+   *   console.log(s.skill_name);
    * }
    * ```
    */
   async getSkillEquipment(params: MOcidRequest): Promise<MCharacterSkillEquipment> {
+    assertOcid(params.ocid);
     return this.http.get<MCharacterSkillEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/skill-equipment`,
       { ocid: params.ocid },
@@ -296,15 +415,24 @@ export class MapleStoryMCharacterClient {
   /**
    * 장착 링크 스킬 정보를 조회한다.
    *
+   * @param params - 캐릭터 식별자(`ocid`)
+   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+   *
    * const link = await client.maplestorym.character.getLinkSkill({ ocid });
-   * for (const s of link.character_link_skill) {
-   *   console.log(`${s.skill_name} Lv.${s.skill_level}`);
+   * for (const s of link.link_skill.flatMap((preset) => preset.link_skill_info)) {
+   *   console.log(s.skill_name);
    * }
    * ```
    */
   async getLinkSkill(params: MOcidRequest): Promise<MCharacterLinkSkill> {
+    assertOcid(params.ocid);
     return this.http.get<MCharacterLinkSkill>(
       `${MapleStoryMCharacterClient.BASE}/character/link-skill`,
       { ocid: params.ocid },
@@ -315,34 +443,72 @@ export class MapleStoryMCharacterClient {
   /**
    * V매트릭스 정보를 조회한다.
    *
+   * @param params - 캐릭터 식별자(`ocid`)
+   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+   *
    * const vmatrix = await client.maplestorym.character.getVMatrix({ ocid });
    * for (const core of vmatrix.character_v_core_equipment) {
-   *   console.log(`${core.v_core_name} Lv.${core.v_core_level}`);
+   *   console.log(`${core.vcore_type} Lv.${core.vcore_level}`);
    * }
    * ```
    */
   async getVMatrix(params: MOcidRequest): Promise<MCharacterVMatrix> {
-    return this.http.get<MCharacterVMatrix>(
+    assertOcid(params.ocid);
+    const response = await this.http.get<MCharacterVMatrix>(
       `${MapleStoryMCharacterClient.BASE}/character/vmatrix`,
       { ocid: params.ocid },
       M_CHARACTER_VMATRIX_SHAPE,
     );
+
+    const cores = response?.character_v_core_equipment;
+    const legacyFields = [
+      'slot_id',
+      'slot_level',
+      'vcore_name',
+      'vcore_skill_name_1',
+      'vcore_skill_name_2',
+      'vcore_skill_name_3',
+    ];
+    if (
+      Array.isArray(cores) &&
+      cores.some((core) => core && legacyFields.some((field) => Object.hasOwn(core, field)))
+    ) {
+      emitDeprecation(
+        'MVCoreEquipment.legacyFields',
+        'V코어의 슬롯 및 코어 명 필드는 현재 포털 스펙에서 제거되었습니다. 스킬 명은 vcore_skill_name1~4를 사용하세요.',
+      );
+    }
+    return response;
   }
 
   /**
    * HEXA매트릭스 스킬 정보를 조회한다.
    *
+   * @param params - 캐릭터 식별자(`ocid`)
+   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+   *
    * const hexa = await client.maplestorym.character.getHexaMatrixSkill({ ocid });
-   * for (const core of hexa.character_hexa_core_equipment) {
-   *   console.log(`${core.hexa_core_name} Lv.${core.hexa_core_level}`);
+   * for (const core of hexa.hexamatrix_skill) {
+   *   console.log(`${core.skill_name} Lv.${core.slot_level}`);
    * }
    * ```
    */
   async getHexaMatrixSkill(params: MOcidRequest): Promise<MCharacterHexaMatrixSkill> {
+    assertOcid(params.ocid);
     return this.http.get<MCharacterHexaMatrixSkill>(
       `${MapleStoryMCharacterClient.BASE}/character/hexamatrix-skill`,
       { ocid: params.ocid },
@@ -353,15 +519,24 @@ export class MapleStoryMCharacterClient {
   /**
    * HEXA매트릭스 스탯 정보를 조회한다.
    *
+   * @param params - 캐릭터 식별자(`ocid`)
+   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+   *
    * const hexaStat = await client.maplestorym.character.getHexaMatrixStat({ ocid });
-   * for (const core of hexaStat.character_hexa_stat_core) {
-   *   console.log(`${core.main_stat_name} Lv.${core.main_stat_level}`);
+   * for (const core of hexaStat.hexamatrix_stat.flatMap((slot) => slot.stat_info)) {
+   *   console.log(`${core.main_stat} Lv.${core.main_stat_level}`);
    * }
    * ```
    */
   async getHexaMatrixStat(params: MOcidRequest): Promise<MCharacterHexaMatrixStat> {
+    assertOcid(params.ocid);
     return this.http.get<MCharacterHexaMatrixStat>(
       `${MapleStoryMCharacterClient.BASE}/character/hexamatrix-stat`,
       { ocid: params.ocid },

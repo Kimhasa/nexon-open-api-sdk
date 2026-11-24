@@ -145,7 +145,15 @@ if (ocid) {
 
   await test('union.getRaider', async () => {
     const r = await client.maplestorym.union.getRaider({ ocid: ocid! });
-    if (!('use_preset_no' in r)) throw new Error('use_preset_no 키 없음');
+    if (!Array.isArray(r.use_union_raider_option))
+      throw new Error('use_union_raider_option 배열 없음');
+  });
+
+  await test('union.getStat', async () => {
+    const r = await client.maplestorym.union.getStat({ ocid: ocid! });
+    if (typeof r.use_preset_no !== 'number') throw new Error('use_preset_no 숫자 없음');
+    if (!Array.isArray(r.use_union_stat)) throw new Error('use_union_stat 배열 없음');
+    if (!Array.isArray(r.union_stat_preset)) throw new Error('union_stat_preset 배열 없음');
   });
 }
 
