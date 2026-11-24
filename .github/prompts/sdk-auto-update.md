@@ -10,4 +10,4 @@
 
 `src/games/**`, `src/core/metadata/api-metadata.ts`, `tests/**`, `docs/**`, `CHANGELOG.md` 안에서만 작업한다. 포털 YAML, 워크플로, 의존성, 진입점과 빌드 설정은 읽기 자료다. 커밋, 푸시, PR 조작과 배포는 워크플로 또는 리뷰어의 작업이다.
 
-`corepack yarn type-check`, `corepack yarn lint`, `corepack yarn format:check`, `corepack yarn test`, `corepack yarn build`, `corepack yarn check:exports`, `corepack yarn specs:drift`를 실행한다. 허용된 파일에서 해결할 수 있는 실패를 수정한다. 마지막으로 위에 지정된 요약 파일에 적용한 항목, 보류 항목과 이유, 검증 결과를 적는다. 적용할 변경이 없어도 요약 파일을 작성한다.
+`corepack yarn type-check`, `corepack yarn lint`, `corepack yarn format:check`, `corepack yarn test`, `corepack yarn build`, `corepack yarn check:exports`, `corepack yarn specs:drift`를 실행한다. 허용된 파일에서 해결할 수 있는 실패를 수정한다. 첫 명령이 샌드박스 오류(`apply-seccomp`, `bwrap` 등)로 실행되지 않으면 같은 명령을 반복하지 않는다. 기존 코드와 같은 패턴으로 최소한만 변경하고, 검증을 실행하지 못했다고 요약에 적는다. 워크플로가 편집 후 게이트를 독립적으로 실행한다. 마지막으로 위에 지정된 요약 파일에 적용한 항목, 보류 항목과 이유, 검증 결과를 적는다. 적용할 변경이 없어도 요약 파일을 작성한다.
