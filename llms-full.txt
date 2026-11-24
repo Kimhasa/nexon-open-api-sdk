@@ -1,0 +1,387 @@
+# nexon-open-api — AI 코딩 도구용 전체 안내
+
+> 넥슨 Open API(14개 게임 + Open API 공지)를 감싼 TypeScript/JavaScript 라이브러리다. npm 패키지 이름은 `nexon-open-api` 이다. Node.js 18 이상이며 의존성은 0개, CJS·ESM을 모두 지원한다.
+> 응답 타입은 2026-11-24 게임별 실제 API 키로 실서버 응답과 중첩 필드까지 대조해 맞췄다 (263개 API, 공개 캐릭터 42명). 포털 OpenAPI 스펙과 실제 응답이 다른 600여 곳(필드 이름, null, 숫자·문자열, 배열·객체)은 실제 응답을 따른다.
+
+## 이 SDK로 코드를 짤 때 지킬 것
+
+1. `https://open.api.nexon.com` 을 직접 fetch하지 말고 `nexon-open-api` 를 쓴다. 포털 스펙의 필드 이름을 추측해 쓰지 말고 아래 메서드와 TypeScript 타입(자동완성)을 따른다. 예: 장비 업그레이드 가능 횟수는 `scroll_upgradeable_count` 다 (스펙의 `scroll_upgradable_count` 는 실제로 오지 않는다).
+2. 클라이언트는 `new NexonClient({ apiKey: process.env.NEXON_API_KEY })` 로 만든다. **API 키는 게임마다 따로다.** 여러 게임을 다루면 게임마다 키와 클라이언트를 나눈다. 키는 서버·봇에서만 쓰고 브라우저 코드에 넣지 않는다.
+3. 조회는 보통 2단계다: 이름 → 고유 번호(`getOcid`/`getOuid`) → 정보 조회. 고유 번호(OCID·OUID)는 비밀처럼 다룬다. 화면·URL·로그에 원문을 남기지 않는다 (`maskIdentifier` 로 앞 8자만).
+4. 없는 이름이면 `NexonNotFoundError` 가 난다 (넥슨은 OPENAPI00004를 주지만 SDK가 바꿔 준다). 사용자에게는 "캐릭터를 찾을 수 없어요"처럼 상황에 맞는 문구를 보여 준다.
+5. 날짜(`date`)가 선택인 조회는 **최신 데이터가 필요하면 date를 생략**한다. 오늘·미래 날짜는 넣지 않는다. 랭킹처럼 date가 필수인 조회는 어제 날짜를 기본으로 쓴다.
+6. 에러는 `instanceof` 로 나눈다: `NexonNotFoundError`(없는 캐릭터), `NexonBadRequestError`(입력 오류, 요청 전에 SDK가 검사), `NexonDataNotReadyError`(데이터 준비 중), `NexonMaintenanceError`(점검 중, `NexonServerError` 보다 먼저 검사), `NexonAuthError`(키 문제·다른 게임 키), `NexonRateLimitError`(호출 한도), `NexonServerError`(넥슨 서버 오류). 모두 `NexonError` 를 상속한다. 429·5xx는 SDK가 자동으로 다시 시도한다.
+7. 호출 한도: 개발 단계 키는 초당 5건·하루 1,000건, 서비스 단계는 초당 500건·하루 2천만 건이다. 캐릭터 카드 한 장에 8회 안팎이 드므로 결과를 캐시한다.
+8. 화면에 출처 "Data based on NEXON Open API" 를 표기하고, 저장한 데이터는 30일 이내에 다시 받아 갱신한다 (넥슨 이용 규칙).
+9. 응답 필드는 null일 수 있다(장착하지 않은 장비, 날짜를 생략한 조회의 `date` 등). 타입에 `| null` 이 있으면 반드시 확인한다.
+
+## 기본 예
+
+```js
+import { NexonClient, NexonNotFoundError } from 'nexon-open-api';
+
+const client = new NexonClient({ apiKey: process.env.NEXON_API_KEY });
+try {
+  const ocid = await client.maplestory.getOcid('캐릭터명');
+  const basic = await client.maplestory.character.getBasic({ ocid }); // date 생략 = 최신
+  console.log(`${basic.character_name} Lv.${basic.character_level} ${basic.character_class}`);
+} catch (err) {
+  if (err instanceof NexonNotFoundError) console.log('캐릭터를 찾을 수 없어요');
+  else throw err;
+}
+```
+
+## 더 읽을 문서
+
+- 시작 가이드: https://github.com/Kimhasa/nexon-open-api-sdk/blob/main/docs/getting-started.md
+- FAQ(상황별 에러와 해결): https://github.com/Kimhasa/nexon-open-api-sdk/blob/main/docs/faq.md
+- AI 도구와 함께 쓰기: https://github.com/Kimhasa/nexon-open-api-sdk/blob/main/docs/ai-guide.md
+- 예제: https://github.com/Kimhasa/nexon-open-api-sdk/tree/main/examples
+- 넥슨 공식 AI 에이전트 가이드(원 API의 함정): https://openapi.nexon.com/ko/guide/ai-agent/
+
+## 게임별 공개 메서드
+
+시그니처의 타입 이름은 패키지에서 `import type` 으로 가져올 수 있다. 응답 필드는 에디터 자동완성으로 확인한다.
+
+## 메이플스토리 (KMS) — `client.maplestory`
+
+문서: https://github.com/Kimhasa/nexon-open-api-sdk/blob/main/docs/maplestory.md
+
+- `client.maplestory.getOcid(characterName: string): Promise<OCID>` — 캐릭터 이름으로 캐릭터 고유 번호(OCID)를 받아 온다. 캐릭터 정보를 조회하는 메서드에 이 값을 넣는다.
+- `client.maplestory.getOuid(): Promise<string>` — API 키를 발급받은 넥슨 계정의 고유 번호(ouid)를 조회한다.
+- `client.maplestory.getLegacyOuid(legacyApiKey: string): Promise<string>` — 구 개발자센터 API 키로 계정 고유 번호(ouid)를 조회한다.
+- `client.maplestory.getAchievement(): Promise<Achievement>` — 내 계정이 달성한 업적 목록을 조회한다. API 키를 발급받은 계정이 기준이다.
+- `client.maplestory.character.getList(): Promise<CharacterList>` — 내 계정의 모든 캐릭터 목록(월드·직업·레벨)을 조회한다. API 키를 발급받은 계정이 기준이다.
+- `client.maplestory.character.getBasic(params: OcidDateRequest): Promise<CharacterBasic>` — 캐릭터 기본 정보(레벨·직업·월드·소속 길드·외형 이미지)를 조회한다.
+- `client.maplestory.character.getPopularity(params: OcidDateRequest): Promise<CharacterPopularity>` — 캐릭터 인기도를 조회한다.
+- `client.maplestory.character.getStat(params: OcidDateRequest): Promise<CharacterStat>` — 캐릭터 정보창의 스탯(종합 능력치)을 조회한다. 스탯 이름·값 목록으로 온다.
+- `client.maplestory.character.getHyperStat(params: OcidDateRequest): Promise<CharacterHyperStat>` — 하이퍼 스탯을 조회한다. 프리셋별 스탯 레벨과 상승량, 남은 포인트가 들어 있다.
+- `client.maplestory.character.getPropensity(params: OcidDateRequest): Promise<CharacterPropensity>` — 성향 6종(카리스마·감성·통찰력·의지·손재주·매력)의 레벨을 조회한다.
+- `client.maplestory.character.getAbility(params: OcidDateRequest): Promise<CharacterAbility>` — 어빌리티(등급과 옵션, 프리셋 포함)와 보유 명성치를 조회한다.
+- `client.maplestory.character.getItemEquipment(params: OcidDateRequest): Promise<CharacterItemEquipment>` — 장비창의 장착 장비(프리셋 포함, 캐시 장비 제외)를 조회한다. 스타포스·잠재능력·에디셔널 잠재능력·추가 옵션과 칭호가 함께 온다.
+- `client.maplestory.character.getCashItemEquipment(params: OcidDateRequest): Promise<CharacterCashItemEquipment>` — 장착 중인 캐시 장비(코디, 프리셋 포함)를 조회한다.
+- `client.maplestory.character.getSymbolEquipment(params: OcidDateRequest): Promise<CharacterSymbolEquipment>` — 장착한 심볼(아케인심볼·어센틱심볼)의 레벨·성장치·증가 스탯을 조회한다.
+- `client.maplestory.character.getSetEffect(params: OcidDateRequest): Promise<CharacterSetEffect>` — 적용 중인 세트 효과(세트 이름, 착용 세트 수, 옵션)를 조회한다.
+- `client.maplestory.character.getBeautyEquipment(params: OcidDateRequest): Promise<CharacterBeautyEquipment>` — 헤어·성형·피부(믹스 염색 포함)를 조회한다.
+- `client.maplestory.character.getAndroidEquipment(params: OcidDateRequest): Promise<CharacterAndroidEquipment>` — 장착 안드로이드(외형·캐시 장비·프리셋)를 조회한다.
+- `client.maplestory.character.getPetEquipment(params: OcidDateRequest): Promise<CharacterPetEquipment>` — 장착 펫(최대 3마리)과 펫 장비·펫 스킬(자동 버프)을 조회한다.
+- `client.maplestory.character.getSkill(params: SkillRequest): Promise<CharacterSkill>` — 전직 차수별 스킬 또는 하이퍼 스킬(스킬 레벨·효과)을 조회한다.
+- `client.maplestory.character.getLinkSkill(params: OcidDateRequest): Promise<CharacterLinkSkill>` — 장착 링크 스킬(프리셋 포함)과 이 캐릭터가 주는 링크 스킬을 조회한다.
+- `client.maplestory.character.getVMatrix(params: OcidDateRequest): Promise<CharacterVMatrix>` — V매트릭스(5차)에 장착한 V코어와 슬롯 정보를 조회한다.
+- `client.maplestory.character.getHexaMatrix(params: OcidDateRequest): Promise<CharacterHexaMatrix>` — HEXA 매트릭스(6차)에 장착한 HEXA 코어(이름·레벨·타입)를 조회한다.
+- `client.maplestory.character.getHexaMatrixStat(params: OcidDateRequest): Promise<CharacterHexaMatrixStat>` — HEXA 매트릭스에 설정한 HEXA 스탯(메인·서브 스탯 레벨)을 조회한다.
+- `client.maplestory.character.getDojang(params: OcidDateRequest): Promise<CharacterDojang>` — 무릉도장 최고 기록(최고 층수와 클리어 시간)을 조회한다.
+- `client.maplestory.character.getOtherStat(params: OcidDateRequest): Promise<CharacterOtherStat>` — 다른 조회에서는 확인하기 어려운, 능력치에 영향을 주는 기타 요소를 조회한다.
+- `client.maplestory.character.getRingReserveSkillEquipment(params: OcidDateRequest): Promise<CharacterRingReserveSkillEquipment>` — 예비 특수 반지 슬롯에 장착한 특수 반지를 조회한다.
+- `client.maplestory.union.getUnion(params: OcidDateRequest): Promise<Union>` — 유니온 레벨·등급과 아티팩트 레벨·포인트를 조회한다.
+- `client.maplestory.union.getRaider(params: OcidDateRequest): Promise<UnionRaider>` — 유니온 공격대 배치(블록 위치, 공격대원 효과, 공격대 점령 효과, 프리셋)를 조회한다.
+- `client.maplestory.union.getArtifact(params: OcidDateRequest): Promise<UnionArtifact>` — 유니온 아티팩트(효과 레벨과 크리스탈 옵션)를 조회한다.
+- `client.maplestory.union.getChampion(params: OcidDateRequest): Promise<UnionChampion>` — 유니온 챔피언(챔피언 캐릭터·등급·휘장 효과)을 조회한다.
+- `client.maplestory.guild.getId(guildName: string, worldName: WorldName | (string & {})): Promise<GuildId>` — 길드 이름과 월드 이름으로 길드 고유 번호(oguild_id)를 받아 온다. 길드 정보를 조회할 때 이 값을 넣는다.
+- `client.maplestory.guild.getBasic(params: GuildIdDateRequest): Promise<GuildBasic>` — 길드 기본 정보(레벨·명성치·길드 마스터·길드원 목록·길드 스킬·노블레스 스킬)를 조회한다.
+- `client.maplestory.history.getStarforce(params: HistoryRequest): Promise<StarforceHistory>` — 내 계정의 스타포스 강화 기록(강화 전후 별 수, 결과, 스타 캐치·찬스 타임 여부)을 조회한다.
+- `client.maplestory.history.getPotential(params: HistoryRequest): Promise<PotentialHistory>` — 내 계정의 잠재능력 재설정 이용 기록(재설정 전후 잠재능력·에디셔널 잠재능력 옵션)을 조회한다.
+- `client.maplestory.history.getCube(params: HistoryRequest): Promise<CubeHistory>` — 내 계정의 큐브 사용 기록(사용한 큐브, 사용 전후 잠재능력 옵션, 등급 상승 여부)을 조회한다.
+- `client.maplestory.history.getSoulPotential(params: HistoryRequest): Promise<SoulPotentialHistory>` — 내 계정의 소울 잠재능력 재설정 이용 기록을 한 페이지 조회한다.
+- `client.maplestory.ranking.getOverall(params: OverallRankingRequest): Promise<OverallRanking>` — 종합 랭킹(레벨·경험치 순위)을 조회한다.
+- `client.maplestory.ranking.getUnion(params: UnionRankingRequest): Promise<UnionRanking>` — 유니온 랭킹(유니온 레벨·유니온 파워 순위)을 조회한다.
+- `client.maplestory.ranking.getGuild(params: GuildRankingRequest): Promise<GuildRanking>` — 길드 랭킹(주간 명성치·플래그 레이스·지하 수로)을 조회한다.
+- `client.maplestory.ranking.getDojang(params: DojangRankingRequest): Promise<DojangRanking>` — 무릉도장 랭킹(일반·통달 구간별 층수와 클리어 시간)을 조회한다.
+- `client.maplestory.ranking.getTheSeed(params: TheSeedRankingRequest): Promise<TheSeedRanking>` — 더 시드 랭킹(도달 층과 클리어 시간)을 조회한다.
+- `client.maplestory.ranking.getAchievement(params: RankingBaseRequest): Promise<AchievementRanking>` — 업적 랭킹(업적 등급·업적 점수)을 조회한다.
+- `client.maplestory.notice.getList(): Promise<NoticeList>` — 메이플스토리 홈페이지 공지사항 목록을 조회한다 (최근 20개).
+- `client.maplestory.notice.getDetail(noticeId: number): Promise<NoticeDetail>` — 공지사항 한 건의 본문을 조회한다.
+- `client.maplestory.notice.getUpdateList(): Promise<UpdateNoticeList>` — 업데이트 게시글 목록을 조회한다 (최근 20개).
+- `client.maplestory.notice.getUpdateDetail(noticeId: number): Promise<NoticeDetail>` — 업데이트 게시글 한 건의 본문을 조회한다.
+- `client.maplestory.notice.getEventList(): Promise<EventNoticeList>` — 진행 중 이벤트 목록(이벤트 시작·종료 일시 포함)을 조회한다 (최근 20개).
+- `client.maplestory.notice.getEventDetail(noticeId: number): Promise<EventNoticeDetail>` — 진행 중 이벤트 한 건의 본문과 기간을 조회한다.
+- `client.maplestory.notice.getCashshopList(): Promise<CashshopNoticeList>` — 캐시샵 공지 목록(판매 시작·종료 일시 포함)을 조회한다 (최근 20개).
+- `client.maplestory.notice.getCashshopDetail(noticeId: number): Promise<CashshopNoticeDetail>` — 캐시샵 공지 한 건의 본문과 판매 기간을 조회한다.
+- `client.maplestory.battlePractice.getReplayId(params: BattlePracticeReplayIdRequest): Promise<BattlePracticeReplayId>` — 캐릭터가 등록한 연무장 리플레이 목록(리플레이 고유 번호)을 조회한다.
+- `client.maplestory.battlePractice.getResult(params: BattlePracticeReplayRequest): Promise<BattlePracticeResult>` — 연무장 측정 결과(총 데미지, DPS, 스킬별 데미지 비중)를 조회한다.
+- `client.maplestory.battlePractice.getSkillTimeline(params: BattlePracticeSkillTimelineRequest): Promise<BattlePracticeSkillTimeline>` — 연무장 측정 중 스킬 사용 내역(타임라인)을 한 페이지 조회한다.
+- `client.maplestory.battlePractice.getCharacterInfo(params: BattlePracticeReplayRequest): Promise<BattlePracticeCharacterInfo>` — 연무장 입장 당시의 캐릭터 정보(스탯·장비·스킬·유니온 등)를 한 번에 조회한다.
+- `client.maplestory.scheduler.getCharacterState(params: SchedulerCharacterStateRequest): Promise<SchedulerCharacterState>` — 인게임 스케줄러의 일일·주간·보스 콘텐츠 수행 현황(주간 보스 처치 횟수 등)을 조회한다.
+
+## EA SPORTS FC 온라인 — `client.fcOnline`
+
+문서: https://github.com/Kimhasa/nexon-open-api-sdk/blob/main/docs/fc-online.md
+
+- `client.fcOnline.getOuid(nickname: string): Promise<OUID>` — 구단주 닉네임으로 계정 고유 번호(ouid)를 받아 온다. 구단주 정보와 경기 기록을 조회할 때 이 값을 넣는다.
+- `client.fcOnline.getBasic(ouid: OUID): Promise<FcUserBasic>` — 구단주 기본 정보(닉네임과 레벨)를 조회한다.
+- `client.fcOnline.getMaxDivision(ouid: OUID): Promise<readonly FcMaxDivision[]>` — 역대 최고 등급(디비전)과 달성 일자를 매치 종류별로 조회한다.
+- `client.fcOnline.getMatchList(params: FcUserMatchRequest): Promise<string[]>` — 구단주가 치른 경기의 매치 번호 목록을 매치 종류별로 조회한다 (최근 경기부터).
+- `client.fcOnline.getTradeList(params: FcUserTradeRequest): Promise<FcTradeRecord[]>` — 내 이적시장 거래 기록(거래한 선수 카드, 강화 등급, 거래 가격)을 조회한다 (최근 거래부터).
+- `client.fcOnline.getMatchDetail(matchId: string): Promise<FcMatchDetail>` — 경기 한 판의 상세 기록(승패, 점유율, 슛·패스·수비 통계, 출전 선수별 평점)을 조회한다.
+- `client.fcOnline.getRankerStats(params: FcRankerStatsRequest): Promise<FcRankerStats[]>` — TOP 10,000 랭커가 쓴 선수 카드의 포지션별 20경기 평균 기록(골·어시스트·패스·수비 등)을 조회한다.
+- `client.fcOnline.getMatchTypeMeta(): Promise<FcMatchTypeMeta[]>` — 매치 종류 번호와 이름(50 = 공식경기, 52 = 감독모드, 214 = 볼타 공식 등) 목록을 조회한다. API 키 없이도 받을 수 있는 공개 목록이다.
+- `client.fcOnline.getSpidMeta(): Promise<FcSpidMeta[]>` — 모든 선수 카드의 번호(spid)와 선수 이름 목록을 조회한다.
+- `client.fcOnline.getSpPositionMeta(): Promise<FcSpPositionMeta[]>` — 포지션 번호와 이름(0 = GK, 1 = SW 등) 목록을 조회한다.
+- `client.fcOnline.getDivisionMeta(): Promise<FcDivisionMeta[]>` — 공식경기 등급(디비전) 번호와 이름(800 = 슈퍼 챔피언스, 900 = 챔피언스 등) 목록을 조회한다.
+- `client.fcOnline.getDivisionVoltaMeta(): Promise<FcDivisionVoltaMeta[]>` — 볼타 공식경기 등급 번호와 이름(1100 = 월드 스타 등) 목록을 조회한다.
+- `client.fcOnline.getSeasonMeta(): Promise<FcSeasonMeta[]>` — 공식경기·감독모드의 현재(최신) 시즌 번호를 조회한다.
+- `client.fcOnline.getClassMeta(): Promise<FcClassMeta[]>` — 선수 클래스(ICON TM 같은 시즌 카드 종류)의 번호·이름·아이콘 이미지 목록을 조회한다.
+- `client.fcOnline.getActionShotUrl(spid: number): string` — 선수 카드 번호(spid) 또는 선수 번호(pid)로 선수 액션샷 이미지 주소를 만든다.
+- `client.fcOnline.getPlayerImageUrl(spid: number): string` — 선수 카드 번호(spid) 또는 선수 번호(pid)로 선수 얼굴 이미지 주소를 만든다.
+
+## 메이플스토리M — `client.maplestorym`
+
+문서: https://github.com/Kimhasa/nexon-open-api-sdk/blob/main/docs/maplestory-m.md
+
+- `client.maplestorym.getOcid(worldName: MWorldName, characterName: string): Promise<OCID>` — 월드 이름과 캐릭터 이름으로 캐릭터 고유 번호(OCID)를 받아 온다. 메이플스토리M은 월드마다 같은 이름이 있을 수 있어 월드 이름이 꼭 필요하다.
+- `client.maplestorym.character.getBasic(params: MOcidRequest): Promise<MCharacterBasic>` — 캐릭터 기본 정보(레벨·직업·월드·최근 접속 일시·외형 이미지)를 조회한다.
+- `client.maplestorym.character.getStat(params: MOcidRequest): Promise<MCharacterStat>` — 캐릭터 스탯(스탯 이름·값 목록)을 조회한다.
+- `client.maplestorym.character.getHyperStat(params: MOcidRequest): Promise<MCharacterHyperStat>` — 하이퍼 스탯(프리셋별 스탯 레벨과 상승량)을 조회한다.
+- `client.maplestorym.character.getGuild(params: MOcidRequest): Promise<MCharacterGuild>` — 캐릭터가 가입한 길드 이름을 조회한다.
+- `client.maplestorym.character.getItemEquipment(params: MOcidRequest): Promise<MCharacterItemEquipment>` — 장착 장비(프리셋 포함, 캐시 아이템 제외)를 조회한다. 스타포스·잠재능력·에디셔널 잠재능력·소울·마스터리가 함께 온다.
+- `client.maplestorym.character.getCashItemEquipment(params: MOcidRequest): Promise<MCharacterCashItemEquipment>` — 장착 중인 캐시 아이템(코디, 프리셋 포함)을 조회한다.
+- `client.maplestorym.character.getSymbol(params: MOcidRequest): Promise<MCharacterSymbolEquipment>` — 장착한 심볼(아케인심볼·어센틱심볼)의 레벨·성장치·옵션을 조회한다.
+- `client.maplestorym.character.getSetEffect(params: MOcidRequest): Promise<MCharacterSetEffect>` — 적용 중인 세트 효과를 조회한다.
+- `client.maplestorym.character.getAndroidEquipment(params: MOcidRequest): Promise<MCharacterAndroidEquipment>` — 장착 안드로이드(프리셋 포함)를 조회한다.
+- `client.maplestorym.character.getJewel(params: MOcidRequest): Promise<MCharacterJewel>` — 장착 쥬얼(페이지별 쥬얼과 쥬얼 세트 옵션)을 조회한다.
+- `client.maplestorym.character.getBeautyEquipment(params: MOcidRequest): Promise<MCharacterBeautyEquipment>` — 헤어·성형·피부를 조회한다.
+- `client.maplestorym.character.getPetEquipment(params: MOcidRequest): Promise<MCharacterPetEquipment>` — 장착 펫과 펫 장비·펫 스킬을 조회한다.
+- `client.maplestorym.character.getSkillEquipment(params: MOcidRequest): Promise<MCharacterSkillEquipment>` — 캐릭터가 장착 중인 스킬을 조회한다.
+- `client.maplestorym.character.getLinkSkill(params: MOcidRequest): Promise<MCharacterLinkSkill>` — 장착 링크 스킬(프리셋별)을 조회한다.
+- `client.maplestorym.character.getVMatrix(params: MOcidRequest): Promise<MCharacterVMatrix>` — V매트릭스의 V코어(코어 레벨·스킬·코어 점수)를 조회한다.
+- `client.maplestorym.character.getHexaMatrixSkill(params: MOcidRequest): Promise<MCharacterHexaMatrixSkill>` — HEXA매트릭스의 스킬(슬롯 레벨·스킬 타입)을 조회한다.
+- `client.maplestorym.character.getHexaMatrixStat(params: MOcidRequest): Promise<MCharacterHexaMatrixStat>` — HEXA매트릭스의 HEXA 스탯(메인·서브 스탯 강화 레벨)을 조회한다.
+- `client.maplestorym.union.get(params: MOcidRequest): Promise<MUnion>` — 유니온 레벨·등급과 레벨 총합 누적 효과를 조회한다.
+- `client.maplestorym.union.getRaider(params: MOcidRequest): Promise<MUnionRaider>` — 유니온에 배치된 공격대원 효과를 조회한다.
+- `client.maplestorym.union.getStat(params: MOcidRequest): Promise<MUnionStat>` — 유니온 스탯(적용 중인 스탯과 프리셋별 포인트 분배)을 조회한다.
+- `client.maplestorym.guild.getId(worldName: MWorldName, guildName: string): Promise<GuildId>` — 월드 이름과 길드 이름으로 길드 고유 번호(oguild_id)를 받아 온다.
+- `client.maplestorym.guild.getBasic(params: MGuildIdRequest): Promise<MGuildBasic>` — 길드 기본 정보(레벨·길드 마스터·길드원별 레벨과 활동량·길드 스킬·시설물)를 조회한다.
+- `client.maplestorym.ranking.getLevel(params: MLevelRankingRequest): Promise<MLevelRanking>` — 레벨 랭킹을 조회한다.
+- `client.maplestorym.ranking.getDojang(params: MDojangRankingRequest): Promise<MDojangRanking>` — 무릉도장 랭킹(도달 층수)을 조회한다.
+- `client.maplestorym.ranking.getRootOfTime(params: MRootOfTimeRankingRequest): Promise<MRootOfTimeRanking>` — 시간의 근원 랭킹을 조회한다.
+- `client.maplestorym.ranking.getUnion(params: MUnionRankingRequest): Promise<MUnionRanking>` — 유니온 랭킹(유니온 등급·레벨)을 조회한다.
+- `client.maplestorym.ranking.getCombatPower(params: MCombatPowerRankingRequest): Promise<MCombatPowerRanking>` — 전투력 랭킹을 조회한다.
+- `client.maplestorym.ranking.getKerningMTower(params: MKerningMTowerRankingRequest): Promise<MKerningMTowerRanking>` — 커닝M타워 랭킹을 조회한다.
+- `client.maplestorym.ranking.getAchievement(params: MAchievementRankingRequest): Promise<MAchievementRanking>` — 업적 랭킹을 조회한다.
+- `client.maplestorym.ranking.getSharenianBattlefield(params: MSharenianBattlefieldRankingRequest): Promise<MSharenianBattlefieldRanking>` — 샤레니안의 전장 랭킹(길드 랭킹)을 조회한다.
+- `client.maplestorym.ranking.getSharenianWaterway(params: MSharenianWaterwayRankingRequest): Promise<MSharenianWaterwayRanking>` — 샤레니안의 지하수로 랭킹(길드 랭킹)을 조회한다.
+- `client.maplestorym.notice.getList(): Promise<MNoticeList>` — 메이플스토리M 공지사항 목록을 조회한다 (최근 20개).
+- `client.maplestorym.notice.getDetail(noticeId: number): Promise<MNoticeDetail>` — 공지사항 한 건의 본문을 조회한다.
+- `client.maplestorym.notice.getPatchList(): Promise<MPatchNoticeList>` — 패치노트 목록을 조회한다 (최근 20개).
+- `client.maplestorym.notice.getPatchDetail(noticeId: number): Promise<MNoticeDetail>` — 패치노트 한 건의 본문을 조회한다.
+- `client.maplestorym.notice.getEventList(): Promise<MEventNoticeList>` — 진행 중 이벤트 목록을 조회한다 (최근 20개).
+- `client.maplestorym.notice.getEventDetail(noticeId: number): Promise<MEventNoticeDetail>` — 진행 중 이벤트 한 건의 본문을 조회한다.
+
+## MapleStory SEA — `client.maplestorySEA`
+
+문서: https://github.com/Kimhasa/nexon-open-api-sdk/blob/main/docs/maplestory-sea.md
+
+- `client.maplestorySEA.getOcid(characterName: string): Promise<OCID>` — 캐릭터 이름으로 캐릭터 고유 번호(OCID)를 받아 온다. 캐릭터 정보를 조회하는 메서드에 이 값을 넣는다.
+- `client.maplestorySEA.character.getBasic(params: OcidDateRequest): Promise<SEACharacterBasic>` — 캐릭터 기본 정보(레벨·직업·월드·소속 길드·외형 이미지)를 조회한다. SEA 명칭: Basic character information.
+- `client.maplestorySEA.character.getPopularity(params: OcidDateRequest): Promise<SEACharacterPopularity>` — 캐릭터 인기도를 조회한다. SEA 명칭: Popularity.
+- `client.maplestorySEA.character.getStat(params: OcidDateRequest): Promise<SEACharacterStat>` — 캐릭터 정보창의 스탯(종합 능력치)을 조회한다. 스탯 이름·값 목록으로 온다. SEA 명칭: Comprehensive stats.
+- `client.maplestorySEA.character.getHyperStat(params: OcidDateRequest): Promise<SEACharacterHyperStat>` — 하이퍼 스탯을 조회한다. 프리셋별 스탯 레벨과 상승량, 남은 포인트가 들어 있다. SEA 명칭: Hyper Stat.
+- `client.maplestorySEA.character.getPropensity(params: OcidDateRequest): Promise<SEACharacterPropensity>` — 성향 6종(카리스마·감성·통찰력·의지·손재주·매력)의 레벨을 조회한다. SEA 명칭: Traits.
+- `client.maplestorySEA.character.getAbility(params: OcidDateRequest): Promise<SEACharacterAbility>` — 어빌리티(등급과 옵션, 프리셋 포함)와 보유 명성치를 조회한다. SEA 명칭: Ability.
+- `client.maplestorySEA.character.getItemEquipment(params: OcidDateRequest): Promise<SEACharacterItemEquipment>` — 장비창의 장착 장비(프리셋 포함, 캐시 장비 제외)를 조회한다. 스타포스·잠재능력·에디셔널 잠재능력·추가 옵션과 칭호가 함께 온다. SEA 명칭: Equipped equipment (excluding cash items).
+- `client.maplestorySEA.character.getCashItemEquipment(params: OcidDateRequest): Promise<SEACharacterCashItemEquipment>` — 장착 중인 캐시 장비(코디, 프리셋 포함)를 조회한다. SEA 명칭: Equipped cash items.
+- `client.maplestorySEA.character.getSymbolEquipment(params: OcidDateRequest): Promise<SEACharacterSymbolEquipment>` — 장착한 심볼(아케인심볼·어센틱심볼)의 레벨·성장치·증가 스탯을 조회한다. SEA 명칭: Equipped symbols.
+- `client.maplestorySEA.character.getSetEffect(params: OcidDateRequest): Promise<SEACharacterSetEffect>` — 적용 중인 세트 효과(세트 이름, 착용 세트 수, 옵션)를 조회한다. SEA 명칭: Set item effects.
+- `client.maplestorySEA.character.getBeautyEquipment(params: OcidDateRequest): Promise<SEACharacterBeautyEquipment>` — 헤어·성형·피부(믹스 염색 포함)를 조회한다. SEA 명칭: Hair, face, and skin.
+- `client.maplestorySEA.character.getAndroidEquipment(params: OcidDateRequest): Promise<SEACharacterAndroidEquipment>` — 장착 안드로이드(외형·캐시 장비·프리셋)를 조회한다. SEA 명칭: Android.
+- `client.maplestorySEA.character.getPetEquipment(params: OcidDateRequest): Promise<SEACharacterPetEquipment>` — 장착 펫(최대 3마리)과 펫 장비·펫 스킬(자동 버프)을 조회한다. SEA 명칭: Pets.
+- `client.maplestorySEA.character.getSkill(params: SEASkillRequest): Promise<SEACharacterSkill>` — 전직 차수별 스킬 또는 하이퍼 스킬(스킬 레벨·효과)을 조회한다. SEA 명칭: Skills and Hyper Skills.
+- `client.maplestorySEA.character.getLinkSkill(params: OcidDateRequest): Promise<SEACharacterLinkSkill>` — 장착 링크 스킬(프리셋 포함)과 이 캐릭터가 주는 링크 스킬을 조회한다. SEA 명칭: Link Skills.
+- `client.maplestorySEA.character.getVMatrix(params: OcidDateRequest): Promise<SEACharacterVMatrix>` — V매트릭스(5차)에 장착한 V코어와 슬롯 정보를 조회한다. SEA 명칭: V Matrix, Nodes.
+- `client.maplestorySEA.character.getHexaMatrix(params: OcidDateRequest): Promise<SEACharacterHexaMatrix>` — HEXA 매트릭스(6차)에 장착한 HEXA 코어(이름·레벨·타입)를 조회한다. SEA 명칭: HEXA Nodes.
+- `client.maplestorySEA.character.getHexaMatrixStat(params: OcidDateRequest): Promise<SEACharacterHexaMatrixStat>` — HEXA 매트릭스에 설정한 HEXA 스탯(메인·서브 스탯 레벨)을 조회한다. SEA 명칭: HEXA Stats.
+- `client.maplestorySEA.character.getDojang(params: OcidDateRequest): Promise<SEACharacterDojang>` — 무릉도장 최고 기록(최고 층수와 클리어 시간)을 조회한다. SEA 명칭: Mu Lung Garden.
+- `client.maplestorySEA.union.getUnion(params: OcidDateRequest): Promise<SEAUnion>` — 유니온 레벨·등급과 아티팩트 레벨·포인트를 조회한다. SEA 명칭: Union.
+- `client.maplestorySEA.union.getRaider(params: OcidDateRequest): Promise<SEAUnionRaider>` — 유니온 공격대 배치(블록 위치, 공격대원 효과, 공격대 점령 효과, 프리셋)를 조회한다. SEA 명칭: Union Raider.
+- `client.maplestorySEA.union.getArtifact(params: OcidDateRequest): Promise<SEAUnionArtifact>` — 유니온 아티팩트(효과 레벨과 크리스탈 옵션)를 조회한다. SEA 명칭: Union Artifact.
+- `client.maplestorySEA.union.getChampion(params: OcidDateRequest): Promise<SEAUnionChampion>` — 유니온 챔피언(챔피언 캐릭터·등급·휘장 효과)을 조회한다. SEA 명칭: Union Champion.
+- `client.maplestorySEA.guild.getId(guildName: string, worldName: string): Promise<GuildId>` — 길드 이름과 월드 이름으로 길드 고유 번호(oguild_id)를 받아 온다. 길드 정보를 조회할 때 이 값을 넣는다. SEA 명칭: Guild identifier.
+- `client.maplestorySEA.guild.getBasic(params: GuildIdDateRequest): Promise<SEAGuildBasic>` — 길드 기본 정보(레벨·길드 마스터·길드원 목록·길드 스킬)를 조회한다. SEA 명칭: Guild basic information.
+
+## MapleStory Taiwan — `client.maplestoryTW`
+
+문서: https://github.com/Kimhasa/nexon-open-api-sdk/blob/main/docs/maplestory-tw.md
+
+- `client.maplestoryTW.getOcid(characterName: string): Promise<OCID>` — 캐릭터 이름으로 캐릭터 고유 번호(OCID)를 받아 온다. 캐릭터 정보를 조회하는 메서드에 이 값을 넣는다.
+- `client.maplestoryTW.character.getBasic(params: TWOcidDateRequest): Promise<TWCharacterBasic>` — 캐릭터 기본 정보(레벨·직업·월드·소속 길드·외형 이미지)를 조회한다. 대만 명칭: 基本資訊. Add query parameters to the returned image URL to change its action or expression.
+- `client.maplestoryTW.character.getPopularity(params: TWOcidDateRequest): Promise<TWCharacterPopularity>` — 캐릭터 인기도를 조회한다. 대만 명칭: 名聲.
+- `client.maplestoryTW.character.getStat(params: TWOcidDateRequest): Promise<TWCharacterStat>` — 캐릭터 정보창의 스탯(종합 능력치)을 조회한다. 스탯 이름·값 목록으로 온다. 대만 명칭: 綜合能力值.
+- `client.maplestoryTW.character.getHyperStat(params: TWOcidDateRequest): Promise<TWCharacterHyperStat>` — 하이퍼 스탯을 조회한다. 프리셋별 스탯 레벨과 상승량, 남은 포인트가 들어 있다. 대만 명칭: 極限屬性.
+- `client.maplestoryTW.character.getPropensity(params: TWOcidDateRequest): Promise<TWCharacterPropensity>` — 성향 6종(카리스마·감성·통찰력·의지·손재주·매력)의 레벨을 조회한다. 대만 명칭: 性向.
+- `client.maplestoryTW.character.getAbility(params: TWOcidDateRequest): Promise<TWCharacterAbility>` — 어빌리티(등급과 옵션, 프리셋 포함)와 보유 명성치를 조회한다. 대만 명칭: 能力.
+- `client.maplestoryTW.character.getItemEquipment(params: TWOcidDateRequest): Promise<TWCharacterItemEquipment>` — 장비창의 장착 장비(프리셋 포함, 캐시 장비 제외)를 조회한다. 스타포스·잠재능력·에디셔널 잠재능력·추가 옵션과 칭호가 함께 온다. 대만 명칭: 已裝備道具.
+- `client.maplestoryTW.character.getCashItemEquipment(params: TWOcidDateRequest): Promise<TWCharacterCashItemEquipment>` — 장착 중인 캐시 장비(코디, 프리셋 포함)를 조회한다. 대만 명칭: 已裝備現金道具.
+- `client.maplestoryTW.character.getSymbolEquipment(params: TWOcidDateRequest): Promise<TWCharacterSymbolEquipment>` — 장착한 심볼(아케인심볼·어센틱심볼)의 레벨·성장치·증가 스탯을 조회한다. 대만 명칭: 符文.
+- `client.maplestoryTW.character.getSetEffect(params: TWOcidDateRequest): Promise<TWCharacterSetEffect>` — 적용 중인 세트 효과(세트 이름, 착용 세트 수, 옵션)를 조회한다. 대만 명칭: 套裝效果.
+- `client.maplestoryTW.character.getBeautyEquipment(params: TWOcidDateRequest): Promise<TWCharacterBeautyEquipment>` — 헤어·성형·피부(믹스 염색 포함)를 조회한다. 대만 명칭: 髮型、臉型與膚色.
+- `client.maplestoryTW.character.getAndroidEquipment(params: TWOcidDateRequest): Promise<TWCharacterAndroidEquipment>` — 장착 안드로이드(외형·캐시 장비·프리셋)를 조회한다. 대만 명칭: 機器人.
+- `client.maplestoryTW.character.getPetEquipment(params: TWOcidDateRequest): Promise<TWCharacterPetEquipment>` — 장착 펫(최대 3마리)과 펫 장비·펫 스킬(자동 버프)을 조회한다. 대만 명칭: 寵物.
+- `client.maplestoryTW.character.getSkill(params: TWSkillRequest): Promise<TWCharacterSkill>` — 전직 차수별 스킬 또는 하이퍼 스킬(스킬 레벨·효과)을 조회한다. 대만 명칭: 技能、超技能.
+- `client.maplestoryTW.character.getLinkSkill(params: TWOcidDateRequest): Promise<TWCharacterLinkSkill>` — 장착 링크 스킬(프리셋 포함)과 이 캐릭터가 주는 링크 스킬을 조회한다. 대만 명칭: 連結技能.
+- `client.maplestoryTW.character.getVMatrix(params: TWOcidDateRequest): Promise<TWCharacterVMatrix>` — V매트릭스(5차)에 장착한 V코어와 슬롯 정보를 조회한다. 대만 명칭: V 矩陣、V 核心.
+- `client.maplestoryTW.character.getHexaMatrix(params: TWOcidDateRequest): Promise<TWCharacterHexaMatrix>` — HEXA 매트릭스(6차)에 장착한 HEXA 코어(이름·레벨·타입)를 조회한다. 대만 명칭: HEXA 核心.
+- `client.maplestoryTW.character.getHexaMatrixStat(params: TWOcidDateRequest): Promise<TWCharacterHexaMatrixStat>` — HEXA 매트릭스에 설정한 HEXA 스탯(메인·서브 스탯 레벨)을 조회한다. 대만 명칭: HEXA 屬性.
+- `client.maplestoryTW.character.getDojang(params: TWOcidDateRequest): Promise<TWCharacterDojang>` — 무릉도장 최고 기록(최고 층수와 클리어 시간)을 조회한다. 대만 명칭: 武陵道場.
+- `client.maplestoryTW.character.getFamiliar(params: TWOcidDateRequest): Promise<TWCharacterFamiliar>` — 패밀리어(萌獸) 정보와 연결 슬롯을 조회한다. 대만 서버에만 있다. 대만 명칭: 萌獸.
+- `client.maplestoryTW.union.getUnion(params: TWOcidDateRequest): Promise<TWUnion>` — 유니온 레벨·등급과 아티팩트 레벨·포인트를 조회한다. 대만 명칭: 戰地.
+- `client.maplestoryTW.union.getRaider(params: TWOcidDateRequest): Promise<TWUnionRaider>` — 유니온 공격대 배치(블록 위치, 공격대원 효과, 공격대 점령 효과, 프리셋)를 조회한다. 대만 명칭: 戰地攻擊隊.
+- `client.maplestoryTW.union.getArtifact(params: TWOcidDateRequest): Promise<TWUnionArtifact>` — 유니온 아티팩트(효과 레벨과 크리스탈 옵션)를 조회한다. 대만 명칭: 戰地神器.
+- `client.maplestoryTW.union.getChampion(params: TWOcidDateRequest): Promise<TWUnionChampion>` — 유니온 챔피언(챔피언 캐릭터·등급·휘장 효과)을 조회한다. 대만 명칭: 聯盟冠軍.
+- `client.maplestoryTW.guild.getId(guildName: string, worldName: TWWorldName): Promise<GuildId>` — 길드 이름과 월드 이름으로 길드 고유 번호(oguild_id)를 받아 온다. 길드 정보를 조회할 때 이 값을 넣는다. 대만 명칭: 公會識別碼.
+- `client.maplestoryTW.guild.getBasic(params: TWGuildIdDateRequest): Promise<TWGuildBasic>` — 길드 기본 정보(레벨·길드 마스터·길드원 목록·길드 스킬)를 조회한다. 대만 명칭: 公會基本資訊.
+
+## 퍼스트 디센던트 — `client.firstDescendant`
+
+문서: https://github.com/Kimhasa/nexon-open-api-sdk/blob/main/docs/first-descendant.md
+
+- `client.firstDescendant.getOuid(userName: string): Promise<TfdOuid>` — 닉네임과 태그로 계정 고유 번호를 조회한다.
+- `client.firstDescendant.user.getBasic(params: TfdUserRequest): Promise<TfdUserBasic>` — 프로필의 마스터리 랭크와 타이틀·훈장 정보를 조회한다.
+- `client.firstDescendant.user.getDescendant(params: TfdUserRequest): Promise<TfdUserDescendant>` — 장착한 계승자의 레벨·모듈·커스터마이징을 조회한다.
+- `client.firstDescendant.user.getWeapon(params: TfdUserLocalizedRequest): Promise<TfdUserWeapon>` — 모든 슬롯의 장착 무기와 무기 모듈을 조회한다.
+- `client.firstDescendant.user.getReactor(params: TfdUserLocalizedRequest): Promise<TfdUserReactor>` — 장착 반응로의 레벨·강화 단계·랜덤 옵션을 조회한다.
+- `client.firstDescendant.user.getExternalComponent(params: TfdUserLocalizedRequest): Promise<TfdUserExternalComponent>` — 모든 슬롯의 장착 외장 부품과 코어 옵션을 조회한다.
+- `client.firstDescendant.user.getArcheTuning(params: TfdUserArcheTuningRequest): Promise<TfdUserArcheTuning>` — 계승자 그룹별 아르케 조율 보드와 활성화한 노드를 조회한다.
+- `client.firstDescendant.meta.getAcquisitionDetail(languageCode: TfdLanguageCode = 'ko'): Promise<TfdAcquisitionDetailMeta[]>` — 도감의 획득처 정보를 조회한다.
+- `client.firstDescendant.meta.getArcheTuningNode(languageCode: TfdLanguageCode = 'ko'): Promise<TfdArcheTuningNodeMeta[]>` — 도감의 아르케 조율 노드 정보를 조회한다.
+- `client.firstDescendant.meta.getCollectibleItem(languageCode: TfdLanguageCode = 'ko'): Promise<TfdCollectibleItemMeta[]>` — 도감의 수집형 아이템 정보를 조회한다.
+- `client.firstDescendant.meta.getConsumableMaterial(languageCode: TfdLanguageCode = 'ko'): Promise<TfdConsumableMaterialMeta[]>` — 도감의 소비 아이템 정보를 조회한다.
+- `client.firstDescendant.meta.getCoreType(languageCode: TfdLanguageCode = 'ko'): Promise<TfdCoreTypeMeta[]>` — 도감의 코어 유형 정보를 조회한다.
+- `client.firstDescendant.meta.getCustomizingItem(languageCode: TfdLanguageCode = 'ko'): Promise<TfdCustomizingItemMeta[]>` — 도감의 커스터마이징 아이템 정보를 조회한다.
+- `client.firstDescendant.meta.getDescendant(languageCode: TfdLanguageCode = 'ko'): Promise<TfdDescendantMeta[]>` — 도감의 계승자 정보를 조회한다.
+- `client.firstDescendant.meta.getDescendantGroup(languageCode: TfdLanguageCode = 'ko'): Promise<TfdDescendantGroupMeta[]>` — 도감의 계승자 그룹 정보를 조회한다.
+- `client.firstDescendant.meta.getExternalComponent(languageCode: TfdLanguageCode = 'ko'): Promise<TfdExternalComponentMeta[]>` — 도감의 외장 부품 정보를 조회한다.
+- `client.firstDescendant.meta.getFellow(languageCode: TfdLanguageCode = 'ko'): Promise<TfdFellowMeta[]>` — 도감의 조력자 정보를 조회한다.
+- `client.firstDescendant.meta.getMedal(languageCode: TfdLanguageCode = 'ko'): Promise<TfdMedalMeta[]>` — 도감의 훈장 정보를 조회한다.
+- `client.firstDescendant.meta.getModule(languageCode: TfdLanguageCode = 'ko'): Promise<TfdModuleMeta[]>` — 도감의 모듈 정보를 조회한다.
+- `client.firstDescendant.meta.getNodeItem(languageCode: TfdLanguageCode = 'ko'): Promise<TfdNodeItemMeta[]>` — 도감의 변이 세포 정보를 조회한다.
+- `client.firstDescendant.meta.getNodeSocketType(languageCode: TfdLanguageCode = 'ko'): Promise<TfdNodeSocketTypeMeta[]>` — 도감의 변이 세포 소켓 유형 정보를 조회한다.
+- `client.firstDescendant.meta.getReactor(languageCode: TfdLanguageCode = 'ko'): Promise<TfdReactorMeta[]>` — 도감의 반응로 정보를 조회한다.
+- `client.firstDescendant.meta.getResearch(languageCode: TfdLanguageCode = 'ko'): Promise<TfdResearchMeta[]>` — 도감의 연구 정보를 조회한다.
+- `client.firstDescendant.meta.getReward(languageCode: TfdLanguageCode = 'ko'): Promise<TfdRewardMeta[]>` — 도감의 난이도 보상 정보를 조회한다.
+- `client.firstDescendant.meta.getStat(languageCode: TfdLanguageCode = 'ko'): Promise<TfdStatMeta[]>` — 도감의 기본 스탯 정보를 조회한다.
+- `client.firstDescendant.meta.getTier(languageCode: TfdLanguageCode = 'ko'): Promise<TfdTierMeta[]>` — 도감의 등급 정보를 조회한다.
+- `client.firstDescendant.meta.getTitle(languageCode: TfdLanguageCode = 'ko'): Promise<TfdTitleMeta[]>` — 도감의 타이틀 정보를 조회한다.
+- `client.firstDescendant.meta.getVehicle(languageCode: TfdLanguageCode = 'ko'): Promise<TfdVehicleMeta[]>` — 도감의 탈것 정보를 조회한다.
+- `client.firstDescendant.meta.getVoidBattle(languageCode: TfdLanguageCode = 'ko'): Promise<TfdVoidBattleMeta[]>` — 도감의 보이드 요격전 정보를 조회한다.
+- `client.firstDescendant.meta.getWeapon(languageCode: TfdLanguageCode = 'ko'): Promise<TfdWeaponMeta[]>` — 도감의 무기 정보를 조회한다.
+- `client.firstDescendant.meta.getWeaponType(languageCode: TfdLanguageCode = 'ko'): Promise<TfdWeaponTypeMeta[]>` — 도감의 무기 유형 정보를 조회한다.
+- `client.firstDescendant.meta.getAdaptLevel(): Promise<TfdAdaptLevelMeta[]>` — 적응도 레벨 정보를 조회한다.
+- `client.firstDescendant.meta.getAmorphousReward(): Promise<TfdAmorphousRewardMeta[]>` — 비정형 물질 개봉 보상 정보를 조회한다.
+- `client.firstDescendant.meta.getArcheTuningBoard(): Promise<TfdArcheTuningBoardMeta[]>` — 아르케 조율 보드 정보를 조회한다.
+- `client.firstDescendant.meta.getArcheTuningBoardGroup(): Promise<TfdArcheTuningBoardGroupMeta[]>` — 아르케 조율 보드 그룹 정보를 조회한다.
+- `client.firstDescendant.meta.getCoreSlot(): Promise<TfdCoreSlotMeta[]>` — 코어 슬롯 정보를 조회한다.
+- `client.firstDescendant.meta.getDescendantLevelDetail(): Promise<TfdDescendantLevelDetailMeta[]>` — 계승자 레벨별 경험치 정보를 조회한다.
+- `client.firstDescendant.meta.getFellowLevelDetail(): Promise<TfdFellowLevelDetailMeta[]>` — 조력자 레벨별 경험치 정보를 조회한다.
+- `client.firstDescendant.meta.getMasteryRankLevelDetail(): Promise<TfdMasteryRankLevelDetailMeta[]>` — 마스터리 랭크별 경험치 정보를 조회한다.
+- `client.firstDescendant.recommendation.getModule(params: TfdRecommendationModuleRequest): Promise<TfdRecommendationModule>` — 보이드 요격전 성공 기록에서 계승자와 무기의 추천 모듈을 조회한다.
+- `client.firstDescendant.leaderboard.getVoidInterceptBattle(params: TfdLeaderboardVoidInterceptBattleRequest): Promise<TfdLeaderboardVoidInterceptBattle>` — 보이드 요격전 리더보드의 클리어 타임과 참가 멤버를 조회한다.
+- `client.firstDescendant.leaderboard.getVoidErosionPurgeChallenge(params: TfdLeaderboardVoidErosionPurgeChallengeRequest): Promise<TfdLeaderboardVoidErosionPurgeChallenge>` — 보이드 침식 정화 - 도전의 리더보드 순위·단계·클리어 타임을 조회한다.
+
+## 마비노기 영웅전 — `client.mabinogiHeroes`
+
+문서: https://github.com/Kimhasa/nexon-open-api-sdk/blob/main/docs/mabinogi-heroes.md
+
+- `client.mabinogiHeroes.getOcid(characterName: string): Promise<HeroesOCID>` — 영웅 이름으로 캐릭터 고유 번호를 조회한다.
+- `client.mabinogiHeroes.character.getBasic(params: HeroesOcidRequest): Promise<HeroesCharacterBasic>` — 캐릭터 프로필의 직업·레벨과 타이틀 능력치를 조회한다.
+- `client.mabinogiHeroes.character.getTitle(params: HeroesOcidRequest): Promise<HeroesCharacterTitle>` — 캐릭터가 보유한 타이틀과 문양을 조회한다.
+- `client.mabinogiHeroes.character.getTitleEquipment(params: HeroesOcidRequest): Promise<HeroesCharacterTitleEquipment>` — 캐릭터가 장착한 타이틀과 문양을 조회한다.
+- `client.mabinogiHeroes.character.getItemEquipment(params: HeroesOcidRequest): Promise<HeroesCharacterItemEquipment>` — 장착소지품과 캐시소지품의 장비·프리셋을 조회한다.
+- `client.mabinogiHeroes.character.getStat(params: HeroesOcidRequest): Promise<HeroesCharacterStat>` — 캐릭터 능력치의 이름과 값을 조회한다.
+- `client.mabinogiHeroes.character.getGuild(params: HeroesOcidRequest): Promise<HeroesCharacterGuild>` — 캐릭터가 가입했거나 가입 신청한 길드를 조회한다.
+- `client.mabinogiHeroes.meta.getEnchant(params: HeroesEnchantMetaRequest): Promise<HeroesEnchantMeta>` — 접두·접미 인챈트의 적용 부위와 능력치 효과를 조회한다.
+- `client.mabinogiHeroes.notice.getList(): Promise<HeroesNoticeList>` — 최근 등록된 공지사항 20개를 조회한다.
+- `client.mabinogiHeroes.notice.getDetail(noticeId: number): Promise<HeroesNoticeDetail>` — 공지사항에서 게시글 번호로 본문을 조회한다.
+- `client.mabinogiHeroes.notice.getPatchList(): Promise<HeroesPatchNoticeList>` — 최근 등록된 패치노트 20개를 조회한다.
+- `client.mabinogiHeroes.notice.getPatchDetail(noticeId: number): Promise<HeroesPatchNoticeDetail>` — 패치노트에서 게시글 번호로 본문을 조회한다.
+- `client.mabinogiHeroes.notice.getEventList(): Promise<HeroesEventNoticeList>` — 최근 등록된 이벤트&샵 20개를 조회한다.
+- `client.mabinogiHeroes.notice.getEventDetail(noticeId: number): Promise<HeroesEventNoticeDetail>` — 이벤트&샵에서 게시글 번호로 본문을 조회한다.
+- `client.mabinogiHeroes.marketplace.listHistory(params: HeroesMarketHistoryRequest): Promise<HeroesMarketHistory>` — 거래소에서 최근 1주간의 아이템 거래가를 한 페이지 조회한다.
+- `client.mabinogiHeroes.marketplace.getGoldBuyTop30(): Promise<HeroesGoldMarketBuyTop30>` — 골드 거래소에서 최근 1주간 구매량 상위 30명의 기록을 조회한다.
+- `client.mabinogiHeroes.marketplace.getGoldSellTop30(): Promise<HeroesGoldMarketSellTop30>` — 골드 거래소에서 최근 1주간 판매량 상위 30명의 기록을 조회한다.
+- `client.mabinogiHeroes.ranking.getHallOfHonor(params: HeroesHallOfHonorRankingRequest): Promise<HeroesRankingEntry[]>` — 명예의 전당에서 공격력 또는 마법 공격력 순위를 조회한다.
+- `client.mabinogiHeroes.ranking.getRealTime(params: HeroesRealTimeRankingRequest): Promise<HeroesRankingEntry[]>` — 실시간 랭킹에서 공격력 또는 마법 공격력 순위를 한 페이지 조회한다.
+
+## 서든어택 — `client.suddenAttack`
+
+문서: https://github.com/Kimhasa/nexon-open-api-sdk/blob/main/docs/sudden-attack.md
+
+- `client.suddenAttack.getOuid(userName: string): Promise<SuddenAttackOuid>` — 닉네임으로 계정 고유 번호를 조회한다.
+- `client.suddenAttack.user.getBasic(ouid: SuddenAttackOuid): Promise<SuddenAttackUserBasic>` — 유저 프로필의 장착 칭호·클랜·매너 등급을 조회한다.
+- `client.suddenAttack.user.getRank(ouid: SuddenAttackOuid): Promise<SuddenAttackUserRank>` — 통합·시즌 계급과 각각의 경험치·순위를 조회한다.
+- `client.suddenAttack.user.getTier(ouid: SuddenAttackOuid): Promise<SuddenAttackUserTier>` — 솔로·파티 랭크전 티어와 점수를 조회한다.
+- `client.suddenAttack.user.getRecentInfo(ouid: SuddenAttackOuid): Promise<SuddenAttackUserRecentInfo>` — 최근 승률과 무기별 킬데스를 조회한다.
+- `client.suddenAttack.match.getList({ ouid, match_mode, match_type, }: SuddenAttackMatchListRequest): Promise<SuddenAttackMatchList>` — 최근 매치 목록을 모드와 유형으로 골라 조회한다.
+- `client.suddenAttack.match.getDetail(matchId: string): Promise<SuddenAttackMatchDetail>` — 한 매치의 맵과 참가 유저의 킬·데스 등 전적을 조회한다.
+- `client.suddenAttack.metadata.getLogo(): Promise<SuddenAttackLogo>` — 서든어택 로고의 이미지 주소를 조회한다.
+- `client.suddenAttack.metadata.getGrade(): Promise<readonly SuddenAttackGradeMeta[]>` — 통합 계급과 계급 배지의 이미지 주소를 조회한다.
+- `client.suddenAttack.metadata.getSeasonGrade(): Promise<readonly SuddenAttackSeasonGradeMeta[]>` — 시즌 계급과 계급 배지의 이미지 주소를 조회한다.
+- `client.suddenAttack.metadata.getTier(): Promise<readonly SuddenAttackTierMeta[]>` — 랭크전 티어와 티어 배지의 이미지 주소를 조회한다.
+
+## 카트라이더 러쉬플러스 — `client.kartrider`
+
+문서: https://github.com/Kimhasa/nexon-open-api-sdk/blob/main/docs/kartrider.md
+
+- `client.kartrider.getOuidInfo(racerName: string): Promise<KartriderOuidLookup>` — 라이더명으로 계정 후보의 고유 번호·레벨·생성 시각을 조회한다.
+- `client.kartrider.user.getBasic(params: KartriderOuidRequest): Promise<KartriderUserBasic>` — 라이더 프로필의 레벨과 접속 일시를 조회한다.
+- `client.kartrider.user.getTitleEquipment(params: KartriderOuidRequest): Promise<KartriderUserTitleEquipment>` — 라이더가 장착한 칭호를 조회한다.
+- `client.kartrider.notice.getList(): Promise<KartriderNoticeList>` — 최근 등록된 공지사항 20개를 조회한다.
+- `client.kartrider.notice.getDetail(noticeId: number): Promise<KartriderNoticeDetail>` — 공지사항에서 게시글 번호로 본문을 조회한다.
+- `client.kartrider.notice.getSeasonList(): Promise<KartriderSeasonNoticeList>` — 최근 등록된 시즌 알림판 20개를 조회한다.
+- `client.kartrider.notice.getSeasonDetail(noticeId: number): Promise<KartriderNoticeDetail>` — 시즌 알림판에서 게시글 번호로 본문을 조회한다.
+- `client.kartrider.notice.getEventList(): Promise<KartriderEventNoticeList>` — 최근 등록된 이벤트&대회 20개를 조회한다.
+- `client.kartrider.notice.getEventDetail(noticeId: number): Promise<KartriderNoticeDetail>` — 이벤트&대회에서 게시글 번호로 본문을 조회한다.
+
+## 바람의나라 — `client.baram`
+
+문서: https://github.com/Kimhasa/nexon-open-api-sdk/blob/main/docs/baram.md
+
+- `client.baram.getOcid(characterName: string, serverName: BaramServerName): Promise<BaramOCID>` — 서버 이름과 캐릭터 이름으로 캐릭터 고유 번호를 조회한다.
+- `client.baram.character.getBasic(params: BaramOcidRequest): Promise<BaramCharacterBasic>` — 캐릭터 프로필의 직업·국가·경험치·레벨을 조회한다.
+- `client.baram.character.getTitle(params: BaramOcidRequest): Promise<BaramCharacterTitle>` — 캐릭터가 보유한 칭호와 만료 시각을 조회한다.
+- `client.baram.character.getTitleEquipment(params: BaramOcidRequest): Promise<BaramCharacterTitleEquipment>` — 캐릭터가 장착한 칭호와 만료 시각을 조회한다.
+- `client.baram.character.getItemEquipment(params: BaramOcidRequest): Promise<BaramCharacterItemEquipment>` — 캐릭터가 장착한 아이템을 장착 부위별로 조회한다.
+- `client.baram.character.getStat(params: BaramOcidRequest): Promise<BaramCharacterStat>` — 캐릭터의 능력치 이름과 값을 조회한다.
+- `client.baram.character.getGuild(params: BaramOcidRequest): Promise<BaramCharacterGuild>` — 캐릭터가 가입한 문파를 조회한다.
+
+## 마비노기 — `client.mabinogi`
+
+문서: https://github.com/Kimhasa/nexon-open-api-sdk/blob/main/docs/mabinogi.md
+
+- `client.mabinogi.npcShop.getList({ npc_name, server_name, channel, }: MabinogiNpcShopListRequest): Promise<MabinogiNpcShopList>` — 서버와 채널을 골라 NPC 상점의 탭별 판매 목록을 조회한다.
+- `client.mabinogi.auction.listItems({ auction_item_category, item_name, cursor, }: MabinogiAuctionFilters = {}): Promise<MabinogiAuctionList>` — 경매장에서 판매 중인 매물을 한 페이지 조회한다.
+- `client.mabinogi.auction.listHistory({ auction_item_category, item_name, cursor, }: MabinogiAuctionFilters = {}): Promise<MabinogiAuctionHistory>` — 경매장에서 최근 1시간 동안 거래된 아이템 내역을 한 페이지 조회한다.
+- `client.mabinogi.auction.listByKeyword({ keyword, cursor, }: MabinogiAuctionKeywordSearchRequest): Promise<MabinogiAuctionList>` — 경매장에서 이름에 검색어가 모두 일치하는 매물을 한 페이지 조회한다.
+- `client.mabinogi.hornBugleWorld.getHistory(serverName: MabinogiServerName): Promise<MabinogiHornBugleWorldHistory>` — 서버의 모든 채널에 전송된 거대한 외침의 뿔피리 메시지를 조회한다.
+
+## 바람의나라: 연 — `client.baramYeon`
+
+문서: https://github.com/Kimhasa/nexon-open-api-sdk/blob/main/docs/baram-yeon.md
+
+- `client.baramYeon.getOcid(characterName: string, serverName: BaramYeonServerName): Promise<BaramYeonOCID>` — 서버 이름과 캐릭터 이름으로 캐릭터 고유 번호를 조회한다.
+- `client.baramYeon.character.getBasic(params: BaramYeonOcidRequest): Promise<BaramYeonCharacterBasic>` — 캐릭터 프로필의 서버·직업군·국적·경험치·레벨을 조회한다.
+- `client.baramYeon.character.getTitle(params: BaramYeonOcidRequest): Promise<BaramYeonCharacterTitle>` — 캐릭터가 보유한 칭호와 종류를 조회한다.
+- `client.baramYeon.character.getTitleEquipment(params: BaramYeonOcidRequest): Promise<BaramYeonCharacterTitleEquipment>` — 캐릭터가 장착한 칭호와 표시 중인 칭호를 조회한다.
+
+## V4 — `client.v4`
+
+문서: https://github.com/Kimhasa/nexon-open-api-sdk/blob/main/docs/v4.md
+
+- `client.v4.getOcid(characterName: string): Promise<V4OCID>` — 캐릭터 이름으로 고유 번호를 조회한다.
+- `client.v4.character.getBasic(params: V4OcidRequest): Promise<V4CharacterBasic>` — 캐릭터 프로필의 서버·직업·레벨과 접속 시각을 조회한다.
+- `client.v4.character.getHonor(params: V4OcidRequest): Promise<V4CharacterHonor>` — 캐릭터가 보유한 명예와 만료 시각을 조회한다.
+- `client.v4.character.getHonorEquipment(params: V4OcidRequest): Promise<V4CharacterHonorEquipment>` — 캐릭터가 장착한 명예와 만료 시각을 조회한다.
+
+## 히트2 — `client.hit2`
+
+문서: https://github.com/Kimhasa/nexon-open-api-sdk/blob/main/docs/hit2.md
+
+- `client.hit2.getOcid(characterName: string): Promise<Hit2OCID>` — 캐릭터 이름으로 고유 번호를 조회한다.
+- `client.hit2.character.getBasic(params: Hit2OcidRequest): Promise<Hit2CharacterBasic>` — 캐릭터 프로필의 서버·직업군·레벨과 접속 시각을 조회한다.
+
+## 넥슨 Open API 공지 — `client.platform`
+
+문서: https://github.com/Kimhasa/nexon-open-api-sdk/blob/main/docs/platform.md
+
+- `client.platform.getNoticeList(params: PlatformNoticeRequest = {}): Promise<PlatformNoticeList>` — 넥슨 Open API의 최근 공지 10개와 본문을 조회한다.
+
+(공개 메서드 266개. 더 이상 권장하지 않는 메서드는 뺐다. 이 파일은 `scripts/build-llms.ts` 가 소스에서 만든다.)
