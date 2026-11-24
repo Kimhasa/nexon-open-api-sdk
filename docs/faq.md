@@ -303,7 +303,7 @@ console.log(await checking.maplestory.character.getBasic({ ocid }));
 
 `debug: true` 와 함께 켜면 따로 `logger` 를 적지 않아도 콘솔에 경고가 나옵니다.
 
-- **SDK가 틀렸다** — 이 라이브러리는 넥슨 포털의 공식 스펙을 기준으로 만들었고, API 키가 필요한 조회는 아직 실제 키로 전부 확인하지 못했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)). 실제 응답과 다른 점을 발견하면 [GitHub 이슈](https://github.com/Kimhasa/nexon-open-api-sdk/issues)로 알려 주세요. 게임 이름, 호출한 코드(예: `client.maplestory.character.getStat`), 기대한 값과 실제 값을 적어 주시면 됩니다. **API 키와 실제 캐릭터·계정 이름은 지우고** 올려 주세요.
+- **SDK가 틀렸다** — 이 라이브러리는 넥슨 포털의 공식 스펙으로 만들고 실제 키로 여러 캐릭터의 응답을 맞춰 봤습니다. 그래도 처음 보는 장비·펫·스킬 구성에서는 다른 값이 나올 수 있습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)). 실제 응답과 다른 점을 발견하면 [GitHub 이슈](https://github.com/Kimhasa/nexon-open-api-sdk/issues)로 알려 주세요. 게임 이름, 호출한 코드(예: `client.maplestory.character.getStat`), 기대한 값과 실제 값을 적어 주시면 됩니다. **API 키와 실제 캐릭터·계정 이름은 지우고** 올려 주세요.
 
 넥슨 API 자체의 점검·변경 소식은 [넥슨 Open API 공지](platform.md)(`client.platform.getNoticeList()`)로 확인할 수 있습니다.
 

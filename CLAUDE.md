@@ -368,11 +368,16 @@ Base URL: `https://open.api.nexon.com/`
 
 2026-11-24 기준 포털 14개 게임 + platform의 API **270개를 모두 SDK가 지원**한다 (`yarn specs:coverage` 270/270, CI `specs:drift --strict` 통과).
 
+**실 API 검증**: 2026-11-24 게임별 개발 단계 키로 `yarn test:deep` 을 돌렸다. 공개 캐릭터 42명(게임별 2~6명)으로 HTTP 메서드 263/267개를 부르고, 응답을 SDK 타입과 중첩 필드까지 비교해 차이 0건을 확인했다. 부르지 못한 메서드는 FC `getTradeList`(키 계정 본인 기록만), KMS `getLegacyOuid`(구 키 필요), 제공이 끝난 FC `getAllMatchList`, 정적 파일만 `test:live` 로 확인한 FC `getSeasonIdMeta` 다.
+
+- **포털 스펙은 실제 응답과 다를 수 있다.** 실측에서 null 허용 누락 500여 곳, 이름이 다른 필드(예: `scroll_upgradable_count` ↔ 실제 `scroll_upgradeable_count`), 타입 차이가 나왔다. 타입은 실제 응답을 따르고 근거는 `specs/drift-baseline.json` 에 둔다. 키가 있으면 새 타입도 `yarn test:deep` 으로 확인한다.
+- **없는 이름 조회:** 넥슨은 `OPENAPI00004` 를 돌려준다. 이름 조회 메서드는 `src/core/errors/name-lookup.ts` 의 `lookupByName` 으로 감싸 `NexonNotFoundError` 를 던진다. 새 게임의 이름 조회도 같은 방식을 쓴다.
+
 **포털 변경 대응**: 주간 API Monitor가 변경을 감지하면 스펙 갱신 PR을 열고, `sdk-auto-update.yml` 이 MINOR·DEPRECATE 변경을 SDK에 자동 반영한다. MAJOR와 신규 게임은 사람이 판단한다 ("포털 변경 대응" 참고).
 
 **후속 과제 (선택)**
 
-- 실 API 키로 E2E 검증: 대부분의 게임은 포털 스펙 기반으로 구현됐고 실응답은 정적 메타만 확인했다 (`API_METADATA.note`). 키가 있으면 `yarn test:{game}` 으로 검증한다.
+- 실 API 재검증: 포털 변경이나 새 캐릭터 구성으로 다른 null이 나올 수 있다. 키가 있으면 직업·레벨이 다른 캐릭터로 `yarn test:deep` 을 다시 돌린다.
 - 자동 페이지네이션 `iterateXxx`/`collectXxx` (DX 원칙): 현재 커서 API는 단일 페이지 메서드다.
 - 런타임 shape 검증의 중첩 필드 확인: 현재는 최상위 키만 본다.
 - 던전앤파이터·사이퍼즈(네오플 API)는 범위 외.
