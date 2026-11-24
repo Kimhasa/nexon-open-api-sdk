@@ -28,5 +28,167 @@
     "path": "response[].core_option[].detail[].available_item_option",
     "kind": "missing-spec-field",
     "reason": "2026-11-24 정적 JSON에 있는 경로다. 이 경로의 option_grade는 포털에 적힌 string과 달리 number로 제공된다."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.item_equipment[].scroll_upgradeable_count",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 남은 업그레이드 가능 횟수는 scroll_upgradeable_count로 온다. 포털의 scroll_upgradable_count는 SDK에서 선택 필드로 유지한다."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.item_equipment_preset_1[].additional_potential_option_flag",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 프리셋 장비에도 에디셔널 잠재능력 봉인 여부 additional_potential_option_flag가 온다. 포털 스펙에는 없다."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.item_equipment_preset_1[].item_equipment_slot",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 프리셋 장비의 슬롯 위치는 item_equipment_slot으로 온다. 포털의 equipment_slot은 SDK에서 선택 필드로 유지한다."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.item_equipment_preset_1[].potential_option_flag",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 프리셋 장비에도 잠재능력 봉인 여부 potential_option_flag가 온다. 포털 스펙에는 없다."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.item_equipment_preset_1[].scroll_upgradeable_count",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 남은 업그레이드 가능 횟수는 scroll_upgradeable_count로 온다. 포털의 scroll_upgradable_count는 SDK에서 선택 필드로 유지한다."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.item_equipment_preset_2[].additional_potential_option_flag",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 프리셋 장비에도 에디셔널 잠재능력 봉인 여부 additional_potential_option_flag가 온다. 포털 스펙에는 없다."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.item_equipment_preset_2[].item_equipment_slot",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 프리셋 장비의 슬롯 위치는 item_equipment_slot으로 온다. 포털의 equipment_slot은 SDK에서 선택 필드로 유지한다."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.item_equipment_preset_2[].potential_option_flag",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 프리셋 장비에도 잠재능력 봉인 여부 potential_option_flag가 온다. 포털 스펙에는 없다."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.item_equipment_preset_2[].scroll_upgradeable_count",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 남은 업그레이드 가능 횟수는 scroll_upgradeable_count로 온다. 포털의 scroll_upgradable_count는 SDK에서 선택 필드로 유지한다."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.item_equipment_preset_3[].additional_potential_option_flag",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 프리셋 장비에도 에디셔널 잠재능력 봉인 여부 additional_potential_option_flag가 온다. 포털 스펙에는 없다."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.item_equipment_preset_3[].item_equipment_slot",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 프리셋 장비의 슬롯 위치는 item_equipment_slot으로 온다. 포털의 equipment_slot은 SDK에서 선택 필드로 유지한다."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.item_equipment_preset_3[].potential_option_flag",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 프리셋 장비에도 잠재능력 봉인 여부 potential_option_flag가 온다. 포털 스펙에는 없다."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.item_equipment_preset_3[].scroll_upgradeable_count",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 남은 업그레이드 가능 횟수는 scroll_upgradeable_count로 온다. 포털의 scroll_upgradable_count는 SDK에서 선택 필드로 유지한다."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.dragon_equipment[].additional_potential_option_flag",
+    "kind": "missing-spec-field",
+    "reason": "SDK에서 프리셋 장비와 같은 타입을 쓰는 직업 전용 장비다. 2026-11-24 실 API 응답(개발 키 실측)에서 프리셋 장비에 additional_potential_option_flag가 확인되어 선택 필드로 함께 열어 둔다 (실측 캐릭터에는 직업 전용 장비가 없어 이 경로는 미확인)."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.dragon_equipment[].item_equipment_slot",
+    "kind": "missing-spec-field",
+    "reason": "SDK에서 프리셋 장비와 같은 타입을 쓰는 직업 전용 장비다. 2026-11-24 실 API 응답(개발 키 실측)에서 프리셋 장비에 item_equipment_slot가 확인되어 선택 필드로 함께 열어 둔다 (실측 캐릭터에는 직업 전용 장비가 없어 이 경로는 미확인)."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.dragon_equipment[].potential_option_flag",
+    "kind": "missing-spec-field",
+    "reason": "SDK에서 프리셋 장비와 같은 타입을 쓰는 직업 전용 장비다. 2026-11-24 실 API 응답(개발 키 실측)에서 프리셋 장비에 potential_option_flag가 확인되어 선택 필드로 함께 열어 둔다 (실측 캐릭터에는 직업 전용 장비가 없어 이 경로는 미확인)."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.dragon_equipment[].scroll_upgradeable_count",
+    "kind": "missing-spec-field",
+    "reason": "SDK에서 프리셋 장비와 같은 타입을 쓰는 직업 전용 장비다. 2026-11-24 실 API 응답(개발 키 실측)에서 프리셋 장비에 scroll_upgradeable_count가 확인되어 선택 필드로 함께 열어 둔다 (실측 캐릭터에는 직업 전용 장비가 없어 이 경로는 미확인)."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.mechanic_equipment[].additional_potential_option_flag",
+    "kind": "missing-spec-field",
+    "reason": "SDK에서 프리셋 장비와 같은 타입을 쓰는 직업 전용 장비다. 2026-11-24 실 API 응답(개발 키 실측)에서 프리셋 장비에 additional_potential_option_flag가 확인되어 선택 필드로 함께 열어 둔다 (실측 캐릭터에는 직업 전용 장비가 없어 이 경로는 미확인)."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.mechanic_equipment[].item_equipment_slot",
+    "kind": "missing-spec-field",
+    "reason": "SDK에서 프리셋 장비와 같은 타입을 쓰는 직업 전용 장비다. 2026-11-24 실 API 응답(개발 키 실측)에서 프리셋 장비에 item_equipment_slot가 확인되어 선택 필드로 함께 열어 둔다 (실측 캐릭터에는 직업 전용 장비가 없어 이 경로는 미확인)."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.mechanic_equipment[].potential_option_flag",
+    "kind": "missing-spec-field",
+    "reason": "SDK에서 프리셋 장비와 같은 타입을 쓰는 직업 전용 장비다. 2026-11-24 실 API 응답(개발 키 실측)에서 프리셋 장비에 potential_option_flag가 확인되어 선택 필드로 함께 열어 둔다 (실측 캐릭터에는 직업 전용 장비가 없어 이 경로는 미확인)."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.mechanic_equipment[].scroll_upgradeable_count",
+    "kind": "missing-spec-field",
+    "reason": "SDK에서 프리셋 장비와 같은 타입을 쓰는 직업 전용 장비다. 2026-11-24 실 API 응답(개발 키 실측)에서 프리셋 장비에 scroll_upgradeable_count가 확인되어 선택 필드로 함께 열어 둔다 (실측 캐릭터에는 직업 전용 장비가 없어 이 경로는 미확인)."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.title_preset1",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 칭호 프리셋 1번이 최상위 title_preset1으로 온다. 포털은 title.title_preset_1으로 적고 있다."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.title_preset2",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 칭호 프리셋 2번이 최상위 title_preset2으로 온다. 포털은 title.title_preset_2으로 적고 있다."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/item-equipment",
+    "path": "response.title_preset3",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 칭호 프리셋 3번이 최상위 title_preset3으로 온다. 포털은 title.title_preset_3으로 적고 있다."
+  },
+  {
+    "operation": "GET /maplestory/v1/character/pet-equipment",
+    "path": "response.world_share_pet_equipment_preset",
+    "kind": "type-mismatch",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 월드 공유 펫 장착 아이템 프리셋은 포털에 적힌 객체가 아니라 배열로 온다."
+  },
+  {
+    "operation": "GET /maplestory/v1/notice-cashshop",
+    "path": "response.cashshop_notice[].thumbnail_url",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 캐시샵 공지 항목에 썸네일 thumbnail_url이 온다. 포털 스펙에는 없다."
+  },
+  {
+    "operation": "GET /maplestory/v1/notice-event",
+    "path": "response.event_notice[].thumbnail_url",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 이벤트 공지 항목에 썸네일 thumbnail_url이 온다. 포털 스펙에는 없다."
   }
 ]

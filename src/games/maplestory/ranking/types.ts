@@ -82,8 +82,8 @@ export interface OverallRankingItem {
   readonly character_exp: number;
   /** 캐릭터 인기도 */
   readonly character_popularity: number;
-  /** 길드 명 */
-  readonly character_guildname: string;
+  /** 길드 명 (길드에 가입하지 않았으면 null) */
+  readonly character_guildname: string | null;
 }
 
 /** 종합 랭킹 응답 */

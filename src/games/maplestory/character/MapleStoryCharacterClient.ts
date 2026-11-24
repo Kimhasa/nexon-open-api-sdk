@@ -241,6 +241,9 @@ export class MapleStoryCharacterClient {
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
+   * 장비 카드에 자주 쓰는 필드: 남은 업그레이드 가능 횟수는 `scroll_upgradeable_count`, 장착 슬롯은 프리셋 장비도 `item_equipment_slot`,
+   * 칭호 프리셋 1~3번은 `title_preset1`~`3` 이다. 잠재능력·소울이 없는 장비는 해당 필드가 null이다.
+   *
    * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
    * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 생략하면 가장 최근 데이터(게임 반영까지 평균 15분). 날짜를 넣으면 그날 하루치이며, 지난 날짜는 다음날 오전 2시(KST)부터 조회할 수 있다
    *
@@ -250,7 +253,7 @@ export class MapleStoryCharacterClient {
    * const equip = await client.maplestory.character.getItemEquipment({ ocid });
    * for (const item of equip.item_equipment) {
    *   console.log(
-   *     `[${item.item_equipment_part}] ${item.item_name} ★${item.starforce} ${item.potential_option_grade}`,
+   *     `[${item.item_equipment_part}] ${item.item_name} ★${item.starforce} ${item.potential_option_grade ?? '잠재능력 없음'} 남은 업그레이드 ${item.scroll_upgradeable_count}`,
    *   );
    * }
    * ```
@@ -574,7 +577,8 @@ export class MapleStoryCharacterClient {
    * @example
    * ```ts
    * const other = await client.maplestory.character.getOtherStat({ ocid });
-   * for (const entry of other.other_stat) {
+   * // 기타 능력치가 없는 캐릭터는 other_stat 이 null이다
+   * for (const entry of other.other_stat ?? []) {
    *   console.log(`[${entry.other_stat_type}]`);
    *   for (const s of entry.stat_info) {
    *     console.log(`  ${s.stat_name}: ${s.stat_value}`);

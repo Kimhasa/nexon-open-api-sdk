@@ -65,31 +65,31 @@ API 키는 게임마다 따로 발급받습니다. 키 발급과 설치가 처�
 
 ### 캐릭터 정보 (23개)
 
-| 게임에서 부르는 이름                              | SDK 메서드                                                | 주요 응답 필드                                                                                |
-| ------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| 내 계정의 캐릭터 목록                             | `character.getList()`                                     | `account_list[].character_list` (이름·월드·직업·레벨·OCID)                                    |
-| 캐릭터 기본 정보 (레벨·직업·월드·길드·외형)       | `character.getBasic({ ocid })`                            | `character_level`, `character_class`, `world_name`, `character_guild_name`, `character_image` |
-| 인기도                                            | `character.getPopularity({ ocid })`                       | `popularity`                                                                                  |
-| 캐릭터 정보창 > 스탯 (전투력 포함)                | `character.getStat({ ocid })`                             | `final_stat` (스탯 이름·값 목록), `remain_ap`                                                 |
-| 하이퍼 스탯                                       | `character.getHyperStat({ ocid })`                        | `use_preset_no`, `hyper_stat_preset_1`~`3` (스탯 종류·레벨·상승량)                            |
-| 성향 (카리스마·감성·통찰력·의지·손재주·매력)      | `character.getPropensity({ ocid })`                       | `charisma_level`, `sensibility_level`, `insight_level` 등                                     |
-| 어빌리티                                          | `character.getAbility({ ocid })`                          | `ability_grade`, `ability_info` (옵션 3줄), `remain_fame` (명성치)                            |
-| 장비창 > 장착 장비 (스타포스·잠재능력·추가 옵션)  | `character.getItemEquipment({ ocid })`                    | `item_equipment` (장비 목록), `item_equipment_preset_1`~`3`, `title` (칭호)                   |
-| 캐시 장비 (코디)                                  | `character.getCashItemEquipment({ ocid })`                | `cash_item_equipment_base`, `cash_item_equipment_preset_1`~`3`                                |
-| 심볼 (아케인심볼·어센틱심볼)                      | `character.getSymbolEquipment({ ocid })`                  | `symbol` (심볼 이름·레벨·`symbol_force`)                                                      |
-| 세트 효과                                         | `character.getSetEffect({ ocid })`                        | `set_effect` (세트 이름·`total_set_count`·옵션)                                               |
-| 헤어·성형·피부                                    | `character.getBeautyEquipment({ ocid })`                  | `character_hair`, `character_face`, `character_skin`                                          |
-| 안드로이드                                        | `character.getAndroidEquipment({ ocid })`                 | `android_name`, `android_grade`, `android_cash_item_equipment`                                |
-| 펫·펫 장비·펫 스킬                                | `character.getPetEquipment({ ocid })`                     | `pet_1_name`, `pet_1_equipment`, `pet_1_auto_skill` (펫 2·3도 같은 꼴)                        |
-| 스킬 (전직 차수별, 하이퍼 스킬 포함)              | `character.getSkill({ ocid, character_skill_grade })`     | `character_skill` (스킬 이름·레벨·효과)                                                       |
-| 링크 스킬                                         | `character.getLinkSkill({ ocid })`                        | `character_link_skill` (장착), `character_owned_link_skill` (내가 주는 링크)                  |
-| V매트릭스 (5차)                                   | `character.getVMatrix({ ocid })`                          | `character_v_core_equipment` (코어 이름·타입·레벨)                                            |
-| HEXA 매트릭스 (6차) > HEXA 코어                   | `character.getHexaMatrix({ ocid })`                       | `character_hexa_core_equipment` (코어 이름·레벨·타입)                                         |
-| HEXA 매트릭스 > HEXA 스탯                         | `character.getHexaMatrixStat({ ocid })`                   | `character_hexa_stat_core` (메인·서브 스탯 이름과 레벨)                                       |
-| 무릉도장 최고 기록                                | `character.getDojang({ ocid })`                           | `dojang_best_floor` (층), `dojang_best_time` (초)                                             |
-| 능력치에 영향을 주는 기타 요소                    | `character.getOtherStat({ ocid })`                        | `other_stat[].stat_info` (스탯 이름·값)                                                       |
-| 예비 특수 반지 슬롯의 특수 반지                   | `character.getRingReserveSkillEquipment({ ocid })`        | `special_ring_reserve_name`, `special_ring_reserve_level`                                     |
-| 링 익스체인지에 등록한 특수 반지 (2026-03-18까지) | `character.getRingExchangeSkillEquipment({ ocid, date })` | `special_ring_exchange_name`, `special_ring_exchange_level`                                   |
+| 게임에서 부르는 이름                              | SDK 메서드                                                | 주요 응답 필드                                                                                                                             |
+| ------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| 내 계정의 캐릭터 목록                             | `character.getList()`                                     | `account_list[].character_list` (이름·월드·직업·레벨·OCID)                                                                                 |
+| 캐릭터 기본 정보 (레벨·직업·월드·길드·외형)       | `character.getBasic({ ocid })`                            | `character_level`, `character_class`, `world_name`, `character_guild_name`, `character_image`                                              |
+| 인기도                                            | `character.getPopularity({ ocid })`                       | `popularity`                                                                                                                               |
+| 캐릭터 정보창 > 스탯 (전투력 포함)                | `character.getStat({ ocid })`                             | `final_stat` (스탯 이름·값 목록), `remain_ap`                                                                                              |
+| 하이퍼 스탯                                       | `character.getHyperStat({ ocid })`                        | `use_preset_no`, `hyper_stat_preset_1`~`3` (스탯 종류·레벨·상승량)                                                                         |
+| 성향 (카리스마·감성·통찰력·의지·손재주·매력)      | `character.getPropensity({ ocid })`                       | `charisma_level`, `sensibility_level`, `insight_level` 등                                                                                  |
+| 어빌리티                                          | `character.getAbility({ ocid })`                          | `ability_grade`, `ability_info` (옵션 3줄), `remain_fame` (명성치)                                                                         |
+| 장비창 > 장착 장비 (스타포스·잠재능력·추가 옵션)  | `character.getItemEquipment({ ocid })`                    | `item_equipment` (장비 목록), `item_equipment_preset_1`~`3`, `title` (칭호), `title_preset1`~`3` (칭호 프리셋)                             |
+| 캐시 장비 (코디)                                  | `character.getCashItemEquipment({ ocid })`                | `cash_item_equipment_base`, `cash_item_equipment_preset_1`~`3`                                                                             |
+| 심볼 (아케인심볼·어센틱심볼)                      | `character.getSymbolEquipment({ ocid })`                  | `symbol` (심볼 이름·레벨·`symbol_force`)                                                                                                   |
+| 세트 효과                                         | `character.getSetEffect({ ocid })`                        | `set_effect` (세트 이름·`total_set_count`·옵션)                                                                                            |
+| 헤어·성형·피부                                    | `character.getBeautyEquipment({ ocid })`                  | `character_hair`, `character_face`, `character_skin`                                                                                       |
+| 안드로이드                                        | `character.getAndroidEquipment({ ocid })`                 | `android_name`, `android_grade`, `android_cash_item_equipment`                                                                             |
+| 펫·펫 장비·펫 스킬                                | `character.getPetEquipment({ ocid })`                     | `pet_1_name`, `pet_1_equipment`, `pet_1_auto_skill` (펫 2·3도 같은 꼴), `world_share_pet_equipment_preset` (월드 공유 펫 장비 프리셋 목록) |
+| 스킬 (전직 차수별, 하이퍼 스킬 포함)              | `character.getSkill({ ocid, character_skill_grade })`     | `character_skill` (스킬 이름·레벨·효과)                                                                                                    |
+| 링크 스킬                                         | `character.getLinkSkill({ ocid })`                        | `character_link_skill` (장착), `character_owned_link_skill` (내가 주는 링크)                                                               |
+| V매트릭스 (5차)                                   | `character.getVMatrix({ ocid })`                          | `character_v_core_equipment` (코어 이름·타입·레벨)                                                                                         |
+| HEXA 매트릭스 (6차) > HEXA 코어                   | `character.getHexaMatrix({ ocid })`                       | `character_hexa_core_equipment` (코어 이름·레벨·타입)                                                                                      |
+| HEXA 매트릭스 > HEXA 스탯                         | `character.getHexaMatrixStat({ ocid })`                   | `character_hexa_stat_core` (메인·서브 스탯 이름과 레벨)                                                                                    |
+| 무릉도장 최고 기록                                | `character.getDojang({ ocid })`                           | `dojang_best_floor` (층), `dojang_best_time` (초)                                                                                          |
+| 능력치에 영향을 주는 기타 요소                    | `character.getOtherStat({ ocid })`                        | `other_stat[].stat_info` (스탯 이름·값). 기타 능력치가 없으면 `other_stat` 이 `null`                                                       |
+| 예비 특수 반지 슬롯의 특수 반지                   | `character.getRingReserveSkillEquipment({ ocid })`        | `special_ring_reserve_name`, `special_ring_reserve_level`                                                                                  |
+| 링 익스체인지에 등록한 특수 반지 (2026-03-18까지) | `character.getRingExchangeSkillEquipment({ ocid, date })` | `special_ring_exchange_name`, `special_ring_exchange_level`                                                                                |
 
 ### 유니온 (4개)
 
@@ -129,16 +129,16 @@ API 키는 게임마다 따로 발급받습니다. 키 발급과 설치가 처�
 
 ### 공지 (8개)
 
-| 게임에서 부르는 이름 | SDK 메서드                           | 주요 응답 필드                                           |
-| -------------------- | ------------------------------------ | -------------------------------------------------------- |
-| 공지사항 목록        | `notice.getList()`                   | `notice[]` (`title`, `url`, `notice_id`, `date`)         |
-| 공지사항 본문        | `notice.getDetail(noticeId)`         | `title`, `contents`, `url`                               |
-| 업데이트 목록        | `notice.getUpdateList()`             | `update_notice[]`                                        |
-| 업데이트 본문        | `notice.getUpdateDetail(noticeId)`   | `title`, `contents`, `url`                               |
-| 진행 중 이벤트 목록  | `notice.getEventList()`              | `event_notice[]` (`date_event_start`, `date_event_end`)  |
-| 진행 중 이벤트 본문  | `notice.getEventDetail(noticeId)`    | `contents`, `date_event_start`, `date_event_end`         |
-| 캐시샵 공지 목록     | `notice.getCashshopList()`           | `cashshop_notice[]` (`date_sale_start`, `date_sale_end`) |
-| 캐시샵 공지 본문     | `notice.getCashshopDetail(noticeId)` | `contents`, `ongoing_flag` (상시 판매 여부)              |
+| 게임에서 부르는 이름 | SDK 메서드                           | 주요 응답 필드                                                            |
+| -------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| 공지사항 목록        | `notice.getList()`                   | `notice[]` (`title`, `url`, `notice_id`, `date`)                          |
+| 공지사항 본문        | `notice.getDetail(noticeId)`         | `title`, `contents`, `url`                                                |
+| 업데이트 목록        | `notice.getUpdateList()`             | `update_notice[]`                                                         |
+| 업데이트 본문        | `notice.getUpdateDetail(noticeId)`   | `title`, `contents`, `url`                                                |
+| 진행 중 이벤트 목록  | `notice.getEventList()`              | `event_notice[]` (`date_event_start`, `date_event_end`, `thumbnail_url`)  |
+| 진행 중 이벤트 본문  | `notice.getEventDetail(noticeId)`    | `contents`, `date_event_start`, `date_event_end`                          |
+| 캐시샵 공지 목록     | `notice.getCashshopList()`           | `cashshop_notice[]` (`date_sale_start`, `date_sale_end`, `thumbnail_url`) |
+| 캐시샵 공지 본문     | `notice.getCashshopDetail(noticeId)` | `contents`, `ongoing_flag` (상시 판매 여부)                               |
 
 ### 연무장 (4개)
 
@@ -178,7 +178,7 @@ API 키는 게임마다 따로 발급받습니다. 키 발급과 설치가 처�
 
 - 게임에서 바뀐 내용은 **평균 15분 뒤**에 조회됩니다.
 - `date` 에 날짜를 넣으면 **그날 하루(0시~24시, 한국 시간)** 의 데이터를 받습니다. 지난 날짜의 데이터는 **다음날 오전 2시부터** 조회됩니다 (어제 데이터는 오늘 오전 2시부터).
-- `date` 를 생략하면 **가장 최근 데이터**를 받습니다. 스케줄러도 생략하면 오늘 기준입니다.
+- `date` 를 생략하면 **가장 최근 데이터**를 받습니다. 이때 응답의 `date` 필드는 `null` 입니다. 스케줄러도 생략하면 오늘 기준입니다.
 - 캐릭터·유니온·길드 정보는 **2023년 12월 21일** 데이터부터 있습니다. 더 늦게 시작한 것: 유니온 아티팩트(2024-01-18), 유니온 챔피언(2025-02-20), 기타 능력치 영향 요소(2025-08-21).
 - 랭킹은 2023년 12월 22일부터, 최근 2년 데이터만 조회됩니다. **오늘 랭킹은 오전 9시 30분경부터** 나옵니다.
 - 강화 기록은 최근 2년 데이터만 조회됩니다. 스타포스는 강화 후 최대 5분, 큐브·잠재능력 재설정은 최대 30분 뒤에 조회됩니다.
@@ -268,13 +268,13 @@ for (const item of equip.item_equipment) {
 
 - `item_equipment_part`, `item_equipment_slot` — 장비 부위와 슬롯 (반지 1~4처럼 같은 부위가 여러 개일 때 슬롯으로 구분)
 - `starforce` — 스타포스 별 개수 (문자열). `starforce_scroll_flag` 가 `"1"` 이면 놀라운 장비강화 주문서를 쓴 장비
-- `potential_option_grade`, `potential_option_1`~`3` — 잠재능력 등급과 옵션 3줄
+- `potential_option_grade`, `potential_option_1`~`3` — 잠재능력 등급과 옵션 3줄. 잠재능력이 없는 장비는 `null`
 - `additional_potential_option_grade`, `additional_potential_option_1`~`3` — 에디셔널 잠재능력
 - `item_total_option` — 모든 강화를 더한 최종 옵션. 세부 내역은 `item_base_option`(기본), `item_add_option`(추가 옵션), `item_etc_option`(주문서), `item_starforce_option`(스타포스)
-- `scroll_upgrade`, `scroll_upgradable_count` — 주문서 강화 횟수와 남은 업그레이드 횟수
-- `soul_name`, `soul_option` — 무기에 장착한 소울
+- `scroll_upgrade`, `scroll_upgradeable_count` — 주문서 강화 횟수와 남은 업그레이드 가능 횟수 (문자열 숫자)
+- `soul_name`, `soul_option` — 무기에 장착한 소울. 소울이 없으면 `null`
 
-`preset_no` 는 지금 쓰는 장비 프리셋 번호이고, `item_equipment_preset_1`~`3` 에 프리셋별 장비가 들어 있습니다. 칭호는 `title`, 에반의 드래곤 장비는 `dragon_equipment`, 메카닉 장비는 `mechanic_equipment` 입니다.
+`preset_no` 는 지금 쓰는 장비 프리셋 번호이고, `item_equipment_preset_1`~`3` 에 프리셋별 장비가 들어 있습니다. 프리셋 장비의 장착 슬롯도 `item_equipment_slot` 입니다. 칭호는 `title`, 칭호 프리셋 1~3번은 `title_preset1`~`3` (빈 프리셋은 `title_name` 이 `null`), 에반의 드래곤 장비는 `dragon_equipment`, 메카닉 장비는 `mechanic_equipment` 입니다.
 
 ### 스킬·링크 스킬·V매트릭스·HEXA 매트릭스
 
@@ -353,7 +353,7 @@ for (const h of all) {
 }
 ```
 
-- 한 번에 `count` 개(10~1000)까지 받고, 더 있으면 응답의 `next_cursor` 를 `cursor` 에 넣어 이어서 받습니다. `next_cursor` 가 비어 있으면 끝입니다.
+- 한 번에 `count` 개(10~1000)까지 받고, 더 있으면 응답의 `next_cursor` 를 `cursor` 에 넣어 이어서 받습니다. `next_cursor` 가 `null` 이면 끝입니다.
 - 스타포스: `item_upgrade_result` 강화 결과, `starcatch_result` 스타 캐치, `chance_time` 찬스 타임, `destroy_defence` 파괴 방지, `starforce_event_list` 당시 진행 중이던 스타포스 이벤트
 - 큐브·잠재능력 재설정: `cube_type` 사용한 큐브, `potential_type` 대상(잠재능력 / 에디셔널 잠재능력), `before_potential_option` → `after_potential_option` 전후 옵션, `item_upgrade_result` 결과, `miracle_time_flag` 미라클 타임
 - `upgrade_guarantee` 는 천장에 도달해 등급이 확정 상승했는지, `upgrade_guarantee_count` 는 지금까지 쌓인 횟수입니다.
@@ -419,7 +419,7 @@ if (replayId) {
 - `total_play_time`, `elapse_time` 은 밀리초(ms)입니다.
 - `end_type` — `"1"` 자동 종료, `"2"` 수동 종료, `"3"` 시간 초과, `"9"` 기타
 - `period_no` — 연무장이 초기화될 때마다 1씩 늘어나는 기간 번호
-- `getCharacterInfo()` 는 연무장 입장 당시의 스탯·장비·스킬·유니온 정보를 한 번에 줍니다. 최상위 키는 모두 `basic_object`, `stat_object`, `item_object` 처럼 `_object` 로 끝납니다. 여기서는 장비의 남은 업그레이드 횟수 필드 이름이 `scroll_upgrade_able_count` 입니다 (캐릭터 장비 조회에서는 `scroll_upgradable_count`).
+- `getCharacterInfo()` 는 연무장 입장 당시의 스탯·장비·스킬·유니온 정보를 한 번에 줍니다. 최상위 키는 모두 `basic_object`, `stat_object`, `item_object` 처럼 `_object` 로 끝납니다. 여기서는 장비의 남은 업그레이드 횟수 필드 이름이 `scroll_upgrade_able_count` 입니다 (캐릭터 장비 조회에서는 `scroll_upgradeable_count`).
 
 ### 스케줄러 (일일·주간·보스)
 

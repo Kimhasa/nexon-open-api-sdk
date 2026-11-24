@@ -34,8 +34,8 @@ export interface CharacterList {
 
 /** 캐릭터 기본 정보 — `client.maplestory.character.getBasic()` 의 응답. */
 export interface CharacterBasic {
-  /** 조회 기준일 (KST, 일 단위 데이터로 시, 분은 일괄 0으로 표기) */
-  readonly date: string;
+  /** 조회 기준일 (KST, 일 단위 데이터로 시, 분은 일괄 0으로 표기). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 캐릭터 명 */
   readonly character_name: string;
   /** 월드 명 */
@@ -68,8 +68,8 @@ export interface CharacterBasic {
 
 /** 캐릭터 인기도 — `client.maplestory.character.getPopularity()` 의 응답. */
 export interface CharacterPopularity {
-  /** 조회 기준일 (KST) */
-  readonly date: string;
+  /** 조회 기준일 (KST). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 캐릭터 인기도 */
   readonly popularity: number;
 }
@@ -86,8 +86,8 @@ export interface FinalStat {
 
 /** 캐릭터 정보창의 스탯(종합 능력치) — `client.maplestory.character.getStat()` 의 응답. */
 export interface CharacterStat {
-  /** 조회 기준일 (KST) */
-  readonly date: string;
+  /** 조회 기준일 (KST). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 캐릭터 직업 */
   readonly character_class: string;
   /** 현재 스탯 정보 */
@@ -102,18 +102,18 @@ export interface CharacterStat {
 export interface HyperStatPreset {
   /** 스탯 종류 */
   readonly stat_type: string;
-  /** 스탯 투자 포인트 */
-  readonly stat_point: number;
+  /** 스탯 투자 포인트 (포인트를 투자하지 않은 스탯이면 null) */
+  readonly stat_point: number | null;
   /** 스탯 레벨 */
   readonly stat_level: number;
-  /** 스탯 상승량 */
-  readonly stat_increase: string;
+  /** 스탯 상승량 (포인트를 투자하지 않은 스탯이면 null) */
+  readonly stat_increase: string | null;
 }
 
 /** 하이퍼 스탯 — `client.maplestory.character.getHyperStat()` 의 응답. */
 export interface CharacterHyperStat {
-  /** 조회 기준일 (KST) */
-  readonly date: string;
+  /** 조회 기준일 (KST). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 캐릭터 직업 */
   readonly character_class: string;
   /** 적용 중인 프리셋 번호 */
@@ -138,8 +138,8 @@ export interface CharacterHyperStat {
 
 /** 성향 — `client.maplestory.character.getPropensity()` 의 응답. */
 export interface CharacterPropensity {
-  /** 조회 기준일 (KST) */
-  readonly date: string;
+  /** 조회 기준일 (KST). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 카리스마 레벨 */
   readonly charisma_level: number;
   /** 감성 레벨 */
@@ -176,8 +176,8 @@ export interface AbilityPreset {
 
 /** 어빌리티 — `client.maplestory.character.getAbility()` 의 응답. */
 export interface CharacterAbility {
-  /** 조회 기준일 (KST) */
-  readonly date: string;
+  /** 조회 기준일 (KST). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 어빌리티 등급 */
   readonly ability_grade: string;
   /** 어빌리티 정보 */
@@ -366,14 +366,14 @@ export interface ItemEquipment {
   readonly item_name: string;
   /** 장비 아이콘 */
   readonly item_icon: string;
-  /** 장비 설명 */
-  readonly item_description: string;
+  /** 장비 설명 (설명이 없는 장비면 null) */
+  readonly item_description: string | null;
   /** 장비 외형 */
   readonly item_shape_name: string;
   /** 장비 외형 아이콘 */
   readonly item_shape_icon: string;
-  /** 전용 성별 */
-  readonly item_gender: string;
+  /** 전용 성별 (성별 제한이 없으면 null) */
+  readonly item_gender: string | null;
   /** 장비 최종 옵션 */
   readonly item_total_option: ItemTotalOption;
   /** 장비 기본 옵션 */
@@ -382,22 +382,22 @@ export interface ItemEquipment {
   readonly potential_option_flag: string;
   /** 에디셔널 잠재능력 봉인 여부 */
   readonly additional_potential_option_flag: string;
-  /** 잠재능력 등급 (예: 레어, 에픽, 유니크, 레전드리) */
-  readonly potential_option_grade: string;
-  /** 에디셔널 잠재능력 등급 (예: 레어, 에픽, 유니크, 레전드리) */
-  readonly additional_potential_option_grade: string;
-  /** 잠재능력 첫 번째 옵션 */
-  readonly potential_option_1: string;
-  /** 잠재능력 두 번째 옵션 */
-  readonly potential_option_2: string;
-  /** 잠재능력 세 번째 옵션 */
-  readonly potential_option_3: string;
-  /** 에디셔널 잠재능력 첫 번째 옵션 */
-  readonly additional_potential_option_1: string;
-  /** 에디셔널 잠재능력 두 번째 옵션 */
-  readonly additional_potential_option_2: string;
-  /** 에디셔널 잠재능력 세 번째 옵션 */
-  readonly additional_potential_option_3: string;
+  /** 잠재능력 등급 (예: 레어, 에픽, 유니크, 레전드리) (잠재능력이 없으면 null) */
+  readonly potential_option_grade: string | null;
+  /** 에디셔널 잠재능력 등급 (예: 레어, 에픽, 유니크, 레전드리) (에디셔널 잠재능력이 없으면 null) */
+  readonly additional_potential_option_grade: string | null;
+  /** 잠재능력 첫 번째 옵션 (없으면 null) */
+  readonly potential_option_1: string | null;
+  /** 잠재능력 두 번째 옵션 (없으면 null) */
+  readonly potential_option_2: string | null;
+  /** 잠재능력 세 번째 옵션 (없으면 null) */
+  readonly potential_option_3: string | null;
+  /** 에디셔널 잠재능력 첫 번째 옵션 (없으면 null) */
+  readonly additional_potential_option_1: string | null;
+  /** 에디셔널 잠재능력 두 번째 옵션 (없으면 null) */
+  readonly additional_potential_option_2: string | null;
+  /** 에디셔널 잠재능력 세 번째 옵션 (없으면 null) */
+  readonly additional_potential_option_3: string | null;
   /** 착용 레벨 증가 */
   readonly equipment_level_increase: number;
   /** 익셉셔널 강화 옵션 */
@@ -416,12 +416,17 @@ export interface ItemEquipment {
   readonly golden_hammer_flag: string;
   /** 복구 가능 횟수 (실패로 줄어든 업그레이드 횟수 중 되돌릴 수 있는 수) */
   readonly scroll_resilience_count: string;
-  /** 남은 업그레이드 가능 횟수 */
-  readonly scroll_upgradable_count: string;
-  /** 소울 명 */
-  readonly soul_name: string;
-  /** 소울 옵션 */
-  readonly soul_option: string;
+  /**
+   * 남은 업그레이드 가능 횟수 (문자열 숫자). 실제 응답의 필드. 포털 스펙에는 `scroll_upgradable_count` 로 적혀 있다.
+   * 포털 스펙에는 없고 실제 응답에 있는 필드 (2026-11-24 실측)
+   */
+  readonly scroll_upgradeable_count?: string | undefined;
+  /** 포털 스펙의 이름. 2026-11-24 실제 응답에는 없고 `scroll_upgradeable_count` 로 온다 */
+  readonly scroll_upgradable_count?: string | undefined;
+  /** 소울 명 (소울을 장착하지 않았으면 null) */
+  readonly soul_name: string | null;
+  /** 소울 옵션 (소울을 장착하지 않았으면 null) */
+  readonly soul_option: string | null;
   /** 주문서 등으로 붙은 기타 옵션 */
   readonly item_etc_option: ItemEtcOption;
   /** 스타포스 강화 단계 (별 개수, 문자열 숫자) */
@@ -454,27 +459,46 @@ export interface ItemEquipment {
   readonly soul_active?: string | null | undefined;
 }
 
-/** 프리셋 장비 정보 (item_equipment_slot 대신 equipment_slot 사용). */
+/** 프리셋 장비 정보. 실제 응답의 필드는 장착 장비(`ItemEquipment`)와 같다. */
 export interface PresetItemEquipment {
   readonly item_equipment_part: string;
-  /** 프리셋에서는 equipment_slot 사용 */
-  readonly equipment_slot: string;
+  /**
+   * 장비 슬롯 위치 (반지 1~4처럼 같은 부위가 여러 개일 때 구분). 실제 응답의 필드. 포털 스펙에는 `equipment_slot` 으로 적혀 있다.
+   * 포털 스펙에는 없고 실제 응답에 있는 필드 (2026-11-24 실측)
+   */
+  readonly item_equipment_slot?: string | undefined;
+  /** 포털 스펙의 이름. 2026-11-24 실제 응답에는 없고 `item_equipment_slot` 으로 온다 */
+  readonly equipment_slot?: string | undefined;
   readonly item_name: string;
   readonly item_icon: string;
-  readonly item_description: string;
+  /** 설명이 없는 장비면 null */
+  readonly item_description: string | null;
   readonly item_shape_name: string;
   readonly item_shape_icon: string;
-  readonly item_gender: string;
+  /** 성별 제한이 없으면 null */
+  readonly item_gender: string | null;
   readonly item_total_option: ItemTotalOption;
   readonly item_base_option: ItemBaseOption;
-  readonly potential_option_grade: string;
-  readonly additional_potential_option_grade: string;
-  readonly potential_option_1: string;
-  readonly potential_option_2: string;
-  readonly potential_option_3: string;
-  readonly additional_potential_option_1: string;
-  readonly additional_potential_option_2: string;
-  readonly additional_potential_option_3: string;
+  /** 잠재능력 봉인 여부 ("true": 봉인, "false": 봉인 없음). 포털 스펙에는 없고 실제 응답에 있는 필드 (2026-11-24 실측) */
+  readonly potential_option_flag?: string | undefined;
+  /** 에디셔널 잠재능력 봉인 여부. 포털 스펙에는 없고 실제 응답에 있는 필드 (2026-11-24 실측) */
+  readonly additional_potential_option_flag?: string | undefined;
+  /** 잠재능력이 없으면 null */
+  readonly potential_option_grade: string | null;
+  /** 에디셔널 잠재능력이 없으면 null */
+  readonly additional_potential_option_grade: string | null;
+  /** 없으면 null */
+  readonly potential_option_1: string | null;
+  /** 없으면 null */
+  readonly potential_option_2: string | null;
+  /** 없으면 null */
+  readonly potential_option_3: string | null;
+  /** 없으면 null */
+  readonly additional_potential_option_1: string | null;
+  /** 없으면 null */
+  readonly additional_potential_option_2: string | null;
+  /** 없으면 null */
+  readonly additional_potential_option_3: string | null;
   readonly equipment_level_increase: number;
   readonly item_exceptional_option: ItemExceptionalOption;
   readonly item_add_option: ItemAddOption;
@@ -484,9 +508,17 @@ export interface PresetItemEquipment {
   readonly cuttable_count: string;
   readonly golden_hammer_flag: string;
   readonly scroll_resilience_count: string;
-  readonly scroll_upgradable_count: string;
-  readonly soul_name: string;
-  readonly soul_option: string;
+  /**
+   * 남은 업그레이드 가능 횟수 (문자열 숫자). 실제 응답의 필드. 포털 스펙에는 `scroll_upgradable_count` 로 적혀 있다.
+   * 포털 스펙에는 없고 실제 응답에 있는 필드 (2026-11-24 실측)
+   */
+  readonly scroll_upgradeable_count?: string | undefined;
+  /** 포털 스펙의 이름. 2026-11-24 실제 응답에는 없고 `scroll_upgradeable_count` 로 온다 */
+  readonly scroll_upgradable_count?: string | undefined;
+  /** 소울을 장착하지 않았으면 null */
+  readonly soul_name: string | null;
+  /** 소울을 장착하지 않았으면 null */
+  readonly soul_option: string | null;
   readonly item_etc_option: ItemEtcOption;
   readonly starforce: string;
   readonly starforce_scroll_flag: string;
@@ -577,12 +609,12 @@ export interface TitleInfo {
   readonly date_expire: string | null;
   /** 칭호 옵션 유효 기간 */
   readonly date_option_expire: string | null;
-  /** 외형 설정 칭호 장비 명 */
-  readonly title_shape_name: string;
-  /** 외형 설정 칭호 아이콘 */
-  readonly title_shape_icon: string;
-  /** 외형 설정 칭호 설명 */
-  readonly title_shape_description: string;
+  /** 외형 설정 칭호 장비 명 (외형 설정에 등록한 칭호가 없으면 null) */
+  readonly title_shape_name: string | null;
+  /** 외형 설정 칭호 아이콘 (외형 설정에 등록한 칭호가 없으면 null) */
+  readonly title_shape_icon: string | null;
+  /** 외형 설정 칭호 설명 (외형 설정에 등록한 칭호가 없으면 null) */
+  readonly title_shape_description: string | null;
   /** 적용 중인 칭호 프리셋 번호 */
   readonly preset_no?: number | null | undefined;
   /** 프리셋 1번 칭호 정보 */
@@ -595,12 +627,12 @@ export interface TitleInfo {
 
 /** 칭호 프리셋 개별 정보 */
 export interface TitlePresetInfo {
-  /** 칭호 장비 명 */
-  readonly title_name: string;
-  /** 칭호 아이콘 */
-  readonly title_icon: string;
-  /** 칭호 설명 */
-  readonly title_description: string;
+  /** 칭호 장비 명 (프리셋에 칭호를 넣지 않았으면 null) */
+  readonly title_name: string | null;
+  /** 칭호 아이콘 (프리셋에 칭호를 넣지 않았으면 null) */
+  readonly title_icon: string | null;
+  /** 칭호 설명 (프리셋에 칭호를 넣지 않았으면 null) */
+  readonly title_description: string | null;
   /** 칭호 유효 기간 (KST) */
   readonly date_expire: string | null;
   /** 칭호 옵션 유효 기간 (KST, "expired": 만료, null: 무제한) */
@@ -621,20 +653,20 @@ export interface MedalShape {
   readonly medal_shape_name: string;
   /** 외형 설정 훈장 아이콘 */
   readonly medal_shape_icon: string;
-  /** 외형 설정 훈장 설명 */
-  readonly medal_shape_description: string;
+  /** 외형 설정 훈장 설명 (값이 없으면 null) */
+  readonly medal_shape_description: string | null;
   /** 모루 적용 장비 명 */
   readonly medal_shape_changed_name: string;
   /** 모루 적용 아이콘 */
   readonly medal_shape_changed_icon: string;
-  /** 모루 적용 훈장 설명 */
-  readonly medal_shape_changed_description: string;
+  /** 모루 적용 훈장 설명 (값이 없으면 null) */
+  readonly medal_shape_changed_description: string | null;
 }
 
 /** 장착 장비(캐시 장비 제외) — `client.maplestory.character.getItemEquipment()` 의 응답. */
 export interface CharacterItemEquipment {
-  /** 조회 기준일 (KST) */
-  readonly date: string;
+  /** 조회 기준일 (KST). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 캐릭터 성별 */
   readonly character_gender: string;
   /** 캐릭터 직업 */
@@ -651,6 +683,15 @@ export interface CharacterItemEquipment {
   readonly item_equipment_preset_3: PresetItemEquipment[];
   /** 칭호 정보 */
   readonly title: TitleInfo;
+  /**
+   * 칭호 프리셋 1번에 넣어 둔 칭호. 빈 프리셋은 `title_name` 등이 null이다.
+   * 포털 스펙에는 없고 실제 응답에 있는 필드 (2026-11-24 실측). 포털 스펙은 `title.title_preset_1` 로 적고 있다.
+   */
+  readonly title_preset1?: TitlePresetInfo | null | undefined;
+  /** 칭호 프리셋 2번에 넣어 둔 칭호. 포털 스펙에는 없고 실제 응답에 있는 필드 (2026-11-24 실측) */
+  readonly title_preset2?: TitlePresetInfo | null | undefined;
+  /** 칭호 프리셋 3번에 넣어 둔 칭호. 포털 스펙에는 없고 실제 응답에 있는 필드 (2026-11-24 실측) */
+  readonly title_preset3?: TitlePresetInfo | null | undefined;
   /** 훈장 외형 정보 */
   readonly medal_shape: MedalShape;
   /** 에반 드래곤 장비 정보 (에반인 경우 응답) */
@@ -703,22 +744,22 @@ export interface CashItemEquipmentItem {
   readonly cash_item_name: string;
   /** 캐시 장비 아이콘 */
   readonly cash_item_icon: string;
-  /** 캐시 장비 설명 */
-  readonly cash_item_description: string;
+  /** 캐시 장비 설명 (설명이 없으면 null) */
+  readonly cash_item_description: string | null;
   /** 캐시 장비 옵션 */
   readonly cash_item_option: CashItemOption[];
   /** 캐시 장비 유효 기간 (null: 무제한) */
   readonly date_expire: string | null;
   /** 캐시 장비 옵션 유효 기간 (null: 무제한) */
   readonly date_option_expire: string | null;
-  /** 캐시 장비 라벨 정보 */
-  readonly cash_item_label: string;
+  /** 캐시 장비 라벨 정보 (라벨이 없으면 null) */
+  readonly cash_item_label: string | null;
   /** 캐시 장비 컬러링프리즘 정보 (null: 미적용) */
   readonly cash_item_coloring_prism: CashItemColoringPrism | null;
   /** 캐시 장비 이펙트프리즘 정보 */
   readonly cash_item_effect_prism: CashItemColoringPrism | null;
-  /** 아이템 장착 가능 성별 */
-  readonly item_gender: string;
+  /** 아이템 장착 가능 성별 (성별 제한이 없으면 null) */
+  readonly item_gender: string | null;
   /**
    * 캐시 장비 스킬
    * @deprecated 포털 스펙에서 사라진 필드. `skills` 를 사용하세요. 다음 MAJOR에서 삭제됩니다.
@@ -726,8 +767,8 @@ export interface CashItemEquipmentItem {
   readonly cash_item_skills?: string[] | undefined;
   /** 프리스타일 쿠폰 적용 여부 ("0": 미적용, "1": 적용) */
   readonly freestyle_flag: string;
-  /** 감정 표현 이름 */
-  readonly emotion_name: string;
+  /** 감정 표현 이름 (감정 표현 아이템이 아니면 null) */
+  readonly emotion_name: string | null;
   /** 컬러링 프리즘 적용 여부 ("0": 미적용, "1": 적용) */
   readonly coloring_prism_flag?: string | undefined;
   /** 이펙트 프리즘 적용 여부 ("0": 미적용, "1": 적용) */
@@ -776,8 +817,8 @@ export interface WorldShareMasterLabelItem {
 
 /** 장착 캐시 장비 — `client.maplestory.character.getCashItemEquipment()` 의 응답. */
 export interface CharacterCashItemEquipment {
-  /** 조회 기준일 (KST) */
-  readonly date: string;
+  /** 조회 기준일 (KST). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 캐릭터 성별 */
   readonly character_gender: string;
   /** 캐릭터 직업 */
@@ -848,8 +889,8 @@ export interface SymbolInfo {
 
 /** 장착 심볼 — `client.maplestory.character.getSymbolEquipment()` 의 응답. */
 export interface CharacterSymbolEquipment {
-  /** 조회 기준일 (KST) */
-  readonly date: string;
+  /** 조회 기준일 (KST). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 캐릭터 직업 */
   readonly character_class: string;
   /** 심볼 정보 */
@@ -880,8 +921,8 @@ export interface SetEffectInfo {
 
 /** 적용 중인 세트 효과 — `client.maplestory.character.getSetEffect()` 의 응답. */
 export interface CharacterSetEffect {
-  /** 조회 기준일 (KST) */
-  readonly date: string;
+  /** 조회 기준일 (KST). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 세트 효과 정보 */
   readonly set_effect: SetEffectInfo[];
 }
@@ -890,12 +931,12 @@ export interface CharacterSetEffect {
 
 /** 헤어 정보 (캐릭터/안드로이드 공용) */
 export interface HairInfo {
-  /** 헤어 명 */
-  readonly hair_name: string;
-  /** 헤어 베이스 컬러 */
-  readonly base_color: string;
-  /** 헤어 믹스 컬러 */
-  readonly mix_color: string;
+  /** 헤어 명 (값이 없으면 null) */
+  readonly hair_name: string | null;
+  /** 헤어 베이스 컬러 (값이 없으면 null) */
+  readonly base_color: string | null;
+  /** 헤어 믹스 컬러 (값이 없으면 null) */
+  readonly mix_color: string | null;
   /** 헤어 믹스 컬러의 염색 비율 */
   readonly mix_rate: string;
   /** 프리스타일 쿠폰 적용 여부 ("0": 미적용, "1": 적용) */
@@ -904,12 +945,12 @@ export interface HairInfo {
 
 /** 성형 정보 (캐릭터/안드로이드 공용) */
 export interface FaceInfo {
-  /** 성형 명 */
-  readonly face_name: string;
-  /** 성형 베이스 컬러 */
-  readonly base_color: string;
-  /** 성형 믹스 컬러 */
-  readonly mix_color: string;
+  /** 성형 명 (값이 없으면 null) */
+  readonly face_name: string | null;
+  /** 성형 베이스 컬러 (값이 없으면 null) */
+  readonly base_color: string | null;
+  /** 성형 믹스 컬러 (값이 없으면 null) */
+  readonly mix_color: string | null;
   /** 성형 믹스 컬러의 염색 비율 */
   readonly mix_rate: string;
   /** 프리스타일 쿠폰 적용 여부 ("0": 미적용, "1": 적용) */
@@ -932,8 +973,8 @@ export interface SkinInfo {
 
 /** 헤어·성형·피부 — `client.maplestory.character.getBeautyEquipment()` 의 응답. */
 export interface CharacterBeautyEquipment {
-  /** 조회 기준일 (KST) */
-  readonly date: string;
+  /** 조회 기준일 (KST). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 캐릭터 성별 */
   readonly character_gender: string;
   /** 캐릭터 직업 */
@@ -944,12 +985,12 @@ export interface CharacterBeautyEquipment {
   readonly character_face: FaceInfo;
   /** 캐릭터 피부 정보 (제로: 알파, 엔젤릭버스터: 일반 모드) */
   readonly character_skin: SkinInfo;
-  /** 추가 헤어 정보 (제로: 베타, 엔젤릭버스터: 드레스 업 모드) */
-  readonly additional_character_hair: HairInfo;
-  /** 추가 성형 정보 (제로: 베타, 엔젤릭버스터: 드레스 업 모드) */
-  readonly additional_character_face: FaceInfo;
-  /** 추가 피부 정보 (제로: 베타, 엔젤릭버스터: 드레스 업 모드) */
-  readonly additional_character_skin: SkinInfo;
+  /** 추가 헤어 정보 (제로: 베타, 엔젤릭버스터: 드레스 업 모드) (제로·엔젤릭버스터가 아니면 null) */
+  readonly additional_character_hair: HairInfo | null;
+  /** 추가 성형 정보 (제로: 베타, 엔젤릭버스터: 드레스 업 모드) (제로·엔젤릭버스터가 아니면 null) */
+  readonly additional_character_face: FaceInfo | null;
+  /** 추가 피부 정보 (제로: 베타, 엔젤릭버스터: 드레스 업 모드) (제로·엔젤릭버스터가 아니면 null) */
+  readonly additional_character_skin: SkinInfo | null;
 }
 
 // ─── GET /maplestory/v1/character/android-equipment ─────────────────────────
@@ -970,20 +1011,20 @@ export interface AndroidCashItem {
   readonly cash_item_name: string;
   /** 캐시 아이템 아이콘 */
   readonly cash_item_icon: string;
-  /** 캐시 아이템 설명 */
-  readonly cash_item_description: string;
+  /** 캐시 아이템 설명 (설명이 없으면 null) */
+  readonly cash_item_description: string | null;
   /** 캐시 아이템 옵션 */
   readonly cash_item_option: CashItemOption[];
   /** 캐시 아이템 유효 기간 ("expired": 만료, null: 무제한) */
   readonly date_expire: string | null;
   /** 캐시 아이템 옵션 유효 기간 ("expired": 만료, null: 무제한) */
   readonly date_option_expire: string | null;
-  /** 캐시 아이템 라벨 정보 */
-  readonly cash_item_label: string;
+  /** 캐시 아이템 라벨 정보 (라벨이 없으면 null) */
+  readonly cash_item_label: string | null;
   /** 캐시 아이템 컬러링프리즘 정보 (null: 미적용) */
   readonly cash_item_coloring_prism: AndroidCashItemColoringPrism | null;
-  /** 아이템 장착 가능 성별 */
-  readonly android_item_gender: string;
+  /** 아이템 장착 가능 성별 (성별 제한이 없으면 null) */
+  readonly android_item_gender: string | null;
   /** 프리스타일 쿠폰 적용 여부 ("0": 미적용, "1": 적용) */
   readonly freestyle_flag: string;
 }
@@ -1002,8 +1043,8 @@ export interface AndroidPresetInfo {
   readonly android_gender: string;
   /** 안드로이드 등급 */
   readonly android_grade: string;
-  /** 안드로이드 피부 정보 */
-  readonly android_skin: SkinInfo;
+  /** 안드로이드 피부 정보 (값이 없으면 null) */
+  readonly android_skin: SkinInfo | null;
   /** 안드로이드 헤어 정보 */
   readonly android_hair: HairInfo;
   /** 안드로이드 성형 정보 */
@@ -1018,8 +1059,8 @@ export interface AndroidPresetInfo {
 
 /** 장착 안드로이드 — `client.maplestory.character.getAndroidEquipment()` 의 응답. */
 export interface CharacterAndroidEquipment {
-  /** 조회 기준일 (KST) */
-  readonly date: string;
+  /** 조회 기준일 (KST). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 안드로이드 명 */
   readonly android_name: string;
   /** 안드로이드 닉네임 */
@@ -1032,8 +1073,8 @@ export interface CharacterAndroidEquipment {
   readonly android_hair: HairInfo;
   /** 안드로이드 성형 정보 */
   readonly android_face: FaceInfo;
-  /** 안드로이드 피부 정보 */
-  readonly android_skin: SkinInfo;
+  /** 안드로이드 피부 정보 (값이 없으면 null) */
+  readonly android_skin: SkinInfo | null;
   /** 안드로이드 캐시 아이템 장착 정보 */
   readonly android_cash_item_equipment: AndroidCashItem[];
   /** 이어센서 클립 적용 여부 */
@@ -1048,12 +1089,12 @@ export interface CharacterAndroidEquipment {
   readonly android_shop_usable_flag: string;
   /** 적용 중인 프리셋 번호 */
   readonly preset_no: number;
-  /** 1번 프리셋 안드로이드 정보 */
-  readonly android_preset_1: AndroidPresetInfo;
-  /** 2번 프리셋 안드로이드 정보 */
-  readonly android_preset_2: AndroidPresetInfo;
-  /** 3번 프리셋 안드로이드 정보 */
-  readonly android_preset_3: AndroidPresetInfo;
+  /** 1번 프리셋 안드로이드 정보 (프리셋이 비어 있으면 null) */
+  readonly android_preset_1: AndroidPresetInfo | null;
+  /** 2번 프리셋 안드로이드 정보 (프리셋이 비어 있으면 null) */
+  readonly android_preset_2: AndroidPresetInfo | null;
+  /** 3번 프리셋 안드로이드 정보 (프리셋이 비어 있으면 null) */
+  readonly android_preset_3: AndroidPresetInfo | null;
 }
 
 // ─── GET /maplestory/v1/character/pet-equipment ─────────────────────────────
@@ -1140,8 +1181,8 @@ export interface PetAutoSkill {
 
 /** 장착 펫과 펫 장비·펫 스킬 — `client.maplestory.character.getPetEquipment()` 의 응답. */
 export interface CharacterPetEquipment {
-  /** 조회 기준일 (KST) */
-  readonly date: string;
+  /** 조회 기준일 (KST). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 펫1 명 */
   readonly pet_1_name: string;
   /** 펫1 닉네임 */
@@ -1282,8 +1323,8 @@ export interface CharacterPetEquipment {
   readonly world_share_pet_3_appearance?: string | null | undefined;
   /** 월드 공유 펫3 외형 아이콘 */
   readonly world_share_pet_3_appearance_icon?: string | null | undefined;
-  /** 월드 공유 펫 장착 아이템 프리셋 정보 */
-  readonly world_share_pet_equipment_preset?: WorldSharePetEquipmentPreset | null | undefined;
+  /** 월드 공유 펫 장착 아이템 프리셋 목록. 포털 스펙은 객체로 적지만 실제 응답은 배열이다 (2026-11-24 실측) */
+  readonly world_share_pet_equipment_preset?: WorldSharePetEquipmentPreset[] | null | undefined;
   /** 루나 쁘띠 펫 스킬 정보 */
   readonly petite_luna_pet_skill?: PetiteLunaPetSkill[] | undefined;
 }
@@ -1300,8 +1341,8 @@ export interface SkillInfo {
   readonly skill_level: number;
   /** 스킬 레벨 별 효과 설명 */
   readonly skill_effect: string;
-  /** 다음 스킬 레벨 효과 설명 */
-  readonly skill_effect_next: string;
+  /** 다음 스킬 레벨 효과 설명 (다음 레벨이 없으면 null) */
+  readonly skill_effect_next: string | null;
   /** 스킬 아이콘 */
   readonly skill_icon: string;
   /** 컷인 이펙트 명 */
@@ -1345,8 +1386,8 @@ export interface SkillRequest {
 
 /** 전직 차수별 스킬 — `client.maplestory.character.getSkill()` 의 응답. */
 export interface CharacterSkill {
-  /** 조회 기준일 (KST) */
-  readonly date: string;
+  /** 조회 기준일 (KST). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 캐릭터 직업 */
   readonly character_class: string;
   /** 스킬 전직 차수 */
@@ -1383,8 +1424,8 @@ export interface LinkSkillInfo {
 
 /** 링크 스킬 — `client.maplestory.character.getLinkSkill()` 의 응답. */
 export interface CharacterLinkSkill {
-  /** 조회 기준일 (KST) */
-  readonly date: string;
+  /** 조회 기준일 (KST). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 캐릭터 직업 */
   readonly character_class: string;
   /** 장착 링크 스킬 정보 */
@@ -1441,8 +1482,8 @@ export interface VCoreEquipment {
 
 /** V매트릭스(5차) — `client.maplestory.character.getVMatrix()` 의 응답. */
 export interface CharacterVMatrix {
-  /** 조회 기준일 (KST) */
-  readonly date: string;
+  /** 조회 기준일 (KST). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 캐릭터 직업 */
   readonly character_class: string;
   /** V코어 정보 */
@@ -1495,8 +1536,8 @@ export interface HexaCoreEquipment {
 
 /** HEXA 매트릭스(6차)의 HEXA 코어 — `client.maplestory.character.getHexaMatrix()` 의 응답. */
 export interface CharacterHexaMatrix {
-  /** 조회 기준일 (KST) */
-  readonly date: string;
+  /** 조회 기준일 (KST). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** HEXA 코어 정보 */
   readonly character_hexa_core_equipment: HexaCoreEquipment[];
 }
@@ -1507,12 +1548,12 @@ export interface CharacterHexaMatrix {
 export interface HexaStatCore {
   /** 슬롯 인덱스 */
   readonly slot_id: string;
-  /** 메인 스탯 명 */
-  readonly main_stat_name: string;
-  /** 첫 번째 서브 명 */
-  readonly sub_stat_name_1: string;
-  /** 두 번째 서브 명 */
-  readonly sub_stat_name_2: string;
+  /** 메인 스탯 명 (스탯을 정하지 않은 코어면 null) */
+  readonly main_stat_name: string | null;
+  /** 첫 번째 서브 명 (스탯을 정하지 않은 코어면 null) */
+  readonly sub_stat_name_1: string | null;
+  /** 두 번째 서브 명 (스탯을 정하지 않은 코어면 null) */
+  readonly sub_stat_name_2: string | null;
   /** 메인 스탯 레벨 */
   readonly main_stat_level: number;
   /** 첫 번째 서브 레벨 */
@@ -1525,8 +1566,8 @@ export interface HexaStatCore {
 
 /** HEXA 스탯 — `client.maplestory.character.getHexaMatrixStat()` 의 응답. */
 export interface CharacterHexaMatrixStat {
-  /** 조회 기준일 (KST) */
-  readonly date: string;
+  /** 조회 기준일 (KST). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 캐릭터 직업 */
   readonly character_class: string;
   /** HEXA 스탯 I 코어 정보 */
@@ -1547,8 +1588,8 @@ export interface CharacterHexaMatrixStat {
 
 /** 무릉도장 최고 기록 — `client.maplestory.character.getDojang()` 의 응답. */
 export interface CharacterDojang {
-  /** 조회 기준일 (KST) */
-  readonly date: string;
+  /** 조회 기준일 (KST). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 캐릭터 직업 */
   readonly character_class: string;
   /** 월드 명 */
@@ -1581,10 +1622,10 @@ export interface OtherStatEntry {
 
 /** 능력치에 영향을 주는 기타 요소 — `client.maplestory.character.getOtherStat()` 의 응답. */
 export interface CharacterOtherStat {
-  /** 조회 기준일 (KST) */
-  readonly date: string;
-  /** 능력치에 영향을 주는 요소 및 스탯 정보 */
-  readonly other_stat: OtherStatEntry[];
+  /** 조회 기준일 (KST). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
+  /** 능력치에 영향을 주는 요소 및 스탯 정보 (기타 능력치가 없는 캐릭터면 null) */
+  readonly other_stat: OtherStatEntry[] | null;
 }
 
 // ─── GET /maplestory/v1/character/ring-exchange-skill-equipment ──────────────
@@ -1595,14 +1636,14 @@ export interface CharacterRingExchangeSkillEquipment {
   readonly date: string;
   /** 캐릭터 직업 */
   readonly character_class: string;
-  /** 링 익스체인지에 등록된 특수 반지 */
-  readonly special_ring_exchange_name: string;
-  /** 링 익스체인지에 등록된 특수 반지 레벨 */
-  readonly special_ring_exchange_level: number;
-  /** 링 익스체인지에 등록된 특수 반지 아이콘 */
-  readonly special_ring_exchange_icon: string;
-  /** 링 익스체인지에 등록된 특수 반지 설명 */
-  readonly special_ring_exchange_description: string;
+  /** 링 익스체인지에 등록된 특수 반지 (등록한 반지가 없으면 null) */
+  readonly special_ring_exchange_name: string | null;
+  /** 링 익스체인지에 등록된 특수 반지 레벨 (등록한 반지가 없으면 null) */
+  readonly special_ring_exchange_level: number | null;
+  /** 링 익스체인지에 등록된 특수 반지 아이콘 (등록한 반지가 없으면 null) */
+  readonly special_ring_exchange_icon: string | null;
+  /** 링 익스체인지에 등록된 특수 반지 설명 (등록한 반지가 없으면 null) */
+  readonly special_ring_exchange_description: string | null;
 }
 
 // ─── GET /maplestory/v1/character/ring-reserve-skill-equipment ───────────────
@@ -1615,8 +1656,8 @@ export interface CharacterRingReserveSkillEquipment {
   readonly character_class: string;
   /** 예비 특수 반지 슬롯에 장착한 특수 반지 (null: 미장착) */
   readonly special_ring_reserve_name: string | null;
-  /** 예비 특수 반지 슬롯에 장착한 특수 반지 레벨 */
-  readonly special_ring_reserve_level: number;
+  /** 예비 특수 반지 슬롯에 장착한 특수 반지 레벨 (미장착이면 null) */
+  readonly special_ring_reserve_level: number | null;
   /** 예비 특수 반지 슬롯에 장착한 특수 반지 아이콘 */
   readonly special_ring_reserve_icon: string | null;
   /** 예비 특수 반지 슬롯에 장착한 특수 반지 설명 */

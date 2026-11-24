@@ -2,8 +2,8 @@
 
 /** 유니온 정보 */
 export interface Union {
-  /** 조회 기준일 (KST, YYYY-MM-DDT00:00+09:00) */
-  readonly date: string;
+  /** 조회 기준일 (KST, YYYY-MM-DDT00:00+09:00). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 유니온 레벨 */
   readonly union_level: number;
   /** 유니온 등급 */
@@ -68,8 +68,8 @@ export interface UnionRaiderPreset {
 
 /** 유니온 공격대 정보 */
 export interface UnionRaider {
-  /** 조회 기준일 (KST, YYYY-MM-DDT00:00+09:00) */
-  readonly date: string;
+  /** 조회 기준일 (KST, YYYY-MM-DDT00:00+09:00). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 유니온 공격대원 효과 */
   readonly union_raider_stat: readonly string[];
   /** 유니온 공격대 점령 효과 */
@@ -136,8 +136,8 @@ export interface UnionArtifactCrystal {
 
 /** 유니온 아티팩트 정보 */
 export interface UnionArtifact {
-  /** 조회 기준일 (KST, YYYY-MM-DDT00:00+09:00) */
-  readonly date: string;
+  /** 조회 기준일 (KST, YYYY-MM-DDT00:00+09:00). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 아티팩트 효과 정보 */
   readonly union_artifact_effect: readonly UnionArtifactEffect[];
   /** 아티팩트 크리스탈 정보 */
@@ -170,8 +170,8 @@ export interface UnionChampionInfo {
 
 /** 유니온 챔피언 정보 */
 export interface UnionChampion {
-  /** 조회 기준일 (KST, YYYY-MM-DDT00:00+09:00) */
-  readonly date: string;
+  /** 조회 기준일 (KST, YYYY-MM-DDT00:00+09:00). `date` 를 생략해 가장 최근 데이터를 조회하면 null */
+  readonly date: string | null;
   /** 유니온 챔피언 정보 */
   readonly union_champion: readonly UnionChampionInfo[];
   /** 챔피언 휘장 효과 */
