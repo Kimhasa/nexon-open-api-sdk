@@ -32,6 +32,7 @@
 | 카트라이더 러쉬플러스      | 라이더명 그대로 (`\|` 문자는 SDK가 알아서 변환) | `client.kartrider.getOuidInfo('라이더명')` — 결과가 목록이다 |
 
 - **다른 게임의 캐릭터** — 메이플스토리와 메이플스토리M, 바람의나라와 바람의나라: 연은 서로 다른 게임입니다. `client.maplestory` 와 `client.maplestorym` 을 구분해 부릅니다.
+- **`.env` 에 적은 닉네임의 `#` 뒤가 잘림** — `.env` 에서는 따옴표가 없으면 `#` 부터 주석으로 읽힙니다. 퍼스트 디센던트 닉네임처럼 `#` 이 들어간 값은 `TFD_USER_NAME="닉네임#1234"` 처럼 큰따옴표로 감쌉니다.
 
 ```js
 import { NexonNotFoundError } from 'nexon-open-api';

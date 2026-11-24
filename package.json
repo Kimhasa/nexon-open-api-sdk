@@ -223,6 +223,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:live": "tsx scripts/smoke-live.ts",
+    "test:deep": "tsx scripts/test-deep.ts",
     "test:package": "tsx scripts/smoke-package.ts",
     "test:maplestory": "tsx scripts/test-maplestory.ts",
     "test:maplestory-m": "tsx scripts/test-maplestory-m.ts",
