@@ -1,3 +1,10 @@
+import {
+  SEA_UNION_SHAPE,
+  SEA_UNION_RAIDER_SHAPE,
+  SEA_UNION_ARTIFACT_SHAPE,
+  SEA_UNION_CHAMPION_SHAPE,
+} from '../shapes.js';
+import { assertNonBlank } from '../validate-input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { OcidDateRequest } from '../../_base/maple-base-types.js';
 import type { SEAUnion, SEAUnionRaider, SEAUnionArtifact, SEAUnionChampion } from './types.js';
@@ -26,12 +33,26 @@ export class MapleStorySEAUnionClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.union.getUnion({ ocid });
+   * ```
    */
   async getUnion(params: OcidDateRequest): Promise<SEAUnion> {
-    return this.http.get<SEAUnion>(`${MapleStorySEAUnionClient.BASE}/user/union`, {
-      ocid: params.ocid,
-      date: params.date as string | undefined,
-    });
+    assertNonBlank(params.ocid, 'ocid');
+    return this.http.get<SEAUnion>(
+      `${MapleStorySEAUnionClient.BASE}/user/union`,
+      {
+        ocid: params.ocid,
+        date: params.date as string | undefined,
+      },
+      SEA_UNION_SHAPE,
+    );
   }
 
   // ─── GET /maplestorysea/v1/user/union-raider ───────────────────────────
@@ -41,12 +62,26 @@ export class MapleStorySEAUnionClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.union.getRaider({ ocid });
+   * ```
    */
   async getRaider(params: OcidDateRequest): Promise<SEAUnionRaider> {
-    return this.http.get<SEAUnionRaider>(`${MapleStorySEAUnionClient.BASE}/user/union-raider`, {
-      ocid: params.ocid,
-      date: params.date as string | undefined,
-    });
+    assertNonBlank(params.ocid, 'ocid');
+    return this.http.get<SEAUnionRaider>(
+      `${MapleStorySEAUnionClient.BASE}/user/union-raider`,
+      {
+        ocid: params.ocid,
+        date: params.date as string | undefined,
+      },
+      SEA_UNION_RAIDER_SHAPE,
+    );
   }
 
   // ─── GET /maplestorysea/v1/user/union-artifact ─────────────────────────
@@ -56,12 +91,26 @@ export class MapleStorySEAUnionClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.union.getArtifact({ ocid });
+   * ```
    */
   async getArtifact(params: OcidDateRequest): Promise<SEAUnionArtifact> {
-    return this.http.get<SEAUnionArtifact>(`${MapleStorySEAUnionClient.BASE}/user/union-artifact`, {
-      ocid: params.ocid,
-      date: params.date as string | undefined,
-    });
+    assertNonBlank(params.ocid, 'ocid');
+    return this.http.get<SEAUnionArtifact>(
+      `${MapleStorySEAUnionClient.BASE}/user/union-artifact`,
+      {
+        ocid: params.ocid,
+        date: params.date as string | undefined,
+      },
+      SEA_UNION_ARTIFACT_SHAPE,
+    );
   }
 
   // ─── GET /maplestorysea/v1/user/union-champion ─────────────────────────
@@ -71,11 +120,25 @@ export class MapleStorySEAUnionClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.union.getChampion({ ocid });
+   * ```
    */
   async getChampion(params: OcidDateRequest): Promise<SEAUnionChampion> {
-    return this.http.get<SEAUnionChampion>(`${MapleStorySEAUnionClient.BASE}/user/union-champion`, {
-      ocid: params.ocid,
-      date: params.date as string | undefined,
-    });
+    assertNonBlank(params.ocid, 'ocid');
+    return this.http.get<SEAUnionChampion>(
+      `${MapleStorySEAUnionClient.BASE}/user/union-champion`,
+      {
+        ocid: params.ocid,
+        date: params.date as string | undefined,
+      },
+      SEA_UNION_CHAMPION_SHAPE,
+    );
   }
 }

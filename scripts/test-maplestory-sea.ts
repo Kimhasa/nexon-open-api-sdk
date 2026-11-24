@@ -18,7 +18,11 @@ if (!apiKey || !characterName) {
   process.exit(1);
 }
 
-const client = new NexonClient({ apiKey });
+const client = new NexonClient({
+  apiKey,
+  responseValidation: true,
+  logger: { onResponseShapeMismatch: (mismatch) => console.warn(mismatch) },
+});
 
 let passed = 0;
 let failed = 0;
@@ -64,6 +68,9 @@ if (ocid) {
   await test('character.getStat', async () => {
     const r = await client.maplestorySEA.character.getStat({ ocid: ocid! });
     if (!r.final_stat) throw new Error('final_stat 없음');
+    if (r.mentorship_stat !== undefined && !Array.isArray(r.mentorship_stat)) {
+      throw new Error('mentorship_stat이 배열이 아님');
+    }
   });
 
   await test('character.getHyperStat', async () => {
@@ -89,6 +96,11 @@ if (ocid) {
   await test('character.getCashItemEquipment', async () => {
     const r = await client.maplestorySEA.character.getCashItemEquipment({ ocid: ocid! });
     if (r.character_look_mode === undefined) throw new Error('character_look_mode 없음');
+    for (const item of r.cash_item_equipment_base) {
+      if (item.skill_info !== undefined && !Array.isArray(item.skill_info)) {
+        throw new Error('skill_info가 배열이 아님');
+      }
+    }
   });
 
   await test('character.getSymbolEquipment', async () => {

@@ -1,3 +1,5 @@
+import { SEA_OCID_SHAPE } from './shapes.js';
+import { assertNonBlank } from './validate-input.js';
 import { AbstractMapleBaseClient } from '../_base/AbstractMapleStoryBaseClient.js';
 import type { OCID } from '../_base/maple-base-types.js';
 import { MapleStorySEACharacterClient } from './character/MapleStorySEACharacterClient.js';
@@ -59,6 +61,7 @@ export class MapleStorySEAClient extends AbstractMapleBaseClient {
    * GET /maplestorysea/v1/id
    *
    * @param characterName - Character name to look up
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
    * @throws {NexonNotFoundError} Character not found
    * @throws {NexonAuthError} Invalid API key
    *
@@ -68,10 +71,15 @@ export class MapleStorySEAClient extends AbstractMapleBaseClient {
    * ```
    */
   async getOcid(characterName: string): Promise<OCID> {
+    assertNonBlank(characterName, 'characterName');
     const url = this.buildUrl('id');
-    const response = await this.http.get<{ ocid: string }>(url, {
-      character_name: characterName,
-    });
+    const response = await this.http.get<{ ocid: string }>(
+      url,
+      {
+        character_name: characterName,
+      },
+      SEA_OCID_SHAPE,
+    );
     return response.ocid as OCID;
   }
 }

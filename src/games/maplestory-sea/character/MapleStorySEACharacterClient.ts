@@ -1,3 +1,26 @@
+import { emitDeprecation } from '../../../core/deprecation/deprecation.js';
+import {
+  SEA_CHARACTER_BASIC_SHAPE,
+  SEA_CHARACTER_POPULARITY_SHAPE,
+  SEA_CHARACTER_STAT_SHAPE,
+  SEA_CHARACTER_HYPER_STAT_SHAPE,
+  SEA_CHARACTER_PROPENSITY_SHAPE,
+  SEA_CHARACTER_ABILITY_SHAPE,
+  SEA_CHARACTER_ITEM_EQUIPMENT_SHAPE,
+  SEA_CHARACTER_CASHITEM_EQUIPMENT_SHAPE,
+  SEA_CHARACTER_SYMBOL_EQUIPMENT_SHAPE,
+  SEA_CHARACTER_SET_EFFECT_SHAPE,
+  SEA_CHARACTER_BEAUTY_EQUIPMENT_SHAPE,
+  SEA_CHARACTER_ANDROID_EQUIPMENT_SHAPE,
+  SEA_CHARACTER_PET_EQUIPMENT_SHAPE,
+  SEA_CHARACTER_SKILL_SHAPE,
+  SEA_CHARACTER_LINK_SKILL_SHAPE,
+  SEA_CHARACTER_VMATRIX_SHAPE,
+  SEA_CHARACTER_HEXAMATRIX_SHAPE,
+  SEA_CHARACTER_HEXAMATRIX_STAT_SHAPE,
+  SEA_CHARACTER_DOJANG_SHAPE,
+} from '../shapes.js';
+import { assertNonBlank } from '../validate-input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { OcidDateRequest } from '../../_base/maple-base-types.js';
 import type {
@@ -47,11 +70,22 @@ export class MapleStorySEACharacterClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.character.getBasic({ ocid });
+   * ```
    */
   async getBasic(params: OcidDateRequest): Promise<SEACharacterBasic> {
+    assertNonBlank(params.ocid, 'ocid');
     return this.http.get<SEACharacterBasic>(
       `${MapleStorySEACharacterClient.BASE}/character/basic`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      SEA_CHARACTER_BASIC_SHAPE,
     );
   }
 
@@ -62,11 +96,22 @@ export class MapleStorySEACharacterClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.character.getPopularity({ ocid });
+   * ```
    */
   async getPopularity(params: OcidDateRequest): Promise<SEACharacterPopularity> {
+    assertNonBlank(params.ocid, 'ocid');
     return this.http.get<SEACharacterPopularity>(
       `${MapleStorySEACharacterClient.BASE}/character/popularity`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      SEA_CHARACTER_POPULARITY_SHAPE,
     );
   }
 
@@ -77,12 +122,26 @@ export class MapleStorySEACharacterClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.character.getStat({ ocid });
+   * ```
    */
   async getStat(params: OcidDateRequest): Promise<SEACharacterStat> {
-    return this.http.get<SEACharacterStat>(`${MapleStorySEACharacterClient.BASE}/character/stat`, {
-      ocid: params.ocid,
-      date: params.date as string | undefined,
-    });
+    assertNonBlank(params.ocid, 'ocid');
+    return this.http.get<SEACharacterStat>(
+      `${MapleStorySEACharacterClient.BASE}/character/stat`,
+      {
+        ocid: params.ocid,
+        date: params.date as string | undefined,
+      },
+      SEA_CHARACTER_STAT_SHAPE,
+    );
   }
 
   // ─── GET /maplestorysea/v1/character/hyper-stat ─────────────────────────
@@ -92,11 +151,22 @@ export class MapleStorySEACharacterClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.character.getHyperStat({ ocid });
+   * ```
    */
   async getHyperStat(params: OcidDateRequest): Promise<SEACharacterHyperStat> {
+    assertNonBlank(params.ocid, 'ocid');
     return this.http.get<SEACharacterHyperStat>(
       `${MapleStorySEACharacterClient.BASE}/character/hyper-stat`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      SEA_CHARACTER_HYPER_STAT_SHAPE,
     );
   }
 
@@ -107,11 +177,22 @@ export class MapleStorySEACharacterClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.character.getPropensity({ ocid });
+   * ```
    */
   async getPropensity(params: OcidDateRequest): Promise<SEACharacterPropensity> {
+    assertNonBlank(params.ocid, 'ocid');
     return this.http.get<SEACharacterPropensity>(
       `${MapleStorySEACharacterClient.BASE}/character/propensity`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      SEA_CHARACTER_PROPENSITY_SHAPE,
     );
   }
 
@@ -122,11 +203,22 @@ export class MapleStorySEACharacterClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.character.getAbility({ ocid });
+   * ```
    */
   async getAbility(params: OcidDateRequest): Promise<SEACharacterAbility> {
+    assertNonBlank(params.ocid, 'ocid');
     return this.http.get<SEACharacterAbility>(
       `${MapleStorySEACharacterClient.BASE}/character/ability`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      SEA_CHARACTER_ABILITY_SHAPE,
     );
   }
 
@@ -137,12 +229,31 @@ export class MapleStorySEACharacterClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.character.getItemEquipment({ ocid });
+   * ```
    */
   async getItemEquipment(params: OcidDateRequest): Promise<SEACharacterItemEquipment> {
-    return this.http.get<SEACharacterItemEquipment>(
+    assertNonBlank(params.ocid, 'ocid');
+    const response = await this.http.get<SEACharacterItemEquipment>(
       `${MapleStorySEACharacterClient.BASE}/character/item-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      SEA_CHARACTER_ITEM_EQUIPMENT_SHAPE,
     );
+    const equipment = [response?.dragon_equipment, response?.mechanic_equipment];
+    if (equipment.some((items) => hasEquipmentField(items, CLASS_EQUIPMENT_POTENTIAL_FIELDS))) {
+      emitDeprecation(
+        'SEAClassItemEquipment.potentialOptions',
+        'The MapleStory SEA portal omits potential options for dragon and mechanic equipment. Check whether these fields are present before using them.',
+      );
+    }
+    return response;
   }
 
   // ─── GET /maplestorysea/v1/character/cashitem-equipment ─────────────────
@@ -152,12 +263,40 @@ export class MapleStorySEACharacterClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.character.getCashItemEquipment({ ocid });
+   * ```
    */
   async getCashItemEquipment(params: OcidDateRequest): Promise<SEACharacterCashItemEquipment> {
-    return this.http.get<SEACharacterCashItemEquipment>(
+    assertNonBlank(params.ocid, 'ocid');
+    const response = await this.http.get<SEACharacterCashItemEquipment>(
       `${MapleStorySEACharacterClient.BASE}/character/cashitem-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      SEA_CHARACTER_CASHITEM_EQUIPMENT_SHAPE,
     );
+    const equipment = [
+      response?.cash_item_equipment_base,
+      response?.cash_item_equipment_preset_1,
+      response?.cash_item_equipment_preset_2,
+      response?.cash_item_equipment_preset_3,
+      response?.additional_cash_item_equipment_base,
+      response?.additional_cash_item_equipment_preset_1,
+      response?.additional_cash_item_equipment_preset_2,
+      response?.additional_cash_item_equipment_preset_3,
+    ];
+    if (equipment.some((items) => hasEquipmentField(items, ['skills']))) {
+      emitDeprecation(
+        'SEACashItemEquipmentItem.skills',
+        'Read skill_info for the names and levels of MapleStory SEA cash equipment skills.',
+      );
+    }
+    return response;
   }
 
   // ─── GET /maplestorysea/v1/character/symbol-equipment ───────────────────
@@ -167,11 +306,22 @@ export class MapleStorySEACharacterClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.character.getSymbolEquipment({ ocid });
+   * ```
    */
   async getSymbolEquipment(params: OcidDateRequest): Promise<SEACharacterSymbolEquipment> {
+    assertNonBlank(params.ocid, 'ocid');
     return this.http.get<SEACharacterSymbolEquipment>(
       `${MapleStorySEACharacterClient.BASE}/character/symbol-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      SEA_CHARACTER_SYMBOL_EQUIPMENT_SHAPE,
     );
   }
 
@@ -182,11 +332,22 @@ export class MapleStorySEACharacterClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.character.getSetEffect({ ocid });
+   * ```
    */
   async getSetEffect(params: OcidDateRequest): Promise<SEACharacterSetEffect> {
+    assertNonBlank(params.ocid, 'ocid');
     return this.http.get<SEACharacterSetEffect>(
       `${MapleStorySEACharacterClient.BASE}/character/set-effect`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      SEA_CHARACTER_SET_EFFECT_SHAPE,
     );
   }
 
@@ -197,11 +358,22 @@ export class MapleStorySEACharacterClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.character.getBeautyEquipment({ ocid });
+   * ```
    */
   async getBeautyEquipment(params: OcidDateRequest): Promise<SEACharacterBeautyEquipment> {
+    assertNonBlank(params.ocid, 'ocid');
     return this.http.get<SEACharacterBeautyEquipment>(
       `${MapleStorySEACharacterClient.BASE}/character/beauty-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      SEA_CHARACTER_BEAUTY_EQUIPMENT_SHAPE,
     );
   }
 
@@ -212,11 +384,22 @@ export class MapleStorySEACharacterClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.character.getAndroidEquipment({ ocid });
+   * ```
    */
   async getAndroidEquipment(params: OcidDateRequest): Promise<SEACharacterAndroidEquipment> {
+    assertNonBlank(params.ocid, 'ocid');
     return this.http.get<SEACharacterAndroidEquipment>(
       `${MapleStorySEACharacterClient.BASE}/character/android-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      SEA_CHARACTER_ANDROID_EQUIPMENT_SHAPE,
     );
   }
 
@@ -227,11 +410,22 @@ export class MapleStorySEACharacterClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.character.getPetEquipment({ ocid });
+   * ```
    */
   async getPetEquipment(params: OcidDateRequest): Promise<SEACharacterPetEquipment> {
+    assertNonBlank(params.ocid, 'ocid');
     return this.http.get<SEACharacterPetEquipment>(
       `${MapleStorySEACharacterClient.BASE}/character/pet-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      SEA_CHARACTER_PET_EQUIPMENT_SHAPE,
     );
   }
 
@@ -243,8 +437,19 @@ export class MapleStorySEACharacterClient {
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
    * @param params.character_skill_grade - Job advancement level ("0"~"6", "hyperpassive", "hyperactive")
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.character.getSkill({ ocid, character_skill_grade: '6' });
+   * ```
    */
   async getSkill(params: SEASkillRequest): Promise<SEACharacterSkill> {
+    assertNonBlank(params.ocid, 'ocid');
+    assertNonBlank(params.character_skill_grade, 'character_skill_grade');
     return this.http.get<SEACharacterSkill>(
       `${MapleStorySEACharacterClient.BASE}/character/skill`,
       {
@@ -252,6 +457,7 @@ export class MapleStorySEACharacterClient {
         date: params.date as string | undefined,
         character_skill_grade: params.character_skill_grade,
       },
+      SEA_CHARACTER_SKILL_SHAPE,
     );
   }
 
@@ -262,11 +468,22 @@ export class MapleStorySEACharacterClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.character.getLinkSkill({ ocid });
+   * ```
    */
   async getLinkSkill(params: OcidDateRequest): Promise<SEACharacterLinkSkill> {
+    assertNonBlank(params.ocid, 'ocid');
     return this.http.get<SEACharacterLinkSkill>(
       `${MapleStorySEACharacterClient.BASE}/character/link-skill`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      SEA_CHARACTER_LINK_SKILL_SHAPE,
     );
   }
 
@@ -277,11 +494,22 @@ export class MapleStorySEACharacterClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.character.getVMatrix({ ocid });
+   * ```
    */
   async getVMatrix(params: OcidDateRequest): Promise<SEACharacterVMatrix> {
+    assertNonBlank(params.ocid, 'ocid');
     return this.http.get<SEACharacterVMatrix>(
       `${MapleStorySEACharacterClient.BASE}/character/vmatrix`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      SEA_CHARACTER_VMATRIX_SHAPE,
     );
   }
 
@@ -292,11 +520,22 @@ export class MapleStorySEACharacterClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.character.getHexaMatrix({ ocid });
+   * ```
    */
   async getHexaMatrix(params: OcidDateRequest): Promise<SEACharacterHexaMatrix> {
+    assertNonBlank(params.ocid, 'ocid');
     return this.http.get<SEACharacterHexaMatrix>(
       `${MapleStorySEACharacterClient.BASE}/character/hexamatrix`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      SEA_CHARACTER_HEXAMATRIX_SHAPE,
     );
   }
 
@@ -307,11 +546,22 @@ export class MapleStorySEACharacterClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.character.getHexaMatrixStat({ ocid });
+   * ```
    */
   async getHexaMatrixStat(params: OcidDateRequest): Promise<SEACharacterHexaMatrixStat> {
+    assertNonBlank(params.ocid, 'ocid');
     return this.http.get<SEACharacterHexaMatrixStat>(
       `${MapleStorySEACharacterClient.BASE}/character/hexamatrix-stat`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      SEA_CHARACTER_HEXAMATRIX_STAT_SHAPE,
     );
   }
 
@@ -322,11 +572,45 @@ export class MapleStorySEACharacterClient {
    *
    * @param params.ocid - Character identifier
    * @param params.date - Query date (SGT, YYYY-MM-DD). Defaults to previous day
+   *
+   * @throws {NexonBadRequestError} A required identifier or parameter is blank
+   * @throws {NexonAuthError} Invalid API key
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestorySEA.getOcid('CharacterName');
+   * const result = await client.maplestorySEA.character.getDojang({ ocid });
+   * ```
    */
   async getDojang(params: OcidDateRequest): Promise<SEACharacterDojang> {
+    assertNonBlank(params.ocid, 'ocid');
     return this.http.get<SEACharacterDojang>(
       `${MapleStorySEACharacterClient.BASE}/character/dojang`,
       { ocid: params.ocid, date: params.date as string | undefined },
+      SEA_CHARACTER_DOJANG_SHAPE,
     );
   }
+}
+
+const CLASS_EQUIPMENT_POTENTIAL_FIELDS = [
+  'potential_option_grade',
+  'additional_potential_option_grade',
+  'potential_option_1',
+  'potential_option_2',
+  'potential_option_3',
+  'additional_potential_option_1',
+  'additional_potential_option_2',
+  'additional_potential_option_3',
+];
+
+function hasEquipmentField(items: unknown, fields: readonly string[]): boolean {
+  return (
+    Array.isArray(items) &&
+    items.some(
+      (item: unknown) =>
+        typeof item === 'object' &&
+        item !== null &&
+        fields.some((field) => Object.hasOwn(item, field)),
+    )
+  );
 }

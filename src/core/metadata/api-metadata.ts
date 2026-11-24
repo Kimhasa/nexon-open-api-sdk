@@ -44,18 +44,18 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
   maplestorysea: {
     game: 'MapleStory SEA',
     pathPrefix: 'maplestorysea',
-    lastVerifiedAt: '2026-03-09',
-    sdkVersionAtVerification: '0.1.1',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
     endpointCount: 26,
-    note: 'OCID(1) + Character(19) + Union(4) + Guild(2). Types from the Nexon portal spec; no real-API E2E run on record.',
+    note: 'Portal OpenAPI spec (specs/openapi/maplestorysea/, 2026-11-24). All 26 response shapes and MSW fixtures verified. Not verified with a real API key.',
   },
   fconline: {
     game: 'EA SPORTS FC Online',
     pathPrefix: 'fconline',
-    lastVerifiedAt: '2026-03-05',
-    sdkVersionAtVerification: '0.1.1',
-    endpointCount: 16,
-    note: '14 HTTP methods + 2 image URL helpers. E2E script (yarn test:fconline) passed 14/15 with a real API key (PR #2); the failing check was not recorded.',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 18,
+    note: 'Portal OpenAPI spec (specs/openapi/fconline/, 2026-11-24). Public static metadata and image CDN checked without a key. Authenticated endpoints verified with MSW fixtures.',
   },
 };
 
