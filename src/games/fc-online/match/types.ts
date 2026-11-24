@@ -72,8 +72,10 @@ export interface FcMatchDetailInfo {
   readonly cornerKick: number;
   /** 점유율 */
   readonly possession: number;
-  /** 오프사이드 수 */
-  readonly OffsideCount: number;
+  /** 오프사이드 수. 포털 스펙의 이름. 2026-11-24 실제 응답에는 없고 `offsideCount`로 온다. */
+  readonly OffsideCount?: number | undefined;
+  /** 오프사이드 수. 실제 응답의 필드. 포털 스펙에는 `OffsideCount`로 적혀 있다. */
+  readonly offsideCount?: number | undefined;
   /** 경기 평점 */
   readonly averageRating: number;
   /** 사용한 컨트롤러 타입 (`"keyboard"` | `"pad"` 등) */
@@ -152,8 +154,10 @@ export interface FcMatchShootDetail {
   readonly spIdType: boolean;
   /** 어시스트 받은 골 여부 */
   readonly assist: boolean;
-  /** 어시스트 선수 고유 식별자 (-1이면 없음) */
-  readonly assistSpI: number;
+  /** 어시스트 선수 카드 번호 (-1이면 없음). 포털 스펙의 이름. 2026-11-24 실제 응답에는 없고 `assistSpId`로 온다. */
+  readonly assistSpI?: number | undefined;
+  /** 어시스트 선수 카드 번호 (-1이면 없음). 실제 응답의 필드. 포털 스펙에는 `assistSpI`로 적혀 있다. */
+  readonly assistSpId?: number | undefined;
   /** 어시스트 x좌표 */
   readonly assistX: number;
   /** 어시스트 y좌표 */
@@ -234,8 +238,10 @@ export interface FcPlayerStatus {
   readonly dribbleSuccess: number;
   /** 볼 소유 시도 수 */
   readonly ballPossesionTry: number;
-  /** 볼 소유 성공 수 */
-  readonly ballPossesionSuc: number;
+  /** 볼 소유 성공 수. 포털 스펙의 이름. 2026-11-24 실제 응답에는 없고 `ballPossesionSuccess`로 온다. */
+  readonly ballPossesionSuc?: number | undefined;
+  /** 볼 소유 성공 수. 실제 응답의 필드. 포털 스펙에는 `ballPossesionSuc`로 적혀 있다. */
+  readonly ballPossesionSuccess?: number | undefined;
   /** 공중볼 경합 시도 수 */
   readonly aerialTry: number;
   /** 공중볼 경합 성공 수 */

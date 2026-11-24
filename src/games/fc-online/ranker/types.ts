@@ -46,8 +46,10 @@ export interface FcRankerPlayerStatus {
 
 /** TOP 10,000 랭커가 쓴 선수 카드의 포지션별 평균 기록 — `client.fcOnline.getRankerStats()` 응답 배열의 항목. */
 export interface FcRankerStats {
-  /** 선수 고유 식별자 — 선수 카드 번호 (`getSpidMeta()` 참고) */
-  readonly spId: number;
+  /** 선수 카드 번호 (`getSpidMeta()` 참고). 포털 스펙의 이름. 2026-11-24 실제 응답에는 없고 `spid`로 온다. */
+  readonly spId?: number | undefined;
+  /** 선수 카드 번호 (`getSpidMeta()` 참고). 실제 응답의 필드. 포털 스펙에는 `spId`로 적혀 있다. */
+  readonly spid?: number | undefined;
   /** 선수 포지션 번호 (`getSpPositionMeta()` 참고, 예: 0 = GK) */
   readonly spPosition: number;
   /** 선수의 20경기 평균 스탯 */

@@ -70,7 +70,7 @@ API 키는 게임마다 따로 발급받습니다. 처음이면 [시작 가이�
 | 경기 기록 목록 (공식경기·감독모드·볼타 등) | `getMatchList({ ouid, matchtype })`      | 매치 번호 문자열 배열 (최근 경기부터)                                    |
 | 경기 한 판의 상세 기록                     | `getMatchDetail(matchId)`                | `matchDate`, `matchInfo[]` (구단주별 승패·슛·패스·수비·출전 선수)        |
 | 내 이적시장 거래 기록 (구입·판매)          | `getTradeList({ tradetype })`            | 배열. `spid` (선수 카드), `grade` (강화 등급), `value` (BP), `tradeDate` |
-| TOP 10,000 랭커의 선수별 평균 기록         | `getRankerStats({ matchtype, players })` | 배열. `spId`, `spPosition`, `status` (골·어시스트·패스 등 20경기 평균)   |
+| TOP 10,000 랭커의 선수별 평균 기록         | `getRankerStats({ matchtype, players })` | 배열. `spid`, `spPosition`, `status` (골·어시스트·패스 등 20경기 평균)   |
 
 ### 숫자를 이름으로 바꾸는 이름표 (7개)
 
@@ -145,7 +145,7 @@ console.log(official?.division); // 등급 번호. 기록이 없으면 undefined
 
 ### 주의할 점
 
-- **이적시장 거래 기록은 내 것만 조회됩니다.** `getTradeList()` 는 닉네임이나 ouid를 받지 않고, API 키를 발급받은 계정의 거래만 돌려줍니다.
+- `getTradeList()`는 API 키를 발급한 넥슨 계정 본인의 이적시장 거래 기록만 조회합니다.
 - **한 번에 100개까지.** `getMatchList()`, `getTradeList()` 는 `limit`(최대 100)과 `offset`(건너뛸 개수)으로 나눠 받습니다. 다음 100개는 `offset: 100` 입니다.
 - **상대 기록이 없을 수 있습니다.** 매치 통계가 만들어지기 전에 상대가 경기를 종료하면 `matchInfo` 에 상대 구단주가 빠질 수 있습니다.
 - **랭커 기록은 한 번에 50명 이내로.** `getRankerStats()` 에 선수를 너무 많이 넣으면 넥슨 서버가 요청을 거절할 수 있습니다.
@@ -186,11 +186,11 @@ for (const matchId of matchIds) {
 
 - `matchDetail.matchResult` — `"승"`, `"무"`, `"패"`
 - `matchDetail.matchEndType` — `0` 정상 종료, `1` 몰수승, `2` 몰수패
-- `matchDetail.possession` 점유율, `matchDetail.averageRating` 경기 평점, `matchDetail.controller` 조작 방식(`"keyboard"`, `"pad"` 등)
+- `matchDetail.possession` 점유율, `matchDetail.offsideCount` 오프사이드 수, `matchDetail.averageRating` 경기 평점, `matchDetail.controller` 조작 방식(`"keyboard"`, `"pad"` 등)
 - `shoot.goalTotalDisplay` — 경기 결과 화면에 표시되는 골 수. `shoot.shootTotal`, `shoot.effectiveShootTotal` 은 슛·유효슛 수
 - `pass.passTry` / `pass.passSuccess`, `defence.tackleTry` / `defence.tackleSuccess` — 패스·태클 시도와 성공
-- `player[]` — 출전 선수. `spId` 선수 카드 번호, `spPosition` 포지션 번호, `spGrade` 강화 등급, `status.spRating` 평점, `status.goal`·`status.assist`
-- `shootDetail[]` — 슛 하나하나의 위치(`x`, `y`)와 결과(`result`: `1` 유효슛, `2` 빗나감, `3` 골). 슛 차트를 그릴 때 씁니다. 슛 시각 `goalTime` 은 전·후반이 섞인 값이라 에디터의 필드 설명에 있는 규칙대로 풀어야 합니다.
+- `player[]` — 출전 선수. `spId` 선수 카드 번호, `spPosition` 포지션 번호, `spGrade` 강화 등급, `status.spRating` 평점, `status.goal`·`status.assist`, `status.ballPossesionSuccess` 볼 소유 성공 수
+- `shootDetail[]` — 슛 하나하나의 위치(`x`, `y`), 결과(`result`: `1` 유효슛, `2` 빗나감, `3` 골), 어시스트 선수 카드 번호(`assistSpId`, 없으면 `-1`). 슛 차트를 그릴 때 씁니다. 슛 시각 `goalTime` 은 전·후반이 섞인 값이라 에디터의 필드 설명에 있는 규칙대로 풀어야 합니다.
 - `division` — 경기 당시 등급 번호 (없을 수 있음)
 
 ### 이적시장 거래 기록
@@ -234,7 +234,7 @@ const stats = await client.fcOnline.getRankerStats({
 
 for (const s of stats) {
   console.log(
-    `선수 카드 ${s.spId}: 평균 ${s.status.goal}골 ${s.status.assist}도움 (${s.status.matchCount}경기)`,
+    `선수 카드 ${s.spid}: 평균 ${s.status.goal}골 ${s.status.assist}도움 (${s.status.matchCount}경기)`,
   );
 }
 ```

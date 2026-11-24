@@ -37,7 +37,7 @@ export const mDojangRankingFixture: MDojangRanking = {
       character_class: '히어로',
       character_level: 250,
       dojang_floor: 50,
-      guild_name: '테스트길드M',
+      guild_name: null,
     },
   ],
 };
@@ -53,7 +53,7 @@ export const mRootOfTimeRankingFixture: MRootOfTimeRanking = {
       character_class: '히어로',
       character_level: 250,
       max_damage: 12345678,
-      guild_name: '테스트길드M',
+      guild_name: null,
     },
   ],
 };
@@ -70,7 +70,7 @@ export const mUnionRankingFixture: MUnionRanking = {
       union_grade: '마스터 유니온 1',
       union_grade_icon: 'https://example.com/union-grade-icon.png',
       union_level: 5000,
-      guild_name: '테스트길드M',
+      guild_name: null,
     },
   ],
 };
@@ -86,7 +86,7 @@ export const mCombatPowerRankingFixture: MCombatPowerRanking = {
       character_class: '히어로',
       character_level: 250,
       character_combat_power: 87654321,
-      guild_name: '테스트길드M',
+      guild_name: null,
     },
   ],
 };
@@ -102,7 +102,7 @@ export const mKerningMTowerRankingFixture: MKerningMTowerRanking = {
       character_class: '히어로',
       character_level: 250,
       tower_floor: 35,
-      guild_name: '테스트길드M',
+      guild_name: null,
     },
   ],
 };
@@ -156,7 +156,7 @@ export const mSharenianWaterwayRankingFixture: MSharenianWaterwayRanking = {
       world_name: '스카니아',
       guild_master_name: '테스트길드장M',
       guild_mark_icon: 'https://example.com/guild-mark-icon.png',
-      season_score: '7500',
+      season_score: 7500,
       grade_icon: 'https://example.com/ranking-grade.png',
     },
   ],

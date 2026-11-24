@@ -58,7 +58,7 @@ const equipmentItem: MItemEquipment = {
   },
   emblem_info: {
     emblem_name: '테스트 문장',
-    emblem_level: '2',
+    emblem_level: 2,
     emblem_option: '공격력 10 증가',
   },
   mastery_info: {
@@ -71,6 +71,24 @@ const equipmentItem: MItemEquipment = {
   },
 };
 
+const secondaryEquipmentItem: MItemEquipment = {
+  ...equipmentItem,
+  item_name: '테스트 훈장',
+  item_equipment_slot_name: '훈장',
+  item_combat_power: null,
+  starforce_upgrade: null,
+  item_additional_option_grade: null,
+  item_potential_option_grade: null,
+  item_additional_potential_option_grade: null,
+  item_additional_option: [],
+  item_potential_option: [],
+  item_additional_potential_option: [],
+  soul_equipment_flag: '0',
+  soul_info: null,
+  emblem_info: null,
+  mastery_info: null,
+};
+
 const cashItem: MCashItemEquipmentItem = {
   cash_item_equipment_page_name: '캐시',
   cash_item_equipment_slot_name: '모자',
@@ -79,7 +97,7 @@ const cashItem: MCashItemEquipmentItem = {
   miracle_anvil_item_name: '테스트 신비의 모루 외형',
   miracle_anvil_item_icon: 'https://example.com/miracle-anvil-item-icon.png',
   cash_item_description: '테스트용 캐시 아이템',
-  cash_item_gender: 1,
+  cash_item_gender: '공용',
   freestyle_coupon_flag: '1',
   cash_item_option: [
     {
@@ -96,6 +114,15 @@ const cashItem: MCashItemEquipmentItem = {
     saturation: 1,
     value: 1,
   },
+};
+
+const cashItemWithoutAnvil: MCashItemEquipmentItem = {
+  ...cashItem,
+  cash_item_equipment_slot_name: '신발',
+  cash_item_name: '테스트 캐시 신발',
+  miracle_anvil_item_name: null,
+  miracle_anvil_item_icon: null,
+  cash_item_label: null,
 };
 
 const dressUpItem: MCashItemEquipmentItem = {
@@ -120,9 +147,9 @@ const android: MAndroidEquipmentInfo = {
       cash_item_name: '테스트 코디',
       cash_item_icon: 'https://example.com/cash-item-icon.png',
       cash_item_description: '테스트용 캐시 아이템',
-      android_item_gender: '공용',
+      cash_item_gender: '공용',
       freestyle_coupon_flag: '1',
-      cash_item_label: '스페셜 라벨',
+      cash_item_label: null,
       cash_item_coloring_prism: {
         color_range: '전체',
         hue: 1,
@@ -177,12 +204,12 @@ export const mCharacterGuildFixture: MCharacterGuild = {
 export const mCharacterItemEquipmentFixture: MCharacterItemEquipment = {
   character_class: '히어로',
   use_preset_no: 1,
-  item_equipment: [equipmentItem],
+  item_equipment: [equipmentItem, secondaryEquipmentItem],
   soul_set_option: '공격력 10 증가',
   equipment_preset: [
     {
       preset_no: 1,
-      item_equipment: [equipmentItem],
+      item_equipment: [equipmentItem, secondaryEquipmentItem],
       soul_set_option: '공격력 10 증가',
     },
   ],
@@ -194,12 +221,12 @@ export const mCharacterCashItemEquipmentFixture: MCharacterCashItemEquipment = {
   use_preset_no: 1,
   use_additional_preset_no: 1,
   character_look_mode: '1',
-  cash_item_equipment: [cashItem],
+  cash_item_equipment: [cashItem, cashItemWithoutAnvil],
   additional_cash_item_equipment: [dressUpItem],
   cash_equipment_preset: [
     {
       preset_no: 1,
-      cash_item_equipment: [cashItem],
+      cash_item_equipment: [cashItem, cashItemWithoutAnvil],
     },
   ],
   additional_cash_equipment_preset: [
@@ -277,37 +304,37 @@ export const mCharacterJewelFixture: MCharacterJewel = {
 
 export const mCharacterBeautyEquipmentFixture: MCharacterBeautyEquipment = {
   character_gender: '여',
-  character_class: '엔젤릭버스터',
+  character_class: '히어로',
   character_hair: {
     hair_name: '테스트 헤어',
     base_color: '검은색',
-    mix_color: '갈색',
-    mix_rate: '50',
-    freestyle_coupon_flag: '1',
+    mix_color: null,
+    mix_rate: null,
+    freestyle_coupon_flag: null,
   },
   character_face: {
     face_name: '테스트 얼굴',
     base_color: '검은색',
     mix_color: '갈색',
     mix_rate: '50',
-    freestyle_coupon_flag: '1',
+    freestyle_coupon_flag: null,
   },
   character_skin_name: '뽀송 피부',
   additional_character_hair: {
-    hair_name: '테스트 드레스 업 헤어',
-    base_color: '검은색',
-    mix_color: '갈색',
-    mix_rate: '50',
-    freestyle_coupon_flag: '1',
+    hair_name: null,
+    base_color: null,
+    mix_color: null,
+    mix_rate: null,
+    freestyle_coupon_flag: null,
   },
   additional_character_face: {
-    face_name: '테스트 드레스 업 성형',
-    base_color: '검은색',
-    mix_color: '갈색',
-    mix_rate: '50',
-    freestyle_coupon_flag: '1',
+    face_name: null,
+    base_color: null,
+    mix_color: null,
+    mix_rate: null,
+    freestyle_coupon_flag: null,
   },
-  additional_character_skin_name: '뽀송 피부',
+  additional_character_skin_name: null,
 };
 
 export const mCharacterPetEquipmentFixture: MCharacterPetEquipment = {
@@ -319,10 +346,10 @@ export const mCharacterPetEquipmentFixture: MCharacterPetEquipment = {
   pet_2_pet_type: '원더 블랙',
   pet_2_date_expire: '2023-12-14T08:28:35Z',
   pet_2_icon: 'https://example.com/pet-2-icon.png',
-  pet_3_name: '테스트 펫 3',
-  pet_3_pet_type: '원더 블랙',
-  pet_3_date_expire: '2023-12-14T08:28:35Z',
-  pet_3_icon: 'https://example.com/pet-3-icon.png',
+  pet_3_name: null,
+  pet_3_pet_type: null,
+  pet_3_date_expire: null,
+  pet_3_icon: null,
   pet_set_option: [
     {
       set_name: '테스트 세트',
@@ -338,13 +365,13 @@ export const mCharacterSkillEquipmentFixture: MCharacterSkillEquipment = {
     equipment_skill: [
       {
         skill_mode: 1,
-        equipment_skill_set: '1',
+        equipment_skill_set: 1,
         slot_id: '1',
         skill_name: '테스트 스킬',
         skill_icon: 'https://example.com/skill-icon.png',
-        skill_type: '강화',
-        skill_grade: '1',
-        add_feature_flag: '1',
+        skill_type: null,
+        skill_grade: null,
+        add_feature_flag: null,
       },
     ],
     preset: [
@@ -354,10 +381,10 @@ export const mCharacterSkillEquipmentFixture: MCharacterSkillEquipment = {
         skill_icon_1: 'https://example.com/skill.png',
         skill_name_2: '테스트 스킬 2',
         skill_icon_2: 'https://example.com/skill.png',
-        skill_name_3: '테스트 스킬 3',
-        skill_icon_3: 'https://example.com/skill.png',
-        skill_name_4: '테스트 스킬 4',
-        skill_icon_4: 'https://example.com/skill.png',
+        skill_name_3: null,
+        skill_icon_3: null,
+        skill_name_4: null,
+        skill_icon_4: null,
         preset_command_flag: '1',
       },
     ],
@@ -379,14 +406,14 @@ export const mCharacterSkillEquipmentFixture: MCharacterSkillEquipment = {
 };
 
 export const mCharacterLinkSkillFixture: MCharacterLinkSkill = {
-  use_preset_no: 1,
+  use_prest_no: 1,
   link_skill: [
     {
       preset_no: 1,
       link_skill_info: [
         {
           skill_name: '테스트 스킬',
-          skill_level: '1',
+          skill_level: 1,
           skill_description: '공격력을 높이는 테스트 스킬',
           skill_effect: '공격력 10 증가',
           skill_effect_next: '공격력 15 증가',
@@ -411,6 +438,17 @@ export const mCharacterVMatrixFixture: MCharacterVMatrix = {
       vcore_skill_name4: '파이널 어택',
       vcore_expire_flag: '1',
       vcore_expire_date: '2026-12-31T00:00:00Z',
+      vcore_equipment_flag: '1',
+    },
+    {
+      vcore_type: '스킬 코어',
+      vcore_level: 25,
+      vcore_skill_name1: '소드 오브 버닝 소울',
+      vcore_skill_name2: null,
+      vcore_skill_name3: null,
+      vcore_skill_name4: null,
+      vcore_expire_flag: '0',
+      vcore_expire_date: null,
       vcore_equipment_flag: '1',
     },
   ],

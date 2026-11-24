@@ -87,9 +87,9 @@ API 키는 게임마다 따로 발급받습니다. PC 메이플스토리 키로�
 | 안드로이드                                  | `character.getAndroidEquipment({ ocid })`  | `android_equipment` (안드로이드), `heart_equipment` (기계 심장)                      |
 | 쥬얼                                        | `character.getJewel({ ocid })`             | `use_jewel_page_no`, `use_jewel_set_option`, `jewel_equipment`                       |
 | 헤어·성형·피부                              | `character.getBeautyEquipment({ ocid })`   | `character_hair`, `character_face`, `character_skin_name`                            |
-| 펫                                          | `character.getPetEquipment({ ocid })`      | `pet_1_name`, `pet_1_pet_type`, `pet_set_option`                                     |
+| 펫                                          | `character.getPetEquipment({ ocid })`      | `pet_1_name`, `pet_1_pet_type` (값이 없으면 `null`), `pet_set_option`                |
 | 장착 스킬                                   | `character.getSkillEquipment({ ocid })`    | `skill.equipment_skill`, `skill.preset`                                              |
-| 링크 스킬                                   | `character.getLinkSkill({ ocid })`         | `use_preset_no`, `link_skill[].link_skill_info`                                      |
+| 링크 스킬                                   | `character.getLinkSkill({ ocid })`         | `use_prest_no`, `link_skill[].link_skill_info`                                       |
 | V매트릭스                                   | `character.getVMatrix({ ocid })`           | `character_v_core_equipment`, `vmatrix_total_score`                                  |
 | HEXA매트릭스 > 스킬                         | `character.getHexaMatrixSkill({ ocid })`   | `hexamatrix_skill` (슬롯 레벨·스킬 이름), `hexamatrix_total_score`                   |
 | HEXA매트릭스 > HEXA 스탯                    | `character.getHexaMatrixStat({ ocid })`    | `hexamatrix_stat[].stat_info` (메인·서브 스탯과 강화 레벨)                           |
@@ -104,10 +104,10 @@ API 키는 게임마다 따로 발급받습니다. PC 메이플스토리 키로�
 
 ### 길드 (2개)
 
-| 게임에서 부르는 이름           | SDK 메서드                          | 주요 응답 필드                                                    |
-| ------------------------------ | ----------------------------------- | ----------------------------------------------------------------- |
-| 길드 고유 번호 받기            | `guild.getId('스카니아', '길드명')` | 반환값이 곧 길드 고유 번호                                        |
-| 길드 정보 (길드원·활동량·스킬) | `guild.getBasic({ oguild_id })`     | `guild_level`, `guild_master_name`, `guild_member`, `guild_skill` |
+| 게임에서 부르는 이름           | SDK 메서드                          | 주요 응답 필드                                                                         |
+| ------------------------------ | ----------------------------------- | -------------------------------------------------------------------------------------- |
+| 길드 고유 번호 받기            | `guild.getId('스카니아', '길드명')` | 반환값이 곧 길드 고유 번호                                                             |
+| 길드 정보 (창설일·길드원·스킬) | `guild.getBasic({ oguild_id })`     | `guild_create_date`, `guild_level`, `guild_master_name`, `guild_member`, `guild_skill` |
 
 ### 랭킹 (9개)
 
@@ -160,7 +160,9 @@ API 키는 게임마다 따로 발급받습니다. PC 메이플스토리 키로�
 ### 주의할 점
 
 - **시각은 UTC 기준입니다.** 캐릭터 생성일·최근 접속 시각(`character_date_last_login`)과 공지 등록일은 UTC(한국 시간보다 9시간 늦음)로 옵니다. 랭킹의 `date` 만 한국 시간입니다.
-- **장비 등급은 숫자 문자열입니다.** 잠재능력 등급(`item_potential_option_grade`)은 `"1"` 레어, `"2"` 에픽, `"3"` 유니크, `"4"` 레전더리이고, 추가 옵션 등급(`item_additional_option_grade`)은 `"1"`·`"4"` 파란색, `"2"` 보라색, `"3"` 주황색입니다.
+- 잠재능력 등급(`item_potential_option_grade`)은 `"1"` 레어, `"2"` 에픽, `"3"` 유니크, `"4"` 레전더리이고, 추가 옵션 등급(`item_additional_option_grade`)은 `"1"`·`"4"` 파란색, `"2"` 보라색, `"3"` 주황색입니다. 해당 옵션이 없으면 `null`이 옵니다.
+- 안드로이드의 캐시 아이템 장착 가능 성별은 `cash_item_gender` 문자열로 옵니다. 캐릭터의 캐시 아이템도 같은 필드에 문자열로 제공됩니다.
+- 장착 스킬 세팅 번호(`skill.equipment_skill[].equipment_skill_set`)와 링크 스킬 레벨(`link_skill[].link_skill_info[].skill_level`)은 숫자입니다.
 - **필수 값이 비어 있으면 요청을 보내지 않습니다.** 빈 월드 이름·캐릭터 이름·`ocid`, 랭킹에서 `world_name` 과 `ocid` 를 함께 넣은 경우 등은 `NexonBadRequestError` 로 바로 알려 줍니다.
 - **더 이상 권장하지 않는 필드**
   - 기본 정보의 `character_job_name` → `character_class` 를 쓰세요.
@@ -200,9 +202,10 @@ const GRADE = new Map([
 const equip = await client.maplestorym.character.getItemEquipment({ ocid });
 
 for (const item of equip.item_equipment) {
-  const grade = GRADE.get(item.item_potential_option_grade) ?? '없음';
-  console.log(`[${item.item_equipment_slot_name}] ${item.item_name} ★${item.starforce_upgrade}`);
-  console.log(`  잠재능력 ${grade}, 장비 전투력 ${item.item_combat_power}`);
+  const grade = GRADE.get(item.item_potential_option_grade ?? '') ?? '없음';
+  const starforce = item.starforce_upgrade === null ? '' : ` ★${item.starforce_upgrade}`;
+  console.log(`[${item.item_equipment_slot_name}] ${item.item_name}${starforce}`);
+  console.log(`  잠재능력 ${grade}, 장비 전투력 ${item.item_combat_power ?? '없음'}`);
   for (const opt of item.item_potential_option) {
     console.log(`  - ${opt.option_name} ${opt.option_value}`);
   }
@@ -212,11 +215,12 @@ for (const item of equip.item_equipment) {
 자주 쓰는 필드 (`item_equipment[]`):
 
 - `item_equipment_slot_name`, `item_equipment_page_name` — 슬롯 위치와 부위
-- `item_grade` — 아이템 등급, `item_combat_power` — 그 장비의 전투력
-- `starforce_upgrade` — 스타포스 강화 단계
+- `item_grade` — 아이템 등급, `item_combat_power` — 장비 전투력 (`number | null`)
+- `starforce_upgrade` — 스타포스 강화 단계 (`string | null`)
 - `item_basic_option`, `item_additional_option`, `item_potential_option`, `item_additional_potential_option` — 기본 옵션, 추가 옵션, 잠재능력, 에디셔널 잠재능력 (각각 `option_name`·`option_value` 목록)
 - `soul_equipment_flag` — 소울 장착 여부 (`"0"` 미장착, `"1"` 장착)
-- `mastery_info` — 마스터리 레벨과 옵션별 보너스 포인트
+- `emblem_info.emblem_level` — 문장 레벨 (`number`). 문장이 없으면 `emblem_info`는 `null`
+- `mastery_info` — 마스터리 레벨과 옵션별 보너스 포인트. 정보가 없으면 `null` 또는 생략
 
 `use_preset_no` 가 지금 쓰는 프리셋이고 `equipment_preset[]` 에 프리셋별 장비가 있습니다.
 
@@ -290,7 +294,8 @@ console.log(mine.ranking[0]?.ranking);
 ```
 
 - `ranking` 은 전체 월드 순위, `world_ranking` 은 그 캐릭터가 속한 월드 안의 순위입니다.
-- 샤레니안의 전장·지하수로는 길드 랭킹이라 `guild_name`, `guild_master_name`, `season_score` 가 옵니다.
+- 무릉도장·시간의 근원·유니온·전투력·커닝M타워는 길드에 가입하지 않은 캐릭터의 `guild_name`이 `null`입니다.
+- 샤레니안의 전장·지하수로는 길드 랭킹이라 `guild_name`, `guild_master_name`, `season_score`가 옵니다. 시즌 점수는 전장에서 문자열, 지하수로에서 숫자입니다.
 
 ### 공지
 
