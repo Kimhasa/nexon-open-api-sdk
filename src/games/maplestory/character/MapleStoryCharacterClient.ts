@@ -23,7 +23,9 @@ import {
   CHARACTER_DOJANG_SHAPE,
   CHARACTER_OTHER_STAT_SHAPE,
   CHARACTER_RING_EXCHANGE_SKILL_EQUIPMENT_SHAPE,
+  CHARACTER_RING_RESERVE_SKILL_EQUIPMENT_SHAPE,
 } from '../shapes.js';
+import { assertNonEmptyString } from '../validation.js';
 import type {
   CharacterAbility,
   CharacterAndroidEquipment,
@@ -42,6 +44,7 @@ import type {
   CharacterPopularity,
   CharacterPropensity,
   CharacterRingExchangeSkillEquipment,
+  CharacterRingReserveSkillEquipment,
   CharacterSetEffect,
   CharacterSkill,
   CharacterStat,
@@ -604,6 +607,40 @@ export class MapleStoryCharacterClient {
       `${MapleStoryCharacterClient.BASE}/character/ring-exchange-skill-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
       CHARACTER_RING_EXCHANGE_SKILL_EQUIPMENT_SHAPE,
+    );
+  }
+
+  /**
+   * 예비 특수 반지 슬롯에 장착한 특수 반지 정보를 조회한다.
+   *
+   * @param params.ocid - 캐릭터 식별자
+   * @param params.date - 조회 기준일 (KST, YYYY-MM-DD). 생략 시 전일
+   *
+   * @throws {NexonBadRequestError} ocid가 비어 있을 때 (요청 전 즉시 throw)
+   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonDataNotReadyError} 해당 날짜 데이터 미준비 시
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestory.getOcid('캐릭터명');
+   * const ring = await client.maplestory.character.getRingReserveSkillEquipment({ ocid });
+   * if (ring.special_ring_reserve_name) {
+   *   console.log(`${ring.special_ring_reserve_name} Lv.${ring.special_ring_reserve_level}`);
+   * }
+   * ```
+   */
+  async getRingReserveSkillEquipment(
+    params: OcidDateRequest,
+  ): Promise<CharacterRingReserveSkillEquipment> {
+    assertNonEmptyString(
+      params.ocid,
+      'ocid',
+      "client.maplestory.getOcid('캐릭터명') 으로 얻은 값을 전달하세요.",
+    );
+    return this.http.get<CharacterRingReserveSkillEquipment>(
+      `${MapleStoryCharacterClient.BASE}/character/ring-reserve-skill-equipment`,
+      { ocid: params.ocid, date: params.date as string | undefined },
+      CHARACTER_RING_RESERVE_SKILL_EQUIPMENT_SHAPE,
     );
   }
 }

@@ -26,6 +26,8 @@ export interface StarforceEvent {
   readonly plus_value: string;
   /** 이벤트 적용 강화 시도 가능한 n성 범위 */
   readonly starforce_event_range: string;
+  /** 흔적 복구 비용 할인율 */
+  readonly recovery_cost_discount_rate?: string | undefined;
 }
 
 /** 스타포스 강화 결과 */
@@ -134,6 +136,46 @@ export interface PotentialHistory {
   readonly next_cursor: string;
   /** 잠재능력 재설정 히스토리 */
   readonly potential_history: readonly PotentialHistoryItem[];
+}
+
+// ─── GET /maplestory/v1/history/soul-potential ───────────────────────────────
+
+/** 소울 잠재능력 재설정 결과 */
+export interface SoulPotentialHistoryItem {
+  /** 소울 잠재능력 재설정 히스토리 식별자 */
+  readonly id: string;
+  /** 캐릭터 명 */
+  readonly character_name: string;
+  /** 사용 일시 (KST, 예: 2024-01-25T17:28:31.000+09:00) */
+  readonly date_create: string;
+  /** 사용 결과 */
+  readonly item_upgrade_result: string;
+  /** 미라클 타임 적용 여부 */
+  readonly miracle_time_flag: string;
+  /** 소울 증폭 단계 */
+  readonly soul_potential_amplified_grade: number;
+  /** 소울 잠재능력 재설정 장비 명 */
+  readonly target_item: string;
+  /** 소울 잠재능력 등급 */
+  readonly soul_potential_grade: string;
+  /** 천장에 도달하여 확정 등급 상승한 여부 */
+  readonly upgrade_guarantee: boolean;
+  /** 현재까지 쌓은 스택 */
+  readonly upgrade_guarantee_count: number;
+  /** 사용 전 소울 잠재능력 옵션 */
+  readonly before_soul_potential_option: readonly PotentialOption[];
+  /** 사용 후 소울 잠재능력 옵션 */
+  readonly after_soul_potential_option: readonly PotentialOption[];
+}
+
+/** 소울 잠재능력 재설정 결과 조회 응답 */
+export interface SoulPotentialHistory {
+  /** 결과 건 수 */
+  readonly count: number;
+  /** 페이징 처리를 위한 cursor (다음 페이지가 없으면 null) */
+  readonly next_cursor: string | null;
+  /** 소울 잠재능력 재설정 히스토리 */
+  readonly soul_potential_history: readonly SoulPotentialHistoryItem[];
 }
 
 // ─── GET /maplestory/v1/history/cube ─────────────────────────────────────────
