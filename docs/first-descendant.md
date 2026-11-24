@@ -256,7 +256,7 @@ try {
   if (err instanceof NexonRateLimitError) {
     // 429 — SDK가 자동 재시도한 뒤에도 실패
   } else if (err instanceof NexonAuthError) {
-    // 403 — API 키 확인 (퍼스트 디센던트용 키여야 한다)
+    // OPENAPI00002·00005 — API 키 확인 (퍼스트 디센던트용 키여야 한다)
   } else if (err instanceof NexonError) {
     console.error(err.message);
   }

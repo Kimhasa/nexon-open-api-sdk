@@ -103,6 +103,14 @@ console.log(classes.find((entry) => entry.class === 100)?.classImg);
 
 두 메서드는 `fco.dn.nexoncdn.co.kr`의 URL을 조립합니다. `spid` 또는 앞쪽 0을 뺀 `pid`를 숫자로 전달하세요. 선수에 따라 이미지가 없을 수 있습니다.
 
+선수 이미지는 선수에 따라 `spid` 경로와 `pid` 경로 중 한쪽에만 있습니다. 없는 쪽은 CDN이 HTTP 403(`AccessDenied`)을 돌려줍니다 (2026-11-24 실측: 선수 이미지 5/6, 액션샷 2/6). `spid` URL이 403이면 `pid`(`spid` 의 뒤 6자리)로 다시 시도하고, 둘 다 없으면 대체 이미지를 쓰세요.
+
+```ts
+const spid = 101000001;
+const pid = spid % 1_000_000; // 1
+const candidates = [fc.getPlayerImageUrl(spid), fc.getPlayerImageUrl(pid)];
+```
+
 ```ts
 fc.getActionShotUrl(272167135);
 fc.getPlayerImageUrl(167680);

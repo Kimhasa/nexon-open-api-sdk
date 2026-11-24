@@ -60,3 +60,7 @@ export type {
 
 // Meta types — 메타데이터 타입은 70개 가까이 되고 전부 공개 대상이라 파일 단위로 내보낸다
 export type * from './meta/types.js';
+
+// sub-path만으로 클라이언트를 만들 수 있게 HTTP 계층을 함께 내보낸다
+export { HttpClient } from '../../core/http/HttpClient.js';
+export type { HttpClientConfig } from '../../core/http/http-types.js';

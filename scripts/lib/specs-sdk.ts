@@ -17,7 +17,10 @@ export interface SdkMethod {
 }
 
 export interface SdkShape extends Omit<Shape, 'properties' | 'items'> {
-  properties: Map<string, { readonly shape: SdkShape; readonly deprecated: boolean }>;
+  properties: Map<
+    string,
+    { readonly shape: SdkShape; readonly deprecated: boolean; readonly optional: boolean }
+  >;
   items: SdkShape | undefined;
 }
 
@@ -246,6 +249,7 @@ class Analyzer {
         shape.properties.set(name, {
           shape: this.shape(value, at),
           deprecated: this.isDeprecated(property),
+          optional: (property.flags & ts.SymbolFlags.Optional) !== 0,
         });
       }
     }
