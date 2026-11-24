@@ -13,7 +13,7 @@ export class SuddenAttackMetadataClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 서든어택 로고 이미지 URL을 조회합니다.
+   * 서든어택 로고의 이미지 주소를 조회한다.
    *
    * @throws {NexonError} 메타데이터 요청에 실패했을 때
    *
@@ -21,7 +21,11 @@ export class SuddenAttackMetadataClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 전적 검색기 상단에 공식 로고를 표시할 때
    * const result = await client.suddenAttack.metadata.getLogo();
    * console.log(result);
    * ```
@@ -31,7 +35,7 @@ export class SuddenAttackMetadataClient {
   }
 
   /**
-   * 통합 계급과 이미지 URL 목록을 조회합니다.
+   * 통합 계급과 계급 배지의 이미지 주소를 조회한다.
    *
    * @throws {NexonError} 메타데이터 요청에 실패했을 때
    *
@@ -39,7 +43,11 @@ export class SuddenAttackMetadataClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 클랜원 프로필에 통합 계급 배지를 붙일 때
    * const result = await client.suddenAttack.metadata.getGrade();
    * console.log(result);
    * ```
@@ -49,7 +57,7 @@ export class SuddenAttackMetadataClient {
   }
 
   /**
-   * 시즌 계급과 이미지 URL 목록을 조회합니다.
+   * 시즌 계급과 계급 배지의 이미지 주소를 조회한다.
    *
    * @throws {NexonError} 메타데이터 요청에 실패했을 때
    *
@@ -57,7 +65,11 @@ export class SuddenAttackMetadataClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 클랜 랭킹 표에 시즌 계급 배지를 붙일 때
    * const result = await client.suddenAttack.metadata.getSeasonGrade();
    * console.log(result);
    * ```
@@ -67,7 +79,7 @@ export class SuddenAttackMetadataClient {
   }
 
   /**
-   * 랭크전 티어와 이미지 URL 목록을 조회합니다.
+   * 랭크전 티어와 티어 배지의 이미지 주소를 조회한다.
    *
    * @throws {NexonError} 메타데이터 요청에 실패했을 때
    *
@@ -75,7 +87,11 @@ export class SuddenAttackMetadataClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 파티 모집 게시판에 랭크전 티어 배지를 표시할 때
    * const result = await client.suddenAttack.metadata.getTier();
    * console.log(result);
    * ```

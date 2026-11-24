@@ -26,7 +26,9 @@ import type {
  * ```ts
  * import { NexonClient } from 'nexon-open-api';
  *
- * const client = new NexonClient({ apiKey: 'your-api-key' });
+ * const apiKey = process.env['NEXON_API_KEY'];
+ * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+ * const client = new NexonClient({ apiKey });
  * const notices = await client.mabinogiHeroes.notice.getList();
  * const events = await client.mabinogiHeroes.notice.getEventList();
  * ```
@@ -37,13 +39,20 @@ export class MabinogiHeroesNoticeClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 공지사항 목록을 조회한다 (최근 20개).
+   * 최근 등록된 공지사항 20개를 조회한다.
    *
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
    *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 디스코드 알림에서 공지사항의 새 글을 찾을 때
    * const list = await client.mabinogiHeroes.notice.getList();
    * for (const n of list.notice) {
    *   console.log(`[${n.date}] ${n.title} (${n.notice_id})`);
@@ -59,15 +68,22 @@ export class MabinogiHeroesNoticeClient {
   }
 
   /**
-   * 공지사항 상세를 조회한다.
+   * 공지사항에서 게시글 번호로 본문을 조회한다.
    *
-   * @param noticeId - 공지 식별자 (`getList()` 응답의 `notice_id`)
+   * @param noticeId - 게시글 번호 (`getList()` 응답의 `notice_id`)
    * @throws {NexonBadRequestError} noticeId가 1 이상의 정수가 아닐 때 (요청 전에 SDK가 throw)
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
    *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 공지사항 위젯에서 선택한 글의 본문을 표시할 때
    * const list = await client.mabinogiHeroes.notice.getList();
    * const first = list.notice[0];
    * if (first) {
@@ -86,13 +102,20 @@ export class MabinogiHeroesNoticeClient {
   }
 
   /**
-   * 패치노트 목록을 조회한다 (최근 20개).
+   * 최근 등록된 패치노트 20개를 조회한다.
    *
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
    *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 디스코드 알림에서 패치노트의 새 글을 찾을 때
    * const list = await client.mabinogiHeroes.notice.getPatchList();
    * for (const n of list.patch_notice) {
    *   console.log(`[${n.date}] ${n.title} (${n.notice_id})`);
@@ -108,15 +131,22 @@ export class MabinogiHeroesNoticeClient {
   }
 
   /**
-   * 패치노트 상세를 조회한다.
+   * 패치노트에서 게시글 번호로 본문을 조회한다.
    *
-   * @param noticeId - 공지 식별자 (`getPatchList()` 응답의 `notice_id`)
+   * @param noticeId - 게시글 번호 (`getPatchList()` 응답의 `notice_id`)
    * @throws {NexonBadRequestError} noticeId가 1 이상의 정수가 아닐 때 (요청 전에 SDK가 throw)
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
    *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 패치노트 위젯에서 선택한 글의 본문을 표시할 때
    * const list = await client.mabinogiHeroes.notice.getPatchList();
    * const first = list.patch_notice[0];
    * if (first) {
@@ -135,13 +165,20 @@ export class MabinogiHeroesNoticeClient {
   }
 
   /**
-   * 이벤트&샵 목록을 조회한다 (최근 20개).
+   * 최근 등록된 이벤트&샵 20개를 조회한다.
    *
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
    *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 디스코드 알림에서 이벤트&샵의 새 글을 찾을 때
    * const list = await client.mabinogiHeroes.notice.getEventList();
    * for (const e of list.event_notice) {
    *   const period = e.ongoing_flag === 'true' ? '상시' : `${e.date_event_start} ~ ${e.date_event_end}`;
@@ -158,15 +195,22 @@ export class MabinogiHeroesNoticeClient {
   }
 
   /**
-   * 이벤트&샵 상세를 조회한다.
+   * 이벤트&샵에서 게시글 번호로 본문을 조회한다.
    *
-   * @param noticeId - 공지 식별자 (`getEventList()` 응답의 `notice_id`)
+   * @param noticeId - 게시글 번호 (`getEventList()` 응답의 `notice_id`)
    * @throws {NexonBadRequestError} noticeId가 1 이상의 정수가 아닐 때 (요청 전에 SDK가 throw)
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
    *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 이벤트&샵 위젯에서 선택한 글의 본문을 표시할 때
    * const list = await client.mabinogiHeroes.notice.getEventList();
    * const first = list.event_notice[0];
    * if (first) {

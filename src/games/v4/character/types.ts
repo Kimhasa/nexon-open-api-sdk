@@ -6,10 +6,10 @@ export interface V4CharacterBasic {
   readonly server_name: string;
   /** 캐릭터 명 */
   readonly character_name: string;
-  /** 캐릭터 생성일 (UTC0) */
-  readonly character_date_create: string; // 일 단위 데이터라 시·분·초는 항상 0 (예: "2023-12-14T00:00:00Z")
-  /** 캐릭터 생성 타입 */
-  readonly character_create_type: string; // "0": 일반 캐릭터, "1": 점핑 캐릭터 (숫자가 아닌 문자열)
+  /** 캐릭터를 만든 날짜(UTC). 시·분·초는 모두 0이다. */
+  readonly character_date_create: string;
+  /** 생성 방식. 문자열 "0"은 일반 캐릭터, "1"은 점핑 캐릭터다. */
+  readonly character_create_type: string;
   /** 캐릭터 마지막 로그인 일(시) (UTC0, 예: `"2023-12-14T08:28:35Z"`) */
   readonly character_date_last_login: string;
   /** 캐릭터 마지막 로그아웃 일(시) (UTC0) */
@@ -28,8 +28,8 @@ export interface V4Honor {
   readonly honor_type_name: string;
   /** 명예 명 */
   readonly honor_name: string;
-  /** 명예 만료 일(시) (UTC0) */
-  readonly date_expire: string | null; // 스펙에 nullable 표시는 없으나 만료 없는 명예는 null일 수 있어 넓게 잡음 (실 API 미검증)
+  /** 보유 명예의 만료 시각(UTC). SDK 타입은 null을 허용한다. */
+  readonly date_expire: string | null;
 }
 
 /** 명예 보유 정보 조회 응답 */
@@ -46,8 +46,8 @@ export interface V4HonorEquipment {
   readonly honor_type_name: string;
   /** 장착 명예 명 */
   readonly honor_name: string;
-  /** 장착 명예 만료 일(시) (UTC0) */
-  readonly date_expire: string | null; // 스펙에 nullable 표시는 없으나 만료 없는 명예는 null일 수 있어 넓게 잡음 (실 API 미검증)
+  /** 장착 명예의 만료 시각(UTC). SDK 타입은 null을 허용한다. */
+  readonly date_expire: string | null;
 }
 
 /** 장착 명예 정보 조회 응답 */

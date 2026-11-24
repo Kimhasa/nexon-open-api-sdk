@@ -17,9 +17,9 @@ export class MabinogiAuctionClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 현재 판매 중인 경매장 매물을 한 페이지 조회합니다.
+   * 경매장에서 판매 중인 매물을 한 페이지 조회한다.
    *
-   * @param params - 선택할 카테고리, 아이템 이름 및 이전 페이지 커서
+   * @param params - 경매장 분류·아이템 이름, 다음 페이지를 열 때 쓰는 `cursor`
    * @throws {NexonBadRequestError} 지원되지 않는 카테고리를 지정했을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
@@ -27,7 +27,11 @@ export class MabinogiAuctionClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 경매장 시세표에 검 매물을 보여 줄 때
    * const page = await client.mabinogi.auction.listItems({ auction_item_category: '검' });
    * console.log(page.auction_item);
    * ```
@@ -46,9 +50,9 @@ export class MabinogiAuctionClient {
   }
 
   /**
-   * 최근 1시간의 경매장 거래 내역을 한 페이지 조회합니다.
+   * 경매장에서 최근 1시간 동안 거래된 아이템 내역을 한 페이지 조회한다.
    *
-   * @param params - 선택할 카테고리, 아이템 이름 및 이전 페이지 커서
+   * @param params - 경매장 분류·아이템 이름, 다음 페이지를 열 때 쓰는 `cursor`
    * @throws {NexonBadRequestError} 지원되지 않는 카테고리를 지정했을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
@@ -56,7 +60,11 @@ export class MabinogiAuctionClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 시세 조사에서 최근 거래가를 모을 때
    * const page = await client.mabinogi.auction.listHistory({ auction_item_category: '검' });
    * console.log(page.auction_history);
    * ```
@@ -75,9 +83,9 @@ export class MabinogiAuctionClient {
   }
 
   /**
-   * 이름에 검색어가 모두 포함된 경매장 매물을 한 페이지 조회합니다. 검색어는 이름 속 단어와 정확히 일치해야 합니다.
+   * 경매장에서 이름에 검색어가 모두 일치하는 매물을 한 페이지 조회한다.
    *
-   * @param params - 쉼표로 나눈 검색어 1~10개와 선택 커서
+   * @param params - 쉼표로 나눈 검색어 1~10개와 다음 페이지를 열 때 쓰는 `cursor`
    * @throws {NexonBadRequestError} 검색어 개수가 1~10개 범위를 벗어날 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
@@ -85,7 +93,11 @@ export class MabinogiAuctionClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 상세 검색에서 이름 속 두 단어가 모두 일치하는 매물을 보여 줄 때
    * const page = await client.mabinogi.auction.listByKeyword({ keyword: '숏,소드' });
    * console.log(page.auction_item);
    * ```

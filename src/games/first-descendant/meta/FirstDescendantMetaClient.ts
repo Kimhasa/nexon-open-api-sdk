@@ -74,22 +74,19 @@ import {
 const LANGUAGE_CODE_HINT = '언어 코드는 대소문자를 구분합니다.';
 
 /**
- * 퍼스트 디센던트 메타데이터 조회 클라이언트.
+ * 계승자·무기·모듈 등 게임 도감의 이름, 이미지, 능력치를 조회한다.
  *
- * 계정·리더보드 API가 돌려주는 각종 id(계승자, 무기, 모듈 등)를 이름·이미지·수치로 풀어 주는
- * 정적 JSON이다. 응답은 모두 배열이고 파일 하나가 수백 KB~2 MB에 이르므로, 호출 결과를
- * 애플리케이션에서 캐시해 두고 쓰는 것을 권한다.
- *
- * 메서드 이름은 스펙의 파일 이름과 1:1이다 (`descendant.json` → `getDescendant()`).
- *
- * - 이름·설명이 들어가는 24개는 언어 코드를 받는다 (기본값 `'ko'`).
- * - 수치만 있는 8개는 인자가 없다.
+ * 계정 조회에서 받은 ID를 도감의 ID와 연결해 게임 내 이름을 표시한다.
+ * 모든 도감은 배열을 반환한다. 일부 도감 파일은 2 MB를 넘으므로 캐시해 재사용한다.
+ * 표시 언어를 받는 도감의 기본값은 한국어(`ko`)다.
  *
  * @example
  * ```ts
  * import { NexonClient } from 'nexon-open-api';
  *
- * const client = new NexonClient({ apiKey: 'your-api-key' });
+ * const apiKey = process.env['NEXON_API_KEY'];
+ * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+ * const client = new NexonClient({ apiKey });
  *
  * const descendants = await client.firstDescendant.meta.getDescendant('en');
  * const byId = new Map(descendants.map((d) => [d.descendant_id, d]));
@@ -103,16 +100,23 @@ export class FirstDescendantMetaClient {
   // ─── 언어별 메타데이터 (/static/tfd/meta/{language_code}/...) ────────────
 
   /**
-   * 획득처 정보 메타데이터를 조회한다.
+   * 도감의 획득처 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getAcquisitionDetail('ko');
-   * console.log(items.length, items[0]?.acquisition_detail_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 재료 획득처 검색에 도감의 설명을 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getAcquisitionDetail('ko');
+   * if (entry) console.log(entry.acquisition_detail_id, entry.acquisition_detail_name);
    * ```
    */
   async getAcquisitionDetail(
@@ -127,16 +131,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 아르케 조율 노드 메타데이터를 조회한다.
+   * 도감의 아르케 조율 노드 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getArcheTuningNode('ko');
-   * console.log(items.length, items[0]?.node_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 아르케 조율 계산기에서 노드 효과를 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getArcheTuningNode('ko');
+   * if (entry) console.log(entry.node_name, entry.node_effect);
    * ```
    */
   async getArcheTuningNode(
@@ -151,16 +162,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 수집형 아이템 메타데이터를 조회한다.
+   * 도감의 수집형 아이템 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getCollectibleItem('ko');
-   * console.log(items.length, items[0]?.collectible_item_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 수집 도감에 아이템 이름과 설명을 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getCollectibleItem('ko');
+   * if (entry) console.log(entry.collectible_item_name, entry.collectible_item_description);
    * ```
    */
   async getCollectibleItem(
@@ -175,16 +193,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 소비 아이템 메타데이터를 조회한다.
+   * 도감의 소비 아이템 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getConsumableMaterial('ko');
-   * console.log(items.length, items[0]?.consumable_material_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 연구 재료 검색에서 소비 아이템을 이름으로 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getConsumableMaterial('ko');
+   * if (entry) console.log(entry.consumable_material_id, entry.consumable_material_name);
    * ```
    */
   async getConsumableMaterial(
@@ -199,16 +224,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 코어 타입 메타데이터를 조회한다.
+   * 도감의 코어 유형 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getCoreType('ko');
-   * console.log(items.length, items[0]?.core_type_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 코어 계산기에서 코어 유형별 옵션을 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getCoreType('ko');
+   * if (entry) console.log(entry.core_type_id, entry.core_option);
    * ```
    */
   async getCoreType(languageCode: TfdLanguageCode = 'ko'): Promise<TfdCoreTypeMeta[]> {
@@ -221,16 +253,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 커스터마이징 아이템 메타데이터를 조회한다.
+   * 도감의 커스터마이징 아이템 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getCustomizingItem('ko');
-   * console.log(items.length, items[0]?.customizing_item_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 외형 공유 페이지에서 꾸미기 아이템의 이름을 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getCustomizingItem('ko');
+   * if (entry) console.log(entry.customizing_item_id, entry.customizing_item_name);
    * ```
    */
   async getCustomizingItem(
@@ -245,16 +284,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 계승자 메타데이터를 조회한다.
+   * 도감의 계승자 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getDescendant('ko');
-   * console.log(items.length, items[0]?.descendant_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 빌드 카드의 계승자 번호를 게임 내 이름으로 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getDescendant('ko');
+   * if (entry) console.log(entry.descendant_id, entry.descendant_name);
    * ```
    */
   async getDescendant(languageCode: TfdLanguageCode = 'ko'): Promise<TfdDescendantMeta[]> {
@@ -267,16 +313,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 계승자 그룹 메타데이터를 조회한다.
+   * 도감의 계승자 그룹 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getDescendantGroup('ko');
-   * console.log(items.length, items[0]?.descendant_group_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 계승자 그룹 이름으로 아르케 조율 대상을 고를 때
+   * const [entry] = await client.firstDescendant.meta.getDescendantGroup('ko');
+   * if (entry) console.log(entry.descendant_group_id, entry.descendant_group_name);
    * ```
    */
   async getDescendantGroup(
@@ -291,16 +344,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 외장 부품 메타데이터를 조회한다.
+   * 도감의 외장 부품 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getExternalComponent('ko');
-   * console.log(items.length, items[0]?.external_component_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 외장 부품 세트의 이름과 효과를 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getExternalComponent('ko');
+   * if (entry) console.log(entry.external_component_name, entry.set_option_detail);
    * ```
    */
   async getExternalComponent(
@@ -315,16 +375,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 조력자 메타데이터를 조회한다.
+   * 도감의 조력자 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getFellow('ko');
-   * console.log(items.length, items[0]?.fellow_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 조력자 도감에 이름을 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getFellow('ko');
+   * if (entry) console.log(entry.fellow_id, entry.fellow_name);
    * ```
    */
   async getFellow(languageCode: TfdLanguageCode = 'ko'): Promise<TfdFellowMeta[]> {
@@ -337,16 +404,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 훈장 메타데이터를 조회한다.
+   * 도감의 훈장 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getMedal('ko');
-   * console.log(items.length, items[0]?.medal_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 유저 프로필에 훈장 단계별 이름을 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getMedal('ko');
+   * if (entry) console.log(entry.medal_id, entry.medal_detail);
    * ```
    */
   async getMedal(languageCode: TfdLanguageCode = 'ko'): Promise<TfdMedalMeta[]> {
@@ -359,16 +433,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 모듈 메타데이터를 조회한다.
+   * 도감의 모듈 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getModule('ko');
-   * console.log(items.length, items[0]?.module_name);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 빌드 카드의 장착 모듈 번호를 이름으로 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getModule('ko');
+   * if (entry) console.log(entry.module_id, entry.module_name);
    * ```
    */
   async getModule(languageCode: TfdLanguageCode = 'ko'): Promise<TfdModuleMeta[]> {
@@ -381,16 +462,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 변이 세포 메타데이터를 조회한다.
+   * 도감의 변이 세포 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getNodeItem('ko');
-   * console.log(items.length, items[0]?.node_item_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 아르케 조율 페이지에서 변이 세포 이름을 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getNodeItem('ko');
+   * if (entry) console.log(entry.node_item_id, entry.node_item_name);
    * ```
    */
   async getNodeItem(languageCode: TfdLanguageCode = 'ko'): Promise<TfdNodeItemMeta[]> {
@@ -403,16 +491,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 변이 세포 소켓 타입 메타데이터를 조회한다.
+   * 도감의 변이 세포 소켓 유형 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getNodeSocketType('ko');
-   * console.log(items.length, items[0]?.node_item_socket_type);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 변이 세포 도감에서 장착할 소켓 유형을 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getNodeSocketType('ko');
+   * if (entry) console.log(entry.node_item_socket_type, entry.node_item_socket_name);
    * ```
    */
   async getNodeSocketType(languageCode: TfdLanguageCode = 'ko'): Promise<TfdNodeSocketTypeMeta[]> {
@@ -425,16 +520,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 반응로 메타데이터를 조회한다.
+   * 도감의 반응로 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getReactor('ko');
-   * console.log(items.length, items[0]?.reactor_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 반응로 검색에서 이름과 스킬 위력을 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getReactor('ko');
+   * if (entry) console.log(entry.reactor_name, entry.reactor_skill_power);
    * ```
    */
   async getReactor(languageCode: TfdLanguageCode = 'ko'): Promise<TfdReactorMeta[]> {
@@ -447,16 +549,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 연구 정보 메타데이터를 조회한다.
+   * 도감의 연구 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getResearch('ko');
-   * console.log(items.length, items[0]?.research_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 연구 계획표에 필요한 재료를 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getResearch('ko');
+   * if (entry) console.log(entry.research_name, entry.research_material);
    * ```
    */
   async getResearch(languageCode: TfdLanguageCode = 'ko'): Promise<TfdResearchMeta[]> {
@@ -469,16 +578,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 난이도 보상 메타데이터를 조회한다.
+   * 도감의 난이도 보상 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getReward('ko');
-   * console.log(items.length, items[0]?.map_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 난이도 보상 검색에서 지역과 전장별 보상을 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getReward('ko');
+   * if (entry) console.log(entry.map_name, entry.battle_zone);
    * ```
    */
   async getReward(languageCode: TfdLanguageCode = 'ko'): Promise<TfdRewardMeta[]> {
@@ -491,16 +607,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 기본 스탯 메타데이터를 조회한다.
+   * 도감의 기본 스탯 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getStat('ko');
-   * console.log(items.length, items[0]?.stat_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 빌드 계산기에서 스탯 번호를 표시 이름으로 바꿀 때
+   * const [entry] = await client.firstDescendant.meta.getStat('ko');
+   * if (entry) console.log(entry.stat_id, entry.stat_name);
    * ```
    */
   async getStat(languageCode: TfdLanguageCode = 'ko'): Promise<TfdStatMeta[]> {
@@ -513,16 +636,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 등급 메타데이터를 조회한다.
+   * 도감의 등급 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getTier('ko');
-   * console.log(items.length, items[0]?.tier_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 장비 검색 필터에 알맞은 등급 이름을 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getTier('ko');
+   * if (entry) console.log(entry.tier_id, entry.tier_name);
    * ```
    */
   async getTier(languageCode: TfdLanguageCode = 'ko'): Promise<TfdTierMeta[]> {
@@ -535,16 +665,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 타이틀 메타데이터를 조회한다.
+   * 도감의 타이틀 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getTitle('ko');
-   * console.log(items.length, items[0]?.title_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 프로필 타이틀 번호를 표시 이름으로 바꿀 때
+   * const [entry] = await client.firstDescendant.meta.getTitle('ko');
+   * if (entry) console.log(entry.title_id, entry.title_name);
    * ```
    */
   async getTitle(languageCode: TfdLanguageCode = 'ko'): Promise<TfdTitleMeta[]> {
@@ -557,16 +694,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 탈것 메타데이터를 조회한다.
+   * 도감의 탈것 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getVehicle('ko');
-   * console.log(items.length, items[0]?.vehicle_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 탈것 도감에 모델별 이름을 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getVehicle('ko');
+   * if (entry) console.log(entry.vehicle_id, entry.vehicle_name);
    * ```
    */
   async getVehicle(languageCode: TfdLanguageCode = 'ko'): Promise<TfdVehicleMeta[]> {
@@ -579,16 +723,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 보이드 요격전 메타데이터를 조회한다.
+   * 도감의 보이드 요격전 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getVoidBattle('ko');
-   * console.log(items.length, items[0]?.void_battle_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 보이드 요격전 공략에 요격전 이름을 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getVoidBattle('ko');
+   * if (entry) console.log(entry.void_battle_id, entry.void_battle_name);
    * ```
    */
   async getVoidBattle(languageCode: TfdLanguageCode = 'ko'): Promise<TfdVoidBattleMeta[]> {
@@ -601,16 +752,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 무기 메타데이터를 조회한다.
+   * 도감의 무기 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getWeapon('ko');
-   * console.log(items.length, items[0]?.weapon_name);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 빌드 카드에서 장착 무기 번호를 이름으로 바꿀 때
+   * const [entry] = await client.firstDescendant.meta.getWeapon('ko');
+   * if (entry) console.log(entry.weapon_id, entry.weapon_name);
    * ```
    */
   async getWeapon(languageCode: TfdLanguageCode = 'ko'): Promise<TfdWeaponMeta[]> {
@@ -623,16 +781,23 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 무기 유형 메타데이터를 조회한다.
+   * 도감의 무기 유형 정보를 조회한다.
    *
-   * @param languageCode - 언어 코드 (기본값: `'ko'`)
+   * @param languageCode - 도감의 이름과 설명을 받을 언어 코드. 기본값은 한국어('ko')다.
    * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getWeaponType('ko');
-   * console.log(items.length, items[0]?.weapon_type);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 무기 검색 필터에 무기 유형 이름을 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getWeaponType('ko');
+   * if (entry) console.log(entry.weapon_type, entry.weapon_type_name);
    * ```
    */
   async getWeaponType(languageCode: TfdLanguageCode = 'ko'): Promise<TfdWeaponTypeMeta[]> {
@@ -647,14 +812,21 @@ export class FirstDescendantMetaClient {
   // ─── 공통 메타데이터 (/static/tfd/meta/...) ──────────────────────────────
 
   /**
-   * 적응도 레벨 메타데이터를 조회한다. 언어와 무관한 공통 데이터다.
+   * 적응도 레벨 정보를 조회한다.
    *
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getAdaptLevel();
-   * console.log(items.length, items[0]?.level);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 성장 계산기에서 적응도 레벨별 경험치를 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getAdaptLevel();
+   * if (entry) console.log(entry.level, entry.exp_per_level);
    * ```
    */
   async getAdaptLevel(): Promise<TfdAdaptLevelMeta[]> {
@@ -666,14 +838,21 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 비정형 물질 오픈 보상 메타데이터를 조회한다. 언어와 무관한 공통 데이터다.
+   * 비정형 물질 개봉 보상 정보를 조회한다.
    *
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getAmorphousReward();
-   * console.log(items.length, items[0]?.amorphous_reward_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 비정형 물질 보상표에서 개봉 보상 후보를 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getAmorphousReward();
+   * if (entry) console.log(entry.amorphous_reward_id, entry.open_reward);
    * ```
    */
   async getAmorphousReward(): Promise<TfdAmorphousRewardMeta[]> {
@@ -685,14 +864,21 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 아르케 조율 보드 메타데이터를 조회한다. 언어와 무관한 공통 데이터다.
+   * 아르케 조율 보드 정보를 조회한다.
    *
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getArcheTuningBoard();
-   * console.log(items.length, items[0]?.arche_tuning_board_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 아르케 조율 보드의 모양과 노드 배치를 그릴 때
+   * const [entry] = await client.firstDescendant.meta.getArcheTuningBoard();
+   * if (entry) console.log(entry.row_size, entry.column_size, entry.node);
    * ```
    */
   async getArcheTuningBoard(): Promise<TfdArcheTuningBoardMeta[]> {
@@ -704,14 +890,21 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 아르케 조율 보드 그룹 메타데이터를 조회한다. 언어와 무관한 공통 데이터다.
+   * 아르케 조율 보드 그룹 정보를 조회한다.
    *
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getArcheTuningBoardGroup();
-   * console.log(items.length, items[0]?.arche_tuning_board_group_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 계승자 그룹에 맞는 아르케 조율 보드를 찾을 때
+   * const [entry] = await client.firstDescendant.meta.getArcheTuningBoardGroup();
+   * if (entry) console.log(entry.descendant_group_id, entry.arche_tuning_board_id);
    * ```
    */
   async getArcheTuningBoardGroup(): Promise<TfdArcheTuningBoardGroupMeta[]> {
@@ -723,14 +916,21 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 코어 슬롯 메타데이터를 조회한다. 언어와 무관한 공통 데이터다.
+   * 코어 슬롯 정보를 조회한다.
    *
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getCoreSlot();
-   * console.log(items.length, items[0]?.core_slot_id);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 장비 계산기에서 슬롯별 장착 가능한 코어 유형을 찾을 때
+   * const [entry] = await client.firstDescendant.meta.getCoreSlot();
+   * if (entry) console.log(entry.core_slot_id, entry.available_core_type_id);
    * ```
    */
   async getCoreSlot(): Promise<TfdCoreSlotMeta[]> {
@@ -742,14 +942,21 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 계승자 레벨별 경험치 메타데이터를 조회한다. 언어와 무관한 공통 데이터다.
+   * 계승자 레벨별 경험치 정보를 조회한다.
    *
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getDescendantLevelDetail();
-   * console.log(items.length, items[0]?.descendant_level);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 계승자 성장 계산기에서 레벨별 경험치를 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getDescendantLevelDetail();
+   * if (entry) console.log(entry.descendant_level, entry.exp_per_level);
    * ```
    */
   async getDescendantLevelDetail(): Promise<TfdDescendantLevelDetailMeta[]> {
@@ -761,14 +968,21 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 조력자 레벨별 경험치 메타데이터를 조회한다. 언어와 무관한 공통 데이터다.
+   * 조력자 레벨별 경험치 정보를 조회한다.
    *
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getFellowLevelDetail();
-   * console.log(items.length, items[0]?.fellow_level);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 조력자 성장 계산기에 레벨별 경험치를 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getFellowLevelDetail();
+   * if (entry) console.log(entry.fellow_level, entry.exp_per_level);
    * ```
    */
   async getFellowLevelDetail(): Promise<TfdFellowLevelDetailMeta[]> {
@@ -780,14 +994,21 @@ export class FirstDescendantMetaClient {
   }
 
   /**
-   * 마스터리 랭크별 경험치 메타데이터를 조회한다. 언어와 무관한 공통 데이터다.
+   * 마스터리 랭크별 경험치 정보를 조회한다.
    *
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
    * ```ts
-   * const items = await client.firstDescendant.meta.getMasteryRankLevelDetail();
-   * console.log(items.length, items[0]?.mastery_rank_level);
+   * import { NexonClient } from 'nexon-open-api';
+   *
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 마스터리 성장 계산기에서 랭크별 경험치를 표시할 때
+   * const [entry] = await client.firstDescendant.meta.getMasteryRankLevelDetail();
+   * if (entry) console.log(entry.mastery_level, entry.exp_per_level);
    * ```
    */
   async getMasteryRankLevelDetail(): Promise<TfdMasteryRankLevelDetailMeta[]> {

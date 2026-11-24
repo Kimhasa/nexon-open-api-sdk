@@ -14,7 +14,9 @@ const OUID_HINT =
  * ```ts
  * import { NexonClient } from 'nexon-open-api';
  *
- * const client = new NexonClient({ apiKey: 'your-api-key' });
+ * const apiKey = process.env['NEXON_API_KEY'];
+ * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+ * const client = new NexonClient({ apiKey });
  * const { ouid_info } = await client.kartrider.getOuidInfo('라이더명');
  * const ouid = ouid_info[0]?.ouid;
  * if (ouid) {
@@ -29,9 +31,9 @@ export class KartriderUserClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 기본 정보를 조회한다.
+   * 라이더 프로필의 레벨과 접속 일시를 조회한다.
    *
-   * @param params - `{ ouid }` 계정 식별자
+   * @param params - `ouid`는 `getOuidInfo()`의 후보에서 고른 라이더 계정 고유 번호
    * @throws {NexonBadRequestError} ouid가 비어 있거나(요청 전 차단) 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -40,7 +42,11 @@ export class KartriderUserClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 라이더 검색 결과에 레벨을 표시할 때
    * const { ouid_info } = await client.kartrider.getOuidInfo('라이더명');
    * const ouid = ouid_info[0]?.ouid;
    * if (ouid) {
@@ -59,9 +65,9 @@ export class KartriderUserClient {
   }
 
   /**
-   * 장착 칭호 정보를 조회한다.
+   * 라이더가 장착한 칭호를 조회한다.
    *
-   * @param params - `{ ouid }` 계정 식별자
+   * @param params - `ouid`는 `getOuidInfo()`의 후보에서 고른 라이더 계정 고유 번호
    * @throws {NexonBadRequestError} ouid가 비어 있거나(요청 전 차단) 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -70,7 +76,11 @@ export class KartriderUserClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 라이더 카드에 장착 칭호를 표시할 때
    * const { ouid_info } = await client.kartrider.getOuidInfo('라이더명');
    * const ouid = ouid_info[0]?.ouid;
    * if (ouid) {

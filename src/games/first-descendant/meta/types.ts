@@ -11,7 +11,7 @@
 
 /** 계승자 메타데이터 원소 */
 export interface TfdDescendantMeta {
-  /** 계승자 식별자 */
+  /** 장착 계승자 정보와 도감의 이름·이미지를 연결하는 계승자 번호 */
   readonly descendant_id: string;
   /** 계승자 이름 */
   readonly descendant_name: string;
@@ -63,7 +63,7 @@ export interface TfdDescendantMetaSkill {
 export interface TfdWeaponMeta {
   /** 무기 이름 */
   readonly weapon_name: string;
-  /** 무기 식별자 */
+  /** 장착 무기 정보와 도감의 이름·이미지를 연결하는 무기 번호 */
   readonly weapon_id: string;
   /** 무기 이미지 경로 */
   readonly image_url: string;
@@ -119,7 +119,7 @@ export interface TfdWeaponMetaFirearmAtkFirearm {
 export interface TfdModuleMeta {
   /** 모듈 이름 */
   readonly module_name: string;
-  /** 모듈 식별자 */
+  /** 장착·추천 모듈 정보와 도감의 이름·효과를 연결하는 모듈 번호 */
   readonly module_id: string;
   /** 모듈 이미지 경로 */
   readonly image_url: string;
@@ -365,7 +365,7 @@ export interface TfdResearchMeta {
   readonly repeatable_research: boolean;
   /** 연구 유형 */
   readonly research_type: string;
-  /** 연구 시간 (초) */
+  /** 연구가 완료되기까지 걸리는 시간(초) */
   readonly research_time: number;
   /** 연구 비용 */
   readonly research_cost: readonly TfdResearchMetaCost[];
@@ -443,7 +443,7 @@ export interface TfdAmorphousRewardMetaOpenRewardItem {
   readonly meta_type: string;
   /** 비정형 물질 오픈 보상 아이템 식별자 */
   readonly meta_id: string;
-  /** 보상 확률(%) */
+  /** 비정형 물질을 개봉했을 때 이 보상이 나올 확률(%) */
   readonly rate: number;
 }
 
@@ -793,7 +793,7 @@ export interface TfdCollectibleItemMeta {
   readonly collectible_item_lounge_size: string | null;
   /** 수집 구분 */
   readonly collect_type: string;
-  /** 분해 가능 여부 (0:불가, 1:가능) */
+  /** 수집형 아이템 분해 여부. 문자열 "0"은 분해 불가, "1"은 분해 가능이다. */
   readonly decomposition_flag: string;
   /** 분해 보상 */
   readonly decomposition_reward: readonly TfdCollectibleItemMetaDecompositionReward[] | null;

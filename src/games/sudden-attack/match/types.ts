@@ -30,6 +30,7 @@ export interface SuddenAttackMatchListRequest {
   readonly match_type?: SuddenAttackMatchType | undefined;
 }
 
+/** 전적 목록에 들어가는 매치 한 건과 내 킬·데스·어시스트. */
 export interface SuddenAttackMatchSummary {
   /** 매치 고유 식별자 */
   readonly match_id: string;
@@ -41,7 +42,7 @@ export interface SuddenAttackMatchSummary {
   readonly date_match: string;
   /**
    * 매치 결과
-   * - 매치 결과는 기본적으로 1: 승리, 2: 패배, 3: 무승부로 기록됩니다.
+   * - 문자열 "1"은 승리, "2"는 패배, "3"은 무승부다.
    * - 진짜를 모아라 모드는 승리 및 패배 여부가 기록되지 않습니다.
    * - 개인전 및 진짜를 모아라 모드에서는 킬 수가 높은 순으로 순위가 결정되며, 동일한 킬 수일 경우 데스 수가 적은 순으로 순위가 산정됩니다.
    */
@@ -54,17 +55,19 @@ export interface SuddenAttackMatchSummary {
   readonly assist: number;
 }
 
+/** 모드와 유형으로 검색한 최근 매치 목록. 최대 1,000개다. */
 export interface SuddenAttackMatchList {
   /** 매치 목록 */
   readonly match: readonly SuddenAttackMatchSummary[];
 }
 
+/** 매치에 참가한 유저의 팀, 계급과 킬·데스 등 전적. */
 export interface SuddenAttackMatchParticipant {
   /** 팀 정보 */
   readonly team_id: string;
   /**
    * 매치 결과
-   * - 매치 결과는 기본적으로 1: 승리, 2: 패배, 3: 무승부로 기록됩니다.
+   * - 문자열 "1"은 승리, "2"는 패배, "3"은 무승부다.
    * - 진짜를 모아라 모드는 승리 및 패배 여부가 기록되지 않습니다.
    * - 개인전 및 진짜를 모아라 모드에서는 킬 수가 높은 순으로 순위가 결정되며, 동일한 킬 수일 경우 데스 수가 적은 순으로 순위가 산정됩니다.
    */
@@ -75,7 +78,7 @@ export interface SuddenAttackMatchParticipant {
   readonly season_grade: string;
   /**
    * 클랜 이름
-   * -클랜전, 퀵매치 클랜전, 클랜 랭크전에서만 노출
+   * - 클랜전, 퀵매치 클랜전, 클랜 랭크전에서만 제공된다.
    */
   readonly clan_name?: string | undefined;
   /** 킬 기록 */
@@ -90,6 +93,7 @@ export interface SuddenAttackMatchParticipant {
   readonly assist: number;
 }
 
+/** 매치 한 건의 맵, 유형과 참가자별 전적. */
 export interface SuddenAttackMatchDetail {
   /** 매치 고유 식별자 */
   readonly match_id: string;

@@ -15,25 +15,25 @@ export class SuddenAttackClient extends AbstractGameClient {
   private _match: SuddenAttackMatchClient | undefined;
   private _metadata: SuddenAttackMetadataClient | undefined;
 
-  /** 계정 정보 API. */
+  /** 서든어택 유저의 프로필·클랜·계급·티어를 조회하는 메뉴. */
   get user(): SuddenAttackUserClient {
     return (this._user ??= new SuddenAttackUserClient(this.http));
   }
 
-  /** 매치 API. */
+  /** 최근 매치와 참가자별 전적을 조회하는 메뉴. */
   get match(): SuddenAttackMatchClient {
     return (this._match ??= new SuddenAttackMatchClient(this.http));
   }
 
-  /** 로고, 계급, 티어 메타데이터 API. */
+  /** 서든어택 로고와 통합 계급·시즌 계급·랭크전 티어 배지 이미지. */
   get metadata(): SuddenAttackMetadataClient {
     return (this._metadata ??= new SuddenAttackMetadataClient(this.http));
   }
 
   /**
-   * 닉네임으로 서든어택 계정 식별자를 조회합니다.
+   * 닉네임으로 계정 고유 번호를 조회한다.
    *
-   * @param userName - 조회할 닉네임
+   * @param userName - 조회할 서든어택 닉네임
    * @throws {NexonBadRequestError} 닉네임이 비어 있을 때
    * @throws {NexonNotFoundError} 계정을 찾을 수 없을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
@@ -42,7 +42,11 @@ export class SuddenAttackClient extends AbstractGameClient {
    * ```ts
    * import { NexonClient } from 'nexon-open-api';
    *
-   * const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
+   * const apiKey = process.env['NEXON_API_KEY'];
+   * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+   * const client = new NexonClient({ apiKey });
+   *
+   * // 클랜원 검색에 입력한 닉네임을 고유 번호로 바꿀 때
    * const ouid = await client.suddenAttack.getOuid('닉네임');
    * console.log(ouid);
    * ```

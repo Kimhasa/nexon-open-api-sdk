@@ -100,6 +100,7 @@ export interface MabinogiAuctionKeywordSearchRequest {
   readonly cursor?: string | undefined;
 }
 
+/** 현재 경매장에 올라온 매물 한 건의 수량과 개당 가격. */
 export interface MabinogiAuctionItem {
   /** 해당 아이템의 이름 */
   readonly item_name: string;
@@ -113,16 +114,19 @@ export interface MabinogiAuctionItem {
   readonly auction_price_per_unit: number;
   /** 만료 기한 (해당 아이템의 판매가 종료되는 일시) (UTC0) */
   readonly date_auction_expire: string;
+  /** 경매장 매물의 옵션 목록 */
   readonly item_option: readonly MabinogiItemOption[];
 }
 
+/** 판매 중인 경매장 매물 한 페이지. 다음 페이지를 조회할 수 있다. */
 export interface MabinogiAuctionList {
   /** 현재 판매중인 아이템 목록 */
   readonly auction_item: readonly MabinogiAuctionItem[];
-  /** 다음 페이지 조회용 Cursor(null 일 경우 다음 페이지 없음) */
+  /** 같은 검색 조건에서 다음 매물 페이지를 열 때 cursor에 넣는 값. 마지막 페이지에서는 null이다. */
   readonly next_cursor: string | null;
 }
 
+/** 경매장 거래 한 건의 수량, 개당 가격과 거래 시각. */
 export interface MabinogiAuctionTransaction {
   /** 해당 아이템의 이름 */
   readonly item_name: string;
@@ -138,12 +142,14 @@ export interface MabinogiAuctionTransaction {
   readonly date_auction_buy: string;
   /** 해당 아이템의 거래 식별 정보 */
   readonly auction_buy_id: string;
+  /** 거래된 아이템의 옵션 목록 */
   readonly item_option: readonly MabinogiItemOption[];
 }
 
+/** 최근 1시간 경매장 거래 기록 한 페이지. */
 export interface MabinogiAuctionHistory {
   /** 거래 목록 */
   readonly auction_history: readonly MabinogiAuctionTransaction[];
-  /** 다음 페이지 조회용 Cursor(null 일 경우 다음 페이지 없음) */
+  /** 같은 검색 조건에서 다음 거래 내역 페이지를 열 때 cursor에 넣는 값. 마지막 페이지에서는 null이다. */
   readonly next_cursor: string | null;
 }

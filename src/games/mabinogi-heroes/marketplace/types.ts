@@ -86,7 +86,7 @@ export interface HeroesMarketHistoryItem {
  * 현재 평균가는 마지막으로 갱신된 기록의 `average_price` 로 확인한다.
  */
 export interface HeroesMarketHistory {
-  /** 다음 페이지 cursor. 마지막 페이지면 null이거나 빈 문자열일 수 있다 */
+  /** 같은 아이템의 다음 거래 기록 페이지를 열 때 cursor에 넣는 값. 마지막 페이지에서는 null이다. */
   readonly next_cursor: string | null;
   /** 거래 아이템 정보 */
   readonly item: readonly HeroesMarketHistoryItem[];
@@ -98,7 +98,7 @@ export interface HeroesMarketHistory {
 export interface HeroesGoldBuyer {
   /** 카르제 이름 */
   readonly cairde_name: string;
-  /** 최근 1주 구매한 골드 총량 */
+  /** 골드 거래소에서 최근 1주간 구매한 골드 총량 */
   readonly total_buy_gold: number;
 }
 
@@ -114,7 +114,7 @@ export interface HeroesGoldMarketBuyTop30 {
 export interface HeroesGoldSeller {
   /** 카르제 이름 */
   readonly cairde_name: string;
-  /** 최근 1주 판매한 골드 총량 */
+  /** 골드 거래소에서 최근 1주간 판매한 골드 총량 */
   readonly total_sell_gold: number;
 }
 

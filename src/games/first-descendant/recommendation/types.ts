@@ -23,7 +23,7 @@ export interface TfdRecommendationModuleRequest {
 
 /** 추천 모듈 1개 */
 export interface TfdRecommendationModuleItem {
-  /** 모듈 식별자 (`meta.getModule()` 참고) */
+  /** 추천 모듈의 도감 번호. meta.getModule()에서 같은 번호의 이름과 효과를 찾는다. */
   readonly module_id: string;
 }
 

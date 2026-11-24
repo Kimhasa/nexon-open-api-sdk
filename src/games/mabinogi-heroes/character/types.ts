@@ -34,7 +34,7 @@ export interface HeroesCharacterBasic {
   readonly character_name: string;
   /** 영웅(캐릭터) 생성 일(시) (UTC0, 예: `"2023-12-14T08:28:35Z"`) */
   readonly character_date_create: string;
-  /** 최근 7일간 접속 여부. `"true"` | `"false"` (boolean이 아닌 문자열) */
+  /** 최근 7일 동안 접속했으면 문자열 "true", 접속 기록이 없으면 "false"다. */
   readonly access_flag: string;
   /** 영웅(캐릭터) 직업 명 */
   readonly character_class_name: string;
@@ -52,7 +52,7 @@ export interface HeroesCharacterBasic {
   readonly id_title_count: number;
   /** 획득한 모든 타이틀 총 개수 */
   readonly total_title_count: number;
-  /** 타이틀로 오른 능력치의 합계 정보 */
+  /** 획득한 타이틀로 올라간 능력치 합계 */
   readonly title_stat: readonly HeroesStatValue[];
   /** 각성의 돌이 적용된 스킬 목록과 스킬 별 각성의 돌 정보 */
   readonly skill_awakening: readonly HeroesSkillAwakening[];
@@ -118,7 +118,7 @@ export interface HeroesItemColor {
 
 /** 아바타 하의 이너아머 색상 정보 프리셋 */
 export interface HeroesInnerArmorColor extends HeroesItemColor {
-  /** 기본 색상 여부. `"0"`: 기본 색상 미적용, `"1"`: 기본 색상 적용 (숫자가 아닌 문자열) */
+  /** 아바타 하의 이너아머에 기본 색상을 적용했으면 문자열 "1", 미적용이면 "0"이다. */
   readonly default_color_flag: string | null;
 }
 
@@ -181,7 +181,7 @@ export interface HeroesItemEquipmentOption {
 
 /** 장착 아이템 */
 export interface HeroesItemEquipment {
-  /** 장착 아이템 장착 페이지. `"Bag"`: 장착소지품, `"Cash"`: 캐시소지품 */
+  /** 소지품 종류. 문자열 "Bag"은 장착소지품, "Cash"는 캐시소지품이다. */
   readonly item_equipment_page: string;
   /** 장착 아이템 슬롯 명 */
   readonly item_equipment_slot_name: string;
@@ -209,6 +209,6 @@ export interface HeroesCharacterStat {
 
 /** 가입/신청한 길드 정보 응답 */
 export interface HeroesCharacterGuild {
-  /** 가입/신청한 길드 명 (가입·신청한 길드가 없으면 null일 수 있다) */
+  /** 가입했거나 가입 신청한 길드 이름. SDK 타입은 null을 허용한다. */
   readonly guild_name: string | null;
 }

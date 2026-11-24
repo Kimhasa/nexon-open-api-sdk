@@ -1,72 +1,84 @@
-# 넥슨 Open API 플랫폼 API 레퍼런스
+# 넥슨 Open API 공지 — nexon-open-api
 
-> SDK 지원 API 1개 — `client.platform`
->
-> 개수 기준: SDK public API 메서드 수 (메서드 1개 = 넥슨 API 경로 1개). 넥슨 포털 기준 1개를 모두 지원합니다.
->
-> 스펙: `specs/openapi/platform/`
+> `client.platform` · API 1개 · [넥슨 공식 문서](https://openapi.nexon.com/ko/game/platform/)
 
-게임 데이터가 아니라 **NEXON Open API 자체의 공지**(점검, API 변경 안내 등)를 조회합니다.
+API 점검이나 업데이트 공지를 새로 받아 디스코드에 띄우거나, 서비스 상태 페이지에 관련 공지를 모을 수 있습니다.
 
-## 빠른 시작
+## 시작하기
 
-```ts
+게임의 캐릭터 번호나 계정 번호 없이 넥슨 Open API 공지를 조회합니다.
+
+처음이라면 [시작 가이드](./getting-started.md)를 따라 API 키를 발급받고 패키지를 설치하세요.
+
+```js
 import { NexonClient } from 'nexon-open-api';
 
-const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
-
-const { notice } = await client.platform.getNoticeList();
-for (const n of notice) {
-  console.log(`[${n.game_name}] ${n.title} (${n.date})`);
-}
-```
-
-> - 최근 등록된 공지 **10개**를 반환합니다.
-> - 날짜 필드는 **UTC0** (`"2023-12-14T08:28:35Z"`)
-
-## 구조
-
-API가 1개뿐이고 식별자 조회도 없어서 sub-client 없이 `client.platform` 루트에 메서드를 둡니다.
-
-판단 기준: 다른 게임은 경로의 카테고리 세그먼트(`character/`, `user/`)마다 sub-client를 두지만, 플랫폼은 경로가 `notice` 하나라 나눌 카테고리가 없습니다. 카테고리가 2개 이상으로 늘면 sub-client로 옮깁니다.
-
-경로가 `{prefix}/v1/{path}` 꼴이 아니라 `/platform/openapi/v1/notice` 입니다. SDK는 `buildUrl('notice', 'openapi/v1')` 로 조립하고, 단위 테스트가 결과 URL이 스펙과 글자 그대로 같은지 확인합니다.
-
-## 공지 (1개)
-
-| 메서드                         | 경로                                        | 응답                 |
-| ------------------------------ | ------------------------------------------- | -------------------- |
-| `getNoticeList({ game_name })` | `GET /platform/openapi/v1/notice?game_name` | `PlatformNoticeList` |
-
-```ts
-await client.platform.getNoticeList(); // 전체 공지
-await client.platform.getNoticeList({ game_name: '메이플스토리' }); // 특정 게임 공지만
-```
-
-- `game_name` 은 선택입니다. 생략하거나 빈 문자열이면 전체 공지를 조회합니다 (빈 문자열은 SDK가 쿼리에서 뺍니다).
-- 게임 공지 API와 달리 상세 API가 없고, 목록 항목에 본문(`contents`)이 함께 옵니다.
-
-### `game_name` 값
-
-공통, 메이플스토리, EA SPORTS FC 온라인, 바람의나라, 바람의나라:연, 카트라이더 러쉬플러스, 히트2, V4, 마비노기 영웅전, 메이플스토리M, 크레이지 아케이드, 플랫폼
-
-`PlatformGameName` 타입이 위 값(스펙 enum)을 자동완성으로 제공합니다. 스펙 enum은 포털의 현재 게임 목록과 다를 수 있어 다른 문자열도 받습니다.
-
-## 에러
-
-```ts
-import { NexonAuthError, NexonRateLimitError } from 'nexon-open-api';
+const apiKey = process.env['NEXON_API_KEY'];
+if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
+const client = new NexonClient({ apiKey });
 
 try {
-  await client.platform.getNoticeList();
-} catch (err) {
-  if (err instanceof NexonAuthError) console.log('API 키 확인:', err.message);
-  if (err instanceof NexonRateLimitError) console.log('호출 한도 초과');
+  const { notice } = await client.platform.getNoticeList();
+  for (const entry of notice) {
+    console.log(`[${entry.game_name}] ${entry.title}`);
+  }
+  // 예시 출력: [공통] NEXON Open API 점검 안내
+} catch (error) {
+  console.error('조회 실패', error instanceof Error ? error.message : error);
+  process.exitCode = 1;
 }
 ```
 
-필수 파라미터가 없어서 SDK가 요청 전에 막는 입력 검증은 없습니다.
+파일을 `index.mjs`(ES 모듈)로 저장하고 `.env`에 `NEXON_API_KEY`를 설정한 뒤 Node.js 20.6 이상에서 `node --env-file=.env index.mjs`로 실행합니다.
 
-## 검증 상태
+## 게임 용어 ↔ SDK 대응표
 
-포털 OpenAPI 스펙(2026-11-24) 기준으로 구현했고, 실 API 키로는 검증하지 않았습니다. 테스트 fixture는 스펙 스키마로 합성한 값입니다.
+메서드는 `client.platform`에서 호출합니다.
+
+| 게임에서 부르는 이름           | SDK 메서드                     | 주요 응답 필드                                        |
+| ------------------------------ | ------------------------------ | ----------------------------------------------------- |
+| 넥슨 Open API 공지 목록과 본문 | `getNoticeList({ game_name })` | `notice` (공지 목록), `notice[].contents` (공지 본문) |
+
+## 알아두기
+
+- 최근 등록된 넥슨 Open API 공지 10개를 반환합니다. 게시 시각은 UTC 기준입니다.
+- `game_name`을 생략하거나 빈 문자열로 주면 전체 공지를 조회합니다. `PlatformGameName`이 공식 스펙의 이름을 자동완성하며 새 분류에도 대응할 수 있도록 다른 문자열도 받습니다.
+- 공식 스펙의 분류는 `공통`, `메이플스토리`, `EA SPORTS FC 온라인`, `바람의나라`, `바람의나라:연`, `카트라이더 러쉬플러스`, `히트2`, `V4`, `마비노기 영웅전`, `메이플스토리M`, `크레이지 아케이드`, `플랫폼`입니다.
+
+## 카테고리별 사용법
+
+아래 코드 조각은 시작 예제의 `try` 블록 안에 하나씩 붙여 실행합니다. 나머지 응답 필드는 에디터 자동완성에서 확인할 수 있습니다.
+
+### API 점검·업데이트 공지
+
+시작 예제에서 만든 `client`를 사용합니다.
+
+```ts
+// 서비스 상태 페이지에 메이플스토리 관련 API 공지의 최신 글 표시
+const { notice: mapleNotices } = await client.platform.getNoticeList({ game_name: '메이플스토리' });
+const latest = mapleNotices[0];
+if (latest) console.log(latest.title, latest.url, latest.contents);
+```
+
+- `title`과 `url`은 공지 제목과 링크입니다.
+- `contents`는 목록에 함께 오는 공지 본문입니다.
+- `notice_tag`는 공지에 붙은 분류 태그입니다.
+
+<details>
+<summary>넥슨 API 경로</summary>
+
+| SDK 메서드      | 넥슨 API 경로                     |
+| --------------- | --------------------------------- |
+| `getNoticeList` | `GET /platform/openapi/v1/notice` |
+
+</details>
+
+## 만들기 예제
+
+- **디스코드 공지 봇** · 마지막에 표시한 공지 링크를 기억하고 새 글의 제목과 링크를 올립니다.
+- **서비스 상태 페이지** · 공지의 태그와 게시 시각을 사용해 관련 점검과 업데이트를 표시합니다.
+
+## 참고
+
+- 에러와 문제 해결: [FAQ](./faq.md)
+- 이 문서의 API는 넥슨 포털 공식 스펙을 기준으로 구현했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)).
