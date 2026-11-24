@@ -29,6 +29,8 @@ const basic = await client.maplestory.character.getBasic({ ocid });
 | `yarn test`                         | Vitest 1회 실행                                                                                |
 | `yarn test:watch`                   | Vitest watch                                                                                   |
 | `yarn test:coverage`                | Vitest + 커버리지                                                                              |
+| `yarn test:live`                    | 빌드의 정적 메타데이터, 이미지 및 인증 오류를 실서버에서 확인 (키 불필요)                      |
+| `yarn test:package`                 | npm tarball 오프라인 설치와 CJS·ESM 실호출 및 TypeScript 타입 검사                             |
 | `yarn test:{game}`                  | 실 API E2E 스크립트 (`scripts/test-*.ts`, `.env`에 API 키 필요)                                |
 | `yarn specs:fetch`                  | 넥슨 포털의 OpenAPI YAML을 `specs/openapi/`로 수집                                             |
 | `yarn specs:check`                  | 포털 변경 감지 (저장된 스펙과 포털 비교)                                                       |
