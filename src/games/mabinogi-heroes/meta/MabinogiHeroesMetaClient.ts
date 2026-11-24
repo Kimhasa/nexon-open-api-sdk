@@ -1,5 +1,5 @@
+import { assertNonEmptyString, assertOneOf } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
-import { assertNonEmptyString, assertOneOf } from '../validation.js';
 import { HEROES_ENCHANT_META_SHAPE } from '../shapes.js';
 import type { HeroesEnchantMeta, HeroesEnchantMetaRequest } from './types.js';
 

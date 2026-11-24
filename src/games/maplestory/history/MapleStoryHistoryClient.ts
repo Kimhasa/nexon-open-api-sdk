@@ -1,5 +1,4 @@
-import { NexonBadRequestError } from '../../../core/errors/NexonBadRequestError.js';
-import { NEXON_ERROR_CODES } from '../../../core/errors/error-codes.js';
+import { assertInteger, invalidInput } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import {
   STARFORCE_HISTORY_SHAPE,
@@ -7,7 +6,6 @@ import {
   CUBE_HISTORY_SHAPE,
   SOUL_POTENTIAL_HISTORY_SHAPE,
 } from '../shapes.js';
-import { assertIntegerInRange } from '../validation.js';
 import type {
   CubeHistory,
   HistoryRequest,
@@ -155,12 +153,11 @@ export class MapleStoryHistoryClient {
    * ```
    */
   async getSoulPotential(params: HistoryRequest): Promise<SoulPotentialHistory> {
-    assertIntegerInRange(params.count, 'count', 10, 1000);
+    assertInteger(params.count, 'count', { min: 10, max: 1000 });
     if (params.date === undefined && params.cursor === undefined) {
-      throw new NexonBadRequestError(
-        'date와 cursor 중 1개 이상을 입력해야 합니다. 요청을 보내지 않았습니다.\n' +
-          "→ 첫 페이지는 { count: 100, date: 'YYYY-MM-DD' }, 다음 페이지는 { count: 100, cursor: next_cursor } 로 조회하세요.",
-        { code: NEXON_ERROR_CODES.BAD_REQUEST },
+      invalidInput(
+        'date와 cursor가 모두 빠졌습니다. date와 cursor 중 1개 이상을 입력하세요.',
+        "첫 페이지는 { count: 100, date: 'YYYY-MM-DD' }, 다음 페이지는 { count: 100, cursor: next_cursor } 로 조회하세요.",
       );
     }
     return this.http.get<SoulPotentialHistory>(

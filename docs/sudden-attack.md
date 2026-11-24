@@ -28,16 +28,16 @@ console.log(basic.user_name, basic.user_date_create);
 
 ## 매치 (2개)
 
-| 메서드                                                       | 설명                                    |
-| ------------------------------------------------------------ | --------------------------------------- |
-| `suddenAttack.match.list({ ouid, match_mode, match_type? })` | 특정 모드의 최근 매치 최대 1,000개 조회 |
-| `suddenAttack.match.getDetail(matchId)`                      | 매치 ID로 맵과 참여 유저의 기록 조회    |
+| 메서드                                                          | 설명                                    |
+| --------------------------------------------------------------- | --------------------------------------- |
+| `suddenAttack.match.getList({ ouid, match_mode, match_type? })` | 특정 모드의 최근 매치 최대 1,000개 조회 |
+| `suddenAttack.match.getDetail(matchId)`                         | 매치 ID로 맵과 참여 유저의 기록 조회    |
 
 - `match_mode` 값은 `개인전`, `데스매치`, `폭파미션`, `진짜를 모아라`입니다.
 - 선택 파라미터인 `match_type` 값은 `일반전`, `클랜전`, `퀵매치 클랜전`, `클랜 랭크전`, `랭크전 솔로`, `랭크전 파티`, `토너먼트`입니다.
 
 ```ts
-const { match } = await suddenAttack.match.list({
+const { match } = await suddenAttack.match.getList({
   ouid,
   match_mode: '폭파미션',
   match_type: '일반전',

@@ -1,5 +1,5 @@
+import { assertNonEmptyString } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
-import { assertNonEmpty } from '../input-validation.js';
 import { KARTRIDER_USER_BASIC_SHAPE, KARTRIDER_USER_TITLE_EQUIPMENT_SHAPE } from '../shapes.js';
 import type { KartriderOuidRequest } from '../types.js';
 import type { KartriderUserBasic, KartriderUserTitleEquipment } from './types.js';
@@ -50,7 +50,7 @@ export class KartriderUserClient {
    * ```
    */
   async getBasic(params: KartriderOuidRequest): Promise<KartriderUserBasic> {
-    assertNonEmpty(params.ouid, 'ouid', OUID_HINT);
+    assertNonEmptyString(params.ouid, 'ouid', OUID_HINT);
     return this.http.get<KartriderUserBasic>(
       `${KartriderUserClient.BASE}/user/basic`,
       { ouid: params.ouid },
@@ -80,7 +80,7 @@ export class KartriderUserClient {
    * ```
    */
   async getTitleEquipment(params: KartriderOuidRequest): Promise<KartriderUserTitleEquipment> {
-    assertNonEmpty(params.ouid, 'ouid', OUID_HINT);
+    assertNonEmptyString(params.ouid, 'ouid', OUID_HINT);
     return this.http.get<KartriderUserTitleEquipment>(
       `${KartriderUserClient.BASE}/user/title-equipment`,
       { ouid: params.ouid },

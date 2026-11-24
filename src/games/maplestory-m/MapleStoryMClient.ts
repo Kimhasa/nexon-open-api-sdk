@@ -1,3 +1,4 @@
+import { assertNonEmptyString } from '../../core/validation/input.js';
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
 import type { OCID } from '../_base/maple-base-types.js';
 import type { MWorldName } from './guild/types.js';
@@ -7,7 +8,6 @@ import { MapleStoryMGuildClient } from './guild/MapleStoryMGuildClient.js';
 import { MapleStoryMRankingClient } from './ranking/MapleStoryMRankingClient.js';
 import { MapleStoryMNoticeClient } from './notice/MapleStoryMNoticeClient.js';
 import { M_OCID_SHAPE } from './shapes.js';
-import { assertNonBlank } from './validation.js';
 
 /**
  * 메이플스토리M 클라이언트.
@@ -71,7 +71,7 @@ export class MapleStoryMClient extends AbstractGameClient {
    * @throws {NexonNotFoundError} 캐릭터를 찾을 수 없을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
-   * @throws {TypeError} 월드명이나 캐릭터명이 비어 있을 때
+   * @throws {NexonBadRequestError} 월드명이나 캐릭터명이 비어 있을 때
    *
    * @example
    * ```ts
@@ -82,11 +82,8 @@ export class MapleStoryMClient extends AbstractGameClient {
    * ```
    */
   async getOcid(worldName: MWorldName, characterName: string): Promise<OCID> {
-    assertNonBlank(
-      worldName,
-      '월드명이 비어 있습니다. 스카니아 등 캐릭터가 속한 월드명을 입력하세요.',
-    );
-    assertNonBlank(characterName, '캐릭터명이 비어 있습니다. 조회할 캐릭터명을 입력하세요.');
+    assertNonEmptyString(worldName, 'worldName', '스카니아 등 캐릭터가 속한 월드명을 입력하세요.');
+    assertNonEmptyString(characterName, 'characterName', '조회할 캐릭터명을 입력하세요.');
     const url = this.buildUrl('id');
     const response = await this.http.get<{ ocid: string }>(
       url,

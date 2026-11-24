@@ -1,3 +1,4 @@
+import { assertOneOf } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import { ocidDateParams } from '../query-params.js';
 import type { TWFormatQueryDate } from '../query-params.js';
@@ -67,8 +68,7 @@ export class MapleStoryTWCharacterClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -93,8 +93,7 @@ export class MapleStoryTWCharacterClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -119,8 +118,7 @@ export class MapleStoryTWCharacterClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -145,8 +143,7 @@ export class MapleStoryTWCharacterClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -171,8 +168,7 @@ export class MapleStoryTWCharacterClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -197,8 +193,7 @@ export class MapleStoryTWCharacterClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -223,8 +218,7 @@ export class MapleStoryTWCharacterClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -249,8 +243,7 @@ export class MapleStoryTWCharacterClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -275,8 +268,7 @@ export class MapleStoryTWCharacterClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -301,8 +293,7 @@ export class MapleStoryTWCharacterClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -327,8 +318,7 @@ export class MapleStoryTWCharacterClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -353,8 +343,7 @@ export class MapleStoryTWCharacterClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -379,8 +368,7 @@ export class MapleStoryTWCharacterClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -406,8 +394,7 @@ export class MapleStoryTWCharacterClient {
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
    * @param params.character_skill_grade - Job advancement tier or Hyper Skill category.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range, or the skill grade is unsupported.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range, or the skill grade is unsupported.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -420,9 +407,7 @@ export class MapleStoryTWCharacterClient {
    */
   async getSkill(params: TWSkillRequest): Promise<TWCharacterSkill> {
     const query = ocidDateParams(params, this.formatDate, FIRST_SNAPSHOT_DATE);
-    if (!TW_SKILL_GRADES.includes(params.character_skill_grade)) {
-      throw new RangeError(`character_skill_grade must be one of ${TW_SKILL_GRADES.join(', ')}.`);
-    }
+    assertOneOf(params.character_skill_grade, TW_SKILL_GRADES, 'character_skill_grade');
     return this.http.get<TWCharacterSkill>(
       `${MapleStoryTWCharacterClient.BASE}/character/skill`,
       { ...query, character_skill_grade: params.character_skill_grade },
@@ -435,8 +420,7 @@ export class MapleStoryTWCharacterClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -461,8 +445,7 @@ export class MapleStoryTWCharacterClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -487,8 +470,7 @@ export class MapleStoryTWCharacterClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -513,8 +495,7 @@ export class MapleStoryTWCharacterClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -539,8 +520,7 @@ export class MapleStoryTWCharacterClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -565,8 +545,7 @@ export class MapleStoryTWCharacterClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-15 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts

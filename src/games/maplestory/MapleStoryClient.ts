@@ -1,3 +1,4 @@
+import { assertNonEmptyString } from '../../core/validation/input.js';
 import { AbstractMapleBaseClient } from '../_base/AbstractMapleStoryBaseClient.js';
 import type { OCID } from '../_base/maple-base-types.js';
 import { MapleStoryCharacterClient } from './character/MapleStoryCharacterClient.js';
@@ -8,7 +9,6 @@ import { MapleStoryRankingClient } from './ranking/MapleStoryRankingClient.js';
 import { MapleStoryNoticeClient } from './notice/MapleStoryNoticeClient.js';
 import { MapleStoryBattlePracticeClient } from './battle-practice/MapleStoryBattlePracticeClient.js';
 import { MapleStorySchedulerClient } from './scheduler/MapleStorySchedulerClient.js';
-import { assertNonEmptyString } from './validation.js';
 import { OCID_SHAPE, OUID_SHAPE, ACHIEVEMENT_SHAPE } from './shapes.js';
 import type { Achievement } from './user-types.js';
 

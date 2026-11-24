@@ -1,5 +1,6 @@
+import { assertInteger, assertOneOf } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
-import { assertOneOf, assertPositiveInteger } from '../validation.js';
+import { HEROES_RANKING_SHAPE } from '../shapes.js';
 import type {
   HeroesHallOfHonorRankingRequest,
   HeroesRankingEntry,
@@ -11,8 +12,7 @@ const RANKING_TYPE_HINT = "'0' 은 공격력, '1' 은 마법 공격력 기준 �
 /**
  * 마비노기 영웅전 랭킹 API 클라이언트 (V2).
  *
- * 두 API 모두 응답이 객체가 아니라 랭킹 항목의 **배열**입니다.
- * 그래서 `responseValidation` 의 shape 검증 대상에서 빠집니다 (top-level 키가 없음).
+ * 두 API 모두 랭킹 항목의 배열을 반환합니다.
  *
  * @example
  * ```ts
@@ -57,6 +57,7 @@ export class MabinogiHeroesRankingClient {
     return this.http.get<HeroesRankingEntry[]>(
       `${MabinogiHeroesRankingClient.BASE}/ranking/hall-of-honor`,
       { ranking_type: params.ranking_type },
+      HEROES_RANKING_SHAPE,
     );
   }
 
@@ -83,14 +84,14 @@ export class MabinogiHeroesRankingClient {
   async getRealTime(params: HeroesRealTimeRankingRequest): Promise<HeroesRankingEntry[]> {
     const request = params as HeroesRealTimeRankingRequest | undefined;
     assertOneOf(request?.ranking_type, ['0', '1'], 'ranking_type', RANKING_TYPE_HINT);
-    assertPositiveInteger(
-      request?.page_no,
-      'page_no',
-      "첫 페이지는 1입니다 (예: { ranking_type: '0', page_no: 1 }).",
-    );
+    assertInteger(request?.page_no, 'page_no', {
+      min: 1,
+      hint: "첫 페이지는 1입니다 (예: { ranking_type: '0', page_no: 1 }).",
+    });
     return this.http.get<HeroesRankingEntry[]>(
       `${MabinogiHeroesRankingClient.BASE}/ranking/real-time`,
       { ranking_type: params.ranking_type, page_no: params.page_no },
+      HEROES_RANKING_SHAPE,
     );
   }
 }

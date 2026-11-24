@@ -1,3 +1,8 @@
+import {
+  assertInteger,
+  assertNonEmptyString,
+  invalidInput,
+} from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import { M_RANKING_SHAPE } from '../shapes.js';
 import type {
@@ -21,7 +26,6 @@ import type {
   MSharenianWaterwayRanking,
   MSharenianWaterwayRankingRequest,
 } from './types.js';
-import { assertNonBlank } from '../validation.js';
 
 /**
  * 메이플스토리M 랭킹 API 클라이언트.
@@ -41,7 +45,7 @@ export class MapleStoryMRankingClient {
    * 레벨 랭킹 정보를 조회한다.
    *
    * @param params - 조회 기준일(KST), 월드명 또는 캐릭터 식별자, 페이지 번호
-   * @throws {TypeError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
+   * @throws {NexonBadRequestError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -73,7 +77,7 @@ export class MapleStoryMRankingClient {
    * 무릉도장 랭킹 정보를 조회한다.
    *
    * @param params - 조회 기준일(KST), 월드명 또는 캐릭터 식별자, 페이지 번호
-   * @throws {TypeError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
+   * @throws {NexonBadRequestError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -105,7 +109,7 @@ export class MapleStoryMRankingClient {
    * 시간의 근원 랭킹 정보를 조회한다.
    *
    * @param params - 조회 기준일(KST), 월드명 또는 캐릭터 식별자, 페이지 번호
-   * @throws {TypeError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
+   * @throws {NexonBadRequestError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -137,7 +141,7 @@ export class MapleStoryMRankingClient {
    * 유니온 랭킹 정보를 조회한다.
    *
    * @param params - 조회 기준일(KST), 월드명 또는 캐릭터 식별자, 페이지 번호
-   * @throws {TypeError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
+   * @throws {NexonBadRequestError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -169,7 +173,7 @@ export class MapleStoryMRankingClient {
    * 전투력 랭킹 정보를 조회한다.
    *
    * @param params - 조회 기준일(KST), 월드명 또는 캐릭터 식별자, 페이지 번호
-   * @throws {TypeError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
+   * @throws {NexonBadRequestError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -201,7 +205,7 @@ export class MapleStoryMRankingClient {
    * 커닝M타워 랭킹 정보를 조회한다.
    *
    * @param params - 조회 기준일(KST), 월드명 또는 캐릭터 식별자, 페이지 번호
-   * @throws {TypeError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
+   * @throws {NexonBadRequestError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -233,7 +237,7 @@ export class MapleStoryMRankingClient {
    * 업적 랭킹 정보를 조회한다.
    *
    * @param params - 조회 기준일(KST), 월드명 또는 캐릭터 식별자, 페이지 번호
-   * @throws {TypeError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
+   * @throws {NexonBadRequestError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -265,7 +269,7 @@ export class MapleStoryMRankingClient {
    * 샤레니안의 전장 랭킹 정보를 조회한다.
    *
    * @param params - 조회 기준일(KST), 월드명 또는 캐릭터 식별자, 페이지 번호
-   * @throws {TypeError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
+   * @throws {NexonBadRequestError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -299,7 +303,7 @@ export class MapleStoryMRankingClient {
    * 샤레니안의 지하수로 랭킹 정보를 조회한다.
    *
    * @param params - 조회 기준일(KST), 월드명 또는 캐릭터 식별자, 페이지 번호
-   * @throws {TypeError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
+   * @throws {NexonBadRequestError} 기준일 또는 식별자가 비어 있거나, 월드명과 캐릭터 식별자를 함께 지정하거나, 페이지가 정수가 아닐 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -332,27 +336,29 @@ export class MapleStoryMRankingClient {
   private validateParams(
     params: MRankingBaseRequest & { readonly world_name?: string | undefined },
   ): void {
-    assertNonBlank(
-      params.date,
-      'date가 비어 있습니다. 조회 기준일을 YYYY-MM-DD 형식으로 입력하세요.',
-    );
+    assertNonEmptyString(params.date, 'date', '조회 기준일을 YYYY-MM-DD 형식으로 입력하세요.');
     if (params.world_name !== undefined && params.ocid !== undefined) {
-      throw new TypeError('world_name과 ocid 중 하나만 입력하세요.');
+      invalidInput(
+        'world_name과 ocid가 함께 지정되었습니다.',
+        'world_name과 ocid 중 하나만 입력하세요.',
+      );
     }
     if (params.world_name !== undefined) {
-      assertNonBlank(
+      assertNonEmptyString(
         params.world_name,
-        'world_name이 비어 있습니다. 조회할 월드명을 입력하거나 생략하세요.',
+        'world_name',
+        '조회할 월드명을 입력하거나 생략하세요.',
       );
     }
     if (params.ocid !== undefined) {
-      assertNonBlank(
+      assertNonEmptyString(
         params.ocid,
-        'ocid가 비어 있습니다. maplestorym.getOcid()로 캐릭터 식별자를 조회하거나 생략하세요.',
+        'ocid',
+        'maplestorym.getOcid()로 캐릭터 식별자를 조회하거나 생략하세요.',
       );
     }
-    if (params.page !== undefined && !Number.isInteger(params.page)) {
-      throw new TypeError('page는 정수로 입력하세요.');
+    if (params.page !== undefined) {
+      assertInteger(params.page, 'page');
     }
   }
 }

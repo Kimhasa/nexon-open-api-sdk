@@ -1,5 +1,5 @@
+import { assertNonEmptyString } from '../../core/validation/input.js';
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
-import { assertNonEmpty } from './input-validation.js';
 import { KartriderNoticeClient } from './notice/KartriderNoticeClient.js';
 import { KARTRIDER_OUID_LOOKUP_SHAPE } from './shapes.js';
 import { KartriderUserClient } from './user/KartriderUserClient.js';
@@ -72,7 +72,7 @@ export class KartriderClient extends AbstractGameClient {
    * ```
    */
   async getOuidInfo(racerName: string): Promise<KartriderOuidLookup> {
-    assertNonEmpty(
+    assertNonEmptyString(
       racerName,
       'racerName',
       "client.kartrider.getOuidInfo('라이더명') 처럼 조회할 라이더(계정) 명을 전달해주세요.",

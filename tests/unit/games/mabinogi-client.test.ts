@@ -48,20 +48,20 @@ describe('MabinogiClient', () => {
 
   it('NPC, 서버 및 채널로 상점 목록을 조회한다', async () => {
     await expect(
-      game.npcShop.list({ npc_name: '상인 라누', server_name: '류트', channel: 1 }),
+      game.npcShop.getList({ npc_name: '상인 라누', server_name: '류트', channel: 1 }),
     ).resolves.toEqual(mabinogiNpcShopFixture);
     expectRequest('npcshop/list', { npc_name: '상인 라누', server_name: '류트', channel: '1' });
   });
 
   it('경매장 매물을 한 페이지씩 조회하고 다음 커서를 그대로 전달한다', async () => {
     const filters = { auction_item_category: '검', item_name: '숏 소드' } as const;
-    const firstPage = await game.auction.list(filters);
+    const firstPage = await game.auction.listItems(filters);
     expect(firstPage).toEqual(mabinogiAuctionListFixture);
     expectRequest('auction/list', filters);
     expect(onRequest).toHaveBeenCalledTimes(1);
 
     const cursor = firstPage.next_cursor!;
-    await expect(game.auction.list({ ...filters, cursor })).resolves.toEqual({
+    await expect(game.auction.listItems({ ...filters, cursor })).resolves.toEqual({
       auction_item: [],
       next_cursor: null,
     });
@@ -70,7 +70,7 @@ describe('MabinogiClient', () => {
   });
 
   it('선택 필터를 생략할 수 있다', async () => {
-    await expect(game.auction.list()).resolves.toEqual(mabinogiAuctionListFixture);
+    await expect(game.auction.listItems()).resolves.toEqual(mabinogiAuctionListFixture);
     expectRequest('auction/list');
     await expect(game.auction.listHistory()).resolves.toEqual(mabinogiAuctionHistoryFixture);
     expectRequest('auction/history');
@@ -115,20 +115,20 @@ describe('MabinogiClient', () => {
       ),
     );
     await expect(
-      game.npcShop.list({ npc_name: '델', server_name: '류트', channel: 999 }),
+      game.npcShop.getList({ npc_name: '델', server_name: '류트', channel: 999 }),
     ).rejects.toBeInstanceOf(NexonBadRequestError);
   });
 
   it('NPC, 서버 및 채널 입력을 요청 전에 검증한다', async () => {
     await expect(
-      game.npcShop.list({
+      game.npcShop.getList({
         npc_name: '알 수 없음' as MabinogiNpcName,
         server_name: '류트',
         channel: 1,
       }),
     ).rejects.toThrow(/npc_name/);
     await expect(
-      game.npcShop.list({ npc_name: '델', server_name: '류트', channel: 1.5 }),
+      game.npcShop.getList({ npc_name: '델', server_name: '류트', channel: 1.5 }),
     ).rejects.toThrow(/channel/);
     await expect(game.hornBugleWorld.getHistory('' as MabinogiServerName)).rejects.toThrow(
       /server_name/,
@@ -138,7 +138,9 @@ describe('MabinogiClient', () => {
 
   it('경매장 카테고리 및 검색어 개수를 요청 전에 검증한다', async () => {
     await expect(
-      game.auction.list({ auction_item_category: '알 수 없음' as MabinogiAuctionItemCategory }),
+      game.auction.listItems({
+        auction_item_category: '알 수 없음' as MabinogiAuctionItemCategory,
+      }),
     ).rejects.toThrow(/auction_item_category/);
     await expect(game.auction.listByKeyword({ keyword: ' , +' })).rejects.toThrow(/keyword/);
     await expect(

@@ -1,3 +1,4 @@
+import { assertNonEmptyString } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import { SUDDEN_ATTACK_ENDPOINTS } from '../endpoints.js';
 import {
@@ -7,7 +8,6 @@ import {
   USER_RECENT_INFO_SHAPE,
 } from '../shapes.js';
 import type { SuddenAttackOuid } from '../types.js';
-import { validateOuid } from '../validation.js';
 import type {
   SuddenAttackUserBasic,
   SuddenAttackUserRank,
@@ -23,7 +23,7 @@ export class SuddenAttackUserClient {
    * 기본 계정 정보를 조회합니다.
    *
    * @param ouid - getOuid로 얻은 계정 식별자
-   * @throws {TypeError} ouid가 비어 있을 때
+   * @throws {NexonBadRequestError} ouid가 비어 있을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
    * @example
@@ -37,7 +37,11 @@ export class SuddenAttackUserClient {
    * ```
    */
   async getBasic(ouid: SuddenAttackOuid): Promise<SuddenAttackUserBasic> {
-    validateOuid(ouid);
+    assertNonEmptyString(
+      ouid,
+      'ouid',
+      'client.suddenAttack.getOuid(닉네임)으로 계정 식별자를 조회하세요.',
+    );
     return this.http.get(SUDDEN_ATTACK_ENDPOINTS.USER_BASIC, { ouid }, USER_BASIC_SHAPE);
   }
 
@@ -45,7 +49,7 @@ export class SuddenAttackUserClient {
    * 통합·시즌 계급을 조회합니다. 게임 접속 종료 시 갱신됩니다.
    *
    * @param ouid - getOuid로 얻은 계정 식별자
-   * @throws {TypeError} ouid가 비어 있을 때
+   * @throws {NexonBadRequestError} ouid가 비어 있을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
    * @example
@@ -59,7 +63,11 @@ export class SuddenAttackUserClient {
    * ```
    */
   async getRank(ouid: SuddenAttackOuid): Promise<SuddenAttackUserRank> {
-    validateOuid(ouid);
+    assertNonEmptyString(
+      ouid,
+      'ouid',
+      'client.suddenAttack.getOuid(닉네임)으로 계정 식별자를 조회하세요.',
+    );
     return this.http.get(SUDDEN_ATTACK_ENDPOINTS.USER_RANK, { ouid }, USER_RANK_SHAPE);
   }
 
@@ -67,7 +75,7 @@ export class SuddenAttackUserClient {
    * 솔로·파티 랭크전 티어를 조회합니다. 게임 접속 종료 시 갱신됩니다.
    *
    * @param ouid - getOuid로 얻은 계정 식별자
-   * @throws {TypeError} ouid가 비어 있을 때
+   * @throws {NexonBadRequestError} ouid가 비어 있을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
    * @example
@@ -81,7 +89,11 @@ export class SuddenAttackUserClient {
    * ```
    */
   async getTier(ouid: SuddenAttackOuid): Promise<SuddenAttackUserTier> {
-    validateOuid(ouid);
+    assertNonEmptyString(
+      ouid,
+      'ouid',
+      'client.suddenAttack.getOuid(닉네임)으로 계정 식별자를 조회하세요.',
+    );
     return this.http.get(SUDDEN_ATTACK_ENDPOINTS.USER_TIER, { ouid }, USER_TIER_SHAPE);
   }
 
@@ -89,7 +101,7 @@ export class SuddenAttackUserClient {
    * 최근 승률과 무기별 킬데스 정보를 조회합니다. 매치 종료 시 갱신됩니다.
    *
    * @param ouid - getOuid로 얻은 계정 식별자
-   * @throws {TypeError} ouid가 비어 있을 때
+   * @throws {NexonBadRequestError} ouid가 비어 있을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
    * @example
@@ -103,7 +115,11 @@ export class SuddenAttackUserClient {
    * ```
    */
   async getRecentInfo(ouid: SuddenAttackOuid): Promise<SuddenAttackUserRecentInfo> {
-    validateOuid(ouid);
+    assertNonEmptyString(
+      ouid,
+      'ouid',
+      'client.suddenAttack.getOuid(닉네임)으로 계정 식별자를 조회하세요.',
+    );
     return this.http.get(
       SUDDEN_ATTACK_ENDPOINTS.USER_RECENT_INFO,
       { ouid },

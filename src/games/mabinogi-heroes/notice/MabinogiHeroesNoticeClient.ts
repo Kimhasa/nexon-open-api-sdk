@@ -1,5 +1,5 @@
+import { assertInteger } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
-import { assertPositiveInteger } from '../validation.js';
 import {
   HEROES_EVENT_NOTICE_DETAIL_SHAPE,
   HEROES_EVENT_NOTICE_LIST_SHAPE,
@@ -186,9 +186,8 @@ export class MabinogiHeroesNoticeClient {
 }
 
 function assertNoticeId(noticeId: unknown, listMethod: string, listKey: string): void {
-  assertPositiveInteger(
-    noticeId,
-    'noticeId',
-    `client.mabinogiHeroes.notice.${listMethod} 응답의 ${listKey}[].notice_id 를 넘겨주세요.`,
-  );
+  assertInteger(noticeId, 'noticeId', {
+    min: 1,
+    hint: `client.mabinogiHeroes.notice.${listMethod} 응답의 ${listKey}[].notice_id 를 넘겨주세요.`,
+  });
 }

@@ -1,5 +1,5 @@
+import { assertNonEmptyString } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
-import { assertNonEmpty } from '../input-validation.js';
 import {
   BARAM_CHARACTER_BASIC_SHAPE,
   BARAM_CHARACTER_GUILD_SHAPE,
@@ -63,7 +63,7 @@ export class BaramCharacterClient {
    * ```
    */
   async getBasic(params: BaramOcidRequest): Promise<BaramCharacterBasic> {
-    assertNonEmpty(params.ocid, 'ocid', OCID_HINT);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<BaramCharacterBasic>(
       `${BaramCharacterClient.BASE}/character/basic`,
       { ocid: params.ocid },
@@ -92,7 +92,7 @@ export class BaramCharacterClient {
    * ```
    */
   async getTitle(params: BaramOcidRequest): Promise<BaramCharacterTitle> {
-    assertNonEmpty(params.ocid, 'ocid', OCID_HINT);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<BaramCharacterTitle>(
       `${BaramCharacterClient.BASE}/character/title`,
       { ocid: params.ocid },
@@ -119,7 +119,7 @@ export class BaramCharacterClient {
    * ```
    */
   async getTitleEquipment(params: BaramOcidRequest): Promise<BaramCharacterTitleEquipment> {
-    assertNonEmpty(params.ocid, 'ocid', OCID_HINT);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<BaramCharacterTitleEquipment>(
       `${BaramCharacterClient.BASE}/character/title-equipment`,
       { ocid: params.ocid },
@@ -148,7 +148,7 @@ export class BaramCharacterClient {
    * ```
    */
   async getItemEquipment(params: BaramOcidRequest): Promise<BaramCharacterItemEquipment> {
-    assertNonEmpty(params.ocid, 'ocid', OCID_HINT);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<BaramCharacterItemEquipment>(
       `${BaramCharacterClient.BASE}/character/item-equipment`,
       { ocid: params.ocid },
@@ -177,7 +177,7 @@ export class BaramCharacterClient {
    * ```
    */
   async getStat(params: BaramOcidRequest): Promise<BaramCharacterStat> {
-    assertNonEmpty(params.ocid, 'ocid', OCID_HINT);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<BaramCharacterStat>(
       `${BaramCharacterClient.BASE}/character/stat`,
       { ocid: params.ocid },
@@ -204,7 +204,7 @@ export class BaramCharacterClient {
    * ```
    */
   async getGuild(params: BaramOcidRequest): Promise<BaramCharacterGuild> {
-    assertNonEmpty(params.ocid, 'ocid', OCID_HINT);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<BaramCharacterGuild>(
       `${BaramCharacterClient.BASE}/character/guild`,
       { ocid: params.ocid },

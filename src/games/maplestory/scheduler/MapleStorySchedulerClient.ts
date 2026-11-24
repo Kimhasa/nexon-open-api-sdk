@@ -1,6 +1,6 @@
+import { assertNonEmptyString } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import { SCHEDULER_CHARACTER_STATE_SHAPE } from '../shapes.js';
-import { assertNonEmptyString } from '../validation.js';
 import type { SchedulerCharacterState, SchedulerCharacterStateRequest } from './types.js';
 
 /**

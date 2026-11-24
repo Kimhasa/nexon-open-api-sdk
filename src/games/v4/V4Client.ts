@@ -1,6 +1,6 @@
+import { assertNonEmptyString } from '../../core/validation/input.js';
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
 import { V4CharacterClient } from './character/V4CharacterClient.js';
-import { assertNonEmpty } from './input-validation.js';
 import { V4_OCID_SHAPE } from './shapes.js';
 import type { V4OCID } from './types.js';
 
@@ -54,7 +54,7 @@ export class V4Client extends AbstractGameClient {
    * ```
    */
   async getOcid(characterName: string): Promise<V4OCID> {
-    assertNonEmpty(
+    assertNonEmptyString(
       characterName,
       'characterName',
       "client.v4.getOcid('캐릭터명') 처럼 조회할 캐릭터 명을 전달해주세요.",

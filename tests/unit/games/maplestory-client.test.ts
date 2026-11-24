@@ -806,7 +806,7 @@ describe('MapleStoryClient', () => {
       failIfRequested('/v1/history/soul-potential');
       await expect(
         createMapleStoryClient().history.getSoulPotential({ count: 5, date: DATE }),
-      ).rejects.toThrow(/count.*10~1000/s);
+      ).rejects.toThrow(/count.*10 이상 1000 이하/s);
     });
 
     it('history.getSoulPotential — date 와 cursor 가 모두 없음', async () => {

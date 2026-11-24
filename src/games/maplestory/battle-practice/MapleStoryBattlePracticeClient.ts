@@ -1,3 +1,4 @@
+import { assertInteger, assertNonEmptyString } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import {
   BATTLE_PRACTICE_REPLAY_ID_SHAPE,
@@ -5,7 +6,6 @@ import {
   BATTLE_PRACTICE_SKILL_TIMELINE_SHAPE,
   BATTLE_PRACTICE_CHARACTER_INFO_SHAPE,
 } from '../shapes.js';
-import { assertIntegerInRange, assertNonEmptyString } from '../validation.js';
 import type {
   BattlePracticeCharacterInfo,
   BattlePracticeReplayId,
@@ -137,7 +137,7 @@ export class MapleStoryBattlePracticeClient {
     params: BattlePracticeSkillTimelineRequest,
   ): Promise<BattlePracticeSkillTimeline> {
     assertNonEmptyString(params.replay_id, 'replay_id', REPLAY_ID_HINT);
-    if (params.page_no !== undefined) assertIntegerInRange(params.page_no, 'page_no', 1);
+    if (params.page_no !== undefined) assertInteger(params.page_no, 'page_no', { min: 1 });
     return this.http.get<BattlePracticeSkillTimeline>(
       `${MapleStoryBattlePracticeClient.BASE}/battle-practice/skill-timeline`,
       { replay_id: params.replay_id, page_no: params.page_no },

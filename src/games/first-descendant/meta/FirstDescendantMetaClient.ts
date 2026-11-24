@@ -1,6 +1,7 @@
+import { assertOneOf } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
+import { TFD_LANGUAGE_CODES } from '../types.js';
 import type { TfdLanguageCode } from '../types.js';
-import { assertLanguageCode } from '../validate.js';
 import type {
   TfdAcquisitionDetailMeta,
   TfdAdaptLevelMeta,
@@ -35,6 +36,42 @@ import type {
   TfdWeaponMeta,
   TfdWeaponTypeMeta,
 } from './types.js';
+import {
+  TFD_ACQUISITION_DETAIL_META_SHAPE,
+  TFD_ARCHE_TUNING_NODE_META_SHAPE,
+  TFD_COLLECTIBLE_ITEM_META_SHAPE,
+  TFD_CONSUMABLE_MATERIAL_META_SHAPE,
+  TFD_CORE_TYPE_META_SHAPE,
+  TFD_CUSTOMIZING_ITEM_META_SHAPE,
+  TFD_DESCENDANT_META_SHAPE,
+  TFD_DESCENDANT_GROUP_META_SHAPE,
+  TFD_EXTERNAL_COMPONENT_META_SHAPE,
+  TFD_FELLOW_META_SHAPE,
+  TFD_MEDAL_META_SHAPE,
+  TFD_MODULE_META_SHAPE,
+  TFD_NODE_ITEM_META_SHAPE,
+  TFD_NODE_SOCKET_TYPE_META_SHAPE,
+  TFD_REACTOR_META_SHAPE,
+  TFD_RESEARCH_META_SHAPE,
+  TFD_REWARD_META_SHAPE,
+  TFD_STAT_META_SHAPE,
+  TFD_TIER_META_SHAPE,
+  TFD_TITLE_META_SHAPE,
+  TFD_VEHICLE_META_SHAPE,
+  TFD_VOID_BATTLE_META_SHAPE,
+  TFD_WEAPON_META_SHAPE,
+  TFD_WEAPON_TYPE_META_SHAPE,
+  TFD_ADAPT_LEVEL_META_SHAPE,
+  TFD_AMORPHOUS_REWARD_META_SHAPE,
+  TFD_ARCHE_TUNING_BOARD_META_SHAPE,
+  TFD_ARCHE_TUNING_BOARD_GROUP_META_SHAPE,
+  TFD_CORE_SLOT_META_SHAPE,
+  TFD_DESCENDANT_LEVEL_DETAIL_META_SHAPE,
+  TFD_FELLOW_LEVEL_DETAIL_META_SHAPE,
+  TFD_MASTERY_RANK_LEVEL_DETAIL_META_SHAPE,
+} from './shapes.js';
+
+const LANGUAGE_CODE_HINT = '언어 코드는 대소문자를 구분합니다.';
 
 /**
  * 퍼스트 디센던트 메타데이터 조회 클라이언트.
@@ -69,7 +106,7 @@ export class FirstDescendantMetaClient {
    * 획득처 정보 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -81,9 +118,11 @@ export class FirstDescendantMetaClient {
   async getAcquisitionDetail(
     languageCode: TfdLanguageCode = 'ko',
   ): Promise<TfdAcquisitionDetailMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdAcquisitionDetailMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/acquisition-detail.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/acquisition-detail.json`,
+      undefined,
+      TFD_ACQUISITION_DETAIL_META_SHAPE,
     );
   }
 
@@ -91,7 +130,7 @@ export class FirstDescendantMetaClient {
    * 아르케 조율 노드 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -103,9 +142,11 @@ export class FirstDescendantMetaClient {
   async getArcheTuningNode(
     languageCode: TfdLanguageCode = 'ko',
   ): Promise<TfdArcheTuningNodeMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdArcheTuningNodeMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/arche-tuning-node.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/arche-tuning-node.json`,
+      undefined,
+      TFD_ARCHE_TUNING_NODE_META_SHAPE,
     );
   }
 
@@ -113,7 +154,7 @@ export class FirstDescendantMetaClient {
    * 수집형 아이템 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -125,9 +166,11 @@ export class FirstDescendantMetaClient {
   async getCollectibleItem(
     languageCode: TfdLanguageCode = 'ko',
   ): Promise<TfdCollectibleItemMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdCollectibleItemMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/collectible-item.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/collectible-item.json`,
+      undefined,
+      TFD_COLLECTIBLE_ITEM_META_SHAPE,
     );
   }
 
@@ -135,7 +178,7 @@ export class FirstDescendantMetaClient {
    * 소비 아이템 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -147,9 +190,11 @@ export class FirstDescendantMetaClient {
   async getConsumableMaterial(
     languageCode: TfdLanguageCode = 'ko',
   ): Promise<TfdConsumableMaterialMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdConsumableMaterialMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/consumable-material.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/consumable-material.json`,
+      undefined,
+      TFD_CONSUMABLE_MATERIAL_META_SHAPE,
     );
   }
 
@@ -157,7 +202,7 @@ export class FirstDescendantMetaClient {
    * 코어 타입 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -167,9 +212,11 @@ export class FirstDescendantMetaClient {
    * ```
    */
   async getCoreType(languageCode: TfdLanguageCode = 'ko'): Promise<TfdCoreTypeMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdCoreTypeMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/core-type.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/core-type.json`,
+      undefined,
+      TFD_CORE_TYPE_META_SHAPE,
     );
   }
 
@@ -177,7 +224,7 @@ export class FirstDescendantMetaClient {
    * 커스터마이징 아이템 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -189,9 +236,11 @@ export class FirstDescendantMetaClient {
   async getCustomizingItem(
     languageCode: TfdLanguageCode = 'ko',
   ): Promise<TfdCustomizingItemMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdCustomizingItemMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/customizing-item.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/customizing-item.json`,
+      undefined,
+      TFD_CUSTOMIZING_ITEM_META_SHAPE,
     );
   }
 
@@ -199,7 +248,7 @@ export class FirstDescendantMetaClient {
    * 계승자 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -209,9 +258,11 @@ export class FirstDescendantMetaClient {
    * ```
    */
   async getDescendant(languageCode: TfdLanguageCode = 'ko'): Promise<TfdDescendantMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdDescendantMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/descendant.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/descendant.json`,
+      undefined,
+      TFD_DESCENDANT_META_SHAPE,
     );
   }
 
@@ -219,7 +270,7 @@ export class FirstDescendantMetaClient {
    * 계승자 그룹 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -231,9 +282,11 @@ export class FirstDescendantMetaClient {
   async getDescendantGroup(
     languageCode: TfdLanguageCode = 'ko',
   ): Promise<TfdDescendantGroupMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdDescendantGroupMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/descendant-group.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/descendant-group.json`,
+      undefined,
+      TFD_DESCENDANT_GROUP_META_SHAPE,
     );
   }
 
@@ -241,7 +294,7 @@ export class FirstDescendantMetaClient {
    * 외장 부품 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -253,9 +306,11 @@ export class FirstDescendantMetaClient {
   async getExternalComponent(
     languageCode: TfdLanguageCode = 'ko',
   ): Promise<TfdExternalComponentMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdExternalComponentMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/external-component.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/external-component.json`,
+      undefined,
+      TFD_EXTERNAL_COMPONENT_META_SHAPE,
     );
   }
 
@@ -263,7 +318,7 @@ export class FirstDescendantMetaClient {
    * 조력자 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -273,9 +328,11 @@ export class FirstDescendantMetaClient {
    * ```
    */
   async getFellow(languageCode: TfdLanguageCode = 'ko'): Promise<TfdFellowMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdFellowMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/fellow.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/fellow.json`,
+      undefined,
+      TFD_FELLOW_META_SHAPE,
     );
   }
 
@@ -283,7 +340,7 @@ export class FirstDescendantMetaClient {
    * 훈장 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -293,9 +350,11 @@ export class FirstDescendantMetaClient {
    * ```
    */
   async getMedal(languageCode: TfdLanguageCode = 'ko'): Promise<TfdMedalMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdMedalMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/medal.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/medal.json`,
+      undefined,
+      TFD_MEDAL_META_SHAPE,
     );
   }
 
@@ -303,7 +362,7 @@ export class FirstDescendantMetaClient {
    * 모듈 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -313,9 +372,11 @@ export class FirstDescendantMetaClient {
    * ```
    */
   async getModule(languageCode: TfdLanguageCode = 'ko'): Promise<TfdModuleMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdModuleMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/module.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/module.json`,
+      undefined,
+      TFD_MODULE_META_SHAPE,
     );
   }
 
@@ -323,7 +384,7 @@ export class FirstDescendantMetaClient {
    * 변이 세포 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -333,9 +394,11 @@ export class FirstDescendantMetaClient {
    * ```
    */
   async getNodeItem(languageCode: TfdLanguageCode = 'ko'): Promise<TfdNodeItemMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdNodeItemMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/node-item.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/node-item.json`,
+      undefined,
+      TFD_NODE_ITEM_META_SHAPE,
     );
   }
 
@@ -343,7 +406,7 @@ export class FirstDescendantMetaClient {
    * 변이 세포 소켓 타입 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -353,9 +416,11 @@ export class FirstDescendantMetaClient {
    * ```
    */
   async getNodeSocketType(languageCode: TfdLanguageCode = 'ko'): Promise<TfdNodeSocketTypeMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdNodeSocketTypeMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/node-socket-type.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/node-socket-type.json`,
+      undefined,
+      TFD_NODE_SOCKET_TYPE_META_SHAPE,
     );
   }
 
@@ -363,7 +428,7 @@ export class FirstDescendantMetaClient {
    * 반응로 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -373,9 +438,11 @@ export class FirstDescendantMetaClient {
    * ```
    */
   async getReactor(languageCode: TfdLanguageCode = 'ko'): Promise<TfdReactorMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdReactorMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/reactor.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/reactor.json`,
+      undefined,
+      TFD_REACTOR_META_SHAPE,
     );
   }
 
@@ -383,7 +450,7 @@ export class FirstDescendantMetaClient {
    * 연구 정보 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -393,9 +460,11 @@ export class FirstDescendantMetaClient {
    * ```
    */
   async getResearch(languageCode: TfdLanguageCode = 'ko'): Promise<TfdResearchMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdResearchMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/research.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/research.json`,
+      undefined,
+      TFD_RESEARCH_META_SHAPE,
     );
   }
 
@@ -403,7 +472,7 @@ export class FirstDescendantMetaClient {
    * 난이도 보상 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -413,9 +482,11 @@ export class FirstDescendantMetaClient {
    * ```
    */
   async getReward(languageCode: TfdLanguageCode = 'ko'): Promise<TfdRewardMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdRewardMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/reward.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/reward.json`,
+      undefined,
+      TFD_REWARD_META_SHAPE,
     );
   }
 
@@ -423,7 +494,7 @@ export class FirstDescendantMetaClient {
    * 기본 스탯 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -433,15 +504,19 @@ export class FirstDescendantMetaClient {
    * ```
    */
   async getStat(languageCode: TfdLanguageCode = 'ko'): Promise<TfdStatMeta[]> {
-    const language = assertLanguageCode(languageCode);
-    return this.http.get<TfdStatMeta[]>(`${FirstDescendantMetaClient.BASE}/${language}/stat.json`);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
+    return this.http.get<TfdStatMeta[]>(
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/stat.json`,
+      undefined,
+      TFD_STAT_META_SHAPE,
+    );
   }
 
   /**
    * 등급 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -451,15 +526,19 @@ export class FirstDescendantMetaClient {
    * ```
    */
   async getTier(languageCode: TfdLanguageCode = 'ko'): Promise<TfdTierMeta[]> {
-    const language = assertLanguageCode(languageCode);
-    return this.http.get<TfdTierMeta[]>(`${FirstDescendantMetaClient.BASE}/${language}/tier.json`);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
+    return this.http.get<TfdTierMeta[]>(
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/tier.json`,
+      undefined,
+      TFD_TIER_META_SHAPE,
+    );
   }
 
   /**
    * 타이틀 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -469,9 +548,11 @@ export class FirstDescendantMetaClient {
    * ```
    */
   async getTitle(languageCode: TfdLanguageCode = 'ko'): Promise<TfdTitleMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdTitleMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/title.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/title.json`,
+      undefined,
+      TFD_TITLE_META_SHAPE,
     );
   }
 
@@ -479,7 +560,7 @@ export class FirstDescendantMetaClient {
    * 탈것 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -489,9 +570,11 @@ export class FirstDescendantMetaClient {
    * ```
    */
   async getVehicle(languageCode: TfdLanguageCode = 'ko'): Promise<TfdVehicleMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdVehicleMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/vehicle.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/vehicle.json`,
+      undefined,
+      TFD_VEHICLE_META_SHAPE,
     );
   }
 
@@ -499,7 +582,7 @@ export class FirstDescendantMetaClient {
    * 보이드 요격전 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -509,9 +592,11 @@ export class FirstDescendantMetaClient {
    * ```
    */
   async getVoidBattle(languageCode: TfdLanguageCode = 'ko'): Promise<TfdVoidBattleMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdVoidBattleMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/void-battle.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/void-battle.json`,
+      undefined,
+      TFD_VOID_BATTLE_META_SHAPE,
     );
   }
 
@@ -519,7 +604,7 @@ export class FirstDescendantMetaClient {
    * 무기 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -529,9 +614,11 @@ export class FirstDescendantMetaClient {
    * ```
    */
   async getWeapon(languageCode: TfdLanguageCode = 'ko'): Promise<TfdWeaponMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdWeaponMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/weapon.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/weapon.json`,
+      undefined,
+      TFD_WEAPON_META_SHAPE,
     );
   }
 
@@ -539,7 +626,7 @@ export class FirstDescendantMetaClient {
    * 무기 유형 메타데이터를 조회한다.
    *
    * @param languageCode - 언어 코드 (기본값: `'ko'`)
-   * @throws {NexonError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} languageCode가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonServerError} 넥슨 서버 오류일 때
    *
    * @example
@@ -549,9 +636,11 @@ export class FirstDescendantMetaClient {
    * ```
    */
   async getWeaponType(languageCode: TfdLanguageCode = 'ko'): Promise<TfdWeaponTypeMeta[]> {
-    const language = assertLanguageCode(languageCode);
+    assertOneOf(languageCode, TFD_LANGUAGE_CODES, 'languageCode', LANGUAGE_CODE_HINT);
     return this.http.get<TfdWeaponTypeMeta[]>(
-      `${FirstDescendantMetaClient.BASE}/${language}/weapon-type.json`,
+      `${FirstDescendantMetaClient.BASE}/${languageCode}/weapon-type.json`,
+      undefined,
+      TFD_WEAPON_TYPE_META_SHAPE,
     );
   }
 
@@ -569,7 +658,11 @@ export class FirstDescendantMetaClient {
    * ```
    */
   async getAdaptLevel(): Promise<TfdAdaptLevelMeta[]> {
-    return this.http.get<TfdAdaptLevelMeta[]>(`${FirstDescendantMetaClient.BASE}/adapt-level.json`);
+    return this.http.get<TfdAdaptLevelMeta[]>(
+      `${FirstDescendantMetaClient.BASE}/adapt-level.json`,
+      undefined,
+      TFD_ADAPT_LEVEL_META_SHAPE,
+    );
   }
 
   /**
@@ -586,6 +679,8 @@ export class FirstDescendantMetaClient {
   async getAmorphousReward(): Promise<TfdAmorphousRewardMeta[]> {
     return this.http.get<TfdAmorphousRewardMeta[]>(
       `${FirstDescendantMetaClient.BASE}/amorphous-reward.json`,
+      undefined,
+      TFD_AMORPHOUS_REWARD_META_SHAPE,
     );
   }
 
@@ -603,6 +698,8 @@ export class FirstDescendantMetaClient {
   async getArcheTuningBoard(): Promise<TfdArcheTuningBoardMeta[]> {
     return this.http.get<TfdArcheTuningBoardMeta[]>(
       `${FirstDescendantMetaClient.BASE}/arche-tuning-board.json`,
+      undefined,
+      TFD_ARCHE_TUNING_BOARD_META_SHAPE,
     );
   }
 
@@ -620,6 +717,8 @@ export class FirstDescendantMetaClient {
   async getArcheTuningBoardGroup(): Promise<TfdArcheTuningBoardGroupMeta[]> {
     return this.http.get<TfdArcheTuningBoardGroupMeta[]>(
       `${FirstDescendantMetaClient.BASE}/arche-tuning-board-group.json`,
+      undefined,
+      TFD_ARCHE_TUNING_BOARD_GROUP_META_SHAPE,
     );
   }
 
@@ -635,7 +734,11 @@ export class FirstDescendantMetaClient {
    * ```
    */
   async getCoreSlot(): Promise<TfdCoreSlotMeta[]> {
-    return this.http.get<TfdCoreSlotMeta[]>(`${FirstDescendantMetaClient.BASE}/core-slot.json`);
+    return this.http.get<TfdCoreSlotMeta[]>(
+      `${FirstDescendantMetaClient.BASE}/core-slot.json`,
+      undefined,
+      TFD_CORE_SLOT_META_SHAPE,
+    );
   }
 
   /**
@@ -652,6 +755,8 @@ export class FirstDescendantMetaClient {
   async getDescendantLevelDetail(): Promise<TfdDescendantLevelDetailMeta[]> {
     return this.http.get<TfdDescendantLevelDetailMeta[]>(
       `${FirstDescendantMetaClient.BASE}/descendant-level-detail.json`,
+      undefined,
+      TFD_DESCENDANT_LEVEL_DETAIL_META_SHAPE,
     );
   }
 
@@ -669,6 +774,8 @@ export class FirstDescendantMetaClient {
   async getFellowLevelDetail(): Promise<TfdFellowLevelDetailMeta[]> {
     return this.http.get<TfdFellowLevelDetailMeta[]>(
       `${FirstDescendantMetaClient.BASE}/fellow-level-detail.json`,
+      undefined,
+      TFD_FELLOW_LEVEL_DETAIL_META_SHAPE,
     );
   }
 
@@ -686,6 +793,8 @@ export class FirstDescendantMetaClient {
   async getMasteryRankLevelDetail(): Promise<TfdMasteryRankLevelDetailMeta[]> {
     return this.http.get<TfdMasteryRankLevelDetailMeta[]>(
       `${FirstDescendantMetaClient.BASE}/mastery-rank-level-detail.json`,
+      undefined,
+      TFD_MASTERY_RANK_LEVEL_DETAIL_META_SHAPE,
     );
   }
 }

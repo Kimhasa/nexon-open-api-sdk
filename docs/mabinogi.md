@@ -9,7 +9,7 @@ import { NexonClient } from 'nexon-open-api';
 
 const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
 const { mabinogi } = client;
-const { shop } = await mabinogi.npcShop.list({
+const { shop } = await mabinogi.npcShop.getList({
   npc_name: '델',
   server_name: '류트',
   channel: 1,
@@ -19,9 +19,9 @@ console.log(shop);
 
 ## NPC 상점 (1개)
 
-| 메서드                                                      | 설명                                   |
-| ----------------------------------------------------------- | -------------------------------------- |
-| `mabinogi.npcShop.list({ npc_name, server_name, channel })` | 서버 및 채널의 NPC 상점 판매 목록 조회 |
+| 메서드                                                         | 설명                                   |
+| -------------------------------------------------------------- | -------------------------------------- |
+| `mabinogi.npcShop.getList({ npc_name, server_name, channel })` | 서버 및 채널의 NPC 상점 판매 목록 조회 |
 
 `server_name`은 `류트`, `만돌린`, `하프`, `울프` 중 하나입니다. 서버와 NPC 이름은 각각 `MabinogiServerName`과 `MabinogiNpcName`으로 확인할 수 있습니다. 상점 조회 시각과 다음 갱신 시각은 UTC 기준입니다.
 
@@ -29,7 +29,7 @@ console.log(shop);
 
 | 메서드                                                                          | 설명                                         |
 | ------------------------------------------------------------------------------- | -------------------------------------------- |
-| `mabinogi.auction.list({ auction_item_category?, item_name?, cursor? })`        | 현재 판매 중인 매물 검색                     |
+| `mabinogi.auction.listItems({ auction_item_category?, item_name?, cursor? })`   | 현재 판매 중인 매물 검색                     |
 | `mabinogi.auction.listHistory({ auction_item_category?, item_name?, cursor? })` | 최근 1시간 거래 내역 조회                    |
 | `mabinogi.auction.listByKeyword({ keyword, cursor? })`                          | 아이템 이름에 검색어가 모두 포함된 매물 검색 |
 
@@ -37,11 +37,11 @@ console.log(shop);
 
 ```ts
 const filters = { auction_item_category: '검', item_name: '숏 소드' } as const;
-const first = await mabinogi.auction.list(filters);
+const first = await mabinogi.auction.listItems(filters);
 console.log(first.auction_item);
 
 if (first.next_cursor !== null) {
-  const second = await mabinogi.auction.list({ ...filters, cursor: first.next_cursor });
+  const second = await mabinogi.auction.listItems({ ...filters, cursor: first.next_cursor });
   console.log(second.auction_item);
 }
 

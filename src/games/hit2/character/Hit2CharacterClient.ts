@@ -1,5 +1,5 @@
+import { assertNonEmptyString } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
-import { assertNonEmpty } from '../input-validation.js';
 import { HIT2_CHARACTER_BASIC_SHAPE } from '../shapes.js';
 import type { Hit2OcidRequest } from '../types.js';
 import type { Hit2CharacterBasic } from './types.js';
@@ -43,7 +43,7 @@ export class Hit2CharacterClient {
    * ```
    */
   async getBasic(params: Hit2OcidRequest): Promise<Hit2CharacterBasic> {
-    assertNonEmpty(
+    assertNonEmptyString(
       params.ocid,
       'ocid',
       'client.hit2.getOcid(characterName) 로 얻은 값을 { ocid } 로 전달해주세요.',

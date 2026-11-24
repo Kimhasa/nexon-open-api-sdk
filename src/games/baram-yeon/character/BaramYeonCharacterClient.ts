@@ -1,5 +1,5 @@
+import { assertNonEmptyString } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
-import { assertNonEmpty } from '../input-validation.js';
 import {
   BARAM_YEON_CHARACTER_BASIC_SHAPE,
   BARAM_YEON_CHARACTER_TITLE_EQUIPMENT_SHAPE,
@@ -55,7 +55,7 @@ export class BaramYeonCharacterClient {
    * ```
    */
   async getBasic(params: BaramYeonOcidRequest): Promise<BaramYeonCharacterBasic> {
-    assertNonEmpty(params.ocid, 'ocid', OCID_HINT);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<BaramYeonCharacterBasic>(
       `${BaramYeonCharacterClient.BASE}/character/basic`,
       { ocid: params.ocid },
@@ -86,7 +86,7 @@ export class BaramYeonCharacterClient {
    * ```
    */
   async getTitle(params: BaramYeonOcidRequest): Promise<BaramYeonCharacterTitle> {
-    assertNonEmpty(params.ocid, 'ocid', OCID_HINT);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<BaramYeonCharacterTitle>(
       `${BaramYeonCharacterClient.BASE}/character/title`,
       { ocid: params.ocid },
@@ -116,7 +116,7 @@ export class BaramYeonCharacterClient {
    * ```
    */
   async getTitleEquipment(params: BaramYeonOcidRequest): Promise<BaramYeonCharacterTitleEquipment> {
-    assertNonEmpty(params.ocid, 'ocid', OCID_HINT);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<BaramYeonCharacterTitleEquipment>(
       `${BaramYeonCharacterClient.BASE}/character/title-equipment`,
       { ocid: params.ocid },

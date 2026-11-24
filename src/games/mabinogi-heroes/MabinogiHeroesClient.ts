@@ -1,3 +1,4 @@
+import { assertNonEmptyString } from '../../core/validation/input.js';
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
 import { MabinogiHeroesCharacterClient } from './character/MabinogiHeroesCharacterClient.js';
 import { MabinogiHeroesMarketplaceClient } from './marketplace/MabinogiHeroesMarketplaceClient.js';
@@ -6,7 +7,6 @@ import { MabinogiHeroesNoticeClient } from './notice/MabinogiHeroesNoticeClient.
 import { MabinogiHeroesRankingClient } from './ranking/MabinogiHeroesRankingClient.js';
 import { HEROES_OCID_SHAPE } from './shapes.js';
 import type { HeroesOCID } from './types.js';
-import { assertNonEmptyString } from './validation.js';
 
 /**
  * 마비노기 영웅전 클라이언트.

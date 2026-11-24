@@ -1,8 +1,12 @@
+import {
+  assertDateInRange,
+  assertNonEmptyString,
+  invalidInput,
+} from '../../core/validation/input.js';
 import { AbstractMapleBaseClient } from '../_base/AbstractMapleStoryBaseClient.js';
 import type { OCID } from '../_base/maple-base-types.js';
 import { MapleStoryTWCharacterClient } from './character/MapleStoryTWCharacterClient.js';
 import { MapleStoryTWGuildClient } from './guild/MapleStoryTWGuildClient.js';
-import { requireNonBlank } from './query-params.js';
 import { OCID_SHAPE } from './shapes.js';
 import type { TWDate, TWOcidResponse } from './types.js';
 import { MapleStoryTWUnionClient } from './union/MapleStoryTWUnionClient.js';
@@ -65,7 +69,7 @@ export class MapleStoryTWClient extends AbstractMapleBaseClient {
    * Retrieve the identifier (OCID) for a character.
    *
    * @param characterName - Character name to look up.
-   * @throws {TypeError} The character name is blank.
+   * @throws {NexonBadRequestError} The character name is blank.
    * @throws {NexonNotFoundError} The character was not found.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
@@ -77,7 +81,11 @@ export class MapleStoryTWClient extends AbstractMapleBaseClient {
    * ```
    */
   async getOcid(characterName: string): Promise<OCID> {
-    requireNonBlank(characterName, 'characterName', 'Enter a MapleStory Taiwan character name.');
+    assertNonEmptyString(
+      characterName,
+      'characterName',
+      'Enter a MapleStory Taiwan character name.',
+    );
     const response = await this.http.get<TWOcidResponse>(
       this.buildUrl('id'),
       { character_name: characterName },
@@ -93,7 +101,7 @@ export class MapleStoryTWClient extends AbstractMapleBaseClient {
     try {
       formatted = this.formatDate(date);
     } catch {
-      throw new RangeError(INVALID_DATE);
+      invalidInput(INVALID_DATE);
     }
 
     // formatDate preserves calendar strings verbatim and Date can roll over invalid ISO days.
@@ -102,13 +110,11 @@ export class MapleStoryTWClient extends AbstractMapleBaseClient {
     const day = inputDay ?? formatted;
     const parsed = new Date(`${day}T00:00:00Z`);
     if (!Number.isFinite(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== day) {
-      throw new RangeError(INVALID_DATE);
+      invalidInput(INVALID_DATE);
     }
 
     const today = this.formatDate('today');
-    if (formatted < availableFrom || formatted > today) {
-      throw new RangeError(`date must be between ${availableFrom} and ${today} (Taiwan time).`);
-    }
+    assertDateInRange(formatted, availableFrom, today, 'Use a date in Taiwan time.');
     return formatted;
   }
 }

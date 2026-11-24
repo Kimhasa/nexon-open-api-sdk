@@ -1,5 +1,5 @@
+import { assertNonEmptyString, assertOneOf, invalidInput } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
-import { NexonError } from '../../../core/errors/NexonError.js';
 import {
   TFD_LEADERBOARD_VOID_EROSION_PURGE_CHALLENGE_SHAPE,
   TFD_LEADERBOARD_VOID_INTERCEPT_BATTLE_SHAPE,
@@ -21,10 +21,6 @@ interface LeaderboardFilterQuery {
   readonly platform_type: string;
 }
 
-const fail = (problem: string, fix: string): never => {
-  throw new NexonError(`${problem} 퍼스트 디센던트 API에 요청을 보내지 않았습니다.\n→ ${fix}`);
-};
-
 /**
  * 리더보드 공통 조건을 검증하고 쿼리로 바꾼다.
  *
@@ -40,40 +36,29 @@ function toFilterQuery(params: {
   const { leaderboard_type, descendant_id, squad_user_count } = params;
   const platform_type = params.platform_type ?? 'All';
 
-  if (leaderboard_type !== 'Solo' && leaderboard_type !== 'Squad') {
-    fail(
-      `leaderboard_type 값이 올바르지 않습니다: ${JSON.stringify(leaderboard_type)}.`,
-      "'Solo' 또는 'Squad' 를 넘기세요 (대소문자 구분).",
-    );
-  }
-  if (!PLATFORM_TYPES.includes(platform_type)) {
-    fail(
-      `platform_type 값이 올바르지 않습니다: ${JSON.stringify(platform_type)}.`,
-      `다음 중 하나를 넘기세요 (대소문자 구분): ${PLATFORM_TYPES.join(', ')}. 생략하면 'All' 입니다.`,
-    );
-  }
+  assertOneOf(leaderboard_type, ['Solo', 'Squad'], 'leaderboard_type');
+  assertOneOf(platform_type, PLATFORM_TYPES, 'platform_type', "생략하면 'All'입니다.");
   if (leaderboard_type === 'Solo' && squad_user_count !== undefined) {
-    fail(
+    invalidInput(
       "leaderboard_type이 'Solo' 인데 squad_user_count가 들어왔습니다.",
       "squad_user_count를 빼거나 leaderboard_type을 'Squad' 로 바꾸세요. 솔로는 descendant_id로 거릅니다.",
     );
   }
   if (leaderboard_type === 'Squad' && descendant_id !== undefined) {
-    fail(
+    invalidInput(
       "leaderboard_type이 'Squad' 인데 descendant_id가 들어왔습니다.",
       "descendant_id를 빼거나 leaderboard_type을 'Solo' 로 바꾸세요. 스쿼드는 squad_user_count로 거릅니다.",
     );
   }
-  if (squad_user_count !== undefined && !SQUAD_USER_COUNTS.includes(squad_user_count)) {
-    fail(
-      `squad_user_count 값이 올바르지 않습니다: ${JSON.stringify(squad_user_count)}.`,
-      '2, 3, 4 중 하나를 숫자로 넘기세요.',
-    );
+  if (squad_user_count !== undefined) {
+    assertOneOf(squad_user_count, SQUAD_USER_COUNTS, 'squad_user_count');
   }
-  if (descendant_id !== undefined && descendant_id.trim() === '') {
-    fail(
-      'descendant_id 값이 비어 있습니다.',
+  if (descendant_id !== undefined) {
+    assertNonEmptyString(
+      descendant_id,
+      'descendant_id',
       'client.firstDescendant.meta.getDescendant() 응답의 descendant_id를 넘기거나 필드를 빼세요.',
+      'trim-not-empty',
     );
   }
 
@@ -112,8 +97,7 @@ export class FirstDescendantLeaderboardClient {
    *
    * @param params - `leaderboard_type` (`'Solo'` | `'Squad'`), 솔로면 `descendant_id`, 스쿼드면 `squad_user_count` (2 | 3 | 4),
    *   `platform_type` (기본값 `'All'`), `contents_type` (기본값 `'RiskMode'`)
-   * @throws {NexonError} 조건 조합이나 값이 올바르지 않을 때 (요청 전 SDK 검증)
-   * @throws {NexonBadRequestError} 파라미터가 유효하지 않을 때
+   * @throws {NexonBadRequestError} 조건 조합이나 값이 올바르지 않을 때 (요청 전 SDK 검증)
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
    *
@@ -134,12 +118,7 @@ export class FirstDescendantLeaderboardClient {
   ): Promise<TfdLeaderboardVoidInterceptBattle> {
     const filter = toFilterQuery(params);
     const contentsType = params.contents_type ?? 'RiskMode';
-    if (contentsType !== 'RiskMode') {
-      fail(
-        `contents_type 값이 올바르지 않습니다: ${JSON.stringify(contentsType)}.`,
-        "'RiskMode' 를 넘기거나 필드를 빼세요 (현재 스펙이 허용하는 값은 이것뿐입니다).",
-      );
-    }
+    assertOneOf(contentsType, ['RiskMode'], 'contents_type', "생략하면 'RiskMode'입니다.");
     return this.http.get<TfdLeaderboardVoidInterceptBattle>(
       `${FirstDescendantLeaderboardClient.BASE}/leaderboard/void-intercept-battle`,
       {
@@ -158,8 +137,7 @@ export class FirstDescendantLeaderboardClient {
    *
    * @param params - `leaderboard_type` (`'Solo'` | `'Squad'`), 솔로면 `descendant_id`, 스쿼드면 `squad_user_count` (2 | 3 | 4),
    *   `platform_type` (기본값 `'All'`)
-   * @throws {NexonError} 조건 조합이나 값이 올바르지 않을 때 (요청 전 SDK 검증)
-   * @throws {NexonBadRequestError} 파라미터가 유효하지 않을 때
+   * @throws {NexonBadRequestError} 조건 조합이나 값이 올바르지 않을 때 (요청 전 SDK 검증)
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
    *

@@ -1,6 +1,6 @@
+import { assertNonEmptyString } from '../../core/validation/input.js';
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
 import { Hit2CharacterClient } from './character/Hit2CharacterClient.js';
-import { assertNonEmpty } from './input-validation.js';
 import { HIT2_OCID_SHAPE } from './shapes.js';
 import type { Hit2OCID } from './types.js';
 
@@ -54,7 +54,7 @@ export class Hit2Client extends AbstractGameClient {
    * ```
    */
   async getOcid(characterName: string): Promise<Hit2OCID> {
-    assertNonEmpty(
+    assertNonEmptyString(
       characterName,
       'characterName',
       "client.hit2.getOcid('캐릭터명') 처럼 조회할 캐릭터 명을 전달해주세요.",

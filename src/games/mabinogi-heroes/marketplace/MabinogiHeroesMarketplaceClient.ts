@@ -1,5 +1,5 @@
+import { assertNonEmptyString } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
-import { assertNonEmptyString } from '../validation.js';
 import {
   HEROES_GOLD_MARKET_BUY_TOP_30_SHAPE,
   HEROES_GOLD_MARKET_SELL_TOP_30_SHAPE,
@@ -22,7 +22,7 @@ import type {
  * import { NexonClient } from 'nexon-open-api';
  *
  * const client = new NexonClient({ apiKey: 'your-api-key' });
- * const history = await client.mabinogiHeroes.marketplace.getHistory({ item_name: '인챈트 스크롤' });
+ * const history = await client.mabinogiHeroes.marketplace.listHistory({ item_name: '인챈트 스크롤' });
  * const buyers = await client.mabinogiHeroes.marketplace.getGoldBuyTop30();
  * ```
  */
@@ -47,14 +47,14 @@ export class MabinogiHeroesMarketplaceClient {
    *
    * @example
    * ```ts
-   * const first = await client.mabinogiHeroes.marketplace.getHistory({ item_name: '인챈트 스크롤' });
+   * const first = await client.mabinogiHeroes.marketplace.listHistory({ item_name: '인챈트 스크롤' });
    * for (const record of first.item) {
    *   console.log(record.date_update, record.average_price, record.item_option?.prefix_enchant_preset_1);
    * }
    *
    * // 다음 페이지
    * if (first.next_cursor) {
-   *   const next = await client.mabinogiHeroes.marketplace.getHistory({
+   *   const next = await client.mabinogiHeroes.marketplace.listHistory({
    *     item_name: '인챈트 스크롤',
    *     cursor: first.next_cursor,
    *   });
@@ -62,7 +62,7 @@ export class MabinogiHeroesMarketplaceClient {
    * }
    * ```
    */
-  async getHistory(params: HeroesMarketHistoryRequest): Promise<HeroesMarketHistory> {
+  async listHistory(params: HeroesMarketHistoryRequest): Promise<HeroesMarketHistory> {
     assertNonEmptyString(
       (params as HeroesMarketHistoryRequest | undefined)?.item_name,
       'item_name',

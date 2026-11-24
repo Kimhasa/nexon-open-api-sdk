@@ -155,12 +155,12 @@ console.log('\n📋 Marketplace API');
 
 const marketItem = process.env['HEROES_MARKET_ITEM'] ?? '인챈트 스크롤';
 
-await test(`marketplace.getHistory (${marketItem})`, async () => {
-  const first = await heroes.marketplace.getHistory({ item_name: marketItem });
+await test(`marketplace.listHistory (${marketItem})`, async () => {
+  const first = await heroes.marketplace.listHistory({ item_name: marketItem });
   if (!Array.isArray(first.item)) throw new Error('item 없음');
   console.log(`    ${first.item.length}건, next_cursor: ${String(first.next_cursor)}`);
   if (first.next_cursor) {
-    const next = await heroes.marketplace.getHistory({
+    const next = await heroes.marketplace.listHistory({
       item_name: marketItem,
       cursor: first.next_cursor,
     });

@@ -1,5 +1,5 @@
+import { assertNonEmptyString } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
-import { assertNonEmpty } from '../input-validation.js';
 import {
   V4_CHARACTER_BASIC_SHAPE,
   V4_CHARACTER_HONOR_EQUIPMENT_SHAPE,
@@ -53,7 +53,7 @@ export class V4CharacterClient {
    * ```
    */
   async getBasic(params: V4OcidRequest): Promise<V4CharacterBasic> {
-    assertNonEmpty(params.ocid, 'ocid', OCID_HINT);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<V4CharacterBasic>(
       `${V4CharacterClient.BASE}/character/basic`,
       { ocid: params.ocid },
@@ -82,7 +82,7 @@ export class V4CharacterClient {
    * ```
    */
   async getHonor(params: V4OcidRequest): Promise<V4CharacterHonor> {
-    assertNonEmpty(params.ocid, 'ocid', OCID_HINT);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<V4CharacterHonor>(
       `${V4CharacterClient.BASE}/character/honor`,
       { ocid: params.ocid },
@@ -109,7 +109,7 @@ export class V4CharacterClient {
    * ```
    */
   async getHonorEquipment(params: V4OcidRequest): Promise<V4CharacterHonorEquipment> {
-    assertNonEmpty(params.ocid, 'ocid', OCID_HINT);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<V4CharacterHonorEquipment>(
       `${V4CharacterClient.BASE}/character/honor-equipment`,
       { ocid: params.ocid },

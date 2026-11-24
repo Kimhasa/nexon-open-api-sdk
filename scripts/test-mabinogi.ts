@@ -30,12 +30,16 @@ async function test(name: string, check: () => Promise<void>): Promise<void> {
   }
 }
 
-await test('npcShop.list', async () => {
-  const result = await mabinogi.npcShop.list({ npc_name: '델', server_name: '류트', channel: 1 });
+await test('npcShop.getList', async () => {
+  const result = await mabinogi.npcShop.getList({
+    npc_name: '델',
+    server_name: '류트',
+    channel: 1,
+  });
   assert.ok(Array.isArray(result.shop), 'shop 배열 누락');
 });
-await test('auction.list', async () => {
-  const result = await mabinogi.auction.list(filters);
+await test('auction.listItems', async () => {
+  const result = await mabinogi.auction.listItems(filters);
   assert.ok(Array.isArray(result.auction_item), 'auction_item 배열 누락');
   if (result.next_cursor !== null) {
     assert.equal(
@@ -43,7 +47,7 @@ await test('auction.list', async () => {
       'string',
       'next_cursor는 문자열 또는 null이어야 합니다.',
     );
-    const next = await mabinogi.auction.list({ ...filters, cursor: result.next_cursor });
+    const next = await mabinogi.auction.listItems({ ...filters, cursor: result.next_cursor });
     assert.ok(Array.isArray(next.auction_item), '다음 페이지의 auction_item 배열 누락');
   }
 });

@@ -89,7 +89,9 @@ describe('KartriderClient', () => {
 
     it('빈 라이더 명은 요청 없이 NexonBadRequestError를 던진다', async () => {
       await expect(createClient().getOuidInfo('  ')).rejects.toThrow(NexonBadRequestError);
-      await expect(createClient().getOuidInfo('')).rejects.toThrow(/racerName 값이 비어 있습니다/);
+      await expect(createClient().getOuidInfo('')).rejects.toThrow(
+        /racerName 값이 비어 있거나 문자열이 아닙니다/,
+      );
       expect(requests).toHaveLength(0);
     });
   });
@@ -168,7 +170,9 @@ describe('KartriderClient', () => {
       const { notice } = createClient();
 
       await expect(notice.getDetail(Number.NaN)).rejects.toThrow(NexonBadRequestError);
-      await expect(notice.getSeasonDetail(1.5)).rejects.toThrow(/noticeId 는 정수여야 합니다/);
+      await expect(notice.getSeasonDetail(1.5)).rejects.toThrow(
+        /noticeId.*안전한 정수.*getSeasonList/,
+      );
       await expect(notice.getEventDetail(Number.POSITIVE_INFINITY)).rejects.toThrow(
         NexonBadRequestError,
       );

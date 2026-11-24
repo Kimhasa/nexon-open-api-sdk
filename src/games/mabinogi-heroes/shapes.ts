@@ -1,3 +1,4 @@
+import { arrayOf } from '../../core/validation/response-shape.js';
 import type { ShapeDescriptor } from '../../core/validation/response-shape.js';
 
 /**
@@ -7,7 +8,6 @@ import type { ShapeDescriptor } from '../../core/validation/response-shape.js';
  * `responseValidation: true` 시 런타임에서 응답 shape drift를 감지하는 데 사용됩니다.
  *
  * - null이 올 수 있는 문자열 키는 `'any'` 로 둔다 (validator가 null을 `'object'` 로만 허용하기 때문).
- * - 랭킹 API 2개는 응답이 top-level 배열이라 descriptor가 없다 (validator는 객체 키만 비교한다).
  */
 
 // ─── ID ─────────────────────────────────────────────────────────────────────
@@ -17,6 +17,15 @@ export const HEROES_OCID_SHAPE: ShapeDescriptor = {
     ocid: 'string',
   },
 };
+
+export const HEROES_RANKING_SHAPE = arrayOf({
+  expectedKeys: {
+    ranking_type: 'string',
+    ranking: 'number',
+    character_name: 'string',
+    score: 'number',
+  },
+});
 
 // ─── Character ──────────────────────────────────────────────────────────────
 

@@ -1,5 +1,5 @@
+import { assertNonEmptyString } from '../../../core/validation/input.js';
 import { SEA_GUILD_ID_SHAPE, SEA_GUILD_BASIC_SHAPE } from '../shapes.js';
-import { assertNonBlank } from '../validate-input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { GuildId } from '../../_base/maple-base-types.js';
 import type { GuildIdDateRequest } from '../../_base/maple-base-types.js';
@@ -41,8 +41,8 @@ export class MapleStorySEAGuildClient {
    * ```
    */
   async getId(guildName: string, worldName: string): Promise<GuildId> {
-    assertNonBlank(guildName, 'guildName');
-    assertNonBlank(worldName, 'worldName');
+    assertNonEmptyString(guildName, 'guildName', undefined, 'trim-truthy');
+    assertNonEmptyString(worldName, 'worldName', undefined, 'trim-truthy');
     const response = await this.http.get<{ oguild_id: string }>(
       `${MapleStorySEAGuildClient.BASE}/guild/id`,
       { guild_name: guildName, world_name: worldName },
@@ -69,7 +69,7 @@ export class MapleStorySEAGuildClient {
    * ```
    */
   async getBasic(params: GuildIdDateRequest): Promise<SEAGuildBasic> {
-    assertNonBlank(params.oguild_id, 'oguild_id');
+    assertNonEmptyString(params.oguild_id, 'oguild_id', undefined, 'trim-truthy');
     return this.http.get<SEAGuildBasic>(
       `${MapleStorySEAGuildClient.BASE}/guild/basic`,
       {

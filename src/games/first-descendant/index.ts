@@ -1,4 +1,8 @@
 export { FirstDescendantClient } from './FirstDescendantClient.js';
+export { FirstDescendantLeaderboardClient } from './leaderboard/FirstDescendantLeaderboardClient.js';
+export { FirstDescendantMetaClient } from './meta/FirstDescendantMetaClient.js';
+export { FirstDescendantRecommendationClient } from './recommendation/FirstDescendantRecommendationClient.js';
+export { FirstDescendantUserClient } from './user/FirstDescendantUserClient.js';
 
 // Common types
 export { TFD_LANGUAGE_CODES } from './types.js';

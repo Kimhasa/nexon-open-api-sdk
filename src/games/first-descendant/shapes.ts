@@ -6,9 +6,6 @@ import type { ShapeDescriptor } from '../../core/validation/response-shape.js';
  * 각 엔드포인트의 top-level 키와 타입을 정의합니다.
  * `responseValidation: true` 시 런타임에서 응답 shape drift를 감지하는 데 사용됩니다.
  *
- * 정적 메타데이터(`/static/tfd/meta/...`)는 응답 최상위가 배열이라 top-level 키가 없다.
- * `validateShape` 는 객체만 다루므로 메타데이터에는 descriptor를 두지 않는다.
- *
  * 키가 필요한 API는 실응답을 확인하지 못했다(스펙 기준). 스펙이 nullable 여부를 밝히지 않는
  * 부가 필드는 오탐을 피하려고 타입 대신 존재 여부(`'any'`)만 확인한다.
  */

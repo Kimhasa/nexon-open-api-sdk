@@ -331,20 +331,20 @@ describe('MabinogiHeroesClient', () => {
   });
 
   describe('marketplace', () => {
-    it('getHistory — GET /heroes/v2/marketplace/market-history (첫 페이지, cursor 생략)', async () => {
+    it('listHistory — GET /heroes/v2/marketplace/market-history (첫 페이지, cursor 생략)', async () => {
       const harness = createHarness();
-      const result = await harness.client.marketplace.getHistory({ item_name: '인챈트 스크롤' });
+      const result = await harness.client.marketplace.listHistory({ item_name: '인챈트 스크롤' });
 
       expect(result).toEqual(heroesMarketHistoryFixture);
       expect(result.next_cursor).toBe(HEROES_MARKET_NEXT_CURSOR);
       expectRequest(harness, `${V2}/marketplace/market-history`, { item_name: '인챈트 스크롤' });
     });
 
-    it('getHistory — next_cursor를 cursor로 넘겨 다음 페이지를 조회한다', async () => {
+    it('listHistory — next_cursor를 cursor로 넘겨 다음 페이지를 조회한다', async () => {
       const harness = createHarness();
       const { marketplace } = harness.client;
-      const first = await marketplace.getHistory({ item_name: '테스트 팔찌' });
-      const next = await marketplace.getHistory({
+      const first = await marketplace.listHistory({ item_name: '테스트 팔찌' });
+      const next = await marketplace.listHistory({
         item_name: '테스트 팔찌',
         cursor: first.next_cursor ?? undefined,
       });
@@ -357,23 +357,23 @@ describe('MabinogiHeroesClient', () => {
       });
     });
 
-    it('getHistory — 빈 item_name은 요청 없이 NexonBadRequestError', async () => {
+    it('listHistory — 빈 item_name은 요청 없이 NexonBadRequestError', async () => {
       const harness = createHarness();
 
-      await expect(harness.client.marketplace.getHistory({ item_name: '' })).rejects.toThrow(
+      await expect(harness.client.marketplace.listHistory({ item_name: '' })).rejects.toThrow(
         NexonBadRequestError,
       );
-      await expect(harness.client.marketplace.getHistory({ item_name: '' })).rejects.toThrow(
+      await expect(harness.client.marketplace.listHistory({ item_name: '' })).rejects.toThrow(
         /item_name/,
       );
       expect(harness.requests).toHaveLength(0);
     });
 
-    it('getHistory — 서버가 cursor를 거부하면 NexonBadRequestError (400 / OPENAPI00004)', async () => {
+    it('listHistory — 서버가 cursor를 거부하면 NexonBadRequestError (400 / OPENAPI00004)', async () => {
       const { client } = createHarness();
 
       await expect(
-        client.marketplace.getHistory({ item_name: '인챈트 스크롤', cursor: 'invalid-cursor' }),
+        client.marketplace.listHistory({ item_name: '인챈트 스크롤', cursor: 'invalid-cursor' }),
       ).rejects.toThrow(NexonBadRequestError);
     });
 
@@ -411,6 +411,20 @@ describe('MabinogiHeroesClient', () => {
       expect(Array.isArray(result)).toBe(true);
       expect(result).toEqual(heroesRealTimeRankingFixture);
       expectRequest(harness, `${V2}/ranking/real-time`, { ranking_type: '1', page_no: '2' });
+    });
+
+    it('랭킹 배열 항목에 누락된 필드를 보고하고 응답을 반환한다', async () => {
+      const harness = createHarness();
+      const url = `${V2}/ranking/hall-of-honor`;
+      const response = [{ ranking_type: '0', ranking: 1, character_name: '합성 캐릭터' }];
+      server.use(http.get(url, () => HttpResponse.json(response)));
+
+      await expect(harness.client.ranking.getHallOfHonor({ ranking_type: '0' })).resolves.toEqual(
+        response,
+      );
+      expect(harness.mismatches).toEqual([
+        expect.objectContaining({ url: `${url}?ranking_type=0`, missingKeys: ['[0].score'] }),
+      ]);
     });
 
     it('잘못된 ranking_type / page_no는 요청 없이 NexonBadRequestError', async () => {

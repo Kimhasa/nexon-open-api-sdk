@@ -150,6 +150,7 @@ export class NexonClient {
    * const ocid = await client.mabinogiHeroes.getOcid('캐릭터명');
    * const basic = await client.mabinogiHeroes.character.getBasic({ ocid });
    * const ranking = await client.mabinogiHeroes.ranking.getHallOfHonor({ ranking_type: '0' });
+   * const history = await client.mabinogiHeroes.marketplace.listHistory({ item_name: '인챈트 스크롤' });
    * ```
    */
   get mabinogiHeroes(): MabinogiHeroesClient {
@@ -159,6 +160,12 @@ export class NexonClient {
 
   /**
    * 서든어택 클라이언트.
+   *
+   * @example
+   * ```ts
+   * const ouid = await client.suddenAttack.getOuid('닉네임');
+   * const matches = await client.suddenAttack.match.getList({ ouid, match_mode: '폭파미션' });
+   * ```
    */
   get suddenAttack(): SuddenAttackClient {
     this._suddenAttack ??= new SuddenAttackClient(this.http);
@@ -195,6 +202,12 @@ export class NexonClient {
 
   /**
    * 마비노기 클라이언트.
+   *
+   * @example
+   * ```ts
+   * const shop = await client.mabinogi.npcShop.getList({ npc_name: '델', server_name: '류트', channel: 1 });
+   * const items = await client.mabinogi.auction.listItems({ auction_item_category: '검' });
+   * ```
    */
   get mabinogi(): MabinogiClient {
     this._mabinogi ??= new MabinogiClient(this.http);

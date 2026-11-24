@@ -1,4 +1,8 @@
 export { MabinogiClient } from './MabinogiClient.js';
+export { MabinogiAuctionClient } from './auction/MabinogiAuctionClient.js';
+export { MabinogiHornBugleWorldClient } from './horn-bugle-world/MabinogiHornBugleWorldClient.js';
+export { MabinogiNpcShopClient } from './npc-shop/MabinogiNpcShopClient.js';
+
 export type { MabinogiServerName, MabinogiItemOption } from './types.js';
 export type {
   MabinogiNpcName,

@@ -1,3 +1,4 @@
+import { NexonBadRequestError } from '../../../src/core/errors/NexonBadRequestError.js';
 import { http, HttpResponse } from 'msw';
 import { describe, expect, it, vi } from 'vitest';
 import type { Mock } from 'vitest';
@@ -342,20 +343,22 @@ describe('MapleStoryTWClient', () => {
     'rejects invalid or future date %s before making a request',
     async (date) => {
       const { client, onRequest } = createClient();
-      await expect(client.character.getBasic({ ocid: TEST_OCID, date })).rejects.toThrow(
-        RangeError,
-      );
+      const result = client.character.getBasic({ ocid: TEST_OCID, date });
+      await expect(result).rejects.toThrow(NexonBadRequestError);
+      await expect(result).rejects.toMatchObject({ code: 'OPENAPI00004' });
       expect(onRequest).not.toHaveBeenCalled();
     },
   );
 
   it('rejects blank identifiers and lookup names before making a request', async () => {
     const { client, onRequest } = createClient();
-    await expect(client.getOcid(' ')).rejects.toThrow(/characterName must be a non-empty string/);
+    await expect(client.getOcid(' ')).rejects.toThrow(
+      /characterName.*Enter a MapleStory Taiwan character name/,
+    );
     await expect(client.character.getBasic({ ocid: '' as OCID })).rejects.toThrow('getOcid()');
     await expect(client.union.getUnion({ ocid: ' ' as OCID })).rejects.toThrow('getOcid()');
     await expect(client.guild.getId('', '艾麗亞')).rejects.toThrow(
-      /guildName must be a non-empty string/,
+      /guildName.*Enter a MapleStory Taiwan guild name/,
     );
     await expect(client.guild.getBasic({ oguild_id: '' as GuildId })).rejects.toThrow(
       'guild.getId()',
@@ -366,11 +369,11 @@ describe('MapleStoryTWClient', () => {
   it('rejects a world or skill grade outside the portal enums', async () => {
     const { client, onRequest } = createClient();
     await expect(client.guild.getId('FixtureGuild', 'Aquila' as TWWorldName)).rejects.toThrow(
-      /worldName must be one of/,
+      /worldName.*"艾麗亞"/,
     );
     await expect(
       client.character.getSkill({ ocid: TEST_OCID, character_skill_grade: '7' as TWSkillGrade }),
-    ).rejects.toThrow(/character_skill_grade must be one of/);
+    ).rejects.toThrow(/character_skill_grade.*"0"/);
     expect(onRequest).not.toHaveBeenCalled();
   });
 

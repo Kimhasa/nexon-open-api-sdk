@@ -1,6 +1,6 @@
+import { assertNonEmptyString } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { HeroesOcidRequest } from '../types.js';
-import { assertNonEmptyString } from '../validation.js';
 import {
   HEROES_CHARACTER_BASIC_SHAPE,
   HEROES_CHARACTER_GUILD_SHAPE,
