@@ -66,13 +66,27 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
 
   // [slot:heroes] 마비노기 영웅전
 
-  // [slot:suddenattack] 서든어택
+  suddenattack: {
+    game: '서든어택',
+    pathPrefix: 'suddenattack',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 11,
+    note: 'Portal OpenAPI spec (specs/openapi/suddenattack/, 2026-11-24). All four static metadata endpoints verified against live data. Authenticated endpoints were mocked from the spec.',
+  },
 
   // [slot:kartrush] 카트라이더 러쉬플러스
 
   // [slot:baram] 바람의나라
 
-  // [slot:mabinogi] 마비노기
+  mabinogi: {
+    game: '마비노기',
+    pathPrefix: 'mabinogi',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 5,
+    note: 'Portal OpenAPI spec (specs/openapi/mabinogi/, 2026-11-24). Fixtures synthesized from the spec. Not verified with a real API key.',
+  },
 
   // [slot:baramy] 바람의나라: 연
 
