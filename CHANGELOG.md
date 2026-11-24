@@ -19,6 +19,7 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 - `yarn check:exports` — 빌드된 패키지의 sub-path별 CJS/ESM 타입 해석 검사 (`@arethetypeswrong/cli`)
 - 메이플스토리 `GuildBasic.guild_user_count` (포털 스펙 반영, optional)
 - 메이플스토리 `GuildBasic.guild_auto_update_test` (포털 스펙 `specs/openapi/maplestory/16.yaml` 반영, optional). 포털 설명이 "자동 반영 파이프라인 검증용 테스트 필드"인 합성 필드이므로 머지 전 사람이 검토한다
+- 메이플스토리 `GuildBasic.guild_auto_update_count` (포털 스펙 `specs/openapi/maplestory/16.yaml` 반영, optional). 마찬가지로 포털의 합성 테스트 필드이므로 머지 전 사람이 검토한다
 - `API_METADATA` 에 `fconline` 엔트리
 - 메이플스토리: 포털 신규 API 8개 (48 → 56)
   - 연무장 `battlePractice.getReplayId()`, `getResult()`, `getSkillTimeline()`, `getCharacterInfo()`

@@ -65,6 +65,8 @@ export interface GuildBasic {
   readonly guild_point: number;
   /** 자동 반영 파이프라인 검증용 테스트 필드 (포털 스펙에 합성으로 추가된 값) */
   readonly guild_auto_update_test?: string | undefined;
+  /** 자동 반영 파이프라인 검증용 두 번째 테스트 필드 (포털 스펙에 합성으로 추가된 값) */
+  readonly guild_auto_update_count?: number | undefined;
   /** 길드 마스터 캐릭터 명 */
   readonly guild_master_name: string;
   /** 길드 캐릭터 전체 수 */

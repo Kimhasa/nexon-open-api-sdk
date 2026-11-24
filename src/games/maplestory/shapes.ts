@@ -450,6 +450,7 @@ export const GUILD_BASIC_SHAPE: ShapeDescriptor = {
     guild_mark: 'optional',
     guild_mark_custom: 'optional',
     guild_auto_update_test: 'optional',
+    guild_auto_update_count: 'optional',
   },
 };
 

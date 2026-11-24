@@ -31,7 +31,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
     endpointCount: 56,
-    note: 'Portal OpenAPI spec (specs/openapi/maplestory/, 2026-11-24; guild/basic from 16.yaml incl. guild_auto_update_test): all 56 operations, request params and response fields compared. Not verified with a real API key; the last real-API E2E run was 43/43 on 2026-03-05 (PR #2, 48 methods).',
+    note: 'Portal OpenAPI spec (specs/openapi/maplestory/, 2026-11-24; guild/basic from 16.yaml incl. guild_auto_update_test, guild_auto_update_count): all 56 operations, request params and response fields compared. Not verified with a real API key; the last real-API E2E run was 43/43 on 2026-03-05 (PR #2, 48 methods).',
   },
   maplestorym: {
     game: 'MapleStory M',

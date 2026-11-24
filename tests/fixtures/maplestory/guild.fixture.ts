@@ -12,6 +12,7 @@ export const guildBasicFixture: GuildBasic = {
   guild_fame: 150000,
   guild_point: 5000,
   guild_auto_update_test: 'test',
+  guild_auto_update_count: 1,
   guild_master_name: '길드마스터',
   guild_member_count: 150,
   guild_user_count: 100,
