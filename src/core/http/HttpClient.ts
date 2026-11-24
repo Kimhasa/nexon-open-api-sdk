@@ -8,6 +8,7 @@ import type {
   HttpClientConfig,
   HttpLogger,
   HttpRequestInfo,
+  HttpRequestOptions,
   RequestInterceptor,
   ResponseInterceptor,
   RetryInterceptor,
@@ -83,11 +84,25 @@ export class HttpClient {
    * @param url - 완전한 URL 문자열
    * @param params - URL 쿼리 파라미터
    * @param shape - 응답 shape descriptor (`responseValidation: true` 시에만 사용)
+   * @param options - 요청별 옵션. `headers` 로 이 요청의 헤더를 추가·덮어쓰기·제거한다.
+   *   인터셉터, 재시도, 타임아웃, 로거, shape 검증은 옵션과 무관하게 똑같이 적용된다
+   *
+   * @example
+   * ```ts
+   * // 기본 호출: x-nxopen-api-key 가 자동으로 붙는다
+   * const basic = await http.get<CharacterBasic>(url, { ocid }, CHARACTER_BASIC_SHAPE);
+   *
+   * // 요청별 헤더: 기본 API 키 헤더를 제거하고 다른 인증 헤더를 보낸다
+   * const { ouid } = await http.get<{ ouid: string }>(url, undefined, OUID_SHAPE, {
+   *   headers: { 'x-nxopen-api-key': undefined, 'x-nxopen-legacy-api-key': legacyApiKey },
+   * });
+   * ```
    */
   async get<T>(
     url: string,
     params?: Record<string, string | number | boolean | undefined>,
     shape?: ShapeDescriptor,
+    options?: HttpRequestOptions,
   ): Promise<T> {
     const cleanedParams = cleanParams(params);
     const fullUrl = buildUrl(url, cleanedParams);
@@ -95,10 +110,13 @@ export class HttpClient {
     let requestInfo: HttpRequestInfo = {
       url: fullUrl,
       method: 'GET',
-      headers: {
-        'x-nxopen-api-key': this.apiKey,
-        Accept: 'application/json',
-      },
+      headers: mergeHeaders(
+        {
+          'x-nxopen-api-key': this.apiKey,
+          Accept: 'application/json',
+        },
+        options?.headers,
+      ),
       params: cleanedParams,
     };
 
@@ -202,6 +220,29 @@ export class HttpClient {
 
     throw classifyError(response.status, payload, retryAfterMs);
   }
+}
+
+/**
+ * 기본 헤더에 요청별 헤더를 병합한다.
+ *
+ * HTTP 헤더 이름은 대소문자를 구분하지 않으므로, 표기가 달라도 같은 헤더로 보고
+ * 기본 값을 먼저 지운 뒤 덮어쓴다 (`accept` 와 `Accept` 가 함께 나가지 않게).
+ * 값이 `undefined` 면 지우기만 한다.
+ */
+function mergeHeaders(
+  base: Record<string, string>,
+  overrides: Readonly<Record<string, string | undefined>> | undefined,
+): Record<string, string> {
+  if (!overrides) return base;
+  const merged = { ...base };
+  for (const [name, value] of Object.entries(overrides)) {
+    const lower = name.toLowerCase();
+    for (const existing of Object.keys(merged)) {
+      if (existing.toLowerCase() === lower) delete merged[existing];
+    }
+    if (value !== undefined) merged[name] = value;
+  }
+  return merged;
 }
 
 /** URL에 쿼리 파라미터를 붙인다. */

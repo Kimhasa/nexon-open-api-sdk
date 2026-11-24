@@ -203,4 +203,146 @@ describe('HttpClient', () => {
       expect(interceptor.mock.calls[0]?.[0]).toHaveProperty('status', 200);
     });
   });
+
+  describe('요청별 옵션 (headers)', () => {
+    const captureHeaders = (): (() => Headers) => {
+      let captured: Headers | undefined;
+      server.use(
+        http.get(TEST_URL, ({ request }) => {
+          captured = request.headers;
+          return HttpResponse.json({ ok: true });
+        }),
+      );
+      return () => {
+        if (!captured) throw new Error('요청이 기록되지 않았습니다');
+        return captured;
+      };
+    };
+
+    it('옵션 없이 호출하면 기본 헤더만 보낸다', async () => {
+      const headers = captureHeaders();
+      await createClient().get(TEST_URL, { key: 'value' }, undefined);
+
+      expect(headers().get('x-nxopen-api-key')).toBe(TEST_API_KEY);
+      expect(headers().get('accept')).toBe('application/json');
+      expect(headers().get('x-extra')).toBeNull();
+    });
+
+    it('빈 옵션 객체는 기본 동작과 같다', async () => {
+      const headers = captureHeaders();
+      await createClient().get(TEST_URL, undefined, undefined, {});
+
+      expect(headers().get('x-nxopen-api-key')).toBe(TEST_API_KEY);
+      expect(headers().get('accept')).toBe('application/json');
+    });
+
+    it('헤더를 추가하고 기본 헤더는 유지한다', async () => {
+      const headers = captureHeaders();
+      await createClient().get(TEST_URL, undefined, undefined, { headers: { 'X-Extra': 'one' } });
+
+      expect(headers().get('x-extra')).toBe('one');
+      expect(headers().get('x-nxopen-api-key')).toBe(TEST_API_KEY);
+    });
+
+    it('같은 이름의 기본 헤더를 덮어쓴다 (대소문자 무시)', async () => {
+      const headers = captureHeaders();
+      await createClient().get(TEST_URL, undefined, undefined, {
+        headers: { 'X-NXOPEN-API-KEY': 'other-key', accept: 'text/plain' },
+      });
+
+      // 표기가 다른 두 헤더가 함께 나가면 fetch가 값을 "a, b"로 합친다
+      expect(headers().get('x-nxopen-api-key')).toBe('other-key');
+      expect(headers().get('accept')).toBe('text/plain');
+    });
+
+    it('undefined 값은 기본 헤더를 제거한다', async () => {
+      const headers = captureHeaders();
+      await createClient().get(TEST_URL, undefined, undefined, {
+        headers: { 'x-nxopen-api-key': undefined, 'x-nxopen-legacy-api-key': 'legacy-key' },
+      });
+
+      expect(headers().get('x-nxopen-api-key')).toBeNull();
+      expect(headers().get('x-nxopen-legacy-api-key')).toBe('legacy-key');
+      expect(headers().get('accept')).toBe('application/json');
+    });
+
+    it('요청별 헤더는 다음 요청에 남지 않는다', async () => {
+      const client = createClient();
+      const first = captureHeaders();
+      await client.get(TEST_URL, undefined, undefined, {
+        headers: { 'x-nxopen-api-key': undefined, 'X-Extra': 'one' },
+      });
+      expect(first().get('x-nxopen-api-key')).toBeNull();
+
+      const second = captureHeaders();
+      await client.get(TEST_URL);
+      expect(second().get('x-nxopen-api-key')).toBe(TEST_API_KEY);
+      expect(second().get('x-extra')).toBeNull();
+    });
+
+    it('Request 인터셉터와 로거가 병합된 헤더를 받는다', async () => {
+      const headers = captureHeaders();
+      const seenByInterceptor: Array<Record<string, string>> = [];
+      const onRequest = vi.fn();
+      const client = createClient({ logger: { onRequest } });
+      client.addRequestInterceptor((req) => {
+        seenByInterceptor.push(req.headers);
+        return { ...req, headers: { ...req.headers, 'X-From-Interceptor': 'yes' } };
+      });
+
+      await client.get(TEST_URL, undefined, undefined, {
+        headers: { 'x-nxopen-api-key': undefined, 'X-Extra': 'one' },
+      });
+
+      expect(seenByInterceptor).toEqual([{ Accept: 'application/json', 'X-Extra': 'one' }]);
+      expect(onRequest).toHaveBeenCalledOnce();
+      expect(headers().get('x-from-interceptor')).toBe('yes');
+      expect(headers().get('x-extra')).toBe('one');
+    });
+
+    it('재시도할 때도 같은 요청별 헤더를 보낸다', async () => {
+      const seen: Array<string | null> = [];
+      const onRetry = vi.fn();
+      server.use(
+        http.get(TEST_URL, ({ request }) => {
+          seen.push(request.headers.get('x-extra'));
+          if (seen.length === 1) {
+            return HttpResponse.json(
+              { error: { name: 'OPENAPI00007', message: 'Too Many Requests' } },
+              { status: 429 },
+            );
+          }
+          return HttpResponse.json({ ok: true });
+        }),
+      );
+
+      const client = createClient({ retryBaseDelayMs: 1 });
+      client.addRetryInterceptor(onRetry);
+      const result = await client.get(TEST_URL, undefined, undefined, {
+        headers: { 'X-Extra': 'one' },
+      });
+
+      expect(result).toEqual({ ok: true });
+      expect(seen).toEqual(['one', 'one']);
+      expect(onRetry).toHaveBeenCalledOnce();
+    });
+
+    it('shape 검증도 그대로 적용된다', async () => {
+      server.use(http.get(TEST_URL, () => HttpResponse.json({ unexpected: 1 })));
+      const onResponseShapeMismatch = vi.fn();
+      const client = createClient({
+        responseValidation: true,
+        logger: { onResponseShapeMismatch },
+      });
+
+      await client.get(
+        TEST_URL,
+        undefined,
+        { expectedKeys: { ouid: 'string' } },
+        { headers: { 'X-Extra': 'one' } },
+      );
+
+      expect(onResponseShapeMismatch).toHaveBeenCalledOnce();
+    });
+  });
 });

@@ -12,7 +12,7 @@ export interface FcMatchTypeMeta {
 
 /** 선수 고유 식별자(spid) 메타데이터 */
 export interface FcSpidMeta {
-  /** 선수 고유 식별자 (seasonId 3자리 + pid 6자리) */
+  /** 선수 고유 식별자 (class 3자리 + pid 6자리) */
   readonly id: number;
   /** 선수명 */
   readonly name: string;
@@ -20,9 +20,9 @@ export interface FcSpidMeta {
 
 // ─── GET /static/fconline/meta/seasonid.json ────────────────────────────────
 
-/** 시즌 아이디 메타데이터 */
+/** @deprecated 선수 클래스 정보는 {@link FcClassMeta}를 사용하세요. */
 export interface FcSeasonIdMeta {
-  /** 시즌 아이디 */
+  /** 기존 선수 클래스 식별자 */
   readonly seasonId: number;
   /** 선수가 속한 클래스 */
   readonly className: string;
@@ -58,4 +58,22 @@ export interface FcDivisionVoltaMeta {
   readonly divisionId: number;
   /** 볼타 경기 등급명 */
   readonly divisionName: string;
+}
+
+/** 공식경기 시즌 메타데이터 */
+export interface FcSeasonMeta {
+  /** 공식경기 매치 종류 */
+  readonly matchtype: number;
+  /** 최신 공식경기 시즌 식별자 */
+  readonly seasonId: number;
+}
+
+/** 선수 클래스 메타데이터 */
+export interface FcClassMeta {
+  /** 선수 클래스 식별자 (spid 앞 3자리) */
+  readonly class: number;
+  /** 선수가 속한 클래스 */
+  readonly className: string;
+  /** 클래스 이미지 경로 */
+  readonly classImg: string;
 }

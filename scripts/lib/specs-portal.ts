@@ -88,7 +88,7 @@ const RETRY_BASE_DELAY_MS = 800;
 const REQUEST_GAP_MS = 150;
 const GAME_PAGE = '/game/[contextPath]';
 const LANGUAGE_PRIORITY = ['ko', 'en', 'zh-cht'];
-const HTTP_METHODS = ['get', 'put', 'post', 'delete', 'patch', 'head', 'options', 'trace'];
+export const HTTP_METHODS = ['get', 'put', 'post', 'delete', 'patch', 'head', 'options', 'trace'];
 /** 게임 목록을 얻으려면 유효한 게임 페이지가 하나 필요하다 (목록 페이지에는 gameResult가 없다) */
 const DEFAULT_SEED_SLUGS = ['maplestory', 'fconline', 'maplestorym'];
 
@@ -119,7 +119,7 @@ function sleep(ms: number): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-async function fetchBytes(url: string): Promise<Buffer> {
+export async function fetchBytes(url: string): Promise<Buffer> {
   let lastError = '';
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
     try {
@@ -256,23 +256,30 @@ function compareText(a: string, b: string): number {
   return a < b ? -1 : a > b ? 1 : 0;
 }
 
-function parseSpec(bytes: Buffer, label: string): ParsedSpec {
+export function parseOpenApi(
+  bytes: Buffer | string,
+  label: string,
+): { root: JsonObject; paths: JsonObject } {
   // 포털 YAML은 들여쓰기가 파일마다 다르고 중복 키가 섞인 파일도 있어 관대하게 읽는다
-  const doc = parseDocument(bytes.toString('utf8'), { uniqueKeys: false, strict: false });
+  const doc = parseDocument(bytes.toString(), { uniqueKeys: false, strict: false });
   const firstError = doc.errors[0];
   if (firstError) throw new CollectError(`YAML 파싱 실패: ${label} (${firstError.message})`);
   const root: unknown = doc.toJS();
   if (!isObject(root) || typeof root['openapi'] !== 'string' || !isObject(root['paths'])) {
     throw new CollectError(`OpenAPI 문서가 아닙니다 (openapi/paths 없음): ${label}`);
   }
+  return { root, paths: root['paths'] };
+}
 
+function parseSpec(bytes: Buffer, label: string): ParsedSpec {
+  const { root, paths } = parseOpenApi(bytes, label);
   const serversRaw = root['servers'];
   const servers = (Array.isArray(serversRaw) ? serversRaw : [])
     .map((server: unknown) => (isObject(server) ? stringOrNull(server['url']) : null))
     .filter((serverUrl): serverUrl is string => serverUrl !== null);
 
   const operations: ManifestOperation[] = [];
-  for (const [path, item] of Object.entries(root['paths'])) {
+  for (const [path, item] of Object.entries(paths)) {
     if (!isObject(item)) continue;
     for (const method of HTTP_METHODS) {
       const operation = item[method];

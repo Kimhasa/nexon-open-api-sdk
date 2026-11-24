@@ -19,6 +19,25 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 - `yarn check:exports` — 빌드된 패키지의 sub-path별 CJS/ESM 타입 해석 검사 (`@arethetypeswrong/cli`)
 - 메이플스토리 `GuildBasic.guild_user_count` (포털 스펙 반영, optional)
 - `API_METADATA` 에 `fconline` 엔트리
+- 메이플스토리: 포털 신규 API 8개 (48 → 56)
+  - 연무장 `battlePractice.getReplayId()`, `getResult()`, `getSkillTimeline()`, `getCharacterInfo()`
+  - 스케줄러 `scheduler.getCharacterState()`
+  - `history.getSoulPotential()`, `character.getRingReserveSkillEquipment()`
+  - `getLegacyOuid(legacyApiKey)` — 구 개발자센터 API 키로 ouid 조회
+- 메이플스토리M: `union.getStat()` 유니온 스탯 (37 → 38)
+- FC 온라인: `getSeasonMeta()` 공식경기 시즌, `getClassMeta()` 선수 클래스 메타데이터 (16 → 18)
+- MapleStorySEA 응답 shape 검증 (`responseValidation`) — 이제 구현된 모든 게임에 적용
+- 메이플스토리·메이플스토리M·MapleStorySEA·FC 온라인 응답 타입에 2026-11 포털 스펙의 새 필드를 optional로 추가
+- `HttpClient.get()` 의 4번째 인자 `HttpRequestOptions` — 요청별 헤더 추가·덮어쓰기, `undefined` 로 기본 헤더 제거
+- FC 온라인 매치 상세 `matchInfo[].division` (optional)
+- 포털 변경 분석 도구
+  - `yarn specs:diff` — 두 스펙 스냅샷을 오퍼레이션·파라미터·응답 필드 단위로 비교하고 SEMVER 기준(MINOR / DEPRECATE / MAJOR)으로 분류
+  - `yarn specs:drift` — SDK 타입과 커밋된 스펙을 필드 단위로 대조. `--strict` 는 baseline(`specs/drift-baseline.json`) 밖의 drift가 있으면 실패
+  - `yarn specs:notices` — 넥슨 Open API 공지에서 새 공지 수집
+- API 변경 자동 대응 (GitHub Actions)
+  - 주간 모니터가 포털 변경을 감지하면 `specs/auto-update` 브랜치에 스펙을 갱신하고 PR을 연다. 본문에는 분류된 diff, drift, 공지를 넣는다
+  - `sdk-auto-update.yml` — Claude Code가 MINOR·DEPRECATE 변경을 SDK에 반영한다. 권한은 읽기 전용이고 샌드박스에서 실행된다. 독립 검증 게이트를 통과한 변경만 워크플로가 커밋한 뒤 CI를 실행하고 PR에 요약을 단다. MAJOR는 사람 판단으로 남긴다
+  - 모니터가 매 실행마다 자신을 다시 활성화해 60일 비활동 비활성화를 방지한다
 
 ### Fixed
 
@@ -28,12 +47,27 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 - Windows(`core.autocrlf=true`) 체크아웃에서 `format:check` 가 실패하던 문제 — `.gitattributes` 로 LF 고정
 - API 모니터가 2026-04부터 실패하던 문제 — 존재하지 않는 `api-change` 라벨, 잘못된 slug 4개, lockfile 미사용, 같은 변경의 반복 보고. `specs:check` 기반으로 재작성
 - CI가 이미 게시된 버전을 다시 `npm publish` 하려다 실패하던 문제 — 게시 전 버전 존재 확인
+- FC 온라인 이미지 URL 헬퍼(`getActionShotUrl`, `getPlayerImageUrl`)가 HTTP 400을 돌려주는 `open.api.nexon.com` 을 가리키던 문제 — 포털 스펙의 CDN `fco.dn.nexoncdn.co.kr` 로 변경 (실측 200)
+- 메이플스토리·메이플스토리M·MapleStorySEA·FC 온라인 응답 타입을 현재 포털 스펙과 대조해 누락 필드·nullable 정정
 
 ### Changed
+
+- **BREAKING** FC 온라인 `getMaxDivision()` 반환 타입 `FcMaxDivision` → `readonly FcMaxDivision[]`. 역대 최고 등급은 매치 종류별로 존재하며, 응답이 단일 객체여도 배열로 정규화한다
+- CI에 `specs:drift --strict` 게이트 추가 — SDK 타입이 커밋된 포털 스펙에서 벗어나면 실패 (nullable 넓힘과 `@deprecated` 유지는 허용)
 
 - CI: GitHub Actions 메이저 버전 갱신(Node 24 런타임), 테스트 매트릭스 Node 22/24/26 (`engines` 는 `>=18` 유지), npm Trusted Publishing(OIDC·provenance) 준비
 - `yarn type-check` 가 `tests`, `scripts` 까지, `yarn lint` 가 `scripts` 까지 검사
 - 문서(CLAUDE.md, README, docs, CHANGELOG)의 게임 목록·path prefix·엔드포인트 수를 실제와 일치시킴 — 크레이지 아케이드 제거(포털에서 삭제됨), `platform` 추가, 던전앤파이터·사이퍼즈는 네오플 API라 범위 외로 표기
+
+### Deprecated
+
+- FC 온라인 `getAllMatchList()` — 넥슨이 2026-07-07 `/fconline/v1/match` 제공을 종료했다. 개별 계정 기록은 `getMatchList()` 를 사용한다
+- FC 온라인 `getSeasonIdMeta()` — 넥슨이 2026-11-19 이후 제공 종료를 공지했다. 선수 클래스는 `getClassMeta()`, 공식경기 시즌은 `getSeasonMeta()` 를 사용한다
+- 메이플스토리 `ranking.getGuild({ ocid })` 의 `ocid` — 포털 스펙에서 제거됐다. 입력해도 서버로 보내지 않고 한 번 경고한다. 특정 길드는 `guild_name` 으로 조회한다
+- 포털 스펙에서 사라진 응답 필드를 `@deprecated` + optional로 전환 (다음 MAJOR에서 삭제)
+  - 메이플스토리: `CashItemEquipmentItem.cash_item_skills` 등, 직업 전용 장비(`dragon_equipment[]`·`mechanic_equipment[]`)의 잠재능력·에디셔널 잠재능력 등급·옵션 8개 필드 (일반 장비 프리셋은 기존 계약 유지)
+  - 메이플스토리M: V코어 `slot_id`, `slot_level`, `vcore_name`, `vcore_skill_name_1~3`, 유니온 공격대 `use_preset_no`, `use_union_occupied_option`, `battle_map`
+  - MapleStorySEA: `skills`, 직업 전용 장비(Dragon/Mechanic)의 잠재능력 필드
 
 ### Removed
 

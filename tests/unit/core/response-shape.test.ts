@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { validateShape } from '../../../src/core/validation/response-shape.js';
+import { arrayOf, validateShape } from '../../../src/core/validation/response-shape.js';
 import type { ShapeDescriptor } from '../../../src/core/validation/response-shape.js';
 import { _resetDeprecationWarnings } from '../../../src/core/deprecation/deprecation.js';
 
@@ -175,5 +175,56 @@ describe('validateShape', () => {
       { key: 'character_name', expected: 'string', actual: 'number' },
     ]);
     expect(result!.unexpectedKeys).toContain('bonus');
+  });
+});
+
+describe('arrayOf', () => {
+  const itemShape: ShapeDescriptor = { expectedKeys: { id: 'number', name: 'string' } };
+  const item = { id: 1, name: 'Example' };
+
+  it('accepts empty arrays and arrays of matching records', () => {
+    const shape = arrayOf(itemShape);
+    expect(validateShape(TEST_URL, [], shape)).toBeNull();
+    expect(validateShape(TEST_URL, [item, { ...item, id: 2 }], shape)).toBeNull();
+  });
+
+  it('includes the index in the first invalid record’s fields', () => {
+    const data = [item, { id: '2', extra: true }];
+    expect(validateShape(TEST_URL, data, arrayOf(itemShape))).toEqual({
+      url: TEST_URL,
+      unexpectedKeys: ['[1].extra'],
+      missingKeys: ['[1].name'],
+      typeMismatches: [{ key: '[1].id', expected: 'number', actual: 'string' }],
+    });
+  });
+
+  it('validates primitive array items', () => {
+    const shape = arrayOf('string');
+    expect(validateShape(TEST_URL, ['match-1'], shape)).toBeNull();
+    expect(validateShape(TEST_URL, ['match-1', 2], shape)?.typeMismatches).toEqual([
+      { key: '[1]', expected: 'string', actual: 'number' },
+    ]);
+  });
+
+  it('rejects a null element in a record array', () => {
+    expect(validateShape(TEST_URL, [null], arrayOf(itemShape))?.typeMismatches).toEqual([
+      { key: '[0]', expected: 'object', actual: 'null' },
+    ]);
+  });
+
+  it('validates a single object against the same keys when enabled', () => {
+    const shape = arrayOf(itemShape, { allowSingleObject: true });
+    expect(validateShape(TEST_URL, item, shape)).toBeNull();
+    expect(validateShape(TEST_URL, { id: 1 }, shape)?.missingKeys).toEqual(['name']);
+    expect(validateShape(TEST_URL, item, arrayOf(itemShape))?.typeMismatches).toEqual([
+      { key: '(root)', expected: 'array', actual: 'object' },
+    ]);
+  });
+
+  it('rejects a response that is neither an array nor an allowed object', () => {
+    const shape = arrayOf(itemShape, { allowSingleObject: true });
+    expect(validateShape(TEST_URL, 'invalid', shape)?.typeMismatches).toEqual([
+      { key: '(root)', expected: 'array', actual: 'string' },
+    ]);
   });
 });

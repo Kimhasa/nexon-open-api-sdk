@@ -74,6 +74,8 @@ export interface SEACharacterStat {
   readonly final_stat: readonly SEAStatDetail[];
   /** Remaining AP */
   readonly remain_ap: number;
+  /** Mentorship system stat information */
+  readonly mentorship_stat?: readonly SEAStatDetail[] | undefined;
 }
 
 /** Stat detail element in final_stat array */
@@ -238,7 +240,7 @@ export interface SEAItemExceptionalOption {
   readonly max_mp: string;
   readonly attack_power: string;
   readonly magic_power: string;
-  /** Exceptional upgrade count (not present on dragon/mechanic equipment) */
+  /** Exceptional upgrade count */
   readonly exceptional_upgrade?: number | undefined;
 }
 
@@ -400,6 +402,43 @@ export interface SEAPresetItemEquipment {
   readonly freestyle_flag: string;
 }
 
+/** Exceptional options on Evan dragon or Mechanic equipment. */
+interface SEAClassItemExceptionalOption extends SEAItemExceptionalOption {
+  /** @deprecated The portal omits the upgrade count for class equipment. */
+  readonly exceptional_upgrade?: number | undefined;
+}
+
+/** Evan dragon or Mechanic equipment. */
+export interface SEAClassItemEquipment extends Omit<
+  SEAPresetItemEquipment,
+  | 'potential_option_grade'
+  | 'additional_potential_option_grade'
+  | 'potential_option_1'
+  | 'potential_option_2'
+  | 'potential_option_3'
+  | 'additional_potential_option_1'
+  | 'additional_potential_option_2'
+  | 'additional_potential_option_3'
+> {
+  /** @deprecated The portal omits potential options for class equipment. */
+  readonly potential_option_grade?: string | undefined;
+  /** @deprecated The portal omits potential options for class equipment. */
+  readonly additional_potential_option_grade?: string | undefined;
+  /** @deprecated The portal omits potential options for class equipment. */
+  readonly potential_option_1?: string | undefined;
+  /** @deprecated The portal omits potential options for class equipment. */
+  readonly potential_option_2?: string | undefined;
+  /** @deprecated The portal omits potential options for class equipment. */
+  readonly potential_option_3?: string | undefined;
+  /** @deprecated The portal omits potential options for class equipment. */
+  readonly additional_potential_option_1?: string | undefined;
+  /** @deprecated The portal omits potential options for class equipment. */
+  readonly additional_potential_option_2?: string | undefined;
+  /** @deprecated The portal omits potential options for class equipment. */
+  readonly additional_potential_option_3?: string | undefined;
+  readonly item_exceptional_option: SEAClassItemExceptionalOption;
+}
+
 /** Title info */
 export interface SEATitleInfo {
   /** Title name */
@@ -453,9 +492,9 @@ export interface SEACharacterItemEquipment {
   /** Medal shape info */
   readonly medal_shape: SEAMedalShape;
   /** Evan dragon equipment (only for Evan class) */
-  readonly dragon_equipment: readonly SEAPresetItemEquipment[];
+  readonly dragon_equipment: readonly SEAClassItemEquipment[];
   /** Mechanic equipment (only for Mechanic class) */
-  readonly mechanic_equipment: readonly SEAPresetItemEquipment[];
+  readonly mechanic_equipment: readonly SEAClassItemEquipment[];
 }
 
 // ─── GET /maplestorysea/v1/character/cashitem-equipment ───────────────────────
@@ -478,6 +517,14 @@ export interface SEACashItemColoringPrism {
   readonly saturation: number;
   /** Coloring prism brightness */
   readonly value: number;
+}
+
+/** Skill granted by a cash equipment item */
+export interface SEACashItemSkillInfo {
+  /** Skill name */
+  readonly skill_name: string;
+  /** Skill level */
+  readonly skill_level: number;
 }
 
 /** Individual cash item equipment info */
@@ -504,8 +551,10 @@ export interface SEACashItemEquipmentItem {
   readonly cash_item_coloring_prism: SEACashItemColoringPrism | null;
   /** Gender compatibility for item equipment */
   readonly item_gender: string;
-  /** Skill names */
-  readonly skills: readonly string[];
+  /** @deprecated Use skill_info for skill names and levels. */
+  readonly skills?: readonly string[] | undefined;
+  /** Skill information granted to the cash equipment */
+  readonly skill_info?: readonly SEACashItemSkillInfo[] | undefined;
   /** Freestyle Coupon application status ("0": not applied, "1": applied) */
   readonly freestyle_flag: string;
 }

@@ -90,6 +90,20 @@ export interface UnionRaider {
   readonly union_raider_preset_4: UnionRaiderPreset | null;
   /** 유니온 프리셋 5번 정보 */
   readonly union_raider_preset_5: UnionRaiderPreset | null;
+  /** 적용 중인 유니온 스탯 효과 */
+  readonly union_state_stat?: readonly string[] | undefined;
+  /** 프리셋 별 유니온 스탯 효과 */
+  readonly union_state_stat_preset?: readonly UnionStateStatPreset[] | undefined;
+  /** 총 유니온 포인트 */
+  readonly union_max_point?: number | undefined;
+}
+
+/** 프리셋 별 유니온 스탯 효과 */
+export interface UnionStateStatPreset {
+  /** 프리셋 번호 */
+  readonly preset_no: number;
+  /** 유니온 스탯 효과 */
+  readonly union_state_stat: readonly string[];
 }
 
 // ─── GET /maplestory/v1/user/union-artifact ──────────────────────────────────

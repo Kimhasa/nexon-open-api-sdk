@@ -21,6 +21,7 @@ export type MWorldName =
   | '스카니아'
   | '유니온'
   | '제니스'
+  | '챌린저스'
   | (string & {});
 
 // ─── GET /maplestorym/v1/guild/basic ─────────────────────────────────────────

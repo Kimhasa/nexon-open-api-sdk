@@ -102,7 +102,6 @@ export const M_CHARACTER_ANDROID_EQUIPMENT_SHAPE: ShapeDescriptor = {
   },
 };
 
-// 아래 shape는 실제 API 스펙 확인 후 구현 예정
 export const M_CHARACTER_JEWEL_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     use_jewel_page_no: 'number',
@@ -154,12 +153,14 @@ export const M_CHARACTER_LINK_SKILL_SHAPE: ShapeDescriptor = {
 export const M_CHARACTER_VMATRIX_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     character_class: 'string',
+    vmatrix_total_score: 'optional',
     character_v_core_equipment: 'array',
   },
 };
 export const M_CHARACTER_HEXAMATRIX_SKILL_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     character_class: 'string',
+    hexamatrix_total_score: 'optional',
     hexamatrix_skill: 'array',
   },
 };
@@ -169,8 +170,6 @@ export const M_CHARACTER_HEXAMATRIX_STAT_SHAPE: ShapeDescriptor = {
     hexamatrix_stat: 'array',
   },
 };
-
-// ─── 아래 shape는 실제 API 스펙 확인 후 구현 예정 ───────────────────────────
 
 // Union
 export const M_UNION_SHAPE: ShapeDescriptor = {
@@ -182,11 +181,20 @@ export const M_UNION_SHAPE: ShapeDescriptor = {
   },
 };
 export const M_UNION_RAIDER_SHAPE: ShapeDescriptor = {
+  expectedKeys: { use_union_raider_option: 'array' },
+  deprecatedKeys: {
+    use_preset_no:
+      '유니온 공격대 응답의 use_preset_no는 현재 포털 스펙에서 제거되었습니다. 스탯 프리셋은 union.getStat()으로 조회하세요.',
+    use_union_occupied_option:
+      '유니온 공격대 응답의 use_union_occupied_option은 현재 포털 스펙에서 제거되었습니다.',
+    battle_map: '유니온 공격대 응답의 battle_map은 현재 포털 스펙에서 제거되었습니다.',
+  },
+};
+export const M_UNION_STAT_SHAPE: ShapeDescriptor = {
   expectedKeys: {
     use_preset_no: 'number',
-    use_union_occupied_option: 'array',
-    use_union_raider_option: 'array',
-    battle_map: 'array',
+    use_union_stat: 'array',
+    union_stat_preset: 'array',
   },
 };
 
@@ -214,7 +222,9 @@ export const M_GUILD_BASIC_SHAPE: ShapeDescriptor = {
 };
 
 // Ranking
-export const M_RANKING_SHAPE: ShapeDescriptor = { expectedKeys: {} };
+export const M_RANKING_SHAPE: ShapeDescriptor = {
+  expectedKeys: { ranking: 'array' },
+};
 
 // Notice
 export const M_NOTICE_LIST_SHAPE: ShapeDescriptor = {

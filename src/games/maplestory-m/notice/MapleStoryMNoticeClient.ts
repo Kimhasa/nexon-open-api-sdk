@@ -33,8 +33,13 @@ export class MapleStoryMNoticeClient {
   /**
    * 공지사항 목록을 조회한다 (최근 20개).
    *
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   *
    * const list = await client.maplestorym.notice.getList();
    * for (const n of list.notice) {
    *   console.log(`[${n.date}] ${n.title}`);
@@ -54,13 +59,24 @@ export class MapleStoryMNoticeClient {
    *
    * @param noticeId - 공지 식별자
    *
+   * @throws {TypeError} 공지 식별자가 정수가 아닐 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
-   * const detail = await client.maplestorym.notice.getDetail(12345);
-   * console.log(detail.title, detail.contents);
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   *
+   * const list = await client.maplestorym.notice.getList();
+   * const first = list.notice[0];
+   * if (first) {
+   *   const detail = await client.maplestorym.notice.getDetail(first.notice_id);
+   *   console.log(detail.title, detail.contents);
+   * }
    * ```
    */
   async getDetail(noticeId: number): Promise<MNoticeDetail> {
+    this.validateNoticeId(noticeId);
     return this.http.get<MNoticeDetail>(
       `${MapleStoryMNoticeClient.BASE}/notice/detail`,
       { notice_id: noticeId },
@@ -71,8 +87,13 @@ export class MapleStoryMNoticeClient {
   /**
    * 패치노트 목록을 조회한다 (최근 20개).
    *
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   *
    * const list = await client.maplestorym.notice.getPatchList();
    * for (const n of list.patch_notice) {
    *   console.log(`[${n.date}] ${n.title}`);
@@ -92,13 +113,24 @@ export class MapleStoryMNoticeClient {
    *
    * @param noticeId - 공지 식별자
    *
+   * @throws {TypeError} 공지 식별자가 정수가 아닐 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
-   * const detail = await client.maplestorym.notice.getPatchDetail(12345);
-   * console.log(detail.title, detail.contents);
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   *
+   * const list = await client.maplestorym.notice.getPatchList();
+   * const first = list.patch_notice[0];
+   * if (first) {
+   *   const detail = await client.maplestorym.notice.getPatchDetail(first.notice_id);
+   *   console.log(detail.title, detail.contents);
+   * }
    * ```
    */
   async getPatchDetail(noticeId: number): Promise<MNoticeDetail> {
+    this.validateNoticeId(noticeId);
     return this.http.get<MNoticeDetail>(
       `${MapleStoryMNoticeClient.BASE}/notice-patch/detail`,
       { notice_id: noticeId },
@@ -109,8 +141,13 @@ export class MapleStoryMNoticeClient {
   /**
    * 진행 중 이벤트 목록을 조회한다 (최근 20개).
    *
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   *
    * const list = await client.maplestorym.notice.getEventList();
    * for (const e of list.event_notice) {
    *   console.log(`[${e.date}] ${e.title}`);
@@ -130,17 +167,36 @@ export class MapleStoryMNoticeClient {
    *
    * @param noticeId - 공지 식별자
    *
+   * @throws {TypeError} 공지 식별자가 정수가 아닐 때
+   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   *
    * @example
    * ```ts
-   * const detail = await client.maplestorym.notice.getEventDetail(12345);
-   * console.log(detail.title, detail.contents);
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   *
+   * const list = await client.maplestorym.notice.getEventList();
+   * const first = list.event_notice[0];
+   * if (first) {
+   *   const detail = await client.maplestorym.notice.getEventDetail(first.notice_id);
+   *   console.log(detail.title, detail.contents);
+   * }
    * ```
    */
   async getEventDetail(noticeId: number): Promise<MEventNoticeDetail> {
+    this.validateNoticeId(noticeId);
     return this.http.get<MEventNoticeDetail>(
       `${MapleStoryMNoticeClient.BASE}/notice-event/detail`,
       { notice_id: noticeId },
       M_EVENT_NOTICE_DETAIL_SHAPE,
     );
+  }
+
+  private validateNoticeId(noticeId: number): void {
+    if (!Number.isInteger(noticeId)) {
+      throw new TypeError(
+        'noticeId는 정수로 입력하세요. 해당 공지 목록에서 notice_id를 확인하세요.',
+      );
+    }
   }
 }

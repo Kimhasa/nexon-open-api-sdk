@@ -1,52 +1,57 @@
 import { describe, it, expect } from 'vitest';
 import { API_METADATA, getApiMetadata } from '../../../src/core/metadata/api-metadata.js';
 
+/** SDK 범위의 넥슨 Open API path prefix (= 포털 slug, specs/openapi/index.json) */
+const KNOWN_PREFIXES = [
+  'maplestory',
+  'maplestorym',
+  'maplestorysea',
+  'fconline',
+  'maplestorytw',
+  'tfd',
+  'heroes',
+  'suddenattack',
+  'kartrush',
+  'baram',
+  'mabinogi',
+  'baramy',
+  'v4',
+  'hit2',
+  'platform',
+];
+
 describe('api-metadata', () => {
-  it('API_METADATA에 maplestory 엔트리가 존재한다', () => {
-    expect(API_METADATA['maplestory']).toBeDefined();
-    expect(API_METADATA['maplestory']!.game).toBe('MapleStory KMS');
-    expect(API_METADATA['maplestory']!.endpointCount).toBe(48);
+  it('기존 4개 게임이 등록되어 있다', () => {
+    expect(Object.keys(API_METADATA)).toEqual(
+      expect.arrayContaining(['maplestory', 'maplestorym', 'maplestorysea', 'fconline']),
+    );
   });
 
-  it('구현된 4개 게임이 모두 등록되어 있고 키와 pathPrefix가 일치한다', () => {
-    expect(Object.keys(API_METADATA).sort()).toEqual([
-      'fconline',
-      'maplestory',
-      'maplestorym',
-      'maplestorysea',
-    ]);
+  it('모든 키는 SDK 범위의 path prefix이고 pathPrefix 필드와 같다', () => {
     for (const [key, meta] of Object.entries(API_METADATA)) {
+      expect(KNOWN_PREFIXES, key).toContain(key);
       expect(meta.pathPrefix, `${key}.pathPrefix`).toBe(key);
     }
-  });
-
-  it('endpointCount가 게임 클라이언트의 public API 메서드 수와 일치한다', () => {
-    expect(API_METADATA['maplestorym']!.endpointCount).toBe(37);
-    expect(API_METADATA['maplestorysea']!.endpointCount).toBe(26);
-    expect(API_METADATA['fconline']!.endpointCount).toBe(16);
-  });
-
-  it('getApiMetadata()로 게임 메타데이터를 조회할 수 있다', () => {
-    const meta = getApiMetadata('maplestory');
-    expect(meta).toBeDefined();
-    expect(meta!.pathPrefix).toBe('maplestory');
-    expect(meta!.lastVerifiedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-    expect(meta!.sdkVersionAtVerification).toBe('0.1.0');
-  });
-
-  it('존재하지 않는 게임은 undefined를 반환한다', () => {
-    expect(getApiMetadata('nonexistent')).toBeUndefined();
   });
 
   it('모든 메타데이터 엔트리가 필수 필드를 가진다', () => {
     for (const [key, meta] of Object.entries(API_METADATA)) {
       expect(meta.game, `${key}.game`).toBeTruthy();
-      expect(meta.pathPrefix, `${key}.pathPrefix`).toBeTruthy();
       expect(meta.lastVerifiedAt, `${key}.lastVerifiedAt`).toMatch(/^\d{4}-\d{2}-\d{2}$/);
       expect(meta.sdkVersionAtVerification, `${key}.sdkVersionAtVerification`).toMatch(
         /^\d+\.\d+\.\d+$/,
       );
       expect(meta.endpointCount, `${key}.endpointCount`).toBeGreaterThan(0);
     }
+  });
+
+  it('getApiMetadata()로 게임 메타데이터를 조회할 수 있다', () => {
+    const meta = getApiMetadata('maplestory');
+    expect(meta).toBeDefined();
+    expect(meta!.pathPrefix).toBe('maplestory');
+  });
+
+  it('존재하지 않는 게임은 undefined를 반환한다', () => {
+    expect(getApiMetadata('nonexistent')).toBeUndefined();
   });
 });

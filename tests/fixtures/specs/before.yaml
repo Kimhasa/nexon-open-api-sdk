@@ -1,0 +1,66 @@
+openapi: 3.0.3
+paths:
+  /fixture/v1/sample:
+    parameters:
+      - name: overridden
+        in: query
+        required: true
+        schema: { type: integer }
+    get:
+      parameters:
+        - name: overridden
+          in: query
+          schema: { type: integer }
+        - $ref: '#/components/parameters/Pagination'
+        - name: obsolete
+          in: query
+          schema: { type: string }
+        - name: nowOptional
+          in: query
+          required: true
+          schema: { type: string }
+        - name: mode
+          in: query
+          schema: { type: string, format: token, enum: [current, retired] }
+      responses:
+        '200': { $ref: '#/components/responses/Sample' }
+  /fixture/v1/retired:
+    delete: {}
+  /fixture/v1/stable:
+    put: {}
+components:
+  parameters:
+    Pagination:
+      name: cursor
+      in: query
+      schema: { type: string }
+  responses:
+    Sample:
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Sample' }
+  schemas:
+    Sample:
+      type: object
+      required: [presence]
+      properties:
+        stale: { type: string }
+        status: { type: string, enum: [one, two] }
+        date: { type: string, format: date }
+        presence: { type: number }
+        entries:
+          type: array
+          items: { $ref: '#/components/schemas/Entry~1Item' }
+        item:
+          type: array
+          items: { type: number }
+        recursive: { $ref: '#/components/schemas/Sample' }
+    Entry/Item:
+      type: object
+      properties:
+        id: { type: integer }
+        legacy: { type: object }
+        label: { type: string }
+        flags:
+          type: array
+          items: { type: boolean }

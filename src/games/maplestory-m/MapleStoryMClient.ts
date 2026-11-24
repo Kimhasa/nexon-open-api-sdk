@@ -7,6 +7,7 @@ import { MapleStoryMGuildClient } from './guild/MapleStoryMGuildClient.js';
 import { MapleStoryMRankingClient } from './ranking/MapleStoryMRankingClient.js';
 import { MapleStoryMNoticeClient } from './notice/MapleStoryMNoticeClient.js';
 import { M_OCID_SHAPE } from './shapes.js';
+import { assertNonBlank } from './validation.js';
 
 /**
  * 메이플스토리M 클라이언트.
@@ -20,7 +21,7 @@ import { M_OCID_SHAPE } from './shapes.js';
  * const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
  * const basic = await client.maplestorym.character.getBasic({ ocid });
  * const union = await client.maplestorym.union.get({ ocid });
- * const ranking = await client.maplestorym.ranking.getLevel({ date });
+ * const ranking = await client.maplestorym.ranking.getLevel({ date: '2026-11-23' });
  * ```
  */
 export class MapleStoryMClient extends AbstractGameClient {
@@ -38,7 +39,7 @@ export class MapleStoryMClient extends AbstractGameClient {
     return this._character;
   }
 
-  /** 유니온 관련 API (2개 엔드포인트) */
+  /** 유니온 관련 API (3개 엔드포인트) */
   get union(): MapleStoryMUnionClient {
     this._union ??= new MapleStoryMUnionClient(this.http);
     return this._union;
@@ -65,21 +66,31 @@ export class MapleStoryMClient extends AbstractGameClient {
   /**
    * 캐릭터명과 월드명으로 OCID를 조회한다.
    *
-   * @param worldName - 월드 명 (아케인, 크로아, 엘리시움, 루나, 스카니아, 유니온, 제니스)
+   * @param worldName - 월드 명 (아케인, 크로아, 엘리시움, 루나, 스카니아, 유니온, 제니스, 챌린저스)
    * @param characterName - 조회할 캐릭터명
    * @throws {NexonNotFoundError} 캐릭터를 찾을 수 없을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
+   * @throws {TypeError} 월드명이나 캐릭터명이 비어 있을 때
+   *
    * @example
    * ```ts
+   * import { NexonClient } from 'nexon-open-api';
+   * const client = new NexonClient({ apiKey: 'your-api-key' });
+   *
    * const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
    * ```
    */
   async getOcid(worldName: MWorldName, characterName: string): Promise<OCID> {
+    assertNonBlank(
+      worldName,
+      '월드명이 비어 있습니다. 스카니아 등 캐릭터가 속한 월드명을 입력하세요.',
+    );
+    assertNonBlank(characterName, '캐릭터명이 비어 있습니다. 조회할 캐릭터명을 입력하세요.');
     const url = this.buildUrl('id');
     const response = await this.http.get<{ ocid: string }>(
       url,
-      { world_name: worldName as string, character_name: characterName },
+      { world_name: worldName, character_name: characterName },
       M_OCID_SHAPE,
     );
     return response.ocid as OCID;

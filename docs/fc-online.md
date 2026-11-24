@@ -1,9 +1,7 @@
 # EA SPORTS FC Online API 레퍼런스
 
-> SDK 지원 API 16개 — `client.fcOnline`
->
-> 개수 기준: SDK public API 메서드 수 (HTTP 호출 14개 + 이미지 URL 헬퍼 2개).
-> 넥슨 포털 기준 19개 경로 중 17개를 지원합니다 ([포털과의 차이](#포털과의-차이) 참고).
+> SDK 공개 메서드 18개. HTTP 메서드 16개와 이미지 URL 헬퍼 2개를 제공합니다.
+> 포털 OpenAPI 스펙의 19개 경로를 모두 지원합니다. 이미지 헬퍼 2개가 이미지 경로 4개를 처리합니다.
 
 ## 빠른 시작
 
@@ -11,68 +9,101 @@
 import { NexonClient } from 'nexon-open-api';
 
 const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
-
-const ouid = await client.fcOnline.getOuid('닉네임');
-const basic = await client.fcOnline.getBasic(ouid);
+const fc = client.fcOnline;
+const ouid = await fc.getOuid('닉네임');
+const basic = await fc.getBasic(ouid);
 console.log(`${basic.nickname} (Lv.${basic.level})`);
 ```
 
 ## 계정 정보 (5개)
 
-```ts
-const fc = client.fcOnline;
+| 메서드           | GET 경로                        |
+| ---------------- | ------------------------------- |
+| `getOuid`        | `/fconline/v1/id`               |
+| `getBasic`       | `/fconline/v1/user/basic`       |
+| `getMaxDivision` | `/fconline/v1/user/maxdivision` |
+| `getMatchList`   | `/fconline/v1/user/match`       |
+| `getTradeList`   | `/fconline/v1/user/trade`       |
 
-const ouid = await fc.getOuid('닉네임'); // OUID 조회
-await fc.getBasic(ouid); // 기본 정보 (닉네임, 레벨)
-await fc.getMaxDivision(ouid); // 역대 최고 등급
-await fc.getMatchList({ ouid, matchtype: 50 }); // 매치 기록 (매치 ID 목록)
-await fc.getTradeList({ ouid, tradetype: 'buy' }); // 이적시장 거래 기록 (본인만)
+```ts
+const divisions = await fc.getMaxDivision(ouid);
+for (const { matchType, division } of divisions) {
+  console.log(matchType, division);
+}
+
+const matchIds = await fc.getMatchList({ ouid, matchtype: 50, limit: 10 });
+const trades = await fc.getTradeList({ tradetype: 'buy', limit: 10 });
 ```
+
+`getMaxDivision`은 `readonly FcMaxDivision[]`를 반환합니다. 포털에 명세된 단일 객체 응답도 길이 1인 배열로 변환하므로, 기존에 객체 필드를 바로 읽던 코드는 배열을 순회해야 합니다.
+`getTradeList`는 API 키 소유자의 거래 기록을 조회합니다.
 
 ## 매치 (2개)
 
+| 메서드            | GET 경로                    |
+| ----------------- | --------------------------- |
+| `getMatchDetail`  | `/fconline/v1/match-detail` |
+| `getAllMatchList` | `/fconline/v1/match`        |
+
+넥슨은 2026년 7월 7일 전체 매치 목록 제공을 종료했습니다. `getAllMatchList`는 호출 시 폐지 경고를 표시합니다. 개별 계정의 매치 ID는 `getMatchList`로 가져올 수 있습니다. [넥슨 공지](https://openapi.nexon.com/support/notice/3495136/)
+
+`getMatchDetail`의 `matchInfo[].division`은 포털이 함께 제공하는 선택적 참가자 등급 ID입니다.
+
 ```ts
-await fc.getAllMatchList({ matchtype: 50, limit: 10 }); // 전체 매치 목록 (현재 포털 스펙에 없음)
-await fc.getMatchDetail('6572d9bbc7331d2a45f3d755'); // 매치 상세 기록
+const matchId = matchIds[0];
+if (matchId !== undefined) {
+  const detail = await fc.getMatchDetail(matchId);
+  console.log(detail.matchDate);
+}
 ```
 
 ## 랭커 (1개)
 
+| 메서드           | GET 경로                    |
+| ---------------- | --------------------------- |
+| `getRankerStats` | `/fconline/v1/ranker-stats` |
+
 ```ts
-await fc.getRankerStats({
+const stats = await fc.getRankerStats({
   matchtype: 52,
-  players: [{ id: 100167680, po: 18 }], // TOP 10,000 랭커 선수 평균 스탯
+  players: [{ id: 100167680, po: 18 }],
 });
 ```
 
-## 메타데이터 (6개)
+## 메타데이터 (8개)
+
+| 메서드                 | GET 경로                                    |
+| ---------------------- | ------------------------------------------- |
+| `getMatchTypeMeta`     | `/static/fconline/meta/matchtype.json`      |
+| `getSpidMeta`          | `/static/fconline/meta/spid.json`           |
+| `getSeasonIdMeta`      | `/static/fconline/meta/seasonid.json`       |
+| `getSpPositionMeta`    | `/static/fconline/meta/spposition.json`     |
+| `getDivisionMeta`      | `/static/fconline/meta/division.json`       |
+| `getDivisionVoltaMeta` | `/static/fconline/meta/division-volta.json` |
+| `getSeasonMeta`        | `/static/fconline/meta/season.json`         |
+| `getClassMeta`         | `/static/fconline/meta/class.json`          |
+
+`getSeasonMeta`는 공식경기 매치 종류별 최신 시즌을 조회합니다. 실제 `seasonid` 문자열은 포털 계약에 맞춰 `seasonId` 정수로 반환합니다.
+
+넥슨은 `getSeasonIdMeta`가 호출하는 기존 클래스 경로를 클래스 메타데이터로 대체하고 2026년 11월 19일 이후 제공을 종료한다고 공지했습니다. 클래스 식별자와 이미지는 `getClassMeta`로 조회하세요. [넥슨 공지](https://openapi.nexon.com/ko/game/fconline/?id=3)
 
 ```ts
-await fc.getMatchTypeMeta(); // 매치 종류
-await fc.getSpidMeta(); // 선수 고유 식별자 (spid)
-await fc.getSeasonIdMeta(); // 시즌/클래스
-await fc.getSpPositionMeta(); // 포지션 (GK, CB, ST ...)
-await fc.getDivisionMeta(); // 등급 (슈퍼챔피언스 ...)
-await fc.getDivisionVoltaMeta(); // 볼타 등급
+const seasons = await fc.getSeasonMeta();
+const classes = await fc.getClassMeta();
+console.log(seasons.find(({ matchtype }) => matchtype === 50)?.seasonId);
+console.log(classes.find((entry) => entry.class === 100)?.classImg);
 ```
 
 ## 이미지 URL (2개)
 
-HTTP 호출 없이 CDN URL만 조립합니다.
+| 메서드              | CDN 경로                                                         |
+| ------------------- | ---------------------------------------------------------------- |
+| `getActionShotUrl`  | `/live/externalAssets/common/playersAction/p{spid 또는 pid}.png` |
+| `getPlayerImageUrl` | `/live/externalAssets/common/players/p{spid 또는 pid}.png`       |
+
+두 메서드는 `fco.dn.nexoncdn.co.kr`의 URL을 조립합니다. `spid` 또는 앞쪽 0을 뺀 `pid`를 숫자로 전달하세요. 선수에 따라 이미지가 없을 수 있습니다.
 
 ```ts
-fc.getActionShotUrl(272167135); // 액션샷 이미지 URL
-fc.getPlayerImageUrl(272167135); // 선수 이미지 URL
+fc.getActionShotUrl(272167135);
+fc.getPlayerImageUrl(167680);
 ```
-
-> 포털의 이미지 경로는 `p{spid}.png` 와 `p{pid}.png` 두 형태(총 4개)인데 URL 모양이 같습니다.
-> pid 전용 메서드는 없으며, 위 두 메서드에 pid를 넘기면 pid 경로 URL이 만들어집니다.
-
-## 포털과의 차이
-
-2026-11-24 넥슨 포털 스펙과 대조한 결과입니다.
-
-| 구분                 | 경로                                                                          |
-| -------------------- | ----------------------------------------------------------------------------- |
-| SDK 미지원 (2개)     | `/static/fconline/meta/season.json`, `/static/fconline/meta/class.json`       |
-| 포털에 없는 SDK 경로 | `/fconline/v1/match` (`getAllMatchList`) — 폐지 여부 미확인, 실 API 확인 필요 |
