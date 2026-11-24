@@ -22,7 +22,7 @@ export const V4_CHARACTER_BASIC_SHAPE: ShapeDescriptor = {
     server_name: 'string',
     character_name: 'string',
     character_date_create: 'string',
-    character_create_type: 'string',
+    character_create_type: 'any',
     character_date_last_login: 'string',
     character_date_last_logout: 'string',
     character_class_name: 'string',

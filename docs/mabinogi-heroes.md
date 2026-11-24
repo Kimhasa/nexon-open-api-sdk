@@ -52,8 +52,8 @@ try {
 | 이벤트&샵 목록                     | `notice.getEventList()`                           | `event_notice` (이벤트·샵 게시글)                                                              |
 | 이벤트&샵 본문                     | `notice.getEventDetail(noticeId)`                 | `contents` (본문), `date_event_end` (종료 시각), `ongoing_flag` (상시 판매 여부)               |
 | 거래소의 최근 1주 아이템 거래 기록 | `marketplace.listHistory({ item_name, cursor })`  | `item` (가격 기록), `next_cursor` (다음 페이지 번호표)                                         |
-| 골드 거래소 구매 상위 30명         | `marketplace.getGoldBuyTop30()`                   | `buy_gold` (카르제 이름과 누적 구매량)                                                         |
-| 골드 거래소 판매 상위 30명         | `marketplace.getGoldSellTop30()`                  | `sell_gold` (카르제 이름과 누적 판매량)                                                        |
+| 골드 거래소 구매 상위 30명         | `marketplace.getGoldBuyTop30()`                   | `buy_gold` (카르제 이름 `cairde_name`, 구매량 `buy_gold`)                                      |
+| 골드 거래소 판매 상위 30명         | `marketplace.getGoldSellTop30()`                  | `sell_gold` (카르제 이름 `cairde_name`, 판매량 `sell_gold`)                                    |
 | 명예의 전당 순위                   | `ranking.getHallOfHonor({ ranking_type })`        | `ranking` (순위), `character_name` (캐릭터 이름), `score` (공격력 또는 마법 공격력 점수)       |
 | 실시간 랭킹                        | `ranking.getRealTime({ ranking_type, page_no })`  | `ranking` (순위), `character_name` (캐릭터 이름), `score` (공격력 또는 마법 공격력 점수)       |
 
@@ -89,7 +89,7 @@ for (const item of gear.item_equipment) {
 - `access_flag`는 최근 7일 동안 캐릭터가 접속했는지 나타내며 문자열 `"true"` 또는 `"false"`입니다.
 - `title_type`은 `"title"` 타이틀 또는 `"pattern"` 문양입니다. 보유·장착 타이틀의 유형은 2023년 11월 23일 이후 획득·장착한 항목에 제공됩니다.
 - `item_equipment_page`의 `"Bag"`은 장착소지품, `"Cash"`는 캐시소지품입니다.
-- `item_option`에는 강화 단계, 인챈트와 프리셋 등이 들어옵니다. 장비 종류에 따라 비는 값은 `null`일 수 있습니다.
+- `item_option`에는 강화 단계, 인챈트와 프리셋 등이 들어옵니다. 장비 종류에 따라 비는 값은 `null`일 수 있습니다. 정령합성 능력치 `power_infusion_preset_1`·`power_infusion_preset_2`는 배열이 아니라 `{ stat_name, stat_value }` 객체 하나이고, 정령합성을 하지 않은 아이템은 `null`입니다.
 - `guild_name`은 가입하거나 가입 신청한 길드 이름, `cairde_name`은 카르제 이름입니다. 값이 없으면 `null`일 수 있습니다.
 
 ### 접두·접미 인챈트
@@ -106,7 +106,7 @@ console.log(enchant.enchant_grade, enchant.enchant_available_slot_name, enchant.
 ```
 
 - `enchant_type`의 문자열 `"0"`은 접두, `"1"`은 접미입니다.
-- `enchant_grade`는 인챈트 등급, `enchant_available_slot_name`은 적용 부위, `enchant_stat`은 인챈트 능력치입니다.
+- `enchant_grade`는 인챈트 등급(숫자가 아닌 문자열), `enchant_available_slot_name`은 적용 부위, `enchant_stat`은 인챈트 능력치입니다.
 
 ### 아이템 거래소·골드 거래소
 
@@ -126,8 +126,8 @@ for (const record of [...first.item, ...(next?.item ?? [])]) {
 
 - `item`은 최근 1주 거래 기록입니다. 최근 24시간에 10건 이상 거래된 아이템이 대상입니다. 한 페이지에 최대 500개이므로 다음 페이지는 `next_cursor`를 같은 검색의 `cursor`에 넣습니다.
 - `date_update`는 갱신 시각입니다. 마지막으로 갱신된 기록의 `average_price`가 현재 평균가이며 `min_price`, `max_price`는 최저가와 최고가입니다.
-- `인챈트 스크롤` 또는 `인챈트 스크롤 (무기한)`을 검색하고 `item_option.prefix_enchant_preset_1`과 `item_option.suffix_enchant_preset_1`로 스크롤 종류를 구분합니다.
-- 골드 거래소의 거래가는 100만 골드 기준입니다. `buy_gold`와 `sell_gold`는 최근 1주간 구매량·판매량이 많은 상위 30명의 내역입니다.
+- `인챈트 스크롤` 또는 `인챈트 스크롤 (무기한)`을 검색하고 `item_option.prefix_enchant_preset_1`과 `item_option.suffix_enchant_preset_1`로 스크롤 종류를 구분합니다. `item_option`에는 그 아이템에 해당하는 옵션만 들어 있어서, 접두 스크롤에는 `suffix_enchant_preset_1`이 아예 없습니다.
+- 골드 거래소의 거래가는 100만 골드 기준입니다. `buy_gold`와 `sell_gold`는 최근 1주간 구매량·판매량이 많은 상위 30명의 내역입니다. 각 항목의 골드 총량은 목록과 같은 이름의 `buy_gold`, `sell_gold` 필드(숫자)에 들어 있습니다.
 
 ### 명예의 전당·실시간 랭킹
 
@@ -145,7 +145,7 @@ console.log('실시간 1위', live[0]?.character_name);
 ```
 
 - `ranking_type`의 문자열 `"0"`은 공격력으로 명예의 전당 200위·실시간 4,000위(8페이지)까지, `"1"`은 마법 공격력으로 명예의 전당 100위·실시간 2,000위(4페이지)까지 조회합니다.
-- `ranking`은 순위, `character_name`은 캐릭터 이름, `score`는 선택한 공격력 기준의 점수입니다. 두 메서드 모두 순위 항목 배열을 반환합니다. SDK의 `responseValidation`을 켜면 배열의 각 항목을 검사합니다.
+- `ranking`은 순위, `character_name`은 캐릭터 이름, `score`는 선택한 공격력 기준의 점수입니다. 두 메서드 모두 순위 항목 배열을 반환합니다. 넥슨 서버는 `{ ranking: [...] }` 형태로 응답하지만 SDK가 `ranking` 배열만 꺼내 돌려주므로 `honor.length`, `live[0]`처럼 바로 씁니다.
 - 명예의 전당은 매일 오전 9시 실시간 랭킹 순위를 기준으로 반영됩니다. 실시간 랭킹은 1시간마다 반영되며 `page_no`는 1부터 시작합니다. 한 페이지당 최대 500개입니다.
 
 ### 공지사항·패치노트·이벤트&샵

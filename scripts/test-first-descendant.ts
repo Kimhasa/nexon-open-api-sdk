@@ -175,10 +175,17 @@ if (!apiKey || !userName) {
   // ─── 5. Leaderboard ────────────────────────────────────────────────────────
   console.log('\n📋 Leaderboard API');
 
+  // 솔로 리더보드는 계승자 번호가 필수다. 장착 계승자를 못 읽었으면 도감의 첫 계승자를 쓴다.
+  const soloDescendantId = async (): Promise<string> => {
+    const id = descendantId ?? (await tfd.meta.getDescendant(language))[0]?.descendant_id;
+    if (!id) throw new Error('솔로 리더보드에 넣을 descendant_id를 찾지 못함');
+    return id;
+  };
+
   await test('leaderboard.getVoidInterceptBattle (Solo)', async () => {
     const r = await tfd.leaderboard.getVoidInterceptBattle({
       leaderboard_type: 'Solo',
-      ...(descendantId ? { descendant_id: descendantId } : {}),
+      descendant_id: await soloDescendantId(),
     });
     console.log(`    ${r.leaderboard?.length ?? 0}건`);
   });
@@ -194,7 +201,7 @@ if (!apiKey || !userName) {
   await test('leaderboard.getVoidErosionPurgeChallenge (Solo)', async () => {
     const r = await tfd.leaderboard.getVoidErosionPurgeChallenge({
       leaderboard_type: 'Solo',
-      ...(descendantId ? { descendant_id: descendantId } : {}),
+      descendant_id: await soloDescendantId(),
     });
     console.log(`    ${r.leaderboard?.length ?? 0}건`);
   });

@@ -28,5 +28,71 @@
     "path": "response[].core_option[].detail[].available_item_option",
     "kind": "missing-spec-field",
     "reason": "2026-11-24 정적 JSON에 있는 경로다. 이 경로의 option_grade는 포털에 적힌 string과 달리 number로 제공된다."
+  },
+  {
+    "operation": "GET /heroes/v2/marketplace/gold-market-buy-top-30",
+    "path": "response.buy_gold[].buy_gold",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 구매 골드 총량은 포털의 total_buy_gold가 아니라 buy_gold로 온다. 포털의 이름은 SDK에서 선택 필드로 유지한다."
+  },
+  {
+    "operation": "GET /heroes/v2/marketplace/gold-market-sell-top-30",
+    "path": "response.sell_gold[].sell_gold",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 판매 골드 총량은 포털의 total_sell_gold가 아니라 sell_gold로 온다. 포털의 이름은 SDK에서 선택 필드로 유지한다."
+  },
+  {
+    "operation": "GET /heroes/v2/meta/enchant",
+    "path": "response.enchant_grade",
+    "kind": "type-mismatch",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 인챈트 등급은 포털에 적힌 number가 아니라 string으로 온다."
+  },
+  {
+    "operation": "GET /hit2/v1/character/basic",
+    "path": "response.character_date_last_login",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 마지막 접속 시각은 포털의 character_last_login이 아니라 character_date_last_login으로 온다. 포털의 이름은 SDK에서 선택 필드로 유지한다."
+  },
+  {
+    "operation": "GET /hit2/v1/character/basic",
+    "path": "response.character_date_last_logout",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 마지막 접속 종료 시각은 포털의 character_last_logout이 아니라 character_date_last_logout으로 온다. 포털의 이름은 SDK에서 선택 필드로 유지한다."
+  },
+  {
+    "operation": "GET /kartrush/v1/id",
+    "path": "response.ouid_info[].racer_level",
+    "kind": "type-mismatch",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 계정 후보의 라이더 레벨은 포털에 적힌 string이 아니라 number로 온다."
+  },
+  {
+    "operation": "GET /suddenattack/v1/match-detail",
+    "path": "response.match_detail[].guild_name",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 매치 참가자마다 포털에 없는 guild_name이 온다. 관찰된 값은 모두 null이다."
+  },
+  {
+    "operation": "GET /suddenattack/v1/user/tier",
+    "path": "response.party_rank_match_tier",
+    "kind": "type-mismatch",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 파티 랭크전 티어는 포털에 적힌 number가 아니라 string으로 온다."
+  },
+  {
+    "operation": "GET /suddenattack/v1/user/tier",
+    "path": "response.solo_rank_match_tier",
+    "kind": "type-mismatch",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 솔로 랭크전 티어는 포털에 적힌 number가 아니라 string으로 온다."
+  },
+  {
+    "operation": "GET /heroes/v2/character/item-equipment",
+    "path": "response.item_equipment[].item_option.power_infusion_preset_1",
+    "kind": "type-mismatch",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측, 장착 아이템 28개)에서 1번 프리셋 정령합성 능력치는 포털에 적힌 배열이 아니라 { stat_name, stat_value } 단일 객체 또는 null로 온다."
+  },
+  {
+    "operation": "GET /heroes/v2/character/item-equipment",
+    "path": "response.item_equipment[].item_option.power_infusion_preset_2",
+    "kind": "type-mismatch",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측, 장착 아이템 28개)에서 2번 프리셋 정령합성 능력치는 포털에 적힌 배열이 아니라 { stat_name, stat_value } 단일 객체 또는 null로 온다."
   }
 ]

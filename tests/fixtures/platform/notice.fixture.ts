@@ -18,7 +18,7 @@ export const platformNoticeListFixture: PlatformNoticeList = {
       url: 'https://openapi.nexon.com/ko/support/notice/1002/',
       contents: '<p>테스트 API 변경 본문입니다.</p>',
       date: '2023-12-15T02:00:00Z',
-      notice_tag: [],
+      notice_tag: null,
     },
   ],
 };

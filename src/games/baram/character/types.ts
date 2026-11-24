@@ -60,8 +60,8 @@ export interface BaramCharacterTitleEquipment {
 
 /** 장착 아이템 항목 */
 export interface BaramItemEquipment {
-  /** 장착한 아이템 이름(넥슨 포털의 필드 설명 기준) */
-  readonly item_id: string;
+  /** 장착한 아이템 이름(넥슨 포털의 필드 설명 기준). 아이템을 장착하지 않은 슬롯이면 null */
+  readonly item_id: string | null;
   /** 장착 아이템 페이지 슬롯 명 */
   readonly item_equipment_slot_name: string;
 }

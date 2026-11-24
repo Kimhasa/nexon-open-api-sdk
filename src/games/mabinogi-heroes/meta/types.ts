@@ -13,8 +13,8 @@ export interface HeroesEnchantMetaRequest {
 
 /** 인챈트 메타 데이터 응답 */
 export interface HeroesEnchantMeta {
-  /** 인챈트 등급 */
-  readonly enchant_grade: number;
+  /** 인챈트 등급. 숫자가 아닌 문자열로 온다 (포털 스펙은 숫자로 적지만 2026-11-24 실제 응답은 문자열) */
+  readonly enchant_grade: string;
   /** 인챈트 가능 부위 */
   readonly enchant_available_slot_name: readonly string[];
   /** 인챈트 능력치 (능력치 설명 문자열 목록) */

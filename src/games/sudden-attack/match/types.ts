@@ -81,6 +81,11 @@ export interface SuddenAttackMatchParticipant {
    * - 클랜전, 퀵매치 클랜전, 클랜 랭크전에서만 제공된다.
    */
   readonly clan_name?: string | undefined;
+  /**
+   * 길드 이름. 포털 스펙에는 없고 실제 응답에 있는 필드 (2026-11-24 실측).
+   * 실측에서는 모든 참가자가 null이었다. 클랜 이름은 `clan_name` 으로 온다.
+   */
+  readonly guild_name?: string | null | undefined;
   /** 킬 기록 */
   readonly kill: number;
   /** 데스 기록 */

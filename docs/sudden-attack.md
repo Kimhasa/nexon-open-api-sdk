@@ -43,7 +43,7 @@ try {
 | 닉네임으로 계정 고유 번호 찾기 | `getOuid(userName)`                               | `ouid` (SDK가 돌려주는 고유 번호)                                                        |
 | 프로필의 칭호·클랜·매너 등급   | `user.getBasic(ouid)`                             | `title_name` (칭호), `clan_name` (클랜), `manner_grade` (매너 등급)                      |
 | 통합 계급·시즌 계급            | `user.getRank(ouid)`                              | `grade` (통합 계급), `season_grade` (시즌 계급), `season_grade_ranking` (시즌 계급 순위) |
-| 솔로·파티 랭크전 티어          | `user.getTier(ouid)`                              | `solo_rank_match_tier` (솔로 티어 번호), `party_rank_match_tier` (파티 티어 번호)        |
+| 솔로·파티 랭크전 티어          | `user.getTier(ouid)`                              | `solo_rank_match_tier` (솔로 티어), `party_rank_match_tier` (파티 티어)                  |
 | 최근 승률·무기별 킬데스        | `user.getRecentInfo(ouid)`                        | `recent_win_rate` (최근 승률), `recent_kill_death_rate` (최근 킬데스)                    |
 | 모드별 최근 매치               | `match.getList({ ouid, match_mode, match_type })` | `match` (매치 번호·승패·킬·데스·어시스트)                                                |
 | 매치의 맵·참가자별 기록        | `match.getDetail(matchId)`                        | `match_map` (맵), `match_detail` (팀·참가자별 전적)                                      |
@@ -77,7 +77,7 @@ console.log(profile.manner_grade, tier.solo_rank_match_tier, tier.solo_rank_matc
 
 - `clan_name`과 `manner_grade`는 소속 클랜과 매너 등급입니다.
 - `grade`와 `season_grade`는 통합 계급과 시즌 계급입니다. 각 계급의 경험치와 랭킹도 함께 조회됩니다.
-- `solo_rank_match_tier`와 `party_rank_match_tier`는 솔로·파티 랭크전 티어의 숫자 값입니다. 배지 목록의 `tier`는 `BRONZE I` 같은 이름입니다.
+- `solo_rank_match_tier`와 `party_rank_match_tier`는 솔로·파티 랭크전 티어이며 숫자가 아닌 문자열입니다. 배지 목록의 `tier`는 `BRONZE I` 같은 이름입니다.
 
 ### 폭파미션·매치 전적
 

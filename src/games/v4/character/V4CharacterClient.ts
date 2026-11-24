@@ -37,7 +37,7 @@ export class V4CharacterClient {
    * 캐릭터 프로필의 서버·직업·레벨과 접속 시각을 조회한다.
    *
    * `character_date_create` 는 일 단위라 시·분·초가 항상 0이고,
-   * `character_create_type` 은 문자열 코드다 (`"0"`: 일반 캐릭터, `"1"`: 점핑 캐릭터).
+   * `character_create_type` 은 문자열 코드다 (`"0"`: 일반 캐릭터, `"1"`: 점핑 캐릭터). 값이 없으면 null이다.
    *
    * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 고유 번호
    * @throws {NexonBadRequestError} ocid가 비어 있거나(요청 전 차단) 유효하지 않을 때

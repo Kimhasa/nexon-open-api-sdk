@@ -19,7 +19,7 @@ export interface HeroesRealTimeRankingRequest {
   readonly page_no: number;
 }
 
-/** 랭킹 항목 (명예의 전당·실시간 공통). 두 랭킹 API의 응답은 이 항목의 배열이다 */
+/** 랭킹 항목 (명예의 전당·실시간 공통). 두 랭킹 메서드는 이 항목의 배열을 돌려준다 */
 export interface HeroesRankingEntry {
   /** 순위 기준. 문자열 "0"은 공격력, "1"은 마법 공격력이다. */
   readonly ranking_type: string;

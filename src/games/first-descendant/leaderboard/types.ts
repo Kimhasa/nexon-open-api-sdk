@@ -12,8 +12,11 @@ export type TfdLeaderboardSquadUserCount = 2 | 3 | 4;
 export interface TfdLeaderboardSoloFilter {
   /** 리더보드 유형 */
   readonly leaderboard_type: 'Solo';
-  /** 계승자 식별자 (`meta.getDescendant()` 참고) */
-  readonly descendant_id?: string | undefined;
+  /**
+   * 계승자 번호 (계승자 도감 `meta.getDescendant()` 의 `descendant_id`).
+   * 솔로 리더보드는 계승자별 기록이라 반드시 넣는다. 빼면 서버가 요청을 거절한다 (2026-11-24 실측).
+   */
+  readonly descendant_id: string;
   /** 솔로 리더보드에는 쓸 수 없다 */
   readonly squad_user_count?: undefined;
 }
@@ -22,8 +25,11 @@ export interface TfdLeaderboardSoloFilter {
 export interface TfdLeaderboardSquadFilter {
   /** 리더보드 유형 */
   readonly leaderboard_type: 'Squad';
-  /** 스쿼드 인원 수 */
-  readonly squad_user_count?: TfdLeaderboardSquadUserCount | undefined;
+  /**
+   * 스쿼드 인원 수 (2·3·4명).
+   * 스쿼드 리더보드는 인원수별 기록이라 반드시 넣는다. 빼면 서버가 요청을 거절한다 (2026-11-24 실측).
+   */
+  readonly squad_user_count: TfdLeaderboardSquadUserCount;
   /** 스쿼드 리더보드에는 쓸 수 없다 */
   readonly descendant_id?: undefined;
 }
@@ -40,7 +46,7 @@ export type TfdLeaderboardVoidInterceptBattleContentsType = 'RiskMode';
 /**
  * 보이드 요격전 리더보드 조회 요청.
  *
- * `leaderboard_type` 이 `'Solo'` 면 `descendant_id`, `'Squad'` 면 `squad_user_count` 를 함께 쓴다.
+ * `leaderboard_type` 이 `'Solo'` 면 `descendant_id`, `'Squad'` 면 `squad_user_count` 를 반드시 함께 넣는다.
  */
 export type TfdLeaderboardVoidInterceptBattleRequest = (
   | TfdLeaderboardSoloFilter
@@ -54,7 +60,7 @@ export type TfdLeaderboardVoidInterceptBattleRequest = (
 /**
  * 보이드 침식 정화 - 도전 리더보드 조회 요청.
  *
- * `leaderboard_type` 이 `'Solo'` 면 `descendant_id`, `'Squad'` 면 `squad_user_count` 를 함께 쓴다.
+ * `leaderboard_type` 이 `'Solo'` 면 `descendant_id`, `'Squad'` 면 `squad_user_count` 를 반드시 함께 넣는다.
  */
 export type TfdLeaderboardVoidErosionPurgeChallengeRequest = (
   | TfdLeaderboardSoloFilter

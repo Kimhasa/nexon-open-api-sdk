@@ -24,7 +24,7 @@ interface LeaderboardFilterQuery {
 /**
  * 리더보드 공통 조건을 검증하고 쿼리로 바꾼다.
  *
- * 타입이 이미 막는 조합이지만 JavaScript 호출이나 `as` 캐스팅으로 들어온 값은
+ * 타입이 이미 막는 조합·누락이지만 JavaScript 호출이나 `as` 캐스팅으로 들어온 값은
  * 서버 400의 뭉뚱그린 메시지 대신 여기서 원인을 짚어 준다.
  */
 function toFilterQuery(params: {
@@ -50,16 +50,28 @@ function toFilterQuery(params: {
       "descendant_id를 빼거나 leaderboard_type을 'Solo' 로 바꾸세요. 스쿼드는 squad_user_count로 거릅니다.",
     );
   }
-  if (squad_user_count !== undefined) {
-    assertOneOf(squad_user_count, SQUAD_USER_COUNTS, 'squad_user_count');
-  }
-  if (descendant_id !== undefined) {
+  // 스펙은 두 값을 선택으로 적었지만 서버는 유형에 맞는 값이 없으면 400을 돌려준다 (2026-11-24 실측).
+  if (leaderboard_type === 'Solo') {
+    if (descendant_id === undefined) {
+      invalidInput(
+        "leaderboard_type이 'Solo' 인데 descendant_id가 없습니다. 솔로 리더보드는 계승자별로 조회합니다.",
+        '계승자 도감 `meta.getDescendant()` 의 `descendant_id` 를 넣으세요.',
+      );
+    }
     assertNonEmptyString(
       descendant_id,
       'descendant_id',
-      'client.firstDescendant.meta.getDescendant() 응답의 descendant_id를 넘기거나 필드를 빼세요.',
+      '계승자 도감 `meta.getDescendant()` 의 `descendant_id` 를 넣으세요.',
       'trim-not-empty',
     );
+  } else {
+    if (squad_user_count === undefined) {
+      invalidInput(
+        "leaderboard_type이 'Squad' 인데 squad_user_count가 없습니다. 스쿼드 리더보드는 인원수별로 조회합니다.",
+        '스쿼드 인원 2·3·4 중 하나를 squad_user_count에 넣으세요.',
+      );
+    }
+    assertOneOf(squad_user_count, SQUAD_USER_COUNTS, 'squad_user_count');
   }
 
   return { leaderboard_type, descendant_id, squad_user_count, platform_type };
@@ -97,9 +109,9 @@ export class FirstDescendantLeaderboardClient {
   /**
    * 보이드 요격전 리더보드의 클리어 타임과 참가 멤버를 조회한다.
    *
-   * @param params - `leaderboard_type` (`'Solo'` | `'Squad'`), 솔로는 도감의 계승자 번호(`descendant_id`), 스쿼드는 인원수(`squad_user_count`, 2·3·4명)로 필터링,
+   * @param params - `leaderboard_type` (`'Solo'` | `'Squad'`), 솔로는 도감의 계승자 번호(`descendant_id`)가, 스쿼드는 인원수(`squad_user_count`, 2·3·4명)가 필수,
    *   `platform_type` (기본값 `'All'`), `contents_type` (기본값 `'RiskMode'`)
-   * @throws {NexonBadRequestError} 조건 조합이나 값이 올바르지 않을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} 솔로에 `descendant_id`, 스쿼드에 `squad_user_count` 가 없거나 조건 조합·값이 올바르지 않을 때 (요청 전 SDK 검증)
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
    *
@@ -144,9 +156,9 @@ export class FirstDescendantLeaderboardClient {
   /**
    * 보이드 침식 정화 - 도전의 리더보드 순위·단계·클리어 타임을 조회한다.
    *
-   * @param params - `leaderboard_type` (`'Solo'` | `'Squad'`), 솔로는 도감의 계승자 번호(`descendant_id`), 스쿼드는 인원수(`squad_user_count`, 2·3·4명)로 필터링,
+   * @param params - `leaderboard_type` (`'Solo'` | `'Squad'`), 솔로는 도감의 계승자 번호(`descendant_id`)가, 스쿼드는 인원수(`squad_user_count`, 2·3·4명)가 필수,
    *   `platform_type` (기본값 `'All'`)
-   * @throws {NexonBadRequestError} 조건 조합이나 값이 올바르지 않을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} 솔로에 `descendant_id`, 스쿼드에 `squad_user_count` 가 없거나 조건 조합·값이 올바르지 않을 때 (요청 전 SDK 검증)
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
    *
