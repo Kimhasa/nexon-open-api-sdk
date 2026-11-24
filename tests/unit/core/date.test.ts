@@ -1,3 +1,4 @@
+import { NexonBadRequestError } from '../../../src/core/errors/NexonBadRequestError.js';
 import { describe, it, expect } from 'vitest';
 import { toNexonDate } from '../../../src/games/_base/maple-date.js';
 import type { NexonDate } from '../../../src/games/_base/maple-base-types.js';
@@ -41,7 +42,10 @@ describe('toNexonDate', () => {
   });
 
   it('잘못된 날짜 문자열은 에러를 던진다', () => {
-    expect(() => toNexonDate('not-a-date', 540)).toThrow('잘못된 날짜 형식');
+    const parseInvalidDate = (): string => toNexonDate('not-a-date', 540);
+    expect(parseInvalidDate).toThrow(NexonBadRequestError);
+    expect(parseInvalidDate).toThrow(expect.objectContaining({ code: 'OPENAPI00004' }));
+    expect(parseInvalidDate).toThrow(/YYYY-MM-DD/);
   });
 
   it('ISO 문자열을 파싱하여 변환한다', () => {

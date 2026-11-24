@@ -1,3 +1,4 @@
+import { assertNonEmptyString } from '../../../core/validation/input.js';
 import { emitDeprecation } from '../../../core/deprecation/deprecation.js';
 import {
   SEA_CHARACTER_BASIC_SHAPE,
@@ -20,7 +21,6 @@ import {
   SEA_CHARACTER_HEXAMATRIX_STAT_SHAPE,
   SEA_CHARACTER_DOJANG_SHAPE,
 } from '../shapes.js';
-import { assertNonBlank } from '../validate-input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { OcidDateRequest } from '../../_base/maple-base-types.js';
 import type {
@@ -81,7 +81,7 @@ export class MapleStorySEACharacterClient {
    * ```
    */
   async getBasic(params: OcidDateRequest): Promise<SEACharacterBasic> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEACharacterBasic>(
       `${MapleStorySEACharacterClient.BASE}/character/basic`,
       { ocid: params.ocid, date: params.date as string | undefined },
@@ -107,7 +107,7 @@ export class MapleStorySEACharacterClient {
    * ```
    */
   async getPopularity(params: OcidDateRequest): Promise<SEACharacterPopularity> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEACharacterPopularity>(
       `${MapleStorySEACharacterClient.BASE}/character/popularity`,
       { ocid: params.ocid, date: params.date as string | undefined },
@@ -133,7 +133,7 @@ export class MapleStorySEACharacterClient {
    * ```
    */
   async getStat(params: OcidDateRequest): Promise<SEACharacterStat> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEACharacterStat>(
       `${MapleStorySEACharacterClient.BASE}/character/stat`,
       {
@@ -162,7 +162,7 @@ export class MapleStorySEACharacterClient {
    * ```
    */
   async getHyperStat(params: OcidDateRequest): Promise<SEACharacterHyperStat> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEACharacterHyperStat>(
       `${MapleStorySEACharacterClient.BASE}/character/hyper-stat`,
       { ocid: params.ocid, date: params.date as string | undefined },
@@ -188,7 +188,7 @@ export class MapleStorySEACharacterClient {
    * ```
    */
   async getPropensity(params: OcidDateRequest): Promise<SEACharacterPropensity> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEACharacterPropensity>(
       `${MapleStorySEACharacterClient.BASE}/character/propensity`,
       { ocid: params.ocid, date: params.date as string | undefined },
@@ -214,7 +214,7 @@ export class MapleStorySEACharacterClient {
    * ```
    */
   async getAbility(params: OcidDateRequest): Promise<SEACharacterAbility> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEACharacterAbility>(
       `${MapleStorySEACharacterClient.BASE}/character/ability`,
       { ocid: params.ocid, date: params.date as string | undefined },
@@ -240,7 +240,7 @@ export class MapleStorySEACharacterClient {
    * ```
    */
   async getItemEquipment(params: OcidDateRequest): Promise<SEACharacterItemEquipment> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     const response = await this.http.get<SEACharacterItemEquipment>(
       `${MapleStorySEACharacterClient.BASE}/character/item-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
@@ -274,7 +274,7 @@ export class MapleStorySEACharacterClient {
    * ```
    */
   async getCashItemEquipment(params: OcidDateRequest): Promise<SEACharacterCashItemEquipment> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     const response = await this.http.get<SEACharacterCashItemEquipment>(
       `${MapleStorySEACharacterClient.BASE}/character/cashitem-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
@@ -317,7 +317,7 @@ export class MapleStorySEACharacterClient {
    * ```
    */
   async getSymbolEquipment(params: OcidDateRequest): Promise<SEACharacterSymbolEquipment> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEACharacterSymbolEquipment>(
       `${MapleStorySEACharacterClient.BASE}/character/symbol-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
@@ -343,7 +343,7 @@ export class MapleStorySEACharacterClient {
    * ```
    */
   async getSetEffect(params: OcidDateRequest): Promise<SEACharacterSetEffect> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEACharacterSetEffect>(
       `${MapleStorySEACharacterClient.BASE}/character/set-effect`,
       { ocid: params.ocid, date: params.date as string | undefined },
@@ -369,7 +369,7 @@ export class MapleStorySEACharacterClient {
    * ```
    */
   async getBeautyEquipment(params: OcidDateRequest): Promise<SEACharacterBeautyEquipment> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEACharacterBeautyEquipment>(
       `${MapleStorySEACharacterClient.BASE}/character/beauty-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
@@ -395,7 +395,7 @@ export class MapleStorySEACharacterClient {
    * ```
    */
   async getAndroidEquipment(params: OcidDateRequest): Promise<SEACharacterAndroidEquipment> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEACharacterAndroidEquipment>(
       `${MapleStorySEACharacterClient.BASE}/character/android-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
@@ -421,7 +421,7 @@ export class MapleStorySEACharacterClient {
    * ```
    */
   async getPetEquipment(params: OcidDateRequest): Promise<SEACharacterPetEquipment> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEACharacterPetEquipment>(
       `${MapleStorySEACharacterClient.BASE}/character/pet-equipment`,
       { ocid: params.ocid, date: params.date as string | undefined },
@@ -448,8 +448,8 @@ export class MapleStorySEACharacterClient {
    * ```
    */
   async getSkill(params: SEASkillRequest): Promise<SEACharacterSkill> {
-    assertNonBlank(params.ocid, 'ocid');
-    assertNonBlank(params.character_skill_grade, 'character_skill_grade');
+    assertNonEmptyString(params.ocid, 'ocid');
+    assertNonEmptyString(params.character_skill_grade, 'character_skill_grade');
     return this.http.get<SEACharacterSkill>(
       `${MapleStorySEACharacterClient.BASE}/character/skill`,
       {
@@ -479,7 +479,7 @@ export class MapleStorySEACharacterClient {
    * ```
    */
   async getLinkSkill(params: OcidDateRequest): Promise<SEACharacterLinkSkill> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEACharacterLinkSkill>(
       `${MapleStorySEACharacterClient.BASE}/character/link-skill`,
       { ocid: params.ocid, date: params.date as string | undefined },
@@ -505,7 +505,7 @@ export class MapleStorySEACharacterClient {
    * ```
    */
   async getVMatrix(params: OcidDateRequest): Promise<SEACharacterVMatrix> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEACharacterVMatrix>(
       `${MapleStorySEACharacterClient.BASE}/character/vmatrix`,
       { ocid: params.ocid, date: params.date as string | undefined },
@@ -531,7 +531,7 @@ export class MapleStorySEACharacterClient {
    * ```
    */
   async getHexaMatrix(params: OcidDateRequest): Promise<SEACharacterHexaMatrix> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEACharacterHexaMatrix>(
       `${MapleStorySEACharacterClient.BASE}/character/hexamatrix`,
       { ocid: params.ocid, date: params.date as string | undefined },
@@ -557,7 +557,7 @@ export class MapleStorySEACharacterClient {
    * ```
    */
   async getHexaMatrixStat(params: OcidDateRequest): Promise<SEACharacterHexaMatrixStat> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEACharacterHexaMatrixStat>(
       `${MapleStorySEACharacterClient.BASE}/character/hexamatrix-stat`,
       { ocid: params.ocid, date: params.date as string | undefined },
@@ -583,7 +583,7 @@ export class MapleStorySEACharacterClient {
    * ```
    */
   async getDojang(params: OcidDateRequest): Promise<SEACharacterDojang> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEACharacterDojang>(
       `${MapleStorySEACharacterClient.BASE}/character/dojang`,
       { ocid: params.ocid, date: params.date as string | undefined },

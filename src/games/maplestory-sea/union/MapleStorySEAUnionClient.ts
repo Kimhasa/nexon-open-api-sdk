@@ -1,10 +1,10 @@
+import { assertNonEmptyString } from '../../../core/validation/input.js';
 import {
   SEA_UNION_SHAPE,
   SEA_UNION_RAIDER_SHAPE,
   SEA_UNION_ARTIFACT_SHAPE,
   SEA_UNION_CHAMPION_SHAPE,
 } from '../shapes.js';
-import { assertNonBlank } from '../validate-input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { OcidDateRequest } from '../../_base/maple-base-types.js';
 import type { SEAUnion, SEAUnionRaider, SEAUnionArtifact, SEAUnionChampion } from './types.js';
@@ -44,7 +44,7 @@ export class MapleStorySEAUnionClient {
    * ```
    */
   async getUnion(params: OcidDateRequest): Promise<SEAUnion> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEAUnion>(
       `${MapleStorySEAUnionClient.BASE}/user/union`,
       {
@@ -73,7 +73,7 @@ export class MapleStorySEAUnionClient {
    * ```
    */
   async getRaider(params: OcidDateRequest): Promise<SEAUnionRaider> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEAUnionRaider>(
       `${MapleStorySEAUnionClient.BASE}/user/union-raider`,
       {
@@ -102,7 +102,7 @@ export class MapleStorySEAUnionClient {
    * ```
    */
   async getArtifact(params: OcidDateRequest): Promise<SEAUnionArtifact> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEAUnionArtifact>(
       `${MapleStorySEAUnionClient.BASE}/user/union-artifact`,
       {
@@ -131,7 +131,7 @@ export class MapleStorySEAUnionClient {
    * ```
    */
   async getChampion(params: OcidDateRequest): Promise<SEAUnionChampion> {
-    assertNonBlank(params.ocid, 'ocid');
+    assertNonEmptyString(params.ocid, 'ocid');
     return this.http.get<SEAUnionChampion>(
       `${MapleStorySEAUnionClient.BASE}/user/union-champion`,
       {

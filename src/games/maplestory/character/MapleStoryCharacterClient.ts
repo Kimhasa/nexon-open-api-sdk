@@ -1,3 +1,4 @@
+import { assertNonEmptyString } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { OcidDateRequest } from '../../_base/maple-base-types.js';
 import {
@@ -25,7 +26,6 @@ import {
   CHARACTER_RING_EXCHANGE_SKILL_EQUIPMENT_SHAPE,
   CHARACTER_RING_RESERVE_SKILL_EQUIPMENT_SHAPE,
 } from '../shapes.js';
-import { assertNonEmptyString } from '../validation.js';
 import type {
   CharacterAbility,
   CharacterAndroidEquipment,

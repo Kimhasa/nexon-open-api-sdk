@@ -1,3 +1,4 @@
+import { assertNonEmptyString } from '../../../core/validation/input.js';
 import { emitDeprecation } from '../../../core/deprecation/deprecation.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { MOcidRequest } from '../types.js';
@@ -39,7 +40,8 @@ import type {
   MCharacterHexaMatrixSkill,
   MCharacterHexaMatrixStat,
 } from './types.js';
-import { assertOcid } from '../validation.js';
+
+const OCID_HINT = 'maplestorym.getOcid()로 캐릭터 식별자를 조회하세요.';
 
 /**
  * 메이플스토리M 캐릭터 API 클라이언트.
@@ -64,7 +66,7 @@ export class MapleStoryMCharacterClient {
    * 기본 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -78,7 +80,7 @@ export class MapleStoryMCharacterClient {
    * ```
    */
   async getBasic(params: MOcidRequest): Promise<MCharacterBasic> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<MCharacterBasic>(
       `${MapleStoryMCharacterClient.BASE}/character/basic`,
       { ocid: params.ocid },
@@ -90,7 +92,7 @@ export class MapleStoryMCharacterClient {
    * 스탯 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -106,7 +108,7 @@ export class MapleStoryMCharacterClient {
    * ```
    */
   async getStat(params: MOcidRequest): Promise<MCharacterStat> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<MCharacterStat>(
       `${MapleStoryMCharacterClient.BASE}/character/stat`,
       { ocid: params.ocid },
@@ -118,7 +120,7 @@ export class MapleStoryMCharacterClient {
    * 하이퍼 스탯 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -132,7 +134,7 @@ export class MapleStoryMCharacterClient {
    * ```
    */
   async getHyperStat(params: MOcidRequest): Promise<MCharacterHyperStat> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<MCharacterHyperStat>(
       `${MapleStoryMCharacterClient.BASE}/character/hyper-stat`,
       { ocid: params.ocid },
@@ -144,7 +146,7 @@ export class MapleStoryMCharacterClient {
    * 가입한 길드 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -158,7 +160,7 @@ export class MapleStoryMCharacterClient {
    * ```
    */
   async getGuild(params: MOcidRequest): Promise<MCharacterGuild> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<MCharacterGuild>(
       `${MapleStoryMCharacterClient.BASE}/character/guild`,
       { ocid: params.ocid },
@@ -170,7 +172,7 @@ export class MapleStoryMCharacterClient {
    * 장착 아이템 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -186,7 +188,7 @@ export class MapleStoryMCharacterClient {
    * ```
    */
   async getItemEquipment(params: MOcidRequest): Promise<MCharacterItemEquipment> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<MCharacterItemEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/item-equipment`,
       { ocid: params.ocid },
@@ -198,7 +200,7 @@ export class MapleStoryMCharacterClient {
    * 장착 캐시 아이템 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -214,7 +216,7 @@ export class MapleStoryMCharacterClient {
    * ```
    */
   async getCashItemEquipment(params: MOcidRequest): Promise<MCharacterCashItemEquipment> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<MCharacterCashItemEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/cashitem-equipment`,
       { ocid: params.ocid },
@@ -226,7 +228,7 @@ export class MapleStoryMCharacterClient {
    * 장착 심볼 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -242,7 +244,7 @@ export class MapleStoryMCharacterClient {
    * ```
    */
   async getSymbol(params: MOcidRequest): Promise<MCharacterSymbolEquipment> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<MCharacterSymbolEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/symbol`,
       { ocid: params.ocid },
@@ -254,7 +256,7 @@ export class MapleStoryMCharacterClient {
    * 적용 세트 효과 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -270,7 +272,7 @@ export class MapleStoryMCharacterClient {
    * ```
    */
   async getSetEffect(params: MOcidRequest): Promise<MCharacterSetEffect> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<MCharacterSetEffect>(
       `${MapleStoryMCharacterClient.BASE}/character/set-effect`,
       { ocid: params.ocid },
@@ -282,7 +284,7 @@ export class MapleStoryMCharacterClient {
    * 장착 안드로이드 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -296,7 +298,7 @@ export class MapleStoryMCharacterClient {
    * ```
    */
   async getAndroidEquipment(params: MOcidRequest): Promise<MCharacterAndroidEquipment> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<MCharacterAndroidEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/android-equipment`,
       { ocid: params.ocid },
@@ -308,7 +310,7 @@ export class MapleStoryMCharacterClient {
    * 장착 쥬얼 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -324,7 +326,7 @@ export class MapleStoryMCharacterClient {
    * ```
    */
   async getJewel(params: MOcidRequest): Promise<MCharacterJewel> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<MCharacterJewel>(
       `${MapleStoryMCharacterClient.BASE}/character/jewel`,
       { ocid: params.ocid },
@@ -336,7 +338,7 @@ export class MapleStoryMCharacterClient {
    * 장착 헤어, 성형, 피부 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -350,7 +352,7 @@ export class MapleStoryMCharacterClient {
    * ```
    */
   async getBeautyEquipment(params: MOcidRequest): Promise<MCharacterBeautyEquipment> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<MCharacterBeautyEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/beauty-equipment`,
       { ocid: params.ocid },
@@ -362,7 +364,7 @@ export class MapleStoryMCharacterClient {
    * 장착 펫 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -376,7 +378,7 @@ export class MapleStoryMCharacterClient {
    * ```
    */
   async getPetEquipment(params: MOcidRequest): Promise<MCharacterPetEquipment> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<MCharacterPetEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/pet-equipment`,
       { ocid: params.ocid },
@@ -388,7 +390,7 @@ export class MapleStoryMCharacterClient {
    * 장착 스킬 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -404,7 +406,7 @@ export class MapleStoryMCharacterClient {
    * ```
    */
   async getSkillEquipment(params: MOcidRequest): Promise<MCharacterSkillEquipment> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<MCharacterSkillEquipment>(
       `${MapleStoryMCharacterClient.BASE}/character/skill-equipment`,
       { ocid: params.ocid },
@@ -416,7 +418,7 @@ export class MapleStoryMCharacterClient {
    * 장착 링크 스킬 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -432,7 +434,7 @@ export class MapleStoryMCharacterClient {
    * ```
    */
   async getLinkSkill(params: MOcidRequest): Promise<MCharacterLinkSkill> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<MCharacterLinkSkill>(
       `${MapleStoryMCharacterClient.BASE}/character/link-skill`,
       { ocid: params.ocid },
@@ -444,7 +446,7 @@ export class MapleStoryMCharacterClient {
    * V매트릭스 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -460,7 +462,7 @@ export class MapleStoryMCharacterClient {
    * ```
    */
   async getVMatrix(params: MOcidRequest): Promise<MCharacterVMatrix> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     const response = await this.http.get<MCharacterVMatrix>(
       `${MapleStoryMCharacterClient.BASE}/character/vmatrix`,
       { ocid: params.ocid },
@@ -492,7 +494,7 @@ export class MapleStoryMCharacterClient {
    * HEXA매트릭스 스킬 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -508,7 +510,7 @@ export class MapleStoryMCharacterClient {
    * ```
    */
   async getHexaMatrixSkill(params: MOcidRequest): Promise<MCharacterHexaMatrixSkill> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<MCharacterHexaMatrixSkill>(
       `${MapleStoryMCharacterClient.BASE}/character/hexamatrix-skill`,
       { ocid: params.ocid },
@@ -520,7 +522,7 @@ export class MapleStoryMCharacterClient {
    * HEXA매트릭스 스탯 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -536,7 +538,7 @@ export class MapleStoryMCharacterClient {
    * ```
    */
   async getHexaMatrixStat(params: MOcidRequest): Promise<MCharacterHexaMatrixStat> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<MCharacterHexaMatrixStat>(
       `${MapleStoryMCharacterClient.BASE}/character/hexamatrix-stat`,
       { ocid: params.ocid },

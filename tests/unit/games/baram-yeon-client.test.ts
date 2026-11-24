@@ -75,8 +75,12 @@ describe('BaramYeonClient', () => {
       const client = createClient();
 
       await expect(client.getOcid('', '연')).rejects.toThrow(NexonBadRequestError);
-      await expect(client.getOcid(' ', '연')).rejects.toThrow(/characterName 값이 비어 있습니다/);
-      await expect(client.getOcid('테스트연', '')).rejects.toThrow(/serverName 값이 비어 있습니다/);
+      await expect(client.getOcid(' ', '연')).rejects.toThrow(
+        /characterName 값이 비어 있거나 문자열이 아닙니다/,
+      );
+      await expect(client.getOcid('테스트연', '')).rejects.toThrow(
+        /serverName 값이 비어 있거나 문자열이 아닙니다/,
+      );
       expect(requests).toHaveLength(0);
     });
   });

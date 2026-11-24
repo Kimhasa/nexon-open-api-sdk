@@ -1,3 +1,4 @@
+import { invalidInput } from '../../core/validation/input.js';
 import type { NexonDate } from './maple-base-types.js';
 
 /**
@@ -30,8 +31,8 @@ export function toNexonDate(
     // 다른 문자열이면 Date로 파싱
     const parsed = new Date(date);
     if (isNaN(parsed.getTime())) {
-      throw new Error(
-        `잘못된 날짜 형식: "${date}"\n→ 올바른 형식: 'YYYY-MM-DD', Date 객체, 또는 'today'`,
+      invalidInput(
+        `잘못된 날짜 형식: "${date}". 올바른 형식은 'YYYY-MM-DD', Date 객체, 또는 'today'`,
       );
     }
     return formatDateWithOffset(parsed, timezoneOffset);

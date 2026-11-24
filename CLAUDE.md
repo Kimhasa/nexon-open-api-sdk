@@ -139,6 +139,7 @@ NexonError (base)
 - **Branded Types** → OCID, GuildId, NexonDate는 `_base/maple-base-types.ts`, OUID는 `fc-online/user/types.ts`에 정의. `core/types/branded.ts`는 `Brand<T,B>` 유틸리티만 보유
 - **HttpClient** → 429/503만 재시도, 나머지 즉시 throw. `x-nxopen-api-key` 헤더 자동 주입
 - **에러 분류** → OPENAPI 에러 코드 기반 서브클래스 분류 (`classify-error.ts`)
+- **SDK 경계 입력 검증** → `src/core/validation/input.ts` 의 공용 헬퍼를 사용한다. 게임별 조건과 상수는 해당 게임에 두고 `NexonBadRequestError` (`OPENAPI00004`)로 알린다.
 - **엔드포인트 URL** → 두 방식이 공존한다. 한 게임 안에서는 한 방식만 쓴다
   - 메이플 계열(KMS, M, SEA): sub-client마다 `private static readonly BASE = 'https://open.api.nexon.com/{prefix}/v1'` 상수를 두고 `` `${Xxx.BASE}/character/basic` `` 로 조립. 게임 진입 클라이언트는 `this.buildUrl('id')` 사용
   - FC Online: `fc-online/endpoints.ts` 에 `as const` 객체로 모아 관리 (`/static/...`, CDN처럼 host 경로가 여러 갈래일 때 적합)
@@ -207,7 +208,7 @@ throw new NexonRateLimitError(
 
 ### SDK 경계 입력 검증
 
-API 서버 400 응답에 의존하지 않고 SDK에서 즉시 throw (빈 ocid, 미래 날짜 등).
+빈 식별자, 범위를 벗어난 날짜 등 SDK가 검사하는 입력은 HTTP 요청 전에 검증한다. `assertNonEmptyString`, `assertOneOf`, `assertInteger`, `assertDateInRange` 를 재사용하고, 게임별 조건 조합은 `invalidInput(message, hint)` 으로 알린다. 모든 검증 실패는 `NexonBadRequestError` (`code: 'OPENAPI00004'`)를 던지며, 메시지에 문제가 된 입력과 수정 방법을 포함한다.
 
 ### 메서드 네이밍
 

@@ -1,5 +1,5 @@
+import { assertNonEmptyString } from '../../core/validation/input.js';
 import { SEA_OCID_SHAPE } from './shapes.js';
-import { assertNonBlank } from './validate-input.js';
 import { AbstractMapleBaseClient } from '../_base/AbstractMapleStoryBaseClient.js';
 import type { OCID } from '../_base/maple-base-types.js';
 import { MapleStorySEACharacterClient } from './character/MapleStorySEACharacterClient.js';
@@ -71,7 +71,7 @@ export class MapleStorySEAClient extends AbstractMapleBaseClient {
    * ```
    */
   async getOcid(characterName: string): Promise<OCID> {
-    assertNonBlank(characterName, 'characterName');
+    assertNonEmptyString(characterName, 'characterName');
     const url = this.buildUrl('id');
     const response = await this.http.get<{ ocid: string }>(
       url,

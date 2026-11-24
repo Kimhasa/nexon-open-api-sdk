@@ -1,9 +1,9 @@
+import { assertNonEmptyString } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { MGuildIdRequest } from '../types.js';
 import { M_GUILD_ID_SHAPE, M_GUILD_BASIC_SHAPE } from '../shapes.js';
 import type { GuildId } from '../../_base/maple-base-types.js';
 import type { MGuildIdResponse, MGuildBasic, MWorldName } from './types.js';
-import { assertNonBlank } from '../validation.js';
 
 /**
  * 메이플스토리M 길드 API 클라이언트.
@@ -25,7 +25,7 @@ export class MapleStoryMGuildClient {
    * @param worldName - 월드 명
    * @param guildName - 길드 명
    *
-   * @throws {TypeError} 월드명이나 길드명이 비어 있을 때
+   * @throws {NexonBadRequestError} 월드명이나 길드명이 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -37,11 +37,8 @@ export class MapleStoryMGuildClient {
    * ```
    */
   async getId(worldName: MWorldName, guildName: string): Promise<GuildId> {
-    assertNonBlank(
-      worldName,
-      '월드명이 비어 있습니다. 스카니아 등 길드가 속한 월드명을 입력하세요.',
-    );
-    assertNonBlank(guildName, '길드명이 비어 있습니다. 조회할 길드명을 입력하세요.');
+    assertNonEmptyString(worldName, 'worldName', '스카니아 등 길드가 속한 월드명을 입력하세요.');
+    assertNonEmptyString(guildName, 'guildName', '조회할 길드명을 입력하세요.');
     const response = await this.http.get<MGuildIdResponse>(
       `${MapleStoryMGuildClient.BASE}/guild/id`,
       { world_name: worldName, guild_name: guildName },
@@ -54,7 +51,7 @@ export class MapleStoryMGuildClient {
    * 길드 기본 정보를 조회한다.
    *
    * @param params - 길드 식별자(`oguild_id`)
-   * @throws {TypeError} 길드 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 길드 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -68,9 +65,10 @@ export class MapleStoryMGuildClient {
    * ```
    */
   async getBasic(params: MGuildIdRequest): Promise<MGuildBasic> {
-    assertNonBlank(
+    assertNonEmptyString(
       params.oguild_id,
-      'oguild_id가 비어 있습니다. guild.getId()로 길드 식별자를 조회하세요.',
+      'oguild_id',
+      'guild.getId()로 길드 식별자를 조회하세요.',
     );
     return this.http.get<MGuildBasic>(
       `${MapleStoryMGuildClient.BASE}/guild/basic`,

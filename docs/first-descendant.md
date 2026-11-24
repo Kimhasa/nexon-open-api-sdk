@@ -121,7 +121,7 @@ const weaponById = new Map(weapons.map((w) => [w.weapon_id, w]));
 ### 언어 코드
 
 `ko` (기본값), `en`, `de`, `fr`, `ja`, `zh-CN`, `zh-TW`, `it`, `pl`, `pt`, `ru`, `es` — 대소문자를 구분한다.
-목록에 없는 값은 요청 전에 `NexonError` 로 거른다. 런타임 목록은 `TFD_LANGUAGE_CODES`, 타입은 `TfdLanguageCode` 다.
+목록에 없는 값은 요청 전에 `NexonBadRequestError` (`code: 'OPENAPI00004'`)로 거른다. 런타임 목록은 `TFD_LANGUAGE_CODES`, 타입은 `TfdLanguageCode` 다.
 
 ### 언어별 (24개)
 
@@ -263,7 +263,7 @@ try {
 }
 ```
 
-SDK는 요청을 보내기 전에 다음을 검사해 `NexonError` (`status` 없음)를 던진다. 메시지에 고치는 방법이 들어 있다.
+다음 입력은 요청 전에 검증한다. 검증에 실패하면 `NexonBadRequestError` (`code: 'OPENAPI00004'`)가 발생하고 메시지에 고치는 방법이 들어 있다.
 
 - 빈 `userName`, `ouid`, `descendant_group_id`, `descendant_id`, `weapon_id`, `void_battle_id`
 - 지원 목록에 없는 언어 코드

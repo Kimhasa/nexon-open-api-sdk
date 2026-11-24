@@ -1,4 +1,6 @@
+import { assertNonEmptyString, assertOneOf } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
+import { TFD_LANGUAGE_CODES } from '../types.js';
 import {
   TFD_USER_ARCHE_TUNING_SHAPE,
   TFD_USER_BASIC_SHAPE,
@@ -7,7 +9,6 @@ import {
   TFD_USER_REACTOR_SHAPE,
   TFD_USER_WEAPON_SHAPE,
 } from '../shapes.js';
-import { assertLanguageCode, assertNonEmpty } from '../validate.js';
 import type {
   TfdUserArcheTuning,
   TfdUserArcheTuningRequest,
@@ -48,7 +49,7 @@ export class FirstDescendantUserClient {
    * 계정 기본 정보를 조회한다.
    *
    * @param params - `ouid` (계정 식별자)
-   * @throws {NexonError} ouid가 비어 있을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} ouid가 비어 있을 때 (요청 전 SDK 검증)
    * @throws {NexonBadRequestError} ouid가 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -61,7 +62,7 @@ export class FirstDescendantUserClient {
    * ```
    */
   async getBasic(params: TfdUserRequest): Promise<TfdUserBasic> {
-    assertNonEmpty(params.ouid, 'ouid', OUID_HINT);
+    assertNonEmptyString(params.ouid, 'ouid', OUID_HINT);
     return this.http.get<TfdUserBasic>(
       `${FirstDescendantUserClient.BASE}/user/basic`,
       { ouid: params.ouid },
@@ -75,7 +76,7 @@ export class FirstDescendantUserClient {
    * 장착 모듈·커스터마이징 정보는 게임을 재접속하거나 매칭이 있는 콘텐츠를 완료한 뒤에 갱신된다.
    *
    * @param params - `ouid` (계정 식별자)
-   * @throws {NexonError} ouid가 비어 있을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} ouid가 비어 있을 때 (요청 전 SDK 검증)
    * @throws {NexonBadRequestError} ouid가 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -88,7 +89,7 @@ export class FirstDescendantUserClient {
    * ```
    */
   async getDescendant(params: TfdUserRequest): Promise<TfdUserDescendant> {
-    assertNonEmpty(params.ouid, 'ouid', OUID_HINT);
+    assertNonEmptyString(params.ouid, 'ouid', OUID_HINT);
     return this.http.get<TfdUserDescendant>(
       `${FirstDescendantUserClient.BASE}/user/descendant`,
       { ouid: params.ouid },
@@ -102,7 +103,7 @@ export class FirstDescendantUserClient {
    * 장착 모듈 정보는 게임을 재접속하거나 매칭이 있는 콘텐츠를 완료한 뒤에 갱신된다.
    *
    * @param params - `ouid` (계정 식별자), `language_code` (옵션 이름의 언어, 기본값 `'ko'`)
-   * @throws {NexonError} ouid가 비어 있거나 language_code가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} ouid가 비어 있거나 language_code가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonBadRequestError} ouid가 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -115,8 +116,14 @@ export class FirstDescendantUserClient {
    * ```
    */
   async getWeapon(params: TfdUserLocalizedRequest): Promise<TfdUserWeapon> {
-    assertNonEmpty(params.ouid, 'ouid', OUID_HINT);
-    const languageCode = assertLanguageCode(params.language_code ?? 'ko');
+    assertNonEmptyString(params.ouid, 'ouid', OUID_HINT);
+    const languageCode = params.language_code ?? 'ko';
+    assertOneOf(
+      languageCode,
+      TFD_LANGUAGE_CODES,
+      'language_code',
+      '언어 코드는 대소문자를 구분합니다.',
+    );
     return this.http.get<TfdUserWeapon>(
       `${FirstDescendantUserClient.BASE}/user/weapon`,
       { language_code: languageCode, ouid: params.ouid },
@@ -128,7 +135,7 @@ export class FirstDescendantUserClient {
    * 장착한 반응로 정보를 조회한다.
    *
    * @param params - `ouid` (계정 식별자), `language_code` (옵션 이름의 언어, 기본값 `'ko'`)
-   * @throws {NexonError} ouid가 비어 있거나 language_code가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} ouid가 비어 있거나 language_code가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonBadRequestError} ouid가 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -141,8 +148,14 @@ export class FirstDescendantUserClient {
    * ```
    */
   async getReactor(params: TfdUserLocalizedRequest): Promise<TfdUserReactor> {
-    assertNonEmpty(params.ouid, 'ouid', OUID_HINT);
-    const languageCode = assertLanguageCode(params.language_code ?? 'ko');
+    assertNonEmptyString(params.ouid, 'ouid', OUID_HINT);
+    const languageCode = params.language_code ?? 'ko';
+    assertOneOf(
+      languageCode,
+      TFD_LANGUAGE_CODES,
+      'language_code',
+      '언어 코드는 대소문자를 구분합니다.',
+    );
     return this.http.get<TfdUserReactor>(
       `${FirstDescendantUserClient.BASE}/user/reactor`,
       { language_code: languageCode, ouid: params.ouid },
@@ -154,7 +167,7 @@ export class FirstDescendantUserClient {
    * 장착한 모든 슬롯의 외장 부품 정보를 조회한다.
    *
    * @param params - `ouid` (계정 식별자), `language_code` (옵션 이름의 언어, 기본값 `'ko'`)
-   * @throws {NexonError} ouid가 비어 있거나 language_code가 지원 목록에 없을 때 (요청 전 SDK 검증)
+   * @throws {NexonBadRequestError} ouid가 비어 있거나 language_code가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonBadRequestError} ouid가 유효하지 않을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
@@ -167,8 +180,14 @@ export class FirstDescendantUserClient {
    * ```
    */
   async getExternalComponent(params: TfdUserLocalizedRequest): Promise<TfdUserExternalComponent> {
-    assertNonEmpty(params.ouid, 'ouid', OUID_HINT);
-    const languageCode = assertLanguageCode(params.language_code ?? 'ko');
+    assertNonEmptyString(params.ouid, 'ouid', OUID_HINT);
+    const languageCode = params.language_code ?? 'ko';
+    assertOneOf(
+      languageCode,
+      TFD_LANGUAGE_CODES,
+      'language_code',
+      '언어 코드는 대소문자를 구분합니다.',
+    );
     return this.http.get<TfdUserExternalComponent>(
       `${FirstDescendantUserClient.BASE}/user/external-component`,
       { language_code: languageCode, ouid: params.ouid },
@@ -180,8 +199,7 @@ export class FirstDescendantUserClient {
    * 아르케 조율 정보를 조회한다. 계승자 그룹별로 활성화한 노드와 좌표가 내려온다.
    *
    * @param params - `ouid` (계정 식별자), `descendant_group_id` (계승자 그룹 식별자)
-   * @throws {NexonError} ouid 또는 descendant_group_id가 비어 있을 때 (요청 전 SDK 검증)
-   * @throws {NexonBadRequestError} 파라미터가 유효하지 않을 때
+   * @throws {NexonBadRequestError} ouid 또는 descendant_group_id가 비어 있을 때 (요청 전 SDK 검증)
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
    *
@@ -200,8 +218,8 @@ export class FirstDescendantUserClient {
    * ```
    */
   async getArcheTuning(params: TfdUserArcheTuningRequest): Promise<TfdUserArcheTuning> {
-    assertNonEmpty(params.ouid, 'ouid', OUID_HINT);
-    assertNonEmpty(
+    assertNonEmptyString(params.ouid, 'ouid', OUID_HINT);
+    assertNonEmptyString(
       params.descendant_group_id,
       'descendant_group_id',
       'client.firstDescendant.meta.getDescendantGroup() 응답의 descendant_group_id를 넘기세요.',

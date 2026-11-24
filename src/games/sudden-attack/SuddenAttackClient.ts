@@ -1,3 +1,4 @@
+import { assertNonEmptyString } from '../../core/validation/input.js';
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
 import { SUDDEN_ATTACK_ENDPOINTS } from './endpoints.js';
 import { SuddenAttackMatchClient } from './match/SuddenAttackMatchClient.js';
@@ -33,7 +34,7 @@ export class SuddenAttackClient extends AbstractGameClient {
    * 닉네임으로 서든어택 계정 식별자를 조회합니다.
    *
    * @param userName - 조회할 닉네임
-   * @throws {TypeError} 닉네임이 비어 있을 때
+   * @throws {NexonBadRequestError} 닉네임이 비어 있을 때
    * @throws {NexonNotFoundError} 계정을 찾을 수 없을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
@@ -47,9 +48,7 @@ export class SuddenAttackClient extends AbstractGameClient {
    * ```
    */
   async getOuid(userName: string): Promise<SuddenAttackOuid> {
-    if (typeof userName !== 'string' || userName.trim() === '') {
-      throw new TypeError('userName이 비어 있습니다. 조회할 서든어택 닉네임을 입력하세요.');
-    }
+    assertNonEmptyString(userName, 'userName', '조회할 서든어택 닉네임을 입력하세요.');
 
     const response = await this.http.get<SuddenAttackOuidResponse>(
       SUDDEN_ATTACK_ENDPOINTS.ID,

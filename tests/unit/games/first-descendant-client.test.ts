@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { http as mswHttp, HttpResponse } from 'msw';
 import { HttpClient } from '../../../src/core/http/HttpClient.js';
-import { NexonError } from '../../../src/core/errors/NexonError.js';
 import { NexonAuthError } from '../../../src/core/errors/NexonAuthError.js';
 import { NexonBadRequestError } from '../../../src/core/errors/NexonBadRequestError.js';
 import { NexonRateLimitError } from '../../../src/core/errors/NexonRateLimitError.js';
@@ -92,11 +91,15 @@ describe('FirstDescendantClient', () => {
       expect(urls).toEqual([`${BASE}/id?${query({ user_name: TFD_TEST_USER_NAME })}`]);
     });
 
-    it('빈 닉네임은 요청 없이 NexonError를 던진다', async () => {
+    it('빈 닉네임은 요청 없이 NexonBadRequestError를 던진다', async () => {
       const { client, urls } = createClient();
 
-      await expect(client.getOuid('  ')).rejects.toThrow(NexonError);
-      await expect(client.getOuid('')).rejects.toThrow(/userName 값이 비어 있습니다/);
+      const error = client.getOuid('  ');
+      await expect(error).rejects.toThrow(NexonBadRequestError);
+      await expect(error).rejects.toMatchObject({ code: 'OPENAPI00004' });
+      await expect(client.getOuid('')).rejects.toThrow(
+        /userName 값이 비어 있거나 문자열이 아닙니다/,
+      );
       expect(urls).toEqual([]);
     });
 
@@ -197,37 +200,41 @@ describe('FirstDescendantClient', () => {
       ]);
     });
 
-    it('빈 ouid는 요청 없이 NexonError를 던지고 고치는 방법을 안내한다', async () => {
+    it('빈 ouid는 요청 없이 NexonBadRequestError를 던지고 고치는 방법을 안내한다', async () => {
       const { client, urls } = createClient();
       const empty = '' as TfdOuid;
 
       await expect(client.user.getBasic({ ouid: empty })).rejects.toThrow(/getOuid/);
-      await expect(client.user.getDescendant({ ouid: empty })).rejects.toThrow(NexonError);
-      await expect(client.user.getWeapon({ ouid: empty })).rejects.toThrow(NexonError);
-      await expect(client.user.getReactor({ ouid: empty })).rejects.toThrow(NexonError);
-      await expect(client.user.getExternalComponent({ ouid: empty })).rejects.toThrow(NexonError);
+      await expect(client.user.getDescendant({ ouid: empty })).rejects.toThrow(
+        NexonBadRequestError,
+      );
+      await expect(client.user.getWeapon({ ouid: empty })).rejects.toThrow(NexonBadRequestError);
+      await expect(client.user.getReactor({ ouid: empty })).rejects.toThrow(NexonBadRequestError);
+      await expect(client.user.getExternalComponent({ ouid: empty })).rejects.toThrow(
+        NexonBadRequestError,
+      );
       await expect(
         client.user.getArcheTuning({ ouid: empty, descendant_group_id: '101000001' }),
-      ).rejects.toThrow(NexonError);
+      ).rejects.toThrow(NexonBadRequestError);
       expect(urls).toEqual([]);
     });
 
-    it('빈 descendant_group_id는 요청 없이 NexonError를 던진다', async () => {
+    it('빈 descendant_group_id는 요청 없이 NexonBadRequestError를 던진다', async () => {
       const { client, urls } = createClient();
 
       await expect(
         client.user.getArcheTuning({ ouid: TFD_TEST_OUID, descendant_group_id: '' }),
-      ).rejects.toThrow(/descendant_group_id 값이 비어 있습니다/);
+      ).rejects.toThrow(/descendant_group_id 값이 비어 있거나 문자열이 아닙니다/);
       expect(urls).toEqual([]);
     });
 
-    it('지원하지 않는 language_code는 요청 없이 NexonError를 던진다', async () => {
+    it('지원하지 않는 language_code는 요청 없이 NexonBadRequestError를 던진다', async () => {
       const { client, urls } = createClient();
 
       await expect(
         // @ts-expect-error 지원 목록에 없는 언어 코드
         client.user.getWeapon({ ouid: TFD_TEST_OUID, language_code: 'kr' }),
-      ).rejects.toThrow(/지원하지 않는 언어 코드입니다: "kr"/);
+      ).rejects.toThrow(/language_code.*"ko"/);
       expect(urls).toEqual([]);
     });
 
@@ -343,13 +350,13 @@ describe('FirstDescendantClient', () => {
       expect(urls).toEqual([`${META}/zh-TW/tier.json`]);
     });
 
-    it('지원하지 않는 언어 코드는 요청 없이 NexonError를 던지고 지원 목록을 안내한다', async () => {
+    it('지원하지 않는 언어 코드는 요청 없이 NexonBadRequestError를 던지고 지원 목록을 안내한다', async () => {
       const { client, urls } = createClient();
 
       // @ts-expect-error 지원 목록에 없는 언어 코드
-      await expect(client.meta.getDescendant('kr')).rejects.toThrow(NexonError);
+      await expect(client.meta.getDescendant('kr')).rejects.toThrow(NexonBadRequestError);
       // @ts-expect-error 대소문자가 다른 언어 코드
-      await expect(client.meta.getWeapon('zh-cn')).rejects.toThrow(/zh-CN, zh-TW/);
+      await expect(client.meta.getWeapon('zh-cn')).rejects.toThrow(/"zh-CN", "zh-TW"/);
       expect(urls).toEqual([]);
     });
 
@@ -411,12 +418,12 @@ describe('FirstDescendantClient', () => {
       expect(result.weapon.recommendation).toEqual([]);
     });
 
-    it('빈 식별자와 잘못된 period는 요청 없이 NexonError를 던진다', async () => {
+    it('빈 식별자와 잘못된 period는 요청 없이 NexonBadRequestError를 던진다', async () => {
       const { client, urls } = createClient();
 
       await expect(
         client.recommendation.getModule({ ...request, descendant_id: '' }),
-      ).rejects.toThrow(/descendant_id 값이 비어 있습니다/);
+      ).rejects.toThrow(/descendant_id 값이 비어 있거나 문자열이 아닙니다/);
       await expect(client.recommendation.getModule({ ...request, weapon_id: ' ' })).rejects.toThrow(
         /getWeapon/,
       );
@@ -426,7 +433,7 @@ describe('FirstDescendantClient', () => {
       await expect(
         // @ts-expect-error period는 '0' | '1' | '2' 문자열이다
         client.recommendation.getModule({ ...request, period: '7' }),
-      ).rejects.toThrow(/period 값이 올바르지 않습니다: "7"/);
+      ).rejects.toThrow(/period.*최근 7일/);
       expect(urls).toEqual([]);
     });
 
@@ -518,7 +525,7 @@ describe('FirstDescendantClient', () => {
       ]);
     });
 
-    it('모순된 조건은 요청 없이 NexonError를 던지고 고치는 방법을 안내한다', async () => {
+    it('모순된 조건은 요청 없이 NexonBadRequestError를 던지고 고치는 방법을 안내한다', async () => {
       const { client, urls } = createClient();
       // 타입이 막는 조합을 JavaScript 호출처럼 그대로 넘겨 런타임 검증을 확인한다
       const loose = client.leaderboard as unknown as Record<
@@ -545,23 +552,23 @@ describe('FirstDescendantClient', () => {
         }),
       ).rejects.toThrow(/2, 3, 4 중 하나/);
       await expect(loose.getVoidInterceptBattle({ leaderboard_type: 'solo' })).rejects.toThrow(
-        NexonError,
+        NexonBadRequestError,
       );
       await expect(
         loose.getVoidInterceptBattle({
           leaderboard_type: 'Solo',
           platform_type: 'Switch',
         }),
-      ).rejects.toThrow(/All, Pc, PlayStation, Xbox/);
+      ).rejects.toThrow(/"All", "Pc", "PlayStation", "Xbox"/);
       await expect(
         loose.getVoidInterceptBattle({
           leaderboard_type: 'Solo',
           contents_type: 'Normal',
         }),
-      ).rejects.toThrow(/contents_type 값이 올바르지 않습니다/);
+      ).rejects.toThrow(/contents_type.*RiskMode/);
       await expect(
         loose.getVoidInterceptBattle({ leaderboard_type: 'Solo', descendant_id: '' }),
-      ).rejects.toThrow(/descendant_id 값이 비어 있습니다/);
+      ).rejects.toThrow(/descendant_id 값이 비어 있거나 문자열이 아닙니다/);
       expect(urls).toEqual([]);
     });
 

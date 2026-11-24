@@ -1,6 +1,6 @@
+import { assertNonEmptyString } from '../../core/validation/input.js';
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
 import { BaramCharacterClient } from './character/BaramCharacterClient.js';
-import { assertNonEmpty } from './input-validation.js';
 import { BARAM_OCID_SHAPE } from './shapes.js';
 import type { BaramOCID, BaramServerName } from './types.js';
 
@@ -53,12 +53,12 @@ export class BaramClient extends AbstractGameClient {
    * ```
    */
   async getOcid(characterName: string, serverName: BaramServerName): Promise<BaramOCID> {
-    assertNonEmpty(
+    assertNonEmptyString(
       characterName,
       'characterName',
       "client.baram.getOcid('캐릭터명', '연') 처럼 조회할 캐릭터 명을 전달해주세요.",
     );
-    assertNonEmpty(
+    assertNonEmptyString(
       serverName,
       'serverName',
       "두 번째 인자로 서버 명('연', '무휼', '유리', '진', '하자', '호동')을 전달해주세요.",

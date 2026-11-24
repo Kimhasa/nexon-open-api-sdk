@@ -1,3 +1,4 @@
+import { assertOneOf, invalidInput } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import { AUCTION_LIST_SHAPE, AUCTION_HISTORY_SHAPE } from '../shapes.js';
 import { MABINOGI_AUCTION_ITEM_CATEGORIES } from './types.js';
@@ -19,7 +20,7 @@ export class MabinogiAuctionClient {
    * 현재 판매 중인 경매장 매물을 한 페이지 조회합니다.
    *
    * @param params - 선택할 카테고리, 아이템 이름 및 이전 페이지 커서
-   * @throws {TypeError} 지원되지 않는 카테고리를 지정했을 때
+   * @throws {NexonBadRequestError} 지원되지 않는 카테고리를 지정했을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
    * @example
@@ -48,7 +49,7 @@ export class MabinogiAuctionClient {
    * 최근 1시간의 경매장 거래 내역을 한 페이지 조회합니다.
    *
    * @param params - 선택할 카테고리, 아이템 이름 및 이전 페이지 커서
-   * @throws {TypeError} 지원되지 않는 카테고리를 지정했을 때
+   * @throws {NexonBadRequestError} 지원되지 않는 카테고리를 지정했을 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
    * @example
@@ -77,7 +78,7 @@ export class MabinogiAuctionClient {
    * 이름에 검색어가 모두 포함된 경매장 매물을 한 페이지 조회합니다. 검색어는 이름 속 단어와 정확히 일치해야 합니다.
    *
    * @param params - 쉼표로 나눈 검색어 1~10개와 선택 커서
-   * @throws {TypeError} 검색어 개수가 1~10개 범위를 벗어날 때
+   * @throws {NexonBadRequestError} 검색어 개수가 1~10개 범위를 벗어날 때
    * @throws {NexonAuthError} API 키가 유효하지 않을 때
    *
    * @example
@@ -99,8 +100,9 @@ export class MabinogiAuctionClient {
         ? (keyword.match(/[\p{Script=Hangul}a-zA-Z0-9]+/gu)?.length ?? 0)
         : 0;
     if (keywordCount < 1 || keywordCount > 10) {
-      throw new TypeError(
-        'keyword에 한글, 영문 또는 숫자로 된 검색어를 쉼표로 구분해 1~10개 입력하세요.',
+      invalidInput(
+        'keyword 검색어 개수가 허용 범위를 벗어났습니다.',
+        '한글, 영문 또는 숫자로 된 검색어를 쉼표로 구분해 1~10개 입력하세요.',
       );
     }
 
@@ -113,9 +115,12 @@ export class MabinogiAuctionClient {
 }
 
 function validateCategory(category: MabinogiAuctionItemCategory | undefined): void {
-  if (category !== undefined && !MABINOGI_AUCTION_ITEM_CATEGORIES.includes(category)) {
-    throw new TypeError(
-      'auction_item_category에 지원되는 아이템 카테고리를 입력하세요. 예시는 검입니다.',
+  if (category !== undefined) {
+    assertOneOf(
+      category,
+      MABINOGI_AUCTION_ITEM_CATEGORIES,
+      'auction_item_category',
+      '예시는 검입니다.',
     );
   }
 }

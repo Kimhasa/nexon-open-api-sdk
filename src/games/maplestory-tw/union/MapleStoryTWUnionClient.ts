@@ -26,8 +26,7 @@ export class MapleStoryTWUnionClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-14 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -52,8 +51,7 @@ export class MapleStoryTWUnionClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-14 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -78,8 +76,7 @@ export class MapleStoryTWUnionClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-10-14 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts
@@ -104,8 +101,7 @@ export class MapleStoryTWUnionClient {
    *
    * @param params.ocid - Character identifier from getOcid().
    * @param params.date - Optional snapshot date in Taiwan time, from 2025-12-18 onward.
-   * @throws {TypeError} The ocid is blank.
-   * @throws {RangeError} The date is invalid or outside the available range.
+   * @throws {NexonBadRequestError} Invalid input. The ocid is blank. The date is invalid or outside the available range.
    * @throws {NexonAuthError} The API key is invalid.
    * @example
    * ```ts

@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { NexonAuthError, NexonClient } from '../../../src/index.js';
+import { NexonAuthError, NexonBadRequestError, NexonClient } from '../../../src/index.js';
 import type { GuildId, OCID } from '../../../src/index.js';
 import type { MapleStoryMClient } from '../../../src/games/maplestory-m/index.js';
 import { MapleStoryMCharacterClient } from '../../../src/games/maplestory-m/character/MapleStoryMCharacterClient.js';
@@ -455,7 +455,8 @@ describe('MapleStoryMClient', () => {
   ] as const)('%s 입력을 요청 전에 거부한다', async (_name, call, message) => {
     const fetch = vi.spyOn(globalThis, 'fetch');
     const result = call(createClient());
-    await expect(result).rejects.toThrow(TypeError);
+    await expect(result).rejects.toThrow(NexonBadRequestError);
+    await expect(result).rejects.toMatchObject({ code: 'OPENAPI00004' });
     await expect(result).rejects.toThrow(message);
     expect(fetch).not.toHaveBeenCalled();
   });

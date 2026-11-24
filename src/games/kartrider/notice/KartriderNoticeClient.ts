@@ -1,5 +1,5 @@
+import { assertInteger } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
-import { assertNoticeId } from '../input-validation.js';
 import {
   KARTRIDER_EVENT_NOTICE_LIST_SHAPE,
   KARTRIDER_NOTICE_DETAIL_SHAPE,
@@ -79,7 +79,10 @@ export class KartriderNoticeClient {
    * ```
    */
   async getDetail(noticeId: number): Promise<KartriderNoticeDetail> {
-    assertNoticeId(noticeId, 'client.kartrider.notice.getList() 의 notice[].notice_id 를 쓰세요.');
+    assertInteger(noticeId, 'noticeId', {
+      safe: true,
+      hint: 'client.kartrider.notice.getList() 의 notice[].notice_id 를 쓰세요.',
+    });
     return this.http.get<KartriderNoticeDetail>(
       `${KartriderNoticeClient.BASE}/notice/detail`,
       { notice_id: noticeId },
@@ -129,10 +132,10 @@ export class KartriderNoticeClient {
    * ```
    */
   async getSeasonDetail(noticeId: number): Promise<KartriderNoticeDetail> {
-    assertNoticeId(
-      noticeId,
-      'client.kartrider.notice.getSeasonList() 의 season_notice[].notice_id 를 쓰세요.',
-    );
+    assertInteger(noticeId, 'noticeId', {
+      safe: true,
+      hint: 'client.kartrider.notice.getSeasonList() 의 season_notice[].notice_id 를 쓰세요.',
+    });
     return this.http.get<KartriderNoticeDetail>(
       `${KartriderNoticeClient.BASE}/notice-season/detail`,
       { notice_id: noticeId },
@@ -182,10 +185,10 @@ export class KartriderNoticeClient {
    * ```
    */
   async getEventDetail(noticeId: number): Promise<KartriderNoticeDetail> {
-    assertNoticeId(
-      noticeId,
-      'client.kartrider.notice.getEventList() 의 event_notice[].notice_id 를 쓰세요.',
-    );
+    assertInteger(noticeId, 'noticeId', {
+      safe: true,
+      hint: 'client.kartrider.notice.getEventList() 의 event_notice[].notice_id 를 쓰세요.',
+    });
     return this.http.get<KartriderNoticeDetail>(
       `${KartriderNoticeClient.BASE}/notice-event/detail`,
       { notice_id: noticeId },

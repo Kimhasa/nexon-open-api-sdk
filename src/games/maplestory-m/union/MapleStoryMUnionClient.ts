@@ -1,8 +1,10 @@
+import { assertNonEmptyString } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { MOcidRequest } from '../types.js';
 import { M_UNION_SHAPE, M_UNION_RAIDER_SHAPE, M_UNION_STAT_SHAPE } from '../shapes.js';
 import type { MUnion, MUnionRaider, MUnionStat } from './types.js';
-import { assertOcid } from '../validation.js';
+
+const OCID_HINT = 'maplestorym.getOcid()로 캐릭터 식별자를 조회하세요.';
 
 /**
  * 메이플스토리M 유니온 API 클라이언트.
@@ -22,7 +24,7 @@ export class MapleStoryMUnionClient {
    * 유니온 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -36,7 +38,7 @@ export class MapleStoryMUnionClient {
    * ```
    */
   async get(params: MOcidRequest): Promise<MUnion> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<MUnion>(
       `${MapleStoryMUnionClient.BASE}/user/union`,
       { ocid: params.ocid },
@@ -48,7 +50,7 @@ export class MapleStoryMUnionClient {
    * 유니온 공격대 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -64,7 +66,7 @@ export class MapleStoryMUnionClient {
    * ```
    */
   async getRaider(params: MOcidRequest): Promise<MUnionRaider> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<MUnionRaider>(
       `${MapleStoryMUnionClient.BASE}/user/union-raider`,
       { ocid: params.ocid },
@@ -76,7 +78,7 @@ export class MapleStoryMUnionClient {
    * 유니온 스탯과 프리셋 정보를 조회한다.
    *
    * @param params - 캐릭터 식별자(`ocid`)
-   * @throws {TypeError} 캐릭터 식별자가 비어 있을 때
+   * @throws {NexonBadRequestError} 캐릭터 식별자가 비어 있을 때
    * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
    *
    * @example
@@ -92,7 +94,7 @@ export class MapleStoryMUnionClient {
    * ```
    */
   async getStat(params: MOcidRequest): Promise<MUnionStat> {
-    assertOcid(params.ocid);
+    assertNonEmptyString(params.ocid, 'ocid', OCID_HINT);
     return this.http.get<MUnionStat>(
       `${MapleStoryMUnionClient.BASE}/user/union-stat`,
       { ocid: params.ocid },

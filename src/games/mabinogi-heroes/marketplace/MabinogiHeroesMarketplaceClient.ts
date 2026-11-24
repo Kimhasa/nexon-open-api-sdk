@@ -1,5 +1,5 @@
+import { assertNonEmptyString } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
-import { assertNonEmptyString } from '../validation.js';
 import {
   HEROES_GOLD_MARKET_BUY_TOP_30_SHAPE,
   HEROES_GOLD_MARKET_SELL_TOP_30_SHAPE,

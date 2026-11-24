@@ -1,5 +1,5 @@
+import { assertInteger, assertOneOf } from '../../../core/validation/input.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
-import { assertOneOf, assertPositiveInteger } from '../validation.js';
 import type {
   HeroesHallOfHonorRankingRequest,
   HeroesRankingEntry,
@@ -83,11 +83,10 @@ export class MabinogiHeroesRankingClient {
   async getRealTime(params: HeroesRealTimeRankingRequest): Promise<HeroesRankingEntry[]> {
     const request = params as HeroesRealTimeRankingRequest | undefined;
     assertOneOf(request?.ranking_type, ['0', '1'], 'ranking_type', RANKING_TYPE_HINT);
-    assertPositiveInteger(
-      request?.page_no,
-      'page_no',
-      "첫 페이지는 1입니다 (예: { ranking_type: '0', page_no: 1 }).",
-    );
+    assertInteger(request?.page_no, 'page_no', {
+      min: 1,
+      hint: "첫 페이지는 1입니다 (예: { ranking_type: '0', page_no: 1 }).",
+    });
     return this.http.get<HeroesRankingEntry[]>(
       `${MabinogiHeroesRankingClient.BASE}/ranking/real-time`,
       { ranking_type: params.ranking_type, page_no: params.page_no },
