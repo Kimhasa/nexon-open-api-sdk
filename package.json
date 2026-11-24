@@ -1,6 +1,6 @@
 {
   "name": "nexon-open-api",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Type-safe Nexon Open API SDK for MapleStory, FC Online, and more — zero dependencies",
   "author": "Kimhasa",
   "license": "MIT",

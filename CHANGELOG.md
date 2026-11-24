@@ -11,6 +11,8 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-24
+
 ### Added
 
 - **넥슨 Open API 포털 전체 지원** — 신규 게임 클라이언트 11개를 추가해 포털의 API 270개를 모두 지원한다 (14개 게임 + Open API 공지)
@@ -142,6 +144,7 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 - Sub-path export: `nexon-open-api/maplestory`
 - MSW 기반 단위 테스트 (67개)
 
-[Unreleased]: https://github.com/Kimhasa/nexon-open-api-sdk/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/Kimhasa/nexon-open-api-sdk/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/Kimhasa/nexon-open-api-sdk/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/Kimhasa/nexon-open-api-sdk/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/Kimhasa/nexon-open-api-sdk/releases/tag/v0.1.0
