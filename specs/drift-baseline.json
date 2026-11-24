@@ -52,5 +52,83 @@
     "path": "response[].core_option[].detail[].available_item_option",
     "kind": "missing-spec-field",
     "reason": "2026-11-24 정적 JSON에 있는 경로다. 이 경로의 option_grade는 포털에 적힌 string과 달리 number로 제공된다."
+  },
+  {
+    "operation": "GET /maplestorym/v1/character/android-equipment",
+    "path": "response.android_equipment.android_cash_item_equipment[].cash_item_gender",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 안드로이드 캐시 아이템 장착 가능 성별은 포털의 android_item_gender 대신 cash_item_gender로 온다."
+  },
+  {
+    "operation": "GET /maplestorym/v1/character/android-equipment",
+    "path": "response.android_heart_equipment_preset[].android_equipment.android_cash_item_equipment[].cash_item_gender",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 프리셋의 안드로이드 캐시 아이템 장착 가능 성별은 포털의 android_item_gender 대신 cash_item_gender로 온다."
+  },
+  {
+    "operation": "GET /maplestorym/v1/character/cashitem-equipment",
+    "path": "response.additional_cash_equipment_preset[].additional_cash_item_equipment[].cash_item_gender",
+    "kind": "type-mismatch",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 일반 코디 프리셋의 장착 가능 성별은 문자열이었다. 드레스 업 프리셋도 일반 모드와 같은 코디 항목 타입을 사용한다."
+  },
+  {
+    "operation": "GET /maplestorym/v1/character/cashitem-equipment",
+    "path": "response.additional_cash_item_equipment[].cash_item_gender",
+    "kind": "type-mismatch",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 일반 장착 코디의 장착 가능 성별은 문자열이었다. 드레스 업 장착 코디도 일반 모드와 같은 항목 타입을 사용한다."
+  },
+  {
+    "operation": "GET /maplestorym/v1/character/cashitem-equipment",
+    "path": "response.cash_equipment_preset[].cash_item_equipment[].cash_item_gender",
+    "kind": "type-mismatch",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 코디 프리셋 아이템의 장착 가능 성별은 문자열로 온다."
+  },
+  {
+    "operation": "GET /maplestorym/v1/character/cashitem-equipment",
+    "path": "response.cash_item_equipment[].cash_item_gender",
+    "kind": "type-mismatch",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 장착 코디 아이템의 장착 가능 성별은 문자열로 온다."
+  },
+  {
+    "operation": "GET /maplestorym/v1/character/item-equipment",
+    "path": "response.equipment_preset[].item_equipment[].emblem_info.emblem_level",
+    "kind": "type-mismatch",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 장비 프리셋의 문장 레벨은 숫자로 온다."
+  },
+  {
+    "operation": "GET /maplestorym/v1/character/item-equipment",
+    "path": "response.item_equipment[].emblem_info.emblem_level",
+    "kind": "type-mismatch",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 장착 장비의 문장 레벨은 숫자로 온다."
+  },
+  {
+    "operation": "GET /maplestorym/v1/character/link-skill",
+    "path": "response.link_skill[].link_skill_info[].skill_level",
+    "kind": "type-mismatch",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 링크 스킬 레벨은 숫자로 온다."
+  },
+  {
+    "operation": "GET /maplestorym/v1/character/link-skill",
+    "path": "response.use_prest_no",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 적용 중인 링크 스킬 프리셋 번호는 포털의 use_preset_no 대신 use_prest_no로 온다."
+  },
+  {
+    "operation": "GET /maplestorym/v1/character/skill-equipment",
+    "path": "response.skill.equipment_skill[].equipment_skill_set",
+    "kind": "type-mismatch",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 장착 스킬의 스킬 세팅은 숫자로 온다."
+  },
+  {
+    "operation": "GET /maplestorym/v1/guild/basic",
+    "path": "response.guild_create_date",
+    "kind": "missing-spec-field",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 길드 생성일은 포털의 world_create_date 대신 guild_create_date로 온다."
+  },
+  {
+    "operation": "GET /maplestorym/v1/ranking/sharenian-waterway",
+    "path": "response.ranking[].season_score",
+    "kind": "type-mismatch",
+    "reason": "2026-11-24 실 API 응답(개발 키 실측)에서 샤레니안의 지하수로 시즌 점수는 숫자로 온다."
   }
 ]

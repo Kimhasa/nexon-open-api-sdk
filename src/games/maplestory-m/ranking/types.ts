@@ -115,8 +115,8 @@ export interface MDojangRankingItem {
   readonly character_level: number;
   /** 무릉도장 층수 */
   readonly dojang_floor: number;
-  /** 길드 명 */
-  readonly guild_name: string;
+  /** 길드 명. 길드에 가입하지 않은 캐릭터는 null */
+  readonly guild_name: string | null;
 }
 
 /** 무릉도장 랭킹 — `client.maplestorym.ranking.getDojang()` 의 응답. */
@@ -143,8 +143,8 @@ export interface MRootOfTimeRankingItem {
   readonly character_level: number;
   /** 최대 데미지 */
   readonly max_damage: number;
-  /** 길드 명 */
-  readonly guild_name: string;
+  /** 길드 명. 길드에 가입하지 않은 캐릭터는 null */
+  readonly guild_name: string | null;
 }
 
 /** 시간의 근원 랭킹 — `client.maplestorym.ranking.getRootOfTime()` 의 응답. */
@@ -173,8 +173,8 @@ export interface MUnionRankingItem {
   readonly union_grade_icon: string;
   /** 유니온 레벨 */
   readonly union_level: number;
-  /** 길드 명 */
-  readonly guild_name: string;
+  /** 길드 명. 길드에 가입하지 않은 캐릭터는 null */
+  readonly guild_name: string | null;
 }
 
 /** 유니온 랭킹 — `client.maplestorym.ranking.getUnion()` 의 응답. */
@@ -201,8 +201,8 @@ export interface MCombatPowerRankingItem {
   readonly character_level: number;
   /** 캐릭터 전투력 */
   readonly character_combat_power: number;
-  /** 길드 명 */
-  readonly guild_name: string;
+  /** 길드 명. 길드에 가입하지 않은 캐릭터는 null */
+  readonly guild_name: string | null;
 }
 
 /** 전투력 랭킹 — `client.maplestorym.ranking.getCombatPower()` 의 응답. */
@@ -229,8 +229,8 @@ export interface MKerningMTowerRankingItem {
   readonly character_level: number;
   /** 최고 도달 층 */
   readonly tower_floor: number;
-  /** 길드 명 */
-  readonly guild_name: string;
+  /** 길드 명. 길드에 가입하지 않은 캐릭터는 null */
+  readonly guild_name: string | null;
 }
 
 /** 커닝M타워 랭킹 — `client.maplestorym.ranking.getKerningMTower()` 의 응답. */
@@ -280,7 +280,7 @@ export interface MAchievementRanking {
 }
 
 /** 샤레니안 길드 랭킹 항목 (전장/지하수로 공용) */
-export interface MSharenianRankingItem {
+export interface MSharenianRankingItem<Score extends string | number = string> {
   /** 랭킹 조회 기준일 (KST) */
   readonly date: string;
   /** 랭킹 순위 */
@@ -295,8 +295,8 @@ export interface MSharenianRankingItem {
   readonly guild_master_name: string;
   /** 길드 아이콘 */
   readonly guild_mark_icon: string;
-  /** 시즌 점수 */
-  readonly season_score: string;
+  /** 시즌 점수. 전장에서는 문자열, 지하수로에서는 숫자 */
+  readonly season_score: Score;
   /** 등급 아이콘 */
   readonly grade_icon: string;
 }
@@ -310,5 +310,5 @@ export interface MSharenianBattlefieldRanking {
 /** 샤레니안의 지하수로 랭킹 — `client.maplestorym.ranking.getSharenianWaterway()` 의 응답. */
 export interface MSharenianWaterwayRanking {
   /** 랭킹 목록 */
-  readonly ranking: MSharenianRankingItem[];
+  readonly ranking: MSharenianRankingItem<number>[];
 }

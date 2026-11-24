@@ -92,8 +92,10 @@ export interface MGuildBasic {
   readonly world_name: string;
   /** 길드 레벨 */
   readonly guild_level: number;
-  /** 길드 생성일 */
-  readonly world_create_date: string;
+  /** 길드 생성일. 포털 스펙의 이름. 2026-11-24 실제 응답에는 없고 `guild_create_date`로 온다. */
+  readonly world_create_date?: string | undefined;
+  /** 길드 생성일. 실제 응답의 필드. 포털 스펙에는 `world_create_date`로 적혀 있다. */
+  readonly guild_create_date?: string | undefined;
   /** 길드 키워드 */
   readonly guild_keyword: string[];
   /** 길드 마크 아이콘 */
