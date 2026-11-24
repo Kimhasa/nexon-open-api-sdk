@@ -40,7 +40,7 @@ const basic = await client.maplestory.character.getBasic({ ocid });
 | `yarn specs:notices`                | 넥슨 Open API 공지에서 새 공지 수집                                                               |
 | `yarn release`                      | 빌드 + 테스트 + `npm publish` (**버전 범프 없음** — 아래 참고)                                    |
 
-- `yarn test:{game}` 은 `test:maplestory`, `test:maplestory-m`, `test:maplestory-sea`, `test:fconline` 4개다. 필요한 환경변수는 `.env.example` 참고.
+- `yarn test:{game}` 은 구현된 게임마다 하나씩 15개다 (`test:maplestory`, `test:maplestory-m`, `test:maplestory-sea`, `test:maplestory-tw`, `test:fconline`, `test:first-descendant`, `test:mabinogi-heroes`, `test:sudden-attack`, `test:kartrider`, `test:baram`, `test:mabinogi`, `test:baram-yeon`, `test:v4`, `test:hit2`, `test:platform`). 필요한 환경변수는 `.env.example` 참고.
 - `yarn release` 는 `package.json` 의 `version` 을 바꾸지 않는다. 버전은 직접 올리고 태그(`v{version}`)를 만든다. 태그를 push하면 CI도 `npm publish` 를 실행하므로 두 경로를 같은 버전에 함께 쓰지 않는다.
 
 **코드 변경 후 반드시**: `yarn type-check` → `yarn lint` → `yarn test` → `yarn build` → `yarn check:exports` 순서로 확인. 게임 API를 추가·수정했다면 `yarn specs:coverage` 로 스펙 대비 경로도 확인한다.
@@ -66,10 +66,21 @@ src/
 │   │   ├── AbstractMapleStoryBaseClient.ts  # class AbstractMapleBaseClient (파일명과 클래스명이 다름)
 │   │   ├── maple-base-types.ts              # OCID, GuildId, NexonDate + 공유 요청 타입
 │   │   └── maple-date.ts                    # toNexonDate(), DateRange
-│   ├── maplestory/                          # KMS (구현됨)
-│   ├── maplestory-m/                        # 메이플스토리M (구현됨)
-│   ├── maplestory-sea/                      # MapleStorySEA (구현됨)
-│   └── fc-online/                           # FC Online (구현됨)
+│   ├── maplestory/                          # 메이플스토리 (KMS)
+│   ├── maplestory-m/                        # 메이플스토리M
+│   ├── maplestory-sea/                      # MapleStory SEA
+│   ├── maplestory-tw/                       # MapleStory Taiwan
+│   ├── fc-online/                           # EA SPORTS FC 온라인
+│   ├── first-descendant/                    # 퍼스트 디센던트
+│   ├── mabinogi-heroes/                     # 마비노기 영웅전
+│   ├── sudden-attack/                       # 서든어택
+│   ├── kartrider/                           # 카트라이더 러쉬플러스
+│   ├── baram/                               # 바람의나라
+│   ├── mabinogi/                            # 마비노기
+│   ├── baram-yeon/                          # 바람의나라: 연
+│   ├── v4/                                  # V4
+│   ├── hit2/                                # 히트2
+│   └── platform/                            # 넥슨 Open API 공지
 ├── NexonClient.ts                           # 메인 진입점
 └── index.ts                                 # root public exports
 
@@ -110,11 +121,21 @@ FC Online처럼 API 수가 적은 게임은 sub-client 없이 `{Game}Client.ts` 
 
 ```
 NexonClient
-├── .maplestory    → MapleStoryClient    (UTC+9, prefix: maplestory)
-├── .maplestorym   → MapleStoryMClient   (prefix: maplestorym)
-├── .maplestorySEA → MapleStorySEAClient (UTC+8, prefix: maplestorysea)
-└── .fcOnline      → FcOnlineClient      (prefix: fconline)
-    (미구현 게임은 "지원 게임" 표 참고)
+├── .maplestory      → MapleStoryClient      (UTC+9, prefix: maplestory)
+├── .maplestorym     → MapleStoryMClient     (prefix: maplestorym)
+├── .maplestorySEA   → MapleStorySEAClient   (UTC+8, prefix: maplestorysea)
+├── .maplestoryTW    → MapleStoryTWClient    (UTC+8, prefix: maplestorytw)
+├── .fcOnline        → FcOnlineClient        (prefix: fconline)
+├── .firstDescendant → FirstDescendantClient (prefix: tfd)
+├── .mabinogiHeroes  → MabinogiHeroesClient  (prefix: heroes)
+├── .suddenAttack    → SuddenAttackClient    (prefix: suddenattack)
+├── .kartrider       → KartriderClient       (prefix: kartrush)
+├── .baram           → BaramClient           (prefix: baram)
+├── .mabinogi        → MabinogiClient        (prefix: mabinogi)
+├── .baramYeon       → BaramYeonClient       (prefix: baramy)
+├── .v4              → V4Client              (prefix: v4)
+├── .hit2            → Hit2Client            (prefix: hit2)
+└── .platform        → PlatformClient        (prefix: platform)
 
 AbstractGameClient (abstract — 모든 게임의 최상위 기반)
 ├── abstract pathPrefix: string
@@ -128,12 +149,14 @@ AbstractMapleBaseClient extends AbstractGameClient
 
 NexonError (base)
 ├── NexonRateLimitError    (429 / OPENAPI00007)
-├── NexonAuthError         (403 / OPENAPI00002, 00005)
+├── NexonAuthError         (OPENAPI00002, 00005 — 코드로 분류, status는 서버 값 그대로)
 ├── NexonNotFoundError     (400 / OPENAPI00003)
 ├── NexonBadRequestError   (400 / OPENAPI00004, 00006)
 ├── NexonDataNotReadyError (400 / OPENAPI00009, 00010)
-└── NexonServerError       (5xx / OPENAPI00001, 00011)
+└── NexonServerError       (5xx / OPENAPI00001, 00008, 00011)
 ```
+
+분류 기준은 HTTP 상태가 아니라 넥슨 에러 코드다 (`classify-error.ts`). 실제 서버는 잘못된 API 키에 403이 아니라 HTTP 400 + `OPENAPI00005` 를 돌려준다 (2026-11-24 실측).
 
 ## 아키텍처 규칙
 
