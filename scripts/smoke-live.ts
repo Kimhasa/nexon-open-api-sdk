@@ -378,7 +378,11 @@ async function checkAuth(sdk: Sdk): Promise<AuthResult[]> {
         outcome instanceof sdk.NexonAuthError &&
         error?.code === 'OPENAPI00005' &&
         error.status === 400,
-      guidance: /→ API 키를 확인하세요.*https:\/\/openapi\.nexon\.com\//.test(error?.message ?? ''),
+      guidance: /→ API 키가 올바르지 않습니다\..*https:\/\/openapi\.nexon\.com\//.test(
+        error?.message ?? '',
+      ),
+      // 서버 원문 메시지가 에러에 그대로 담기는지 (예: "The apikey is not valid.")
+      nexonMessage: typeof error?.nexonMessage === 'string' && error.nexonMessage.length > 0,
       noRetry: log.retries === 0 && log.statuses.join(',') === '400',
       request:
         log.requests.length === 1 &&

@@ -4,10 +4,11 @@
 // @ts-check
 
 import {
-  NEXON_ERROR_CODES,
   NexonAuthError,
+  NexonBadRequestError,
   NexonClient,
   NexonDataNotReadyError,
+  NexonMaintenanceError,
   NexonNotFoundError,
   NexonRateLimitError,
 } from 'nexon-open-api';
@@ -17,10 +18,16 @@ function messageForPlayer(error) {
   if (error instanceof NexonNotFoundError) {
     return '캐릭터를 찾지 못했어요. 캐릭터명과 띄어쓰기를 확인해 주세요.';
   }
+  if (error instanceof NexonBadRequestError) {
+    // SDK가 넥슨에 보내기 전에 걸러 낸 입력 (빈 이름, 달력에 없는 날짜 등)
+    return '캐릭터명과 날짜(예: 2026-11-01)를 다시 확인해 주세요.';
+  }
   if (error instanceof NexonDataNotReadyError) {
-    return error.code === NEXON_ERROR_CODES.DATA_NOT_READY
-      ? '조회할 수 있는 기간보다 이전 날짜예요. 더 최근 날짜로 검색해 주세요.'
-      : '그날의 캐릭터 정보가 아직 집계 중이에요. 잠시 후 다시 검색해 주세요.';
+    return '그날의 캐릭터 정보가 아직 준비되지 않았어요. 하루 전 날짜로 검색하거나 잠시 후 다시 검색해 주세요.';
+  }
+  if (error instanceof NexonMaintenanceError) {
+    // 정기·임시 점검 중에는 넥슨 API도 응답하지 않는다
+    return '지금은 메이플스토리 점검 중이에요. 점검이 끝나면 다시 검색해 주세요.';
   }
   if (error instanceof NexonAuthError) {
     return '캐릭터 조회에 필요한 메이플스토리 API 키를 확인해야 해요. 봇 운영자에게 알려 주세요.';
@@ -28,7 +35,7 @@ function messageForPlayer(error) {
   if (error instanceof NexonRateLimitError) {
     return '한꺼번에 검색 요청이 많이 들어왔어요. 잠시 쉬었다가 다시 검색해 주세요.';
   }
-  return '캐릭터 정보를 불러오지 못했어요. 캐릭터명과 조회일을 확인한 뒤 다시 검색해 주세요.';
+  return '캐릭터 정보를 불러오지 못했어요. 잠시 뒤 다시 검색해 주세요.';
 }
 
 const apiKey = process.env['NEXON_MAPLESTORY_API_KEY']?.trim();

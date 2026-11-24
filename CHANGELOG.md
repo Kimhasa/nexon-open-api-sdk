@@ -35,6 +35,19 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
   - 15개 게임의 인증 오류 처리
   - 2026-11-24 결과: 44/44 통과, 타입 불일치 0건
 - `yarn test:package` — npm tarball을 오프라인 설치해 CJS·ESM 실호출과 TypeScript(Node16·Bundler) 타입 해석을 확인
+- `NexonMaintenanceError` — 게임 점검 중(`OPENAPI00010`)과 넥슨 Open API 점검 중(`OPENAPI00011`)을 알린다. `NexonServerError` 를 상속하므로 기존 처리도 그대로 동작하고, 봇에서는 "점검 중" 안내를 따로 보여 줄 수 있다
+- `NEXON_ERROR_CODES` 에 포털 응답코드 표의 의미를 따른 키: `INVALID_API_KEY`(00005), `INVALID_GAME_OR_PATH`(00006), `GAME_MAINTENANCE`(00010), `API_MAINTENANCE`(00011)
+- 모든 에러 클래스가 넥슨 서버의 원문 메시지를 `nexonMessage` 로 담는다 (이전에는 `NexonBadRequestError` 와 분류되지 않은 응답만)
+- 창작자용 문서
+  - `docs/getting-started.md`: 설치, API 키 발급, `.env`, 첫 실행, 디스코드 봇 형태, CommonJS·TypeScript
+  - `docs/faq.md`: "캐릭터를 못 찾아요", "오늘 데이터가 안 나와요", "점검 중이래요" 같은 상황별 증상 → 원인 → 해결
+  - `CONTRIBUTING.md`: 개발 환경, 스펙 기반 개발, 포털 변경 자동 대응, CI, 릴리즈, 문서·주석 작성 원칙
+- `examples/` — 창작 시나리오 예제 10개
+  - 디스코드 봇 `!정보 캐릭터명` 카드, 메이플 랭킹 TOP 10, FC 온라인 최근 공식경기 전적
+  - 마비노기 경매장 시세와 거대한 외침의 뿔피리
+  - 키 없이 실행하는 설치 확인과 퍼스트 디센던트 계승자 도감
+  - 봇 에러 안내, CommonJS, TypeScript
+- `yarn examples:check` — 빌드된 패키지로 예제를 타입 검사한다 (CI Examples 게이트, SDK 자동 반영 게이트)
 
 - 넥슨 포털 OpenAPI 스펙 저장소: `yarn specs:fetch` 가 포털의 카테고리별 OpenAPI YAML을 `specs/openapi/{slug}/{categoryId}.yaml` 로 수집하고 `specs/openapi/index.json` 색인을 만든다 (2026-11-24 기준 15개 게임, 270개 오퍼레이션)
 - `yarn specs:check` — 저장된 스펙과 포털을 비교해 게임·카테고리·오퍼레이션 추가/삭제, YAML 수정(시각·해시)을 감지
@@ -74,6 +87,14 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 - 메이플스토리·메이플스토리M·MapleStorySEA·FC 온라인 응답 타입을 현재 포털 스펙과 대조해 누락 필드·nullable 정정
 - `toNexonDate()` 가 유효하지 않은 `Date` 객체를 `NaN-NaN-NaN` 으로, 달력에 없는 날짜(예: `2026-02-30`)를 그대로 넘기던 문제 — 이제 `NexonBadRequestError`(`OPENAPI00004`)로 거부한다. MapleStory Taiwan 날짜 조회도 이 공용 검증을 사용한다
 - SDK 자동 반영 워크플로에서 Claude Code가 시작 직후 종료되던 문제 (MCP 설정 형식, 샌드박스 거부 규칙) — 2026-11-24 실제 실행으로 검증
+- 에러 코드 해석을 넥슨 포털 [응답코드 표](https://openapi.nexon.com/ko/guide/request-api/)에 맞췄다 (2026-11-24 확인)
+  - **동작 변경** `OPENAPI00010` 은 "데이터 준비 중"이 아니라 "게임 점검 중"이다. 이제 `NexonDataNotReadyError` 대신 `NexonMaintenanceError` 로 알린다. `NexonDataNotReadyError` 는 `OPENAPI00009`(데이터 준비 중)만 받는다
+  - `OPENAPI00011` 은 "서버 과부하"가 아니라 "API 점검 중"으로 안내한다 (`NexonMaintenanceError`, 계속 `NexonServerError` 이기도 하다)
+  - 코드별 안내 문구를 포털 의미에 맞게 고쳤다: 00002 이 키로 쓸 수 없는 API, 00005 잘못된 키, 00006 게임·API 주소 오류
+  - "익일 오전 1시" 안내를 스펙 문구로 정정했다: 메이플스토리 지난 날짜 데이터는 다음날 오전 2시, 오늘의 랭킹은 오전 9시 30분경부터
+- 메이플스토리·SEA·TW `date` 설명 정정 — 생략하면 전일이 아니라 가장 최근 데이터(평균 15분 뒤 반영)를 조회한다 (포털 스펙)
+- `nexon-open-api/maplestory-m` sub-path가 응답 타입 일부(4개)만 내보내던 문제 — 루트와 같은 M 타입 84개를 내보낸다
+- JSDoc 예제 오류: 메이플스토리 클래스 예제의 없는 메서드 `union.get`(→ `union.getUnion`), 필수 인자가 빠진 `ranking.getGuild`·`getDojang` 예제, 조회 범위를 벗어난 예제 날짜
 
 ### Changed
 
@@ -82,7 +103,11 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 - 런타임 응답 shape 검증(`responseValidation`)이 최상위 배열 응답에도 적용된다 (`arrayOf()` 사용, 서든어택·마비노기 영웅전·퍼스트 디센던트 메타데이터 등 37개)
 - CI에 `specs:drift --strict` 게이트 추가 — SDK 타입이 커밋된 포털 스펙에서 벗어나면 실패 (nullable 넓힘과 `@deprecated` 유지는 허용)
 - 에러 클래스 JSDoc과 문서의 HTTP 상태 설명을 실제 동작에 맞췄다 (동작 변경 없음). `NexonAuthError` 는 HTTP 상태가 아니라 에러 코드(`OPENAPI00002`, `OPENAPI00005`)로 분류하며, 실제 서버는 잘못된 API 키에 HTTP 400 + `OPENAPI00005` 를 돌려준다
-- README를 0.2.0 기준으로 다시 썼다: 에러 클래스 표, `responseValidation`, 실서버 검증 현황, 개발 · 기여 섹션을 추가하고 동작하지 않던 codecov 배지를 제거했다
+- `apiKey` 가 없거나 공백뿐이면 `NexonClient` 와 `HttpClient` 생성 시 `NexonBadRequestError`(`OPENAPI00004`)를 던지고 `.env` 설정 방법을 안내한다. 이전에는 `NexonClient` 만 일반 `Error` 를 던졌고 공백 키는 서버까지 갔다. `Error` 의 하위 클래스이므로 기존 `catch` 는 그대로 동작한다
+- 문서와 주석을 게임을 잘 아는 창작자(팬사이트·디스코드 봇·전적 검색기) 기준으로 다시 썼다
+  - README: 무엇을 만들 수 있나요, 시작하기 3단계, 이름 → 고유 번호 → 정보, 상황별 에러 표와 봇 응답 예제, API 키 보안. 관리자용 내용은 `CONTRIBUTING.md` 로 옮겼다. 동작하지 않던 codecov 배지를 제거했다
+  - 15개 게임 문서를 "게임 용어 ↔ SDK 대응표" 중심으로 재구성했다 (예: 유니온 공격대 배치 → `union.getRaider()`, 선수 카드 → `spid`)
+  - 공개 메서드와 주요 응답 필드의 JSDoc을 게임 용어로 다듬었다. 코드값에는 게임 속 의미를 붙였다 (동작 변경 없음)
 - npm 패키지 `description` 과 `keywords` 를 지원 범위(14개 게임 + Open API 공지)에 맞게 갱신
 
 - CI: GitHub Actions 메이저 버전 갱신(Node 24 런타임), 테스트 매트릭스 Node 22/24/26 (`engines` 는 `>=18` 유지), npm Trusted Publishing(OIDC·provenance) 준비
@@ -94,6 +119,13 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 - FC 온라인 `getAllMatchList()` — 넥슨이 2026-07-07 `/fconline/v1/match` 제공을 종료했다. 개별 계정 기록은 `getMatchList()` 를 사용한다
 - FC 온라인 `getSeasonIdMeta()` — 넥슨이 2026-11-19 이후 제공 종료를 공지했다. 선수 클래스는 `getClassMeta()`, 공식경기 시즌은 `getSeasonMeta()` 를 사용한다
 - 메이플스토리 `ranking.getGuild({ ocid })` 의 `ocid` — 포털 스펙에서 제거됐다. 입력해도 서버로 보내지 않고 한 번 경고한다. 특정 길드는 `guild_name` 으로 조회한다
+- 메이플스토리 `character.getRingExchangeSkillEquipment()` — 포털 안내에 따라 2025-08-21 ~ 2026-03-18 데이터만 제공된다. 이후 날짜는 `character.getRingReserveSkillEquipment()`(예비 특수 반지)를 사용한다 (JSDoc 표시만, 런타임 경고 없음)
+- `NEXON_ERROR_CODES` 의 이름이 포털 의미와 다른 키 — 값은 그대로라 기존 비교는 계속 동작한다
+  - `FORBIDDEN` → `INVALID_API_KEY`
+  - `INVALID_PARAM` → `INVALID_GAME_OR_PATH`
+  - `DATA_PREPARING` → `GAME_MAINTENANCE`
+  - `SERVER_OVERLOAD` → `API_MAINTENANCE`
+  - `MAINTENANCE`(`OPENAPI00008`, 포털 표에 없는 코드)
 - 포털 스펙에서 사라진 응답 필드를 `@deprecated` + optional로 전환 (다음 MAJOR에서 삭제)
   - 메이플스토리: `CashItemEquipmentItem.cash_item_skills` 등, 직업 전용 장비(`dragon_equipment[]`·`mechanic_equipment[]`)의 잠재능력·에디셔널 잠재능력 등급·옵션 8개 필드 (일반 장비 프리셋은 기존 계약 유지)
   - 메이플스토리M: V코어 `slot_id`, `slot_level`, `vcore_name`, `vcore_skill_name_1~3`, 유니온 공격대 `use_preset_no`, `use_union_occupied_option`, `battle_map`
