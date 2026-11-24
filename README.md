@@ -4,11 +4,10 @@
 
 [![npm version](https://img.shields.io/npm/v/nexon-open-api.svg)](https://www.npmjs.com/package/nexon-open-api)
 [![CI](https://github.com/Kimhasa/nexon-open-api-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/Kimhasa/nexon-open-api-sdk/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/Kimhasa/nexon-open-api-sdk/graph/badge.svg)](https://codecov.io/gh/Kimhasa/nexon-open-api-sdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org/)
 
-[Nexon Open API](https://openapi.nexon.com/)를 TypeScript로 감싼 SDK입니다. 현재 메이플스토리, 메이플스토리M, MapleStorySEA, EA SPORTS FC 온라인을 지원하며 나머지 게임은 순차적으로 추가합니다([지원 게임](#지원-게임)). 외부 의존성 없이 네이티브 `fetch`만 사용하며, CJS/ESM 듀얼 출력을 지원합니다.
+[Nexon Open API](https://openapi.nexon.com/)를 TypeScript로 감싼 비공식 SDK입니다. 넥슨 Open API 포털이 제공하는 14개 게임과 Open API 공지의 API 270개를 모두 지원합니다([지원 게임](#지원-게임)). 모든 요청과 응답에 타입이 있고, 외부 의존성 없이 네이티브 `fetch`만 사용하며, CJS와 ESM을 함께 제공합니다.
 
 ## 설치
 
@@ -20,7 +19,13 @@ yarn add nexon-open-api
 pnpm add nexon-open-api
 ```
 
+- Node.js 18 이상 (CI는 Node.js 22, 24, 26에서 테스트합니다)
+- TypeScript 5.0 이상 (타입을 사용할 때)
+- API 키는 [Nexon Open API 포털](https://openapi.nexon.com/)에서 게임별로 발급받습니다.
+
 ## 빠른 시작
+
+`NexonClient` 하나로 모든 게임에 접근합니다. 대부분의 게임은 식별자 조회(`getOcid` / `getOuid`) 뒤 카테고리별 sub-client를 호출하는 같은 패턴입니다.
 
 ### 메이플스토리
 
@@ -37,48 +42,31 @@ const basic = await client.maplestory.character.getBasic({ ocid });
 console.log(`${basic.character_name} Lv.${basic.character_level}`);
 ```
 
-### 메이플스토리M
+### 메이플스토리M · MapleStorySEA
 
 ```ts
-// OCID 조회 (월드명 필요)
-const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+// 메이플스토리M은 월드명이 필요하다
+const mOcid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
+const mBasic = await client.maplestorym.character.getBasic({ ocid: mOcid });
 
-// 캐릭터 기본 정보
-const basic = await client.maplestorym.character.getBasic({ ocid });
-```
-
-### MapleStorySEA
-
-```ts
-// OCID 조회
-const ocid = await client.maplestorySEA.getOcid('CharacterName');
-
-// 캐릭터 기본 정보
-const basic = await client.maplestorySEA.character.getBasic({ ocid });
-console.log(`${basic.character_name} Lv.${basic.character_level}`);
-
-// 유니온 정보
-const union = await client.maplestorySEA.union.getUnion({ ocid });
+const seaOcid = await client.maplestorySEA.getOcid('CharacterName');
+const seaBasic = await client.maplestorySEA.character.getBasic({ ocid: seaOcid });
+const seaUnion = await client.maplestorySEA.union.getUnion({ ocid: seaOcid });
 ```
 
 ### FC Online
 
 ```ts
-// OUID 조회
 const ouid = await client.fcOnline.getOuid('닉네임');
-
-// 유저 기본 정보
 const basic = await client.fcOnline.getBasic(ouid);
 console.log(`${basic.nickname} (Lv.${basic.level})`);
 
-// 매치 기록 조회
+// 매치 기록
 const matchIds = await client.fcOnline.getMatchList({ ouid, matchtype: 50, limit: 10 });
 const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 ```
 
 ### 그 밖의 게임
-
-모든 게임이 같은 패턴입니다: 식별자 조회(`getOcid` / `getOuid`) → 카테고리별 sub-client.
 
 ```ts
 // MapleStory Taiwan
@@ -111,23 +99,23 @@ const { notice } = await client.platform.getNoticeList();
 
 게임별 전체 API는 아래 [상세 문서](#상세-문서)를 참고하세요.
 
-> API 키는 [Nexon Open API 포털](https://openapi.nexon.com/)에서 발급받을 수 있습니다.
-
 ## 주요 특징
 
-- **Type-safe** — 모든 API 응답에 대한 완전한 TypeScript 타입 정의
-- **Branded Types** — `OCID`, `OUID`, `GuildId`, `NexonDate` 브랜드 타입으로 컴파일 타임 안전성
-- **자동 재시도** — 429 (Rate Limit) / 503 응답 시 지수 백오프 자동 재시도
-- **에러 분류** — `NexonRateLimitError`, `NexonAuthError` 등 `instanceof`로 에러 분기
-- **외부 의존성 0** — Node.js 18+ 네이티브 `fetch` 사용
-- **멀티 게임** — 하나의 `NexonClient`로 지원 게임 전체에 접근
+- **포털 전체 지원** — 넥슨 Open API 포털의 14개 게임과 Open API 공지를 하나의 `NexonClient`로 호출합니다.
+- **타입 안전** — 요청과 응답 타입을 포털의 공식 OpenAPI 스펙에서 만들었습니다. `OCID`, `OUID`, `GuildId`, `NexonDate` 는 브랜드 타입이라 서로 섞어 쓰면 컴파일 오류가 납니다.
+- **요청 전 입력 검증** — 빈 캐릭터명, 달력에 없는 날짜 같은 입력은 HTTP 요청을 보내기 전에 `NexonBadRequestError` 로 거부하고, 메시지에 고치는 방법을 담습니다.
+- **에러 분류** — 넥슨 에러 코드에 따라 에러 클래스를 나눠 `instanceof` 로 분기할 수 있습니다([에러 처리](#에러-처리)).
+- **자동 재시도** — HTTP 429와 503 응답은 지수 백오프로 재시도합니다. `Retry-After` 헤더가 있으면 그 값을 따릅니다.
+- **런타임 응답 검증 (선택)** — `responseValidation: true` 로 켜면 응답의 최상위 구조가 SDK 타입과 다를 때 경고합니다. 배열 응답도 검사합니다([설정 옵션](#설정-옵션)).
+- **포털 변경 추적** — 주간 모니터가 포털 스펙 변경을 감지해 스펙 갱신 PR을 열고, CI의 Spec Drift 검사가 SDK 타입과 공식 스펙의 차이를 막습니다([개발 · 기여](#개발--기여)).
+- **외부 의존성 0, CJS + ESM** — 런타임 의존성이 없고, `require` 와 `import` 모두에서 타입이 해석됩니다. 게임별 [sub-path](#sub-path-import)도 제공합니다.
 
 ## 지원 게임
 
 넥슨 Open API 포털이 제공하는 **14개 게임 전부와 Open API 공지(`client.platform`)를 지원**합니다 (2026-11-24 포털 기준, API 270개).
 
 - <img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> — SDK에 구현된 게임. 아래 버전과 날짜는 처음 포함된 버전과 구현일입니다.
-- **API 개수** — "SDK public API 메서드 수"(메서드 1개 = 넥슨 API 경로 1개)입니다.
+- **API 개수** — "SDK public API 메서드 수"(메서드 1개 = 넥슨 API 경로 1개)입니다. FC 온라인만 예외이며 아래 [표](#포털-대비-지원-범위)에 적었습니다.
 
 <!-- 아이콘 파일: docs/assets/games/{game}.png (48x48 권장) -->
 
@@ -177,8 +165,8 @@ const { notice } = await client.platform.getNoticeList();
 </td>
 <td align="center" valign="top" width="33%">
 <br>
-<img src="docs/assets/games/maplestory-taiwan.png" alt="MapleStoryTaiwan" height="64">
-<h4>MapleStoryTaiwan</h4>
+<img src="docs/assets/games/maplestory-taiwan.png" alt="MapleStory Taiwan" height="64">
+<h4>MapleStory Taiwan</h4>
 <img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-27-blue" alt="SDK 지원 API 27개"><br>
 <sub>v0.2.0 · 2026-11-24</sub><br>
 <br>
@@ -307,119 +295,194 @@ const { notice } = await client.platform.getNoticeList();
 | 히트2                                  | 2          | 2                                                                     |
 | 넥슨 Open API 공지 (`client.platform`) | 1          | 1                                                                     |
 
-넥슨이 포털을 바꾸면 주간 모니터가 감지해 스펙 갱신 PR을 열고, CI의 `specs:drift --strict` 검사가 SDK 타입과 공식 스펙의 차이를 막습니다. 자세한 내용은 [specs/README.md](specs/README.md)를 참고하세요.
+SDK 메서드 합계는 269개입니다. FC 온라인의 이미지 경로 4개를 헬퍼 2개가 담당하고, 넥슨이 제공을 종료한 `getAllMatchList()` 가 deprecated 상태로 남아 있어 포털 경로 수(270)와 1 차이가 납니다.
 
 ### 범위 외: 네오플 API
 
 던전앤파이터와 사이퍼즈는 넥슨 Open API가 아니라 [네오플 Developers](https://developers.neople.co.kr/) API로 제공됩니다. 호스트와 API 키가 달라 이 SDK의 지원 범위에 포함하지 않습니다.
 
-| 게임                                                                                              | API 문서                                                                        |
-| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| <img src="docs/assets/games/dungeon-and-fighter.png" alt="던전앤파이터" height="24"> 던전앤파이터 | [네오플 던전앤파이터 API](https://developers.neople.co.kr/contents/apiDocs/df)  |
-| <img src="docs/assets/games/cyphers.png" alt="사이퍼즈" height="24"> 사이퍼즈                     | [네오플 사이퍼즈 API](https://developers.neople.co.kr/contents/apiDocs/cyphers) |
+- 던전앤파이터: [네오플 던전앤파이터 API](https://developers.neople.co.kr/contents/apiDocs/df)
+- 사이퍼즈: [네오플 사이퍼즈 API](https://developers.neople.co.kr/contents/apiDocs/cyphers)
 
 ## 에러 처리
 
-SDK는 Nexon API 에러 코드를 구체적인 에러 클래스로 분류합니다.
+API 호출에서 SDK가 던지는 에러는 모두 `NexonError` 이거나 그 하위 클래스이고 `status`, `code`, `nexonMessage` 를 가집니다. 분류 기준은 HTTP 상태가 아니라 넥슨 에러 코드(`OPENAPI000xx`)입니다.
 
 ```ts
 import {
-  NexonRateLimitError,
+  NexonClient,
+  NexonError,
+  NexonBadRequestError,
   NexonAuthError,
   NexonNotFoundError,
   NexonDataNotReadyError,
+  NexonRateLimitError,
 } from 'nexon-open-api';
 
+const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
+
 try {
-  const basic = await client.maplestory.character.getBasic({ ocid });
+  const ocid = await client.maplestory.getOcid('캐릭터명');
+  const basic = await client.maplestory.character.getBasic({ ocid, date: '2026-11-23' });
+  console.log(basic.character_name);
 } catch (err) {
-  if (err instanceof NexonRateLimitError) {
-    // 429 — 요청 한도 초과 (SDK가 자동으로 3회 재시도 후 throw)
-    console.log(`재시도 대기: ${err.retryAfterMs}ms`);
-  }
-  if (err instanceof NexonAuthError) {
-    // 403 — API 키 오류 또는 권한 없음
-  }
-  if (err instanceof NexonNotFoundError) {
-    // 캐릭터/길드를 찾을 수 없음
-  }
-  if (err instanceof NexonDataNotReadyError) {
-    // 해당 날짜 데이터 미준비 (매일 오전 1시 KST 이후 갱신)
+  if (err instanceof NexonBadRequestError) {
+    // 입력이 잘못됨. 메시지에 문제가 된 입력과 고치는 방법이 들어 있다
+    console.error(err.message);
+  } else if (err instanceof NexonAuthError) {
+    // API 키가 유효하지 않거나 이 게임용 키가 아님
+  } else if (err instanceof NexonNotFoundError) {
+    // 캐릭터·길드를 찾을 수 없음
+  } else if (err instanceof NexonDataNotReadyError) {
+    // 해당 날짜 데이터가 아직 없음 (일 단위 데이터는 KST 기준 다음 날 오전 1시 이후)
+  } else if (err instanceof NexonRateLimitError) {
+    // 자동 재시도(기본 3회)를 모두 쓴 뒤에도 한도 초과
+    console.error(`재시도 대기: ${err.retryAfterMs ?? 1000}ms`);
+  } else if (err instanceof NexonError) {
+    // 서버 오류, 타임아웃, 네트워크 오류 등
+    console.error(err.status, err.code, err.message);
+  } else {
+    throw err;
   }
 }
 ```
 
+SDK가 검사하는 입력은 요청을 보내기 전에 거부합니다.
+
+```ts
+await client.maplestory.getOcid('');
+// NexonBadRequestError (code: 'OPENAPI00004', status: 400) — HTTP 요청 없이 즉시 throw
+```
+
+| 에러 클래스              | 넥슨 에러 코드                                               | 언제 발생하나                                                                                                                                 |
+| ------------------------ | ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NexonBadRequestError`   | `OPENAPI00004`, `OPENAPI00006`                               | SDK 입력 검증 실패(요청 전, 항상 `OPENAPI00004`) 또는 서버가 파라미터를 HTTP 400으로 거부                                                     |
+| `NexonAuthError`         | `OPENAPI00002`, `OPENAPI00005`                               | API 키가 유효하지 않거나 권한이 없음. `status` 는 서버가 준 값 그대로다. 실제 서버는 잘못된 키에 HTTP 400 + `OPENAPI00005` 를 준다 (403 아님) |
+| `NexonNotFoundError`     | `OPENAPI00003`                                               | 캐릭터·길드 등 식별자를 찾을 수 없음 (HTTP 400)                                                                                               |
+| `NexonDataNotReadyError` | `OPENAPI00009`, `OPENAPI00010`                               | 조회 가능 기간 이전 날짜이거나 당일 데이터가 아직 준비되지 않음 (HTTP 400)                                                                    |
+| `NexonRateLimitError`    | `OPENAPI00007` 또는 HTTP 429                                 | 요청 한도 초과. 429는 자동 재시도 후에 던진다. `retryAfterMs` 는 `Retry-After` 헤더 값이며 헤더가 없으면 `undefined`                          |
+| `NexonServerError`       | `OPENAPI00001`, `OPENAPI00008`, `OPENAPI00011` 또는 HTTP 5xx | 서버 내부 오류, 점검, 과부하. 503은 자동 재시도 후에 던진다                                                                                   |
+| `NexonError` (기반)      | 없음 또는 분류되지 않은 코드                                 | 타임아웃, 네트워크 오류(`status` 가 `undefined`), 위에 해당하지 않는 응답                                                                     |
+
 ## 설정 옵션
 
 ```ts
+import { NexonClient } from 'nexon-open-api';
+
 const client = new NexonClient({
-  apiKey: 'YOUR_API_KEY',
-  timeoutMs: 10_000, // 요청 타임아웃 (기본: 10초)
-  maxRetries: 3, // 429/503 재시도 횟수 (기본: 3)
-  retryBaseDelayMs: 500, // 재시도 기본 대기시간 (기본: 500ms)
-  debug: true, // 콘솔 디버그 로그 활성화
+  apiKey: 'YOUR_API_KEY', // 필수
+  timeoutMs: 10_000, // 요청 타임아웃 (기본 10000)
+  maxRetries: 3, // HTTP 429/503 재시도 횟수 (기본 3)
+  retryBaseDelayMs: 500, // 지수 백오프 기본 대기 시간 (기본 500)
+  debug: false, // true면 요청·응답·재시도를 console.debug 로 출력 (기본 false)
+  responseValidation: false, // 런타임 응답 shape 검증 (기본 false)
 });
 ```
 
-### 커스텀 로거
+재시도 대기 시간은 `retryBaseDelayMs * 2^(시도 - 1)` 에 지터를 더한 값이고 최대 30초입니다. 429와 503 외의 응답은 재시도하지 않습니다.
+
+### 로거와 런타임 응답 검증
+
+`logger` 로 요청, 응답, 재시도 시점에 호출할 함수를 넘깁니다. `debug: true` 이면 SDK 기본 콘솔 로거를 쓰고 `logger` 는 무시합니다.
+
+넥슨이 응답 구조를 바꾸면 TypeScript 타입만으로는 알 수 없습니다. `responseValidation: true` 를 켜면 응답의 최상위 키와 타입(배열 응답은 각 원소)을 SDK가 기대하는 구조와 비교하고, 다르면 `logger.onResponseShapeMismatch` 로 알립니다. 예외를 던지지 않고 응답도 그대로 반환하므로, 개발·모니터링 환경에서 넥슨의 응답 구조 변경을 일찍 발견하는 용도입니다.
 
 ```ts
+import { NexonClient } from 'nexon-open-api';
+
 const client = new NexonClient({
   apiKey: 'YOUR_API_KEY',
+  responseValidation: true,
   logger: {
     onRequest: (info) => console.log(`→ ${info.method} ${info.url}`),
     onResponse: (info) => console.log(`← ${info.status} (${info.durationMs}ms)`),
     onRetry: (info) => console.warn(`↩ retry #${info.attempt} after ${info.waitMs}ms`),
+    onResponseShapeMismatch: (mismatch) => {
+      console.warn(mismatch.url, mismatch.missingKeys, mismatch.unexpectedKeys);
+    },
   },
 });
 ```
 
+`debug: true` 와 함께 쓰면 기본 로거가 불일치를 `console.warn` 으로 출력합니다. `debug` 도 `onResponseShapeMismatch` 도 없으면 불일치가 있어도 아무것도 출력하지 않습니다. 중첩 필드는 검사하지 않습니다.
+
 ## Sub-path Import
 
-특정 게임 코드만 번들에 포함하고 싶다면 sub-path import를 사용하세요.
+게임마다 `nexon-open-api/{sub-path}` 진입점이 있고, 그 게임의 Client 클래스와 타입만 내보냅니다. sub-path는 아래 [상세 문서](#상세-문서) 표에 있습니다. 루트(`nexon-open-api`)에서도 같은 이름을 모두 가져올 수 있습니다.
 
 ```ts
+import { HttpClient } from 'nexon-open-api';
 import { MapleStoryClient } from 'nexon-open-api/maplestory';
-import { MapleStoryMClient } from 'nexon-open-api/maplestory-m';
-import { MapleStorySEAClient } from 'nexon-open-api/maplestory-sea';
-import { FcOnlineClient } from 'nexon-open-api/fconline';
-import { MapleStoryTWClient } from 'nexon-open-api/maplestory-tw';
-import { FirstDescendantClient } from 'nexon-open-api/first-descendant';
-import { MabinogiHeroesClient } from 'nexon-open-api/mabinogi-heroes';
-import { SuddenAttackClient } from 'nexon-open-api/sudden-attack';
-import { KartriderClient } from 'nexon-open-api/kartrider';
-import { BaramClient } from 'nexon-open-api/baram';
-import { MabinogiClient } from 'nexon-open-api/mabinogi';
-import { BaramYeonClient } from 'nexon-open-api/baram-yeon';
-import { V4Client } from 'nexon-open-api/v4';
-import { Hit2Client } from 'nexon-open-api/hit2';
-import { PlatformClient } from 'nexon-open-api/platform';
+import type { CharacterBasic } from 'nexon-open-api/maplestory';
+
+// 게임 Client를 직접 만들 때는 루트의 HttpClient를 넘긴다
+const maplestory = new MapleStoryClient(new HttpClient({ apiKey: 'YOUR_API_KEY' }));
+const ocid = await maplestory.getOcid('캐릭터명');
+const basic: CharacterBasic = await maplestory.character.getBasic({ ocid });
 ```
 
 ## 상세 문서
 
-| 게임                  | 문서                                     | 카테고리                                        |
-| --------------------- | ---------------------------------------- | ----------------------------------------------- |
-| 메이플스토리          | [API 레퍼런스](docs/maplestory.md)       | 캐릭터, 유니온, 길드, 랭킹, 확률/이력, 공지사항 |
-| 메이플스토리M         | [API 레퍼런스](docs/maplestory-m.md)     | 캐릭터, 유니온, 길드, 랭킹, 공지사항            |
-| MapleStorySEA         | [API 레퍼런스](docs/maplestory-sea.md)   | 캐릭터, 유니온, 길드                            |
-| FC Online             | [API 레퍼런스](docs/fc-online.md)        | 계정 정보, 매치, 랭커, 메타데이터, 이미지 URL   |
-| MapleStory Taiwan     | [API 레퍼런스](docs/maplestory-tw.md)    | 캐릭터, 유니온, 길드                            |
-| 퍼스트 디센던트       | [API 레퍼런스](docs/first-descendant.md) | 계정, 메타데이터, 추천 모듈, 리더보드           |
-| 마비노기 영웅전       | [API 레퍼런스](docs/mabinogi-heroes.md)  | 캐릭터, 메타(인챈트), 거래소, 랭킹, 공지사항    |
-| 서든어택              | [API 레퍼런스](docs/sudden-attack.md)    | 계정, 매치, 메타데이터                          |
-| 카트라이더 러쉬플러스 | [API 레퍼런스](docs/kartrider.md)        | 계정, 공지사항                                  |
-| 바람의나라            | [API 레퍼런스](docs/baram.md)            | 캐릭터                                          |
-| 마비노기              | [API 레퍼런스](docs/mabinogi.md)         | NPC 상점, 경매장, 거대한 외침의 뿔피리          |
-| 바람의나라: 연        | [API 레퍼런스](docs/baram-yeon.md)       | 캐릭터                                          |
-| V4                    | [API 레퍼런스](docs/v4.md)               | 캐릭터                                          |
-| 히트2                 | [API 레퍼런스](docs/hit2.md)             | 캐릭터                                          |
-| 넥슨 Open API 공지    | [API 레퍼런스](docs/platform.md)         | 공지 사항                                       |
+| 게임                  | Client 프로퍼티          | sub-path           | 문서                                     | 카테고리                                        |
+| --------------------- | ------------------------ | ------------------ | ---------------------------------------- | ----------------------------------------------- |
+| 메이플스토리          | `client.maplestory`      | `maplestory`       | [API 레퍼런스](docs/maplestory.md)       | 캐릭터, 유니온, 길드, 랭킹, 확률/이력, 공지사항 |
+| 메이플스토리M         | `client.maplestorym`     | `maplestory-m`     | [API 레퍼런스](docs/maplestory-m.md)     | 캐릭터, 유니온, 길드, 랭킹, 공지사항            |
+| MapleStorySEA         | `client.maplestorySEA`   | `maplestory-sea`   | [API 레퍼런스](docs/maplestory-sea.md)   | 캐릭터, 유니온, 길드                            |
+| MapleStory Taiwan     | `client.maplestoryTW`    | `maplestory-tw`    | [API 레퍼런스](docs/maplestory-tw.md)    | 캐릭터, 유니온, 길드                            |
+| EA SPORTS FC 온라인   | `client.fcOnline`        | `fconline`         | [API 레퍼런스](docs/fc-online.md)        | 계정 정보, 매치, 랭커, 메타데이터, 이미지 URL   |
+| 퍼스트 디센던트       | `client.firstDescendant` | `first-descendant` | [API 레퍼런스](docs/first-descendant.md) | 계정, 메타데이터, 추천 모듈, 리더보드           |
+| 마비노기 영웅전       | `client.mabinogiHeroes`  | `mabinogi-heroes`  | [API 레퍼런스](docs/mabinogi-heroes.md)  | 캐릭터, 메타(인챈트), 거래소, 랭킹, 공지사항    |
+| 서든어택              | `client.suddenAttack`    | `sudden-attack`    | [API 레퍼런스](docs/sudden-attack.md)    | 계정, 매치, 메타데이터                          |
+| 카트라이더 러쉬플러스 | `client.kartrider`       | `kartrider`        | [API 레퍼런스](docs/kartrider.md)        | 계정, 공지사항                                  |
+| 바람의나라            | `client.baram`           | `baram`            | [API 레퍼런스](docs/baram.md)            | 캐릭터                                          |
+| 마비노기              | `client.mabinogi`        | `mabinogi`         | [API 레퍼런스](docs/mabinogi.md)         | NPC 상점, 경매장, 거대한 외침의 뿔피리          |
+| 바람의나라: 연        | `client.baramYeon`       | `baram-yeon`       | [API 레퍼런스](docs/baram-yeon.md)       | 캐릭터                                          |
+| V4                    | `client.v4`              | `v4`               | [API 레퍼런스](docs/v4.md)               | 캐릭터                                          |
+| 히트2                 | `client.hit2`            | `hit2`             | [API 레퍼런스](docs/hit2.md)             | 캐릭터                                          |
+| 넥슨 Open API 공지    | `client.platform`        | `platform`         | [API 레퍼런스](docs/platform.md)         | 공지 사항                                       |
 
-## 요구사항
+`client.maplestorym` 의 `m` 은 소문자입니다. 버전별 변경 내용은 [CHANGELOG.md](CHANGELOG.md), 버전 정책은 [SEMVER.md](SEMVER.md)에 있습니다.
 
-- Node.js 18+
-- TypeScript 5.0+ (타입 사용 시)
+## 실서버 검증 현황
+
+이 SDK가 실제 넥슨 서버와 어디까지 대조됐는지 구분해서 적습니다.
+
+- **모든 API는 넥슨 포털의 공식 OpenAPI 스펙을 기준으로 구현했습니다.** 경로, 파라미터, 응답 필드를 스펙과 대조하고, CI가 SDK 타입과 스펙의 차이를 검사합니다.
+- **API 키 없이 열리는 정적 메타데이터는 실제 응답과 대조했습니다.** FC 온라인, 퍼스트 디센던트, 서든어택의 메타데이터와 FC 온라인 이미지 CDN이 여기에 해당합니다. 실응답이 스펙과 다른 곳은 실응답에 맞췄습니다.
+- **API 키가 필요한 API는 0.2.0 기준으로 실 API 키 E2E 검증을 하지 않았습니다.** 단위 테스트는 스펙으로 합성한 응답을 사용합니다. 메이플스토리는 0.1.x 때 실 키 E2E를 통과했지만 0.2.0에서 추가·변경한 부분은 다시 확인하지 않았습니다. 스펙과 실제 응답이 다르면 타입이 어긋날 수 있으니, 그런 경우 [이슈](https://github.com/Kimhasa/nexon-open-api-sdk/issues)로 알려 주세요.
+
+게임별 검증 방식과 날짜는 코드에서 확인할 수 있습니다. 키는 path prefix입니다 (`maplestory`, `maplestorym`, `fconline`, `tfd`, `heroes` 등).
+
+```ts
+import { getApiMetadata } from 'nexon-open-api';
+
+const meta = getApiMetadata('tfd');
+console.log(meta?.lastVerifiedAt, meta?.note);
+```
+
+발급받은 키로 직접 E2E를 돌릴 수 있습니다. 저장소를 받은 뒤 `.env.example` 을 `.env` 로 복사하고, 확인할 게임의 API 키와 캐릭터명 등을 채운 다음 그 게임의 스크립트를 실행합니다. API 키는 게임마다 따로 발급됩니다.
+
+```bash
+cp .env.example .env
+corepack yarn test:maplestory   # test:{game} — 게임 15개 모두 스크립트가 있다 (package.json 참고)
+```
+
+## 개발 · 기여
+
+```bash
+corepack yarn install
+```
+
+| 구분        | 명령                                                                                 | 설명                                                                                                        |
+| ----------- | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| 검사        | `yarn type-check` → `yarn lint` → `yarn test` → `yarn build` → `yarn check:exports`  | 코드 변경 후 이 순서로 확인한다. `check:exports` 는 빌드된 패키지의 sub-path별 CJS/ESM 타입 해석을 검사한다 |
+| 스펙        | `yarn specs:fetch` / `specs:check` / `specs:diff` / `specs:drift` / `specs:coverage` | 포털 스펙 수집 / 포털 변경 감지 / 스냅샷 비교와 SEMVER 분류 / SDK 타입과 스펙 대조 / 경로 커버리지          |
+| 실서버 확인 | `yarn test:live`                                                                     | API 키 없이 실제 넥슨 서버의 정적 메타데이터와 에러 경로를 확인한다                                         |
+| 패키지 확인 | `yarn test:package`                                                                  | npm 패키지를 설치해 CJS, ESM, TypeScript에서 사용할 수 있는지 확인한다                                      |
+
+SDK 코드는 `specs/openapi/` 에 저장한 포털 OpenAPI YAML을 원천으로 만듭니다. 매주 월요일 API Monitor 워크플로가 포털을 저장된 스펙과 비교하고, 변경이 있으면 스펙 갱신 PR을 엽니다. 이어서 SDK Auto Update 워크플로가 호환되는 변경(필드 추가, deprecation)을 SDK에 반영하고 검증을 통과한 패치만 PR에 올립니다. 호환되지 않는 변경과 새 게임은 사람이 판단하고, 머지와 배포도 사람이 합니다. CI의 Spec Drift 검사(`yarn specs:drift --strict`)는 SDK 타입이 커밋된 스펙에서 벗어나면 실패합니다.
+
+구조, 네이밍, 게임 추가 절차는 [CLAUDE.md](CLAUDE.md)에, 스펙 형식과 포털 변경 대응 절차는 [specs/README.md](specs/README.md)에 있습니다. 버그 제보와 PR은 [GitHub 이슈](https://github.com/Kimhasa/nexon-open-api-sdk/issues)로 받습니다.
 
 ## 면책 조항
 
