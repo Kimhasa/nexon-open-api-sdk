@@ -1,4 +1,5 @@
 import { assertNonEmptyString } from '../../core/validation/input.js';
+import { lookupByName } from '../../core/errors/name-lookup.js';
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
 import { V4CharacterClient } from './character/V4CharacterClient.js';
 import { V4_OCID_SHAPE } from './shapes.js';
@@ -65,10 +66,18 @@ export class V4Client extends AbstractGameClient {
       'characterName',
       "client.v4.getOcid('캐릭터명') 처럼 조회할 캐릭터 명을 전달해주세요.",
     );
-    const response = await this.http.get<{ ocid: string }>(
-      this.buildUrl('id'),
-      { character_name: characterName },
-      V4_OCID_SHAPE,
+    const notFound = {
+      message: `'${characterName}' 캐릭터를 찾을 수 없습니다.`,
+      hint: 'V4 캐릭터 이름을 확인하세요.',
+    };
+    const response = await lookupByName(
+      () =>
+        this.http.get<{ ocid: string }>(
+          this.buildUrl('id'),
+          { character_name: characterName },
+          V4_OCID_SHAPE,
+        ),
+      notFound,
     );
     return response.ocid as V4OCID;
   }

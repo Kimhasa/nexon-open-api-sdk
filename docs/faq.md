@@ -15,7 +15,9 @@
 
 ## 캐릭터를 못 찾아요
 
-**증상** — `getOcid()` 나 `getOuid()` 에서 `NexonNotFoundError` (`OPENAPI00003`)가 납니다.
+**증상** — `getOcid()` 나 `getOuid()` 에서 `NexonNotFoundError` 가 나고, 메시지가 `'캐릭터명' 캐릭터를 찾을 수 없습니다.` 처럼 시작합니다.
+
+> 넥슨은 없는 이름에 "찾을 수 없음"(`OPENAPI00003`)이 아니라 "파라미터 오류"(`OPENAPI00004`)를 돌려줍니다. SDK는 이름으로 찾는 조회에서 이 응답을 알아보기 쉽게 `NexonNotFoundError` 로 바꿔 알려 주고, `err.code` 에는 넥슨이 준 `OPENAPI00004` 를 그대로 둡니다. 저장해 둔 고유 번호(OCID·OUID)로 조회했는데 이 에러가 나면 `OPENAPI00003` 입니다 — 번호가 바뀌었으니 이름으로 다시 받으세요.
 
 **원인과 해결**
 

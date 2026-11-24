@@ -179,7 +179,7 @@ const auction = await client.mabinogi.auction.listItems({ auction_item_category:
 
 | 이런 상황                                                               | 이런 에러                                                | 이렇게 하세요                                                                                 |
 | ----------------------------------------------------------------------- | -------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| 캐릭터명 오타, 없는 캐릭터·길드                                         | `NexonNotFoundError` (`OPENAPI00003`)                    | "캐릭터를 찾을 수 없어요"라고 답하고 이름·월드를 다시 확인하게 한다                           |
+| 캐릭터명 오타, 없는 캐릭터·길드                                         | `NexonNotFoundError` (이름 조회는 `OPENAPI00004`)        | "캐릭터를 찾을 수 없어요"라고 답하고 이름·월드를 다시 확인하게 한다                           |
 | 이름이 빈칸, 달력에 없는 날짜, 허용되지 않는 서버명, API 키가 비어 있음 | `NexonBadRequestError` (`OPENAPI00004`)                  | 넥슨에 요청을 보내기 전에 걸러진다. `err.message` 에 고치는 방법이 있다                       |
 | 그 날짜의 데이터가 아직 없음                                            | `NexonDataNotReadyError` (`OPENAPI00009`)                | 날짜를 하루 전으로 바꾸거나 잠시 뒤 다시 조회한다                                             |
 | 게임 또는 넥슨 Open API가 점검 중                                       | `NexonMaintenanceError` (`OPENAPI00010`, `OPENAPI00011`) | 점검이 끝난 뒤 다시 조회한다. "지금은 점검 중이에요"라고 답한다                               |
@@ -189,7 +189,7 @@ const auction = await client.mabinogi.auction.listItems({ auction_item_category:
 | 넥슨 서버 오류                                                          | `NexonServerError` (`OPENAPI00001`, HTTP 5xx)            | 잠시 뒤 다시 시도한다                                                                         |
 | 인터넷 끊김, 응답 시간 초과                                             | `NexonError` (코드 없음)                                 | 네트워크를 확인하거나 `timeoutMs` 를 늘린다                                                   |
 
-모든 에러는 `NexonError` 를 상속하고 `code`(넥슨 에러 코드)와 `status` 를 가집니다. 에러 종류는 넥슨 에러 코드로 정해집니다. 예를 들어 잘못된 키에 넥슨 서버는 `OPENAPI00005` 를 돌려주고, SDK는 이를 `NexonAuthError` 로 알려 줍니다. `NexonMaintenanceError` 는 `NexonServerError` 의 한 종류이므로, 점검을 따로 안내하려면 `NexonMaintenanceError` 를 먼저 검사합니다.
+모든 에러는 `NexonError` 를 상속하고 `code`(넥슨 에러 코드)와 `status` 를 가집니다. 에러 종류는 넥슨 에러 코드로 정해집니다. 예를 들어 잘못된 키에 넥슨 서버는 `OPENAPI00005` 를 돌려주고, SDK는 이를 `NexonAuthError` 로 알려 줍니다. 예외가 하나 있습니다. 이름으로 캐릭터·계정·길드를 찾았는데 없으면 넥슨은 `OPENAPI00004`(파라미터 오류)를 돌려주지만, SDK는 알아보기 쉽게 `NexonNotFoundError` 로 바꿔 알려 줍니다 (`err.code` 는 넥슨이 준 값 그대로). `NexonMaintenanceError` 는 `NexonServerError` 의 한 종류이므로, 점검을 따로 안내하려면 `NexonMaintenanceError` 를 먼저 검사합니다.
 
 ### 디스코드 봇 응답 예제
 

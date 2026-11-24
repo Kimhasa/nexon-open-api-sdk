@@ -1,4 +1,5 @@
 import { assertNonEmptyString } from '../../core/validation/input.js';
+import { lookupByName } from '../../core/errors/name-lookup.js';
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
 import { KartriderNoticeClient } from './notice/KartriderNoticeClient.js';
 import { KARTRIDER_OUID_LOOKUP_SHAPE } from './shapes.js';
@@ -83,11 +84,19 @@ export class KartriderClient extends AbstractGameClient {
       'racerName',
       "client.kartrider.getOuidInfo('라이더명') 처럼 조회할 라이더(계정) 명을 전달해주세요.",
     );
-    return this.http.get<KartriderOuidLookup>(
-      this.buildUrl('id'),
-      // 스펙: 라이더 명의 '|' 는 '_' 로 바꿔 입력해야 조회된다
-      { racer_name: racerName.replaceAll('|', '_') },
-      KARTRIDER_OUID_LOOKUP_SHAPE,
+    const notFound = {
+      message: `'${racerName}' 라이더를 찾을 수 없습니다.`,
+      hint: "라이더명을 확인하세요. 이름의 '|' 는 SDK가 '_' 로 바꿔 보냅니다.",
+    };
+    return lookupByName(
+      () =>
+        this.http.get<KartriderOuidLookup>(
+          this.buildUrl('id'),
+          // 스펙: 라이더 명의 '|' 는 '_' 로 바꿔 입력해야 조회된다
+          { racer_name: racerName.replaceAll('|', '_') },
+          KARTRIDER_OUID_LOOKUP_SHAPE,
+        ),
+      notFound,
     );
   }
 }

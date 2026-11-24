@@ -92,8 +92,8 @@ export interface TfdUserCustomizingPaint {
 
 /** 커스터마이징 정보 */
 export interface TfdUserCustomizing {
-  /** 커스터마이징 슬롯 식별자 */
-  readonly customizing_item_slot_id: string;
+  /** 커스터마이징 슬롯 식별자. 슬롯 구분이 없는 커스터마이징이면 null (2026-11-24 실측) */
+  readonly customizing_item_slot_id: string | null;
   /** 커스터마이징 아이템 유형 */
   readonly customizing_item_type: string;
   /** 커스터마이징 아이템 식별자 (`meta.getCustomizingItem()` 참고) */

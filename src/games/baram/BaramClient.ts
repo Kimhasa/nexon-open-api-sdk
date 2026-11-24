@@ -1,4 +1,5 @@
 import { assertNonEmptyString } from '../../core/validation/input.js';
+import { lookupByName } from '../../core/errors/name-lookup.js';
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
 import { BaramCharacterClient } from './character/BaramCharacterClient.js';
 import { BARAM_OCID_SHAPE } from './shapes.js';
@@ -69,10 +70,18 @@ export class BaramClient extends AbstractGameClient {
       'serverName',
       "두 번째 인자로 서버 명('연', '무휼', '유리', '진', '하자', '호동')을 전달해주세요.",
     );
-    const response = await this.http.get<{ ocid: string }>(
-      this.buildUrl('id'),
-      { character_name: characterName, server_name: serverName },
-      BARAM_OCID_SHAPE,
+    const notFound = {
+      message: `${serverName} 서버에서 '${characterName}' 캐릭터를 찾을 수 없습니다.`,
+      hint: '캐릭터 이름과 서버 이름을 확인하세요.',
+    };
+    const response = await lookupByName(
+      () =>
+        this.http.get<{ ocid: string }>(
+          this.buildUrl('id'),
+          { character_name: characterName, server_name: serverName },
+          BARAM_OCID_SHAPE,
+        ),
+      notFound,
     );
     return response.ocid as BaramOCID;
   }

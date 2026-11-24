@@ -1,4 +1,5 @@
 import { assertNonEmptyString } from '../../core/validation/input.js';
+import { lookupByName } from '../../core/errors/name-lookup.js';
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
 import { FirstDescendantLeaderboardClient } from './leaderboard/FirstDescendantLeaderboardClient.js';
 import { FirstDescendantMetaClient } from './meta/FirstDescendantMetaClient.js';
@@ -64,10 +65,18 @@ export class FirstDescendantClient extends AbstractGameClient {
       'userName',
       "게임 내 닉네임을 태그까지 포함해 넘기세요. 예: getOuid('닉네임#1234') (대소문자 구분)",
     );
-    const response = await this.http.get<{ ouid: string }>(
-      this.buildUrl('id'),
-      { user_name: userName },
-      TFD_OUID_SHAPE,
+    const notFound = {
+      message: `'${userName}' 계정을 찾을 수 없습니다.`,
+      hint: "닉네임은 '#' 뒤 태그까지 대소문자를 맞춰 넣습니다 (예: '닉네임#1234'). .env 에서 읽었다면 값을 큰따옴표로 감쌌는지 확인하세요 ('#' 뒤가 주석으로 잘립니다).",
+    };
+    const response = await lookupByName(
+      () =>
+        this.http.get<{ ouid: string }>(
+          this.buildUrl('id'),
+          { user_name: userName },
+          TFD_OUID_SHAPE,
+        ),
+      notFound,
     );
     return response.ouid as TfdOuid;
   }

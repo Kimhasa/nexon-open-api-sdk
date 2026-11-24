@@ -1,4 +1,5 @@
 import { assertNonEmptyString, assertOneOf } from '../../../core/validation/input.js';
+import { lookupByName, requireFoundId } from '../../../core/errors/name-lookup.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { GuildId } from '../../_base/maple-base-types.js';
 import type { TWFormatQueryDate } from '../query-params.js';
@@ -35,12 +36,20 @@ export class MapleStoryTWGuildClient {
   async getId(guildName: string, worldName: TWWorldName): Promise<GuildId> {
     assertNonEmptyString(guildName, 'guildName', 'Enter a MapleStory Taiwan guild name.');
     assertOneOf(worldName, TW_WORLD_NAMES, 'worldName');
-    const response = await this.http.get<TWGuildIdResponse>(
-      `${MapleStoryTWGuildClient.BASE}/guild/id`,
-      { guild_name: guildName, world_name: worldName },
-      GUILD_ID_SHAPE,
+    const notFound = {
+      message: `${worldName} 월드에서 '${guildName}' 길드를 찾을 수 없습니다.`,
+      hint: '길드 이름과 월드 이름(艾麗亞 등)을 확인하세요.',
+    };
+    const response = await lookupByName(
+      () =>
+        this.http.get<TWGuildIdResponse>(
+          `${MapleStoryTWGuildClient.BASE}/guild/id`,
+          { guild_name: guildName, world_name: worldName },
+          GUILD_ID_SHAPE,
+        ),
+      notFound,
     );
-    return response.oguild_id;
+    return requireFoundId(response.oguild_id, notFound);
   }
 
   /**

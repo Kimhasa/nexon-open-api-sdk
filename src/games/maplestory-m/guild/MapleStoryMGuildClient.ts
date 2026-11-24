@@ -1,4 +1,5 @@
 import { assertNonEmptyString } from '../../../core/validation/input.js';
+import { lookupByName, requireFoundId } from '../../../core/errors/name-lookup.js';
 import type { HttpClient } from '../../../core/http/HttpClient.js';
 import type { MGuildIdRequest } from '../types.js';
 import { M_GUILD_ID_SHAPE, M_GUILD_BASIC_SHAPE } from '../shapes.js';
@@ -39,12 +40,20 @@ export class MapleStoryMGuildClient {
   async getId(worldName: MWorldName, guildName: string): Promise<GuildId> {
     assertNonEmptyString(worldName, 'worldName', '스카니아 등 길드가 속한 월드명을 입력하세요.');
     assertNonEmptyString(guildName, 'guildName', '조회할 길드명을 입력하세요.');
-    const response = await this.http.get<MGuildIdResponse>(
-      `${MapleStoryMGuildClient.BASE}/guild/id`,
-      { world_name: worldName, guild_name: guildName },
-      M_GUILD_ID_SHAPE,
+    const notFound = {
+      message: `${worldName} 월드에서 '${guildName}' 길드를 찾을 수 없습니다.`,
+      hint: "월드 이름과 길드 이름을 확인하세요. 월드를 먼저 넣습니다: guild.getId('스카니아', '길드명')",
+    };
+    const response = await lookupByName(
+      () =>
+        this.http.get<MGuildIdResponse>(
+          `${MapleStoryMGuildClient.BASE}/guild/id`,
+          { world_name: worldName, guild_name: guildName },
+          M_GUILD_ID_SHAPE,
+        ),
+      notFound,
     );
-    return response.oguild_id;
+    return requireFoundId(response.oguild_id, notFound);
   }
 
   /**

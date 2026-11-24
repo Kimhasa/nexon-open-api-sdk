@@ -459,7 +459,8 @@ export const UNION_CHAMPION_SHAPE: ShapeDescriptor = {
 
 export const GUILD_ID_SHAPE: ShapeDescriptor = {
   expectedKeys: {
-    oguild_id: 'string',
+    // 없는 길드면 넥슨이 200과 null 을 준다 (2026-11-24 실측). SDK가 NexonNotFoundError 로 바꾼다
+    oguild_id: 'any',
   },
 };
 

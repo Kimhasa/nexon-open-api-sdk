@@ -19,8 +19,8 @@ export type TWWorldName = (typeof TW_WORLD_NAMES)[number];
 
 /** GET /maplestorytw/v1/guild/id response */
 export interface TWGuildIdResponse {
-  /** Guild identifier */
-  readonly oguild_id: GuildId;
+  /** 길드 고유 번호. 없는 길드면 넥슨이 null 을 준다 (SDK는 NexonNotFoundError 를 던진다) */
+  readonly oguild_id: GuildId | null;
 }
 
 // ─── GET /maplestorytw/v1/guild/basic ────────────────────────────────────────

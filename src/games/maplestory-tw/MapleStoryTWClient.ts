@@ -1,4 +1,5 @@
 import { assertDateInRange, assertNonEmptyString } from '../../core/validation/input.js';
+import { lookupByName } from '../../core/errors/name-lookup.js';
 import { AbstractMapleBaseClient } from '../_base/AbstractMapleStoryBaseClient.js';
 import type { OCID } from '../_base/maple-base-types.js';
 import { MapleStoryTWCharacterClient } from './character/MapleStoryTWCharacterClient.js';
@@ -83,10 +84,18 @@ export class MapleStoryTWClient extends AbstractMapleBaseClient {
       'characterName',
       'Enter a MapleStory Taiwan character name.',
     );
-    const response = await this.http.get<TWOcidResponse>(
-      this.buildUrl('id'),
-      { character_name: characterName },
-      OCID_SHAPE,
+    const notFound = {
+      message: `'${characterName}' 캐릭터를 찾을 수 없습니다.`,
+      hint: 'MapleStory Taiwan 캐릭터 이름을 확인하세요.',
+    };
+    const response = await lookupByName(
+      () =>
+        this.http.get<TWOcidResponse>(
+          this.buildUrl('id'),
+          { character_name: characterName },
+          OCID_SHAPE,
+        ),
+      notFound,
     );
     return response.ocid;
   }

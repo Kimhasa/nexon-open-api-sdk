@@ -1,4 +1,5 @@
 import { assertNonEmptyString } from '../../core/validation/input.js';
+import { lookupByName } from '../../core/errors/name-lookup.js';
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
 import type { OCID } from '../_base/maple-base-types.js';
 import type { MWorldName } from './guild/types.js';
@@ -88,10 +89,18 @@ export class MapleStoryMClient extends AbstractGameClient {
     assertNonEmptyString(worldName, 'worldName', '스카니아 등 캐릭터가 속한 월드명을 입력하세요.');
     assertNonEmptyString(characterName, 'characterName', '조회할 캐릭터명을 입력하세요.');
     const url = this.buildUrl('id');
-    const response = await this.http.get<{ ocid: string }>(
-      url,
-      { world_name: worldName, character_name: characterName },
-      M_OCID_SHAPE,
+    const notFound = {
+      message: `${worldName} 월드에서 '${characterName}' 캐릭터를 찾을 수 없습니다.`,
+      hint: "월드 이름과 캐릭터 이름을 확인하세요. 메이플스토리M은 월드를 먼저 넣습니다: getOcid('스카니아', '캐릭터명')",
+    };
+    const response = await lookupByName(
+      () =>
+        this.http.get<{ ocid: string }>(
+          url,
+          { world_name: worldName, character_name: characterName },
+          M_OCID_SHAPE,
+        ),
+      notFound,
     );
     return response.ocid as OCID;
   }

@@ -152,7 +152,7 @@ AbstractMapleBaseClient extends AbstractGameClient
 NexonError (base)
 ├── NexonRateLimitError    (429 / OPENAPI00007 API 호출량 초과)
 ├── NexonAuthError         (OPENAPI00005 잘못된 API 키, 00002 권한 없음 — status는 서버 값 그대로)
-├── NexonNotFoundError     (400 / OPENAPI00003 유효하지 않은 식별자)
+├── NexonNotFoundError     (400 / OPENAPI00003 유효하지 않은 식별자. 이름 조회의 OPENAPI00004·길드 null도 SDK가 변환 — name-lookup.ts)
 ├── NexonBadRequestError   (400 / OPENAPI00004 파라미터 누락·오류, 00006 유효하지 않은 게임·API 경로)
 ├── NexonDataNotReadyError (400 / OPENAPI00009 데이터 준비 중)
 └── NexonServerError       (5xx / OPENAPI00001 서버 내부 오류, 표에 없는 00008)

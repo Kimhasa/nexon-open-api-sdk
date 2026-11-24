@@ -4,6 +4,7 @@ import {
   assertOneOf,
   invalidInput,
 } from '../../core/validation/input.js';
+import { lookupByName } from '../../core/errors/name-lookup.js';
 import { emitDeprecation } from '../../core/deprecation/deprecation.js';
 import { AbstractGameClient } from '../_base/AbstractGameClient.js';
 import type { OUID } from './user/types.js';
@@ -89,7 +90,14 @@ export class FcOnlineClient extends AbstractGameClient {
   async getOuid(nickname: string): Promise<OUID> {
     assertNonEmptyString(nickname, 'nickname', undefined, 'trim-truthy');
     const url = this.buildUrl('id');
-    const response = await this.http.get<{ ouid: string }>(url, { nickname }, FC_OUID_SHAPE);
+    const notFound = {
+      message: `'${nickname}' 구단주를 찾을 수 없습니다.`,
+      hint: 'FC 온라인 구단주 닉네임을 확인하세요. 닉네임을 바꿨다면 새 닉네임으로 조회합니다.',
+    };
+    const response = await lookupByName(
+      () => this.http.get<{ ouid: string }>(url, { nickname }, FC_OUID_SHAPE),
+      notFound,
+    );
     return response.ouid as OUID;
   }
 
