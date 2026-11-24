@@ -103,7 +103,7 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/fc-online.png" alt="EA SPORTS FC 온라인" height="64">
 <h4>EA SPORTS FC 온라인</h4>
-<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-16-blue" alt="SDK 지원 API 16개"><br>
+<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-18-blue" alt="SDK 지원 API 18개"><br>
 <sub>v0.1.1 · 2026-03-04</sub><br>
 <br>
 <a href="docs/fc-online.md">레퍼런스</a><br>
@@ -113,7 +113,7 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/maplestory.png" alt="메이플스토리" height="64">
 <h4>메이플스토리</h4>
-<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-48-blue" alt="SDK 지원 API 48개"><br>
+<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-56-blue" alt="SDK 지원 API 56개"><br>
 <sub>v0.1.0 · 2026-03-04</sub><br>
 <br>
 <a href="docs/maplestory.md">레퍼런스</a><br>
@@ -123,7 +123,7 @@ const detail = await client.fcOnline.getMatchDetail(matchIds[0]!);
 <br>
 <img src="docs/assets/games/maplestory-m.png" alt="메이플스토리M" height="64">
 <h4>메이플스토리M</h4>
-<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-37-blue" alt="SDK 지원 API 37개"><br>
+<img src="https://img.shields.io/badge/SDK-지원-brightgreen" alt="SDK 지원"> <img src="https://img.shields.io/badge/API-38-blue" alt="SDK 지원 API 38개"><br>
 <sub>v0.1.1 · 2026-03-05</sub><br>
 <br>
 <a href="docs/maplestory-m.md">레퍼런스</a><br>

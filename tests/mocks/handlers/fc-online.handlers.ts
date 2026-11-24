@@ -1,5 +1,15 @@
 import { http, HttpResponse } from 'msw';
 import {
+  fcSpidMetaFixture,
+  fcSeasonIdMetaFixture,
+  fcSpPositionMetaFixture,
+  fcDivisionMetaFixture,
+  fcDivisionVoltaMetaFixture,
+  fcSeasonMetaWireFixture,
+  fcClassMetaFixture,
+} from '../../fixtures/fc-online/metadata.fixture.js';
+import { fcTradeFixture, fcRankerFixture } from '../../fixtures/fc-online/trade-ranker.fixture.js';
+import {
   fcOuidFixture,
   fcUserBasicFixture,
   fcMaxDivisionFixture,
@@ -115,9 +125,47 @@ export const fcOnlineHandlers = [
     return HttpResponse.json(fcMatchDetailFixture);
   }),
 
+  http.get(`${BASE}/user/trade`, ({ request }) => {
+    const authError = checkApiKey(request);
+    if (authError) return authError;
+    const query = new URL(request.url).searchParams;
+    if (
+      query.get('tradetype') !== 'buy' ||
+      query.get('offset') !== '10' ||
+      query.get('limit') !== '5' ||
+      query.has('ouid')
+    ) {
+      return HttpResponse.json(
+        { error: { name: 'OPENAPI00004', message: 'Invalid trade query' } },
+        { status: 400 },
+      );
+    }
+    return HttpResponse.json(fcTradeFixture);
+  }),
+
+  http.get(`${BASE}/ranker-stats`, ({ request }) => {
+    const authError = checkApiKey(request);
+    if (authError) return authError;
+    const query = new URL(request.url).searchParams;
+    if (query.get('matchtype') !== '52' || query.get('players') !== '[{"id":100167680,"po":18}]') {
+      return HttpResponse.json(
+        { error: { name: 'OPENAPI00004', message: 'Invalid ranker query' } },
+        { status: 400 },
+      );
+    }
+    return HttpResponse.json(fcRankerFixture);
+  }),
+
   // ─── Metadata (static JSON) ─────────────────────────────────────────────
 
   http.get(`${STATIC}/matchtype.json`, () => {
     return HttpResponse.json(fcMatchTypeMetaFixture);
   }),
+  http.get(`${STATIC}/spid.json`, () => HttpResponse.json(fcSpidMetaFixture)),
+  http.get(`${STATIC}/seasonid.json`, () => HttpResponse.json(fcSeasonIdMetaFixture)),
+  http.get(`${STATIC}/spposition.json`, () => HttpResponse.json(fcSpPositionMetaFixture)),
+  http.get(`${STATIC}/division.json`, () => HttpResponse.json(fcDivisionMetaFixture)),
+  http.get(`${STATIC}/division-volta.json`, () => HttpResponse.json(fcDivisionVoltaMetaFixture)),
+  http.get(`${STATIC}/season.json`, () => HttpResponse.json(fcSeasonMetaWireFixture)),
+  http.get(`${STATIC}/class.json`, () => HttpResponse.json(fcClassMetaFixture)),
 ];

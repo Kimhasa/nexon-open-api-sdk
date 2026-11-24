@@ -219,6 +219,9 @@
     "specs:fetch": "tsx scripts/specs-fetch.ts",
     "specs:check": "tsx scripts/specs-check.ts",
     "specs:coverage": "tsx scripts/specs-coverage.ts",
+    "specs:diff": "tsx scripts/specs-diff.ts",
+    "specs:drift": "tsx scripts/specs-drift.ts",
+    "specs:notices": "tsx scripts/specs-notices.ts",
     "release": "yarn build && yarn test && npm publish",
     "prepare": "husky"
   },

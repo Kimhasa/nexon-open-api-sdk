@@ -63,6 +63,31 @@ export interface HttpClientConfig {
   readonly responseValidation?: boolean;
 }
 
+/**
+ * `HttpClient.get()` 의 요청별 옵션.
+ *
+ * 클라이언트 전역 설정(타임아웃, 재시도, 로거, 인터셉터)은 그대로 적용되고,
+ * 이 요청 한 건의 헤더만 바꿉니다.
+ *
+ * @example
+ * ```ts
+ * // 기본 API 키 헤더를 빼고 다른 인증 헤더로 보낸다
+ * await http.get<{ ouid: string }>(url, undefined, undefined, {
+ *   headers: { 'x-nxopen-api-key': undefined, 'x-nxopen-legacy-api-key': legacyApiKey },
+ * });
+ * ```
+ */
+export interface HttpRequestOptions {
+  /**
+   * 이 요청에만 적용할 헤더.
+   *
+   * - 기본 헤더(`x-nxopen-api-key`, `Accept`)에 병합하고, 같은 이름이면 덮어씁니다.
+   * - 값이 `undefined` 면 그 이름의 기본 헤더를 제거합니다.
+   * - 이름은 대소문자를 구분하지 않고 비교합니다.
+   */
+  readonly headers?: Readonly<Record<string, string | undefined>> | undefined;
+}
+
 /** 요청 전 호출되는 인터셉터. 반환값으로 요청 정보를 수정할 수 있다. */
 export type RequestInterceptor = (
   request: HttpRequestInfo,

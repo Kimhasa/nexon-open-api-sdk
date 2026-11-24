@@ -37,6 +37,8 @@ export type {
   FcMatchTypeMeta,
   FcSpidMeta,
   FcSeasonIdMeta,
+  FcSeasonMeta,
+  FcClassMeta,
   FcSpPositionMeta,
   FcDivisionMeta,
   FcDivisionVoltaMeta,

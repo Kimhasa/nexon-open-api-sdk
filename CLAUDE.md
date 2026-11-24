@@ -160,7 +160,13 @@ NexonError (base)
 
 - `responseValidation: true` 옵션으로 활성화 (warn-only, opt-in)
 - `shapes.ts`에 shape descriptor 정의 → `HttpClient.get()` 3번째 param으로 전달
-- 현황: KMS·M·FC에 적용됨. **SEA는 `shapes.ts` 가 아직 없다** (보강 대상)
+- 배열 응답은 `arrayOf(itemShape)` (`src/core/validation/response-shape.ts`), 단일 객체도 배열로 받는 응답은 `arrayOf(itemShape, { allowSingleObject: true })`
+- 현황: 구현된 모든 게임에 적용 (KMS·M·SEA·FC)
+
+### HttpClient 요청별 옵션
+
+- `HttpClient.get(url, params?, shape?, options?)` — `options.headers` 로 이 요청에만 헤더를 추가·덮어쓴다. 값이 `undefined` 면 기본 헤더를 제거한다 (예: KMS `getLegacyOuid` 는 `x-nxopen-api-key` 를 빼고 `x-nxopen-legacy-api-key` 만 보낸다).
+- 전용 `HttpClient` 인스턴스를 새로 만들지 않는다. 사용자의 `timeoutMs`·`maxRetries`·`logger`·인터셉터가 적용되지 않기 때문이다.
 
 ## DX 원칙
 
@@ -266,16 +272,17 @@ Base URL: `https://open.api.nexon.com/`
 
 ### 구현된 게임
 
-| 게임                | Client 프로퍼티        | Client 클래스         | Path Prefix     | 디렉토리 / sub-path                 | Base Class                | SDK / 포털 | 상태                        |
-| ------------------- | ---------------------- | --------------------- | --------------- | ----------------------------------- | ------------------------- | ---------- | --------------------------- |
-| 메이플스토리 (KMS)  | `client.maplestory`    | `MapleStoryClient`    | `maplestory`    | `maplestory` / `maplestory`         | `AbstractMapleBaseClient` | 48 / 56    | 구현됨 — 포털 대비 8개 누락 |
-| 메이플스토리M       | `client.maplestorym`   | `MapleStoryMClient`   | `maplestorym`   | `maplestory-m` / `maplestory-m`     | `AbstractGameClient`      | 37 / 38    | 구현됨 — 포털 대비 1개 누락 |
-| MapleStory SEA      | `client.maplestorySEA` | `MapleStorySEAClient` | `maplestorysea` | `maplestory-sea` / `maplestory-sea` | `AbstractMapleBaseClient` | 26 / 26    | 구현 완료 (shapes.ts 없음)  |
-| EA SPORTS FC 온라인 | `client.fcOnline`      | `FcOnlineClient`      | `fconline`      | `fc-online` / `fconline`            | `AbstractGameClient`      | 16 / 19    | 구현됨 — 포털 대비 2개 누락 |
+| 게임                | Client 프로퍼티        | Client 클래스         | Path Prefix     | 디렉토리 / sub-path                 | Base Class                | SDK / 포털 | 상태                         |
+| ------------------- | ---------------------- | --------------------- | --------------- | ----------------------------------- | ------------------------- | ---------- | ---------------------------- |
+| 메이플스토리 (KMS)  | `client.maplestory`    | `MapleStoryClient`    | `maplestory`    | `maplestory` / `maplestory`         | `AbstractMapleBaseClient` | 56 / 56    | 구현 완료                    |
+| 메이플스토리M       | `client.maplestorym`   | `MapleStoryMClient`   | `maplestorym`   | `maplestory-m` / `maplestory-m`     | `AbstractGameClient`      | 38 / 38    | 구현 완료                    |
+| MapleStory SEA      | `client.maplestorySEA` | `MapleStorySEAClient` | `maplestorysea` | `maplestory-sea` / `maplestory-sea` | `AbstractMapleBaseClient` | 26 / 26    | 구현 완료                    |
+| EA SPORTS FC 온라인 | `client.fcOnline`      | `FcOnlineClient`      | `fconline`      | `fc-online` / `fconline`            | `AbstractGameClient`      | 18 / 19    | 구현 완료 (포털 19경로 전부) |
 
 - `client.maplestorym` 은 소문자 `m` 이다 (`maplestoryM` 아님). 문서를 코드에 맞춘다.
 - FC는 디렉토리(`fc-online`)와 sub-path(`fconline`)가 다르다. 나머지는 같다.
-- FC의 16은 HTTP 메서드 14 + 이미지 URL 헬퍼 2. 포털 19경로 중 17경로를 덮는다(이미지 4경로를 헬퍼 2개가 담당). `getAllMatchList` (`/fconline/v1/match`)는 현재 포털 스펙에 없다.
+- FC의 18은 HTTP 메서드 16 + 이미지 URL 헬퍼 2. 헬퍼 2개가 포털의 이미지 4경로를 담당하며 호스트는 CDN `fco.dn.nexoncdn.co.kr` 이다 (`open.api.nexon.com` 은 400). `getAllMatchList` (`/fconline/v1/match`)는 넥슨이 제공을 종료해 deprecated이고 포털 스펙에 없다.
+- FC `getMaxDivision` 은 스펙(단일 객체)과 달리 매치 종류별 배열로 정규화하고, `getSeasonMeta` 는 실응답의 `seasonid`(문자열)를 스펙 형태 `seasonId`(정수)로 맞춘다. 이런 의도적 차이는 `specs:drift` 예외 목록에 이유와 함께 기록한다.
 
 ### 미구현 게임 (이름은 기존 패턴을 따른 예정값)
 
@@ -304,19 +311,17 @@ Base URL: `https://open.api.nexon.com/`
 
 ## 남은 작업
 
-2026-11-24 포털 대조 기준. 포털 14개 게임 + platform 합계 270개 중 SDK가 덮는 것은 128개다.
+2026-11-24 포털 대조 기준. 포털 14개 게임 + platform 합계 270개 중 SDK가 덮는 것은 139개다.
+
+**완료**
+
+- 기존 4개 게임 보강 (2026-11-24): KMS 56/56, M 38/38, SEA 26/26, FC 19/19. 누락 API 11개 추가, 응답 필드 드리프트 보정, 모든 public 메서드 단위 테스트
 
 **우선순위**
 
-1. **기존 4개 게임 보강** (포털 대비 누락 11개 + 응답 필드 드리프트)
-   - KMS 8개: `battle-practice/{replay-id,result,skill-timeline,character-info}`, `scheduler/character-state`, `history/soul-potential`, `character/ring-reserve-skill-equipment`, `/maplestory/legacy/ouid`
-   - M 1개: `user/union-stat`
-   - FC 2개: `/static/fconline/meta/season.json`, `/static/fconline/meta/class.json`. `getAllMatchList` 는 포털에서 빠졌으므로 폐지 여부 확인 후 SEMVER 정책대로 deprecate
-   - SEA: 누락 경로 없음. `shapes.ts` 신설
-   - 공통: 3월 이후 포털에 추가된 응답 필드를 optional로 반영 (KMS 캐릭터가 가장 큼)
-2. **MapleStory Taiwan** (27) — SEA와 거의 같고 `character/familiar` 가 추가됨
-3. **중대형 게임**: 퍼스트 디센던트 (42), 마비노기 영웅전 (19), 서든어택 (11), 마비노기 (5)
-4. **소형 게임**: 카트라이더 러쉬플러스 (9), 바람의나라 (7), 바람의나라: 연 (4), V4 (4), 히트2 (2), platform (1)
+1. **MapleStory Taiwan** (27) — SEA와 거의 같고 `character/familiar` 가 추가됨
+2. **중대형 게임**: 퍼스트 디센던트 (42), 마비노기 영웅전 (19), 서든어택 (11), 마비노기 (5)
+3. **소형 게임**: 카트라이더 러쉬플러스 (9), 바람의나라 (7), 바람의나라: 연 (4), V4 (4), 히트2 (2), platform (1)
 
 현재 수치는 `yarn specs:coverage` 로 다시 확인한다. 이 섹션의 숫자와 다르면 명령 결과가 맞다.
 
@@ -453,3 +458,12 @@ yarn specs:fetch        포털 → specs/openapi/{slug}/{categoryId}.yaml, index
 yarn type-check && yarn lint && yarn test && yarn build
 yarn specs:coverage   # 대상 게임의 SDK 경로 = 스펙 경로인지 확인
 ```
+
+### 포털 변경 대응
+
+1. **API Monitor**가 만든 `specs/auto-update` → `main` PR 또는 `api-change` 이슈와 포털 공지를 확인한다. `yarn specs:diff --base origin/main`으로 분류를 확인하고 `yarn specs:drift --game <slug>`로 SDK 반영 대상을 좁힌다.
+2. MINOR는 호환되는 공개 API로 반영한다. DEPRECATE는 `@deprecated`, optional 또는 메서드 런타임 경고를 적용한다. MAJOR와 새 게임의 공용 진입점 변경은 사람이 판단한다.
+3. SDK Auto Update는 포털 텍스트를 데이터로 취급하고 제한된 파일·명령으로 수정과 검증을 수행한다. 별도 게시 job이 검증된 패치를 커밋하고 CI를 실행한다. 변경은 사람이 검토하고 머지하며 `CHANGELOG.md`와 버전도 검토한다.
+4. CI의 `yarn specs:drift --strict`를 통과하려면 새 drift를 수정하거나 의도적인 차이를 `specs/drift-baseline.json`에 사유와 함께 기록한다. 스펙보다 넓은 SDK의 `null` 허용과 제거된 API의 `@deprecated` 유지는 허용한다.
+
+운영에는 **Allow GitHub Actions to create and approve pull requests** 설정과 Claude 시크릿(`CLAUDE_CODE_OAUTH_TOKEN` 또는 `ANTHROPIC_API_KEY`)이 필요하다. `SDK_AUTO_IMPLEMENT=false`를 설정하면 스펙 갱신만 동작한다. 등록과 수동 검증 절차는 [specs/README.md](specs/README.md#포털-변경-대응-절차)를 확인한다.

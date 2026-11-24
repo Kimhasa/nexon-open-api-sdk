@@ -9,12 +9,14 @@
 ```ts
 import { NexonClient } from 'nexon-open-api';
 
-const client = new NexonClient({ apiKey: 'YOUR_API_KEY' });
+const client = new NexonClient({ apiKey: 'YOUR_API_KEY', responseValidation: true });
 
 const ocid = await client.maplestorySEA.getOcid('CharacterName');
 const basic = await client.maplestorySEA.character.getBasic({ ocid });
 console.log(`${basic.character_name} Lv.${basic.character_level}`);
 ```
+
+`responseValidation: true`로 26개 응답의 최상위 필드를 검증할 수 있습니다. 결과는 `logger.onResponseShapeMismatch` 또는 `debug: true`를 통해 확인할 수 있습니다.
 
 > - 타임존: **UTC+8 (SGT)**
 > - 데이터 제공 시작일: **2025-04-20**
@@ -23,11 +25,37 @@ console.log(`${basic.character_name} Lv.${basic.character_level}`);
 
 ## OCID 조회 (1개)
 
+| 메서드    | GET 경로               |
+| --------- | ---------------------- |
+| `getOcid` | `/maplestorysea/v1/id` |
+
 ```ts
 const ocid = await client.maplestorySEA.getOcid('CharacterName');
 ```
 
 ## 캐릭터 (19개)
+
+| 메서드                           | GET 경로                                         |
+| -------------------------------- | ------------------------------------------------ |
+| `character.getBasic`             | `/maplestorysea/v1/character/basic`              |
+| `character.getPopularity`        | `/maplestorysea/v1/character/popularity`         |
+| `character.getStat`              | `/maplestorysea/v1/character/stat`               |
+| `character.getHyperStat`         | `/maplestorysea/v1/character/hyper-stat`         |
+| `character.getPropensity`        | `/maplestorysea/v1/character/propensity`         |
+| `character.getAbility`           | `/maplestorysea/v1/character/ability`            |
+| `character.getItemEquipment`     | `/maplestorysea/v1/character/item-equipment`     |
+| `character.getCashItemEquipment` | `/maplestorysea/v1/character/cashitem-equipment` |
+| `character.getSymbolEquipment`   | `/maplestorysea/v1/character/symbol-equipment`   |
+| `character.getSetEffect`         | `/maplestorysea/v1/character/set-effect`         |
+| `character.getBeautyEquipment`   | `/maplestorysea/v1/character/beauty-equipment`   |
+| `character.getAndroidEquipment`  | `/maplestorysea/v1/character/android-equipment`  |
+| `character.getPetEquipment`      | `/maplestorysea/v1/character/pet-equipment`      |
+| `character.getSkill`             | `/maplestorysea/v1/character/skill`              |
+| `character.getLinkSkill`         | `/maplestorysea/v1/character/link-skill`         |
+| `character.getVMatrix`           | `/maplestorysea/v1/character/vmatrix`            |
+| `character.getHexaMatrix`        | `/maplestorysea/v1/character/hexamatrix`         |
+| `character.getHexaMatrixStat`    | `/maplestorysea/v1/character/hexamatrix-stat`    |
+| `character.getDojang`            | `/maplestorysea/v1/character/dojang`             |
 
 ```ts
 const char = client.maplestorySEA.character;
@@ -53,6 +81,10 @@ await char.getHexaMatrixStat({ ocid }); // HEXA Stats
 await char.getDojang({ ocid }); // Mu Lung Dojang
 ```
 
+`character.getStat()`의 `mentorship_stat`과 캐시 장비의 `skill_info`는 제공될 때 읽을 수 있습니다.
+캐시 장비 스킬의 이름과 레벨은 `skill_info`에서 조회하세요. 기존 `skills`에는 폐지 예정 표시가 붙었습니다.
+Dragon 및 Mechanic 장비의 잠재능력 필드와 `item_exceptional_option.exceptional_upgrade`는 포털에서 명세하지 않아 SDK 타입에서 optional 및 deprecated로 표시합니다.
+
 ### Skill 조회 파라미터
 
 `character_skill_grade` 값:
@@ -73,6 +105,13 @@ await char.getDojang({ ocid }); // Mu Lung Dojang
 
 ## 유니온 (4개)
 
+| 메서드              | GET 경로                                |
+| ------------------- | --------------------------------------- |
+| `union.getUnion`    | `/maplestorysea/v1/user/union`          |
+| `union.getRaider`   | `/maplestorysea/v1/user/union-raider`   |
+| `union.getArtifact` | `/maplestorysea/v1/user/union-artifact` |
+| `union.getChampion` | `/maplestorysea/v1/user/union-champion` |
+
 ```ts
 const union = client.maplestorySEA.union;
 
@@ -83,6 +122,11 @@ await union.getChampion({ ocid }); // Union Champion
 ```
 
 ## 길드 (2개)
+
+| 메서드           | GET 경로                        |
+| ---------------- | ------------------------------- |
+| `guild.getId`    | `/maplestorysea/v1/guild/id`    |
+| `guild.getBasic` | `/maplestorysea/v1/guild/basic` |
 
 ```ts
 const guild = client.maplestorySEA.guild;

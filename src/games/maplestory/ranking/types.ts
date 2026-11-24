@@ -37,6 +37,11 @@ export interface GuildRankingRequest extends RankingBaseRequest {
   readonly ranking_type: 0 | 1 | 2;
   /** 길드 명 */
   readonly guild_name?: string | undefined;
+  /**
+   * 캐릭터 식별자
+   * @deprecated 입력 시 경고만 표시됩니다. 특정 길드는 `guild_name`으로 조회하세요. 다음 MAJOR에서 삭제됩니다.
+   */
+  readonly ocid?: OCID | undefined;
 }
 
 /** 무릉도장 랭킹 요청 파라미터 */

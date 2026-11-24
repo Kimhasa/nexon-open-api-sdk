@@ -66,6 +66,14 @@ export class NexonClient {
   /**
    * 메이플스토리 KMS (한국) 클라이언트.
    * Timezone: UTC+9 (KST)
+   *
+   * @example
+   * ```ts
+   * const ocid = await client.maplestory.getOcid('캐릭터명');
+   * const basic = await client.maplestory.character.getBasic({ ocid });
+   * const state = await client.maplestory.scheduler.getCharacterState({ ocid });
+   * const replays = await client.maplestory.battlePractice.getReplayId({ ocid });
+   * ```
    */
   get maplestory(): MapleStoryClient {
     this._maplestory ??= new MapleStoryClient(this.http);

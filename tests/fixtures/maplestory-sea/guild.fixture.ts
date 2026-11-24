@@ -11,9 +11,9 @@ export const seaGuildBasicFixture: SEAGuildBasic = {
   guild_level: 25,
   guild_fame: 50000,
   guild_point: 10000,
-  guild_master_name: 'BubbIeLord',
+  guild_master_name: 'ExampleCharacter',
   guild_member_count: 150,
-  guild_member: ['BubbIeLord', 'Member2'],
+  guild_member: ['ExampleCharacter', 'Member2'],
   guild_skill: [],
   guild_noblesse_skill: [],
 };

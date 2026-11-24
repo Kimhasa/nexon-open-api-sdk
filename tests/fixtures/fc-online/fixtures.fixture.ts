@@ -18,11 +18,16 @@ export const fcUserBasicFixture: FcUserBasic = {
 
 // ─── Max Division ────────────────────────────────────────────────────────────
 
-export const fcMaxDivisionFixture: FcMaxDivision = {
+export const fcMaxDivisionObjectFixture: FcMaxDivision = {
   matchType: 50,
   division: 800,
   achievementDate: '2024-01-15T12:00:00',
 };
+
+export const fcMaxDivisionFixture: FcMaxDivision[] = [
+  fcMaxDivisionObjectFixture,
+  { matchType: 52, division: 1100, achievementDate: '2024-01-16T13:30:00' },
+];
 
 // ─── Match List ──────────────────────────────────────────────────────────────
 
@@ -49,6 +54,7 @@ export const fcMatchDetailFixture: FcMatchDetail = {
     {
       ouid: 'fc-ouid-aabb1122334455667788',
       nickname: '테스트유저FC',
+      division: 800,
       matchDetail: {
         seasonId: 1,
         matchResult: '승',

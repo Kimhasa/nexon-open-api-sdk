@@ -20,14 +20,45 @@ export type ExpectedType =
 /**
  * 런타임 응답 Shape descriptor.
  *
- * Top-level key와 예상 타입만 정의합니다.
- * 깊은 nested 검증은 성능 비용 대비 효과가 낮으므로 의도적으로 제외합니다.
+ * 객체의 최상위 키 또는 배열 응답의 원소를 검사합니다.
  */
 export interface ShapeDescriptor {
   /** 예상 키와 타입 맵 */
   readonly expectedKeys: Readonly<Record<string, ExpectedType>>;
   /** deprecated 키와 경고 메시지 맵 (존재 시 emitDeprecation 호출) */
   readonly deprecatedKeys?: Readonly<Record<string, string>> | undefined;
+  /** 배열 응답 검증 설정. {@link arrayOf}로 생성합니다. */
+  readonly array?: ArrayShape | undefined;
+}
+
+type ObjectShape = Pick<ShapeDescriptor, 'expectedKeys' | 'deprecatedKeys'>;
+type ArrayItemShape = ObjectShape | Exclude<ExpectedType, 'optional'>;
+
+interface ArrayShape {
+  readonly items: ArrayItemShape;
+  readonly allowSingleObject?: boolean | undefined;
+}
+
+/**
+ * 최상위 배열의 각 항목에 적용할 응답 descriptor를 만든다.
+ * 불일치가 있으면 첫 번째 항목의 인덱스와 키를 보고합니다.
+ *
+ * @param items - 배열 항목의 타입 또는 객체 shape
+ * @param options.allowSingleObject - 객체 shape를 배열 항목 및 단일 객체에 적용할지 여부
+ *
+ * @example
+ * ```ts
+ * const idsShape = arrayOf('string');
+ * const recordsShape = arrayOf({ expectedKeys: { id: 'number' } });
+ * const flexibleShape = arrayOf({ expectedKeys: { id: 'number' } }, { allowSingleObject: true });
+ * await http.get(url, undefined, flexibleShape);
+ * ```
+ */
+export function arrayOf(
+  items: ArrayItemShape,
+  options?: { readonly allowSingleObject?: boolean | undefined },
+): ShapeDescriptor {
+  return { expectedKeys: {}, array: { items, allowSingleObject: options?.allowSingleObject } };
 }
 
 /** 응답 shape 불일치 정보. */
@@ -47,7 +78,7 @@ export interface ShapeMismatch {
 }
 
 /**
- * 응답 객체를 shape descriptor와 비교한다.
+ * 응답 데이터를 shape descriptor와 비교한다.
  *
  * - shape가 일치하면 `null` 반환
  * - 불일치가 있으면 `ShapeMismatch` 반환 (throw하지 않음)
@@ -62,6 +93,71 @@ export function validateShape(
   data: unknown,
   shape: ShapeDescriptor,
 ): ShapeMismatch | null {
+  if (shape.array) return validateArrayShape(url, data, shape.array);
+  return validateObjectShape(url, data, shape);
+}
+
+function validateArrayShape(url: string, data: unknown, shape: ArrayShape): ShapeMismatch | null {
+  const { items, allowSingleObject } = shape;
+  if (!Array.isArray(data)) {
+    if (allowSingleObject && typeof items !== 'string' && isObjectRecord(data)) {
+      return validateObjectShape(url, data, items);
+    }
+    return arrayTypeMismatch(url, '(root)', 'array', data);
+  }
+
+  for (let index = 0; index < data.length; index += 1) {
+    const item: unknown = data[index];
+    const key = `[${index}]`;
+    if (typeof items === 'string') {
+      if (items !== 'any' && responseType(item) !== items) {
+        return arrayTypeMismatch(url, key, items, item);
+      }
+      continue;
+    }
+
+    if (!isObjectRecord(item)) return arrayTypeMismatch(url, key, 'object', item);
+    const mismatch = validateObjectShape(url, item, items);
+    if (mismatch) {
+      return {
+        url,
+        unexpectedKeys: mismatch.unexpectedKeys.map((field) => `${key}.${field}`),
+        missingKeys: mismatch.missingKeys.map((field) => `${key}.${field}`),
+        typeMismatches: mismatch.typeMismatches.map((entry) => ({
+          ...entry,
+          key: `${key}.${entry.key}`,
+        })),
+      };
+    }
+  }
+
+  return null;
+}
+
+function isObjectRecord(data: unknown): boolean {
+  return typeof data === 'object' && data !== null && !Array.isArray(data);
+}
+
+function responseType(data: unknown): string {
+  if (data === null) return 'null';
+  return Array.isArray(data) ? 'array' : typeof data;
+}
+
+function arrayTypeMismatch(
+  url: string,
+  key: string,
+  expected: ExpectedType,
+  value: unknown,
+): ShapeMismatch {
+  return {
+    url,
+    unexpectedKeys: [],
+    missingKeys: [],
+    typeMismatches: [{ key, expected, actual: responseType(value) }],
+  };
+}
+
+function validateObjectShape(url: string, data: unknown, shape: ObjectShape): ShapeMismatch | null {
   if (typeof data !== 'object' || data === null) {
     return {
       url,

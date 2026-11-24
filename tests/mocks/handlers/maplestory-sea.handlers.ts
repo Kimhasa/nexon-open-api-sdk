@@ -1,4 +1,30 @@
 import { http, HttpResponse } from 'msw';
+import type { HttpHandler } from 'msw';
+import {
+  seaCharacterPopularityFixture,
+  seaCharacterStatFixture,
+  seaCharacterHyperStatFixture,
+  seaCharacterPropensityFixture,
+  seaCharacterAbilityFixture,
+  seaCharacterItemEquipmentFixture,
+  seaCharacterCashItemEquipmentFixture,
+  seaCharacterSymbolEquipmentFixture,
+  seaCharacterSetEffectFixture,
+  seaCharacterBeautyEquipmentFixture,
+  seaCharacterAndroidEquipmentFixture,
+  seaCharacterPetEquipmentFixture,
+  seaCharacterSkillFixture,
+  seaCharacterLinkSkillFixture,
+  seaCharacterVMatrixFixture,
+  seaCharacterHexaMatrixFixture,
+  seaCharacterHexaMatrixStatFixture,
+  seaCharacterDojangFixture,
+} from '../../fixtures/maplestory-sea/character.fixture.js';
+import {
+  seaUnionRaiderFixture,
+  seaUnionArtifactFixture,
+  seaUnionChampionFixture,
+} from '../../fixtures/maplestory-sea/union-detail.fixture.js';
 import { seaOcidFixture } from '../../fixtures/maplestory-sea/ocid.fixture.js';
 import { seaCharacterBasicFixture } from '../../fixtures/maplestory-sea/character-basic.fixture.js';
 import { seaUnionFixture } from '../../fixtures/maplestory-sea/union.fixture.js';
@@ -20,7 +46,54 @@ const checkApiKey = (request: Request): ReturnType<typeof HttpResponse.json> | n
   return null;
 };
 
+const REQUEST_DATE = '2025-04-21';
+
+function datedOcidHandler(
+  path: string,
+  fixture: Parameters<typeof HttpResponse.json>[0],
+  skillGrade?: string,
+): HttpHandler {
+  return http.get(`${BASE}/${path}`, ({ request }) => {
+    const authError = checkApiKey(request);
+    if (authError) return authError;
+    const query = new URL(request.url).searchParams;
+    if (
+      query.get('ocid') !== seaOcidFixture.ocid ||
+      query.get('date') !== REQUEST_DATE ||
+      (skillGrade !== undefined && query.get('character_skill_grade') !== skillGrade)
+    ) {
+      return HttpResponse.json(
+        { error: { name: 'OPENAPI00004', message: 'Unexpected character query' } },
+        { status: 400 },
+      );
+    }
+    return HttpResponse.json(fixture);
+  });
+}
+
 export const mapleStorySEAHandlers = [
+  datedOcidHandler('character/popularity', seaCharacterPopularityFixture),
+  datedOcidHandler('character/stat', seaCharacterStatFixture),
+  datedOcidHandler('character/hyper-stat', seaCharacterHyperStatFixture),
+  datedOcidHandler('character/propensity', seaCharacterPropensityFixture),
+  datedOcidHandler('character/ability', seaCharacterAbilityFixture),
+  datedOcidHandler('character/item-equipment', seaCharacterItemEquipmentFixture),
+  datedOcidHandler('character/cashitem-equipment', seaCharacterCashItemEquipmentFixture),
+  datedOcidHandler('character/symbol-equipment', seaCharacterSymbolEquipmentFixture),
+  datedOcidHandler('character/set-effect', seaCharacterSetEffectFixture),
+  datedOcidHandler('character/beauty-equipment', seaCharacterBeautyEquipmentFixture),
+  datedOcidHandler('character/android-equipment', seaCharacterAndroidEquipmentFixture),
+  datedOcidHandler('character/pet-equipment', seaCharacterPetEquipmentFixture),
+  datedOcidHandler('character/skill', seaCharacterSkillFixture, '6'),
+  datedOcidHandler('character/link-skill', seaCharacterLinkSkillFixture),
+  datedOcidHandler('character/vmatrix', seaCharacterVMatrixFixture),
+  datedOcidHandler('character/hexamatrix', seaCharacterHexaMatrixFixture),
+  datedOcidHandler('character/hexamatrix-stat', seaCharacterHexaMatrixStatFixture),
+  datedOcidHandler('character/dojang', seaCharacterDojangFixture),
+  datedOcidHandler('user/union-raider', seaUnionRaiderFixture),
+  datedOcidHandler('user/union-artifact', seaUnionArtifactFixture),
+  datedOcidHandler('user/union-champion', seaUnionChampionFixture),
+
   // OCID
   http.get(`${BASE}/id`, ({ request }) => {
     const authError = checkApiKey(request);

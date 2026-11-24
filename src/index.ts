@@ -58,11 +58,14 @@ export type {
   ItemAddOption,
   ItemEtcOption,
   TitleInfo,
+  TitlePresetInfo,
   MedalShape,
   CharacterCashItemEquipment,
   CashItemEquipmentItem,
   CashItemOption,
   CashItemColoringPrism,
+  CashItemCustomOrigin,
+  WorldShareMasterLabelItem,
   CharacterSymbolEquipment,
   SymbolInfo,
   CharacterSetEffect,
@@ -79,6 +82,8 @@ export type {
   PetEquipmentItem,
   PetAutoSkill,
   PetItemOption,
+  WorldSharePetEquipmentPreset,
+  PetiteLunaPetSkill,
   CharacterSkill,
   SkillInfo,
   SkillGrade,
@@ -87,6 +92,7 @@ export type {
   LinkSkillInfo,
   CharacterVMatrix,
   VCoreEquipment,
+  VCorePresetEquipment,
   CharacterHexaMatrix,
   HexaCoreEquipment,
   HexaLinkedSkill,
@@ -97,6 +103,7 @@ export type {
   OtherStatEntry,
   OtherStatInfo,
   CharacterRingExchangeSkillEquipment,
+  CharacterRingReserveSkillEquipment,
 } from './games/maplestory/character/types.js';
 
 // MapleStory union types
@@ -107,6 +114,7 @@ export type {
   UnionBlock,
   UnionRaiderPreset,
   UnionRaider,
+  UnionStateStatPreset,
   UnionArtifactEffect,
   UnionArtifactCrystal,
   UnionArtifact,
@@ -134,6 +142,8 @@ export type {
   PotentialHistory,
   CubeHistoryItem,
   CubeHistory,
+  SoulPotentialHistoryItem,
+  SoulPotentialHistory,
 } from './games/maplestory/history/types.js';
 
 // MapleStory ranking types
@@ -172,6 +182,47 @@ export type {
   CashshopNoticeDetail,
 } from './games/maplestory/notice/types.js';
 
+// MapleStory battle practice types
+export type {
+  BattlePracticeReplayIdRequest,
+  BattlePracticeReplayRequest,
+  BattlePracticeSkillTimelineRequest,
+  BattlePracticeReplay,
+  BattlePracticeReplayId,
+  BattlePracticeSkillStatistic,
+  BattlePracticeResult,
+  BattlePracticeSkillTimelineItem,
+  BattlePracticeSkillTimeline,
+  BattlePracticeBasic,
+  BattlePracticeStat,
+  BattlePracticeHyperStatInfo,
+  BattlePracticePropensity,
+  BattlePracticeSubItemEquipment,
+  BattlePracticeItemEquipment,
+  BattlePracticeTitle,
+  BattlePracticeSetEffect,
+  BattlePracticeItem,
+  BattlePracticeCashItemEquipment,
+  BattlePracticeWorldShareMasterLabelItem,
+  BattlePracticeCashItem,
+  BattlePracticePet,
+  BattlePracticeHexaCore,
+  BattlePracticeHexaMatrix,
+  BattlePracticeRingReserveSkill,
+  BattlePracticeUnionRaider,
+  BattlePracticeUnionArtifactEffect,
+  BattlePracticeChampionBadge,
+  BattlePracticeCharacterInfo,
+} from './games/maplestory/battle-practice/types.js';
+
+// MapleStory scheduler types
+export type {
+  SchedulerCharacterStateRequest,
+  SchedulerContent,
+  SchedulerBossContent,
+  SchedulerCharacterState,
+} from './games/maplestory/scheduler/types.js';
+
 // FC Online types
 export type {
   FcUserBasic,
@@ -203,6 +254,8 @@ export type {
   FcMatchTypeMeta,
   FcSpidMeta,
   FcSeasonIdMeta,
+  FcSeasonMeta,
+  FcClassMeta,
   FcSpPositionMeta,
   FcDivisionMeta,
   FcDivisionVoltaMeta,
@@ -219,6 +272,7 @@ export type {
   MCharacterGuild,
   MCharacterItemEquipment,
   MItemEquipment,
+  MItemMasteryInfo,
   MItemOption,
   MSoulInfo,
   MEmblemInfo,
@@ -238,22 +292,30 @@ export type {
   MAndroidEquipmentInfo,
   MHeartEquipment,
   MAndroidHeartPreset,
-  // 스펙 확인 필요
   MCharacterJewel,
   MCharacterBeautyEquipment,
   MCharacterPetEquipment,
   MCharacterSkillEquipment,
   MCharacterLinkSkill,
   MCharacterVMatrix,
+  MVCoreEquipment,
   MCharacterHexaMatrixSkill,
+  MHexaMatrixSkillInfo,
   MCharacterHexaMatrixStat,
 } from './games/maplestory-m/character/types.js';
 
 // MapleStory M common types
 export type { MOcidRequest, MGuildIdRequest } from './games/maplestory-m/types.js';
 
-// MapleStory M union types (스펙 확인 필요)
-export type { MUnion, MUnionRaider } from './games/maplestory-m/union/types.js';
+// MapleStory M union types
+export type {
+  MUnion,
+  MUnionRaider,
+  MUnionOption,
+  MUnionStat,
+  MUnionStatEntry,
+  MUnionStatPreset,
+} from './games/maplestory-m/union/types.js';
 
 // MapleStory M guild types
 export type {
@@ -323,12 +385,14 @@ export type {
   SEAItemEtcOption,
   SEAItemEquipment,
   SEAPresetItemEquipment,
+  SEAClassItemEquipment,
   SEATitleInfo,
   SEAMedalShape,
   SEACharacterItemEquipment,
   SEACashItemOption,
   SEACashItemColoringPrism,
   SEACashItemEquipmentItem,
+  SEACashItemSkillInfo,
   SEACharacterCashItemEquipment,
   SEASymbolInfo,
   SEACharacterSymbolEquipment,
@@ -425,6 +489,7 @@ export * from './games/platform/index.js';
 export { HttpClient } from './core/http/HttpClient.js';
 export type {
   HttpClientConfig,
+  HttpRequestOptions,
   RequestInterceptor,
   ResponseInterceptor,
   RetryInterceptor,

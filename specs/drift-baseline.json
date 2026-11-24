@@ -1,0 +1,14 @@
+[
+  {
+    "operation": "GET /fconline/v1/user/match",
+    "path": "response[]",
+    "kind": "type-mismatch",
+    "reason": "포털은 매치 원소를 객체로 명세하지만 SDK는 실응답처럼 매치 ID 문자열 배열을 공개 계약으로 유지한다."
+  },
+  {
+    "operation": "GET /fconline/v1/user/maxdivision",
+    "path": "response",
+    "kind": "type-mismatch",
+    "reason": "SDK는 포털에 명세된 단일 역대 최고 등급 객체를 길이 1의 배열로 정규화하고 배열 실응답은 그대로 반환한다."
+  }
+]

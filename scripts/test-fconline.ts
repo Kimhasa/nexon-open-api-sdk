@@ -2,7 +2,7 @@
  * EA SPORTS FC Online 실제 API 키로 SDK를 검증하는 스크립트.
  *
  * 사용법:
- *   1. .env 파일에 NEXON_FC_ONLINE_API_KEY 값 입력
+ *   1. .env 파일에 NEXON_FC_ONLINE_API_KEY, FC_ONLINE_NICKNAME 값 입력
  *   2. yarn test:fconline 실행
  */
 import 'dotenv/config';
@@ -22,7 +22,7 @@ if (!nickname) {
   process.exit(1);
 }
 
-const client = new NexonClient({ apiKey, debug: true });
+const client = new NexonClient({ apiKey, debug: true, responseValidation: true });
 
 let passed = 0;
 let failed = 0;
@@ -56,7 +56,8 @@ if (ouid) {
   });
 
   await test('getMaxDivision', async () => {
-    await client.fcOnline.getMaxDivision(ouid!);
+    const divisions = await client.fcOnline.getMaxDivision(ouid!);
+    if (!Array.isArray(divisions)) throw new Error('maxDivision이 배열이 아님');
   });
 
   await test('getMatchList', async () => {
@@ -77,11 +78,6 @@ await test('getTradeList', async () => {
 // ─── 2. Match ─────────────────────────────────────────────────────────────────
 console.log('\n📋 Match API');
 
-await test('getAllMatchList', async () => {
-  const r = await client.fcOnline.getAllMatchList({ matchtype: 50, limit: 5 });
-  if (!Array.isArray(r)) throw new Error('allMatchList가 배열이 아님');
-});
-
 // matchDetail은 실제 matchId가 필요 — 위에서 가져온 목록 사용
 if (ouid) {
   await test('getMatchDetail', async () => {
@@ -96,6 +92,15 @@ if (ouid) {
   });
 }
 
+// ─── Ranker ─────────────────────────────────────────────────────────────────
+await test('getRankerStats', async () => {
+  const stats = await client.fcOnline.getRankerStats({
+    matchtype: 52,
+    players: [{ id: 100167680, po: 18 }],
+  });
+  if (!Array.isArray(stats)) throw new Error('rankerStats가 배열이 아님');
+});
+
 // ─── 3. Metadata ──────────────────────────────────────────────────────────────
 console.log('\n📋 Metadata API');
 
@@ -109,9 +114,16 @@ await test('getSpidMeta', async () => {
   if (!Array.isArray(r) || r.length === 0) throw new Error('spidMeta가 비어있음');
 });
 
-await test('getSeasonIdMeta', async () => {
-  const r = await client.fcOnline.getSeasonIdMeta();
-  if (!Array.isArray(r) || r.length === 0) throw new Error('seasonIdMeta가 비어있음');
+await test('getSeasonMeta', async () => {
+  const seasons = await client.fcOnline.getSeasonMeta();
+  if (seasons.length === 0 || !seasons.every(({ seasonId }) => Number.isSafeInteger(seasonId))) {
+    throw new Error('공식경기 시즌 ID를 정수로 받지 못함');
+  }
+});
+
+await test('getClassMeta', async () => {
+  const classes = await client.fcOnline.getClassMeta();
+  if (!classes[0]?.classImg) throw new Error('클래스 메타데이터가 비어있음');
 });
 
 await test('getSpPositionMeta', async () => {
@@ -134,11 +146,15 @@ console.log('\n📋 Image URL (로컬 조립)');
 
 await test('getActionShotUrl', async () => {
   const url = client.fcOnline.getActionShotUrl(272167135);
-  if (!url.includes('272167135')) throw new Error('URL에 spid가 포함되지 않음');
+  if (
+    url !== 'https://fco.dn.nexoncdn.co.kr/live/externalAssets/common/playersAction/p272167135.png'
+  ) {
+    throw new Error('액션샷 CDN URL이 예상과 다름');
+  }
 });
 
 await test('getPlayerImageUrl', async () => {
-  const url = client.fcOnline.getPlayerImageUrl(272167135);
+  const url = client.fcOnline.getPlayerImageUrl(167680);
   if (!url.includes('272167135')) throw new Error('URL에 spid가 포함되지 않음');
 });
 

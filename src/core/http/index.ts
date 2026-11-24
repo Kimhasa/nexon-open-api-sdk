@@ -3,6 +3,7 @@ export type {
   HttpClientConfig,
   HttpLogger,
   HttpRequestInfo,
+  HttpRequestOptions,
   HttpResponseInfo,
   HttpRetryInfo,
   RequestInterceptor,

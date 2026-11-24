@@ -2,7 +2,7 @@ import type { SEACharacterBasic } from '../../../src/games/maplestory-sea/charac
 
 export const seaCharacterBasicFixture: SEACharacterBasic = {
   date: '2025-04-21T00:00+08:00',
-  character_name: 'BubbIeLord',
+  character_name: 'ExampleCharacter',
   world_name: 'Aquila',
   character_gender: 'Male',
   character_class: 'Night Lord',
