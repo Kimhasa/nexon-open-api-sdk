@@ -77,7 +77,14 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     note: 'OUID(1) + User(2) + Notice(6). Portal OpenAPI spec (specs/openapi/kartrush/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
   },
 
-  // [slot:baram] 바람의나라
+  baram: {
+    game: 'The Kingdom of the Winds (Baram)',
+    pathPrefix: 'baram',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 7,
+    note: 'OCID(1) + Character(6). Portal OpenAPI spec (specs/openapi/baram/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+  },
 
   // [slot:mabinogi] 마비노기
 
