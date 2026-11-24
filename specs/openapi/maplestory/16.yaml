@@ -185,6 +185,10 @@ components:
           type: number
           format: int64
           description: 길드 포인트(GP)
+        guild_auto_update_test:
+          type: string
+          description: 자동 반영 파이프라인 검증용 테스트 필드 (머지 금지)
+          example: "test"
         guild_master_name:
           type: string
           description: 길드 마스터 캐릭터 명
