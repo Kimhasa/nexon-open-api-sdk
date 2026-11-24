@@ -88,7 +88,14 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
 
   // [slot:mabinogi] 마비노기
 
-  // [slot:baramy] 바람의나라: 연
+  baramy: {
+    game: 'The Kingdom of the Winds: Yeon (Baram: Yeon)',
+    pathPrefix: 'baramy',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 4,
+    note: 'OCID(1) + Character(3). Portal OpenAPI spec (specs/openapi/baramy/, 2026-11-24). Not verified with a real API key; fixtures are synthesized from the spec.',
+  },
 
   // [slot:v4] V4
 
