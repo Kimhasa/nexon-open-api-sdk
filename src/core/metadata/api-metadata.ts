@@ -62,7 +62,14 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
 
   // [slot:maplestorytw] MapleStory Taiwan (메이플스토리 대만)
 
-  // [slot:tfd] 퍼스트 디센던트 (The First Descendant)
+  tfd: {
+    game: 'The First Descendant',
+    pathPrefix: 'tfd',
+    lastVerifiedAt: '2026-11-24',
+    sdkVersionAtVerification: '0.2.0',
+    endpointCount: 42,
+    note: 'OUID(1) + User(6) + Meta(32) + Recommendation(1) + Leaderboard(2). Portal OpenAPI spec (specs/openapi/tfd/, 2026-11-24). The 32 static meta files were checked against live responses (no key needed); types follow the live data where it differs from the spec. The 10 keyed APIs are not verified with a real API key (spec-based synthetic fixtures).',
+  },
 
   // [slot:heroes] 마비노기 영웅전
 

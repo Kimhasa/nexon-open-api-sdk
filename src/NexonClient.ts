@@ -121,6 +121,13 @@ export class NexonClient {
 
   /**
    * 퍼스트 디센던트 (The First Descendant) 클라이언트.
+   *
+   * @example
+   * ```ts
+   * const ouid = await client.firstDescendant.getOuid('닉네임#1234');
+   * const basic = await client.firstDescendant.user.getBasic({ ouid });
+   * const descendants = await client.firstDescendant.meta.getDescendant('ko');
+   * ```
    */
   get firstDescendant(): FirstDescendantClient {
     this._firstDescendant ??= new FirstDescendantClient(this.http);
