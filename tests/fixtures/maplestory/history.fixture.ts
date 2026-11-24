@@ -21,7 +21,7 @@ export const starforceHistoryFixture: StarforceHistory = {
       world_name: '스카니아',
       target_item: '파프니르 투핸드소드',
       date_create: '2024-01-15T10:30:00+09:00',
-      starforce_event_list: null,
+      starforce_event_list: [],
     },
   ],
 };
