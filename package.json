@@ -1,6 +1,6 @@
 {
   "name": "nexon-open-api",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Type-safe Nexon Open API SDK for MapleStory, FC Online, and more — zero dependencies",
   "author": "Kimhasa",
   "license": "MIT",
@@ -21,6 +21,10 @@
     "type": "git",
     "url": "https://github.com/Kimhasa/nexon-open-api-sdk.git"
   },
+  "homepage": "https://github.com/Kimhasa/nexon-open-api-sdk#readme",
+  "bugs": {
+    "url": "https://github.com/Kimhasa/nexon-open-api-sdk/issues"
+  },
   "packageManager": "yarn@4.6.0",
   "engines": {
     "node": ">=18.0.0"
@@ -28,43 +32,71 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     },
     "./maplestory": {
-      "types": "./dist/maplestory.d.ts",
-      "import": "./dist/maplestory.js",
-      "require": "./dist/maplestory.cjs"
+      "import": {
+        "types": "./dist/maplestory.d.ts",
+        "default": "./dist/maplestory.js"
+      },
+      "require": {
+        "types": "./dist/maplestory.d.cts",
+        "default": "./dist/maplestory.cjs"
+      }
     },
     "./fconline": {
-      "types": "./dist/fconline.d.ts",
-      "import": "./dist/fconline.js",
-      "require": "./dist/fconline.cjs"
+      "import": {
+        "types": "./dist/fconline.d.ts",
+        "default": "./dist/fconline.js"
+      },
+      "require": {
+        "types": "./dist/fconline.d.cts",
+        "default": "./dist/fconline.cjs"
+      }
     },
     "./maplestory-m": {
-      "types": "./dist/maplestory-m.d.ts",
-      "import": "./dist/maplestory-m.js",
-      "require": "./dist/maplestory-m.cjs"
+      "import": {
+        "types": "./dist/maplestory-m.d.ts",
+        "default": "./dist/maplestory-m.js"
+      },
+      "require": {
+        "types": "./dist/maplestory-m.d.cts",
+        "default": "./dist/maplestory-m.cjs"
+      }
     },
     "./maplestory-sea": {
-      "types": "./dist/maplestory-sea.d.ts",
-      "import": "./dist/maplestory-sea.js",
-      "require": "./dist/maplestory-sea.cjs"
+      "import": {
+        "types": "./dist/maplestory-sea.d.ts",
+        "default": "./dist/maplestory-sea.js"
+      },
+      "require": {
+        "types": "./dist/maplestory-sea.d.cts",
+        "default": "./dist/maplestory-sea.cjs"
+      }
     }
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "type-check": "tsc --noEmit",
-    "lint": "eslint src tests",
-    "lint:fix": "eslint src tests --fix",
+    "type-check": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
+    "check:exports": "attw --pack . --profile node16",
+    "lint": "eslint src tests scripts",
+    "lint:fix": "eslint src tests scripts --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
@@ -74,6 +106,9 @@
     "test:maplestory-m": "tsx scripts/test-maplestory-m.ts",
     "test:fconline": "tsx scripts/test-fconline.ts",
     "test:maplestory-sea": "tsx scripts/test-maplestory-sea.ts",
+    "specs:fetch": "tsx scripts/specs-fetch.ts",
+    "specs:check": "tsx scripts/specs-check.ts",
+    "specs:coverage": "tsx scripts/specs-coverage.ts",
     "release": "yarn build && yarn test && npm publish",
     "prepare": "husky"
   },
@@ -87,6 +122,7 @@
     ]
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
     "@types/node": "^22.10.0",
     "@vitest/coverage-v8": "^3.0.0",
     "dotenv": "^17.3.1",
@@ -99,6 +135,7 @@
     "tsx": "^4.21.0",
     "typescript": "^5.7.0",
     "typescript-eslint": "^8.20.0",
-    "vitest": "^3.0.0"
+    "vitest": "^3.0.0",
+    "yaml": "^2.9.1"
   }
 }

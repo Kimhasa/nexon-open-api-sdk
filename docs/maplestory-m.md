@@ -1,6 +1,8 @@
 # 메이플스토리M API 레퍼런스
 
-> 36개 엔드포인트 — `client.maplestorym`
+> SDK 지원 API 37개 — `client.maplestorym`
+>
+> 개수 기준: SDK public API 메서드 수 (메서드 1개 = 넥슨 API 경로 1개). 넥슨 포털 기준 38개 중 37개를 지원합니다 (미지원: `/maplestorym/v1/user/union-stat`).
 
 ## 빠른 시작
 
@@ -16,7 +18,7 @@ console.log(`${basic.character_name} Lv.${basic.character_level}`);
 
 > 메이플스토리M은 OCID 조회 시 **월드명**이 필요합니다.
 
-## OCID 조회
+## OCID 조회 (1개)
 
 ```ts
 // 월드명: 스카니아, 루나, 엘리시움, 크로아, 유니온, 제니스, 아케인

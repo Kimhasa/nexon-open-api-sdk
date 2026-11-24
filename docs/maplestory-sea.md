@@ -1,6 +1,8 @@
 # MapleStorySEA API 레퍼런스
 
-> 26개 엔드포인트 — `client.maplestorySEA`
+> SDK 지원 API 26개 — `client.maplestorySEA`
+>
+> 개수 기준: SDK public API 메서드 수 (메서드 1개 = 넥슨 API 경로 1개). 넥슨 포털 기준 26개를 모두 지원합니다.
 
 ## 빠른 시작
 
@@ -19,7 +21,7 @@ console.log(`${basic.character_name} Lv.${basic.character_level}`);
 > - 전일 데이터 갱신: 익일 오전 2시 (SGT)
 > - 게임 데이터 반영: 업데이트 후 약 15분 소요
 
-## OCID 조회
+## OCID 조회 (1개)
 
 ```ts
 const ocid = await client.maplestorySEA.getOcid('CharacterName');

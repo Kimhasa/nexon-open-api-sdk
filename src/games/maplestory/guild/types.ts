@@ -65,8 +65,10 @@ export interface GuildBasic {
   readonly guild_point: number;
   /** 길드 마스터 캐릭터 명 */
   readonly guild_master_name: string;
-  /** 길드원 수 */
+  /** 길드 캐릭터 전체 수 */
   readonly guild_member_count: number;
+  /** 길드원 수 */
+  readonly guild_user_count?: number | undefined;
   /** 길드원 목록 */
   readonly guild_member: readonly string[];
   /** 길드 스킬 목록 */

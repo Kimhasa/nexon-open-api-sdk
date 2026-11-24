@@ -1,0 +1,834 @@
+openapi: 3.0.3
+info:
+  title: 楓之谷台灣 API
+  version: 1.0.0
+  contact:
+    name: help_openapi@nexon.co.kr
+  description: |-
+    - 楓之谷遊戲資料平均在 15 分鐘後即可使用。
+    - 您可以從 2025 年 10 月 14 日起搜尋資料。
+    - 您可以輸入所需日期以搜尋過往資料。前一日的資料將於翌日凌晨 2:00 起提供。(當您搜尋 10 月 14 日的資料時，將會擷取從 14 日 00:00 到 15 日 00:00 的資料。)
+    - 由於遊戲內容變動，OCID 可能會有所變更。在更新以 OCID 為基礎的服務時，請務必留意。
+    - 此 API 提供來自楓之谷台灣的資料。
+servers:
+  - url: 'https://open.api.nexon.com'
+tags:
+  - name: 聯盟
+    description: 檢視聯盟資訊
+
+paths:
+  /maplestorytw/v1/user/union:
+    get:
+      tags:
+        - 聯盟
+      summary: 檢視戰地資訊
+      description: 檢視戰地等級與戰地階級資訊。
+      operationId: maplestory_get_union
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 角色辨識器
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: 要搜尋的日期 (TST，YYYY-MM-DD)
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Union'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /maplestorytw/v1/user/union-raider:
+    get:
+      tags:
+        - 聯盟
+      summary: 檢視戰地攻擊隊資訊
+      description: 檢視詳細資訊，例如派遣至聯盟的攻擊單位成員效果，以及攻擊單位佔領效果。
+      operationId: maplestory_get_union_raider
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 角色辨識器
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: 要搜尋的日期 (TST，YYYY-MM-DD)
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnionRaider'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /maplestorytw/v1/user/union-artifact:
+    get:
+      tags:
+        - 聯盟
+      summary: 檢視戰地神器資訊
+      description: 檢視戰地神器資訊。
+      operationId: maplestory_get_union_artifact
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 角色辨識器
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: 要搜尋的日期 (TST，YYYY-MM-DD)
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnionArtifact'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /maplestorytw/v1/user/union-champion:
+    get:
+      tags:
+        - 聯盟
+      summary: 聯盟冠軍資訊查詢
+      description: |-
+        查詢聯盟冠軍資訊。
+        <br>可查詢自 2025 年 12 月 18 日起的資料。
+      operationId: maplestory_get_union_champion
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 角色識別碼
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: 查詢基準日（KST，YYYY-MM-DD）
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnionChampion'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+components:
+  schemas:
+    Union:
+      type: object
+      properties:
+        date:
+          type: string
+          description: 要搜尋的日期 (TST，每日資料中的小時與分鐘將顯示為 0)
+          example: "2025-01-21T00:00+08:00"
+        union_level:
+          type: number
+          format: int64
+          description: 聯盟等級
+        union_grade:
+          type: string
+          description: 聯盟階級
+        union_artifact_level:
+          type: number
+          format: int64
+          description: 神器等級 
+        union_artifact_exp:
+          type: number
+          format: int64
+          description: 持有的神器經驗值  
+        union_artifact_point:
+          type: number
+          format: int64
+          description: 持有的神器點數  
+    UnionRaider:
+      type: object
+      properties:
+        date:
+          type: string
+          description: 要搜尋的日期 (TST，每日資料中的小時與分鐘將顯示為 0)
+          example: "2025-10-15T00:00+08:00"
+        union_raider_stat:
+          type: array
+          description: 戰地攻擊隊員效果
+          items:
+            type: string
+        union_occupied_stat:
+          type: array
+          description: 戰地攻擊隊佔領效果
+          items:
+            type: string
+        union_inner_stat:
+          type: array
+          description: 戰地攻擊隊部署
+          items:
+            type: object
+            properties:
+              stat_field_id:
+                type: string
+                description: 攻擊單位部署位置 (以 11 點鐘方向為起點，順時針 0-7)
+              stat_field_effect:
+                type: string
+                description: 相關區域佔領效果
+        union_block:
+          type: array
+          description: 聯盟方塊資訊
+          items:
+            type: object
+            properties:
+              block_type:
+                type: string
+                description: 方塊編制 (戰士、法師、弓箭手、盜賊、海盜、混合)
+              block_class:
+                type: string
+                description: 方塊角色職業
+              block_level:
+                type: string
+                description: 方塊角色等級
+              block_control_point:
+                type: object
+                description: |
+                  方塊基準點座標
+                  - 四個中央方塊的右下角為位置 x : 0, y : 0
+                  - 向左移動一格，x 減少 1
+                  - 向右移動一格，x 增加 1
+                  - 向下移動一格，y 減少 1
+                  - 向上移動一格，y 增加 1
+                properties:
+                  x:
+                    type: number
+                    format: int64
+                    description: 方塊基準點 x 座標
+                  y:
+                    type: number
+                    format: int64
+                    description: 方塊基準點 y 座標
+              block_position:
+                type: array
+                description: "方塊佔領區域的座標 (null：未部署時)"
+                items:
+                  type: object
+                  properties:
+                    x:
+                      type: number
+                      format: int64
+                      description: 方塊 x 座標
+                    y:
+                      type: number
+                      format: int64
+                      description: 方塊 y 座標
+        use_preset_no:
+          type: number
+          format: int64
+          description: 目前套用的預設編號
+        union_raider_preset_1:
+          type: object
+          description: 聯盟預設 1 資訊 
+          properties: 
+            union_raider_stat:
+              type: array
+              description: 戰地攻擊隊員效果
+              items:
+                type: string
+            union_occupied_stat:
+              type: array
+              description: 戰地攻擊隊佔領效果
+              items:
+                type: string
+            union_inner_stat:
+              type: array
+              description: 戰地攻擊隊部署
+              items:
+                type: object
+                properties:
+                  stat_field_id:
+                    type: string
+                    description: 攻擊單位部署位置 (以 11 點鐘方向為起點，順時針 0-7)
+                  stat_field_effect:
+                    type: string
+                    description: 相關區域佔領效果
+            union_block:
+              type: array
+              description: 聯盟方塊資訊
+              items:
+                type: object
+                properties:
+                  block_type:
+                    type: string
+                    description: 方塊編制 (戰士、法師、弓箭手、盜賊、海盜、混合)
+                  block_class:
+                    type: string
+                    description: 方塊角色職業
+                  block_level:
+                    type: string
+                    description: 方塊角色等級
+                  block_control_point:
+                    type: object
+                    description: |
+                      方塊基準點座標
+                      - 四個中央方塊的右下角為位置 x : 0, y : 0
+                      - 向左移動一格，x 減少 1
+                      - 向右移動一格，x 增加 1
+                      - 向下移動一格，y 減少 1
+                      - 向上移動一格，y 增加 1
+                    properties:
+                      x:
+                        type: number
+                        format: int64
+                        description: 方塊基準點 x 座標
+                      y:
+                        type: number
+                        format: int64
+                        description: 方塊基準點 y 座標
+                  block_position:
+                    type: array
+                    description: "方塊佔領區域的座標 (null：未部署時)"
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          type: number
+                          format: int64
+                          description: 方塊 x 座標
+                        y:
+                          type: number
+                          format: int64
+                          description: 方塊 y 座標
+        union_raider_preset_2:
+          type: object
+          description: 聯盟預設 2 資訊 
+          properties: 
+            union_raider_stat:
+              type: array
+              description: 戰地攻擊隊員效果
+              items:
+                type: string
+            union_occupied_stat:
+              type: array
+              description: 戰地攻擊隊佔領效果
+              items:
+                type: string
+            union_inner_stat:
+              type: array
+              description: 戰地攻擊隊部署
+              items:
+                type: object
+                properties:
+                  stat_field_id:
+                    type: string
+                    description: 攻擊單位部署位置 (以 11 點鐘方向為起點，順時針 0-7)
+                  stat_field_effect:
+                    type: string
+                    description: 相關區域佔領效果
+            union_block:
+              type: array
+              description: 聯盟方塊資訊
+              items:
+                type: object
+                properties:
+                  block_type:
+                    type: string
+                    description: 方塊編制 (戰士、法師、弓箭手、盜賊、海盜、混合)
+                  block_class:
+                    type: string
+                    description: 方塊角色職業
+                  block_level:
+                    type: string
+                    description: 方塊角色等級
+                  block_control_point:
+                    type: object
+                    description: |
+                      方塊基準點座標
+                      - 四個中央方塊的右下角為位置 x : 0, y : 0
+                      - 向左移動一格，x 減少 1
+                      - 向右移動一格，x 增加 1
+                      - 向下移動一格，y 減少 1
+                      - 向上移動一格，y 增加 1
+                    properties:
+                      x:
+                        type: number
+                        format: int64
+                        description: 方塊基準點 x 座標
+                      y:
+                        type: number
+                        format: int64
+                        description: 方塊基準點 y 座標
+                  block_position:
+                    type: array
+                    description: "方塊佔領區域的座標 (null：未部署時)"
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          type: number
+                          format: int64
+                          description: 方塊 x 座標
+                        y:
+                          type: number
+                          format: int64
+                          description: 方塊 y 座標
+        union_raider_preset_3:
+          type: object
+          description: 聯盟預設 3 資訊 
+          properties: 
+            union_raider_stat:
+              type: array
+              description: 戰地攻擊隊員效果
+              items:
+                type: string
+            union_occupied_stat:
+              type: array
+              description: 戰地攻擊隊佔領效果
+              items:
+                type: string
+            union_inner_stat:
+              type: array
+              description: 戰地攻擊隊部署
+              items:
+                type: object
+                properties:
+                  stat_field_id:
+                    type: string
+                    description: 攻擊單位部署位置 (以 11 點鐘方向為起點，順時針 0-7)
+                  stat_field_effect:
+                    type: string
+                    description: 相關區域佔領效果
+            union_block:
+              type: array
+              description: 聯盟方塊資訊
+              items:
+                type: object
+                properties:
+                  block_type:
+                    type: string
+                    description: 方塊編制 (戰士、法師、弓箭手、盜賊、海盜、混合)
+                  block_class:
+                    type: string
+                    description: 方塊角色職業
+                  block_level:
+                    type: string
+                    description: 方塊角色等級
+                  block_control_point:
+                    type: object
+                    description: |
+                      方塊基準點座標
+                      - 四個中央方塊的右下角為位置 x : 0, y : 0
+                      - 向左移動一格，x 減少 1
+                      - 向右移動一格，x 增加 1
+                      - 向下移動一格，y 減少 1
+                      - 向上移動一格，y 增加 1
+                    properties:
+                      x:
+                        type: number
+                        format: int64
+                        description: 方塊基準點 x 座標
+                      y:
+                        type: number
+                        format: int64
+                        description: 方塊基準點 y 座標
+                  block_position:
+                    type: array
+                    description: "方塊佔領區域的座標 (null：未部署時)"
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          type: number
+                          format: int64
+                          description: 方塊 x 座標
+                        y:
+                          type: number
+                          format: int64
+                          description: 方塊 y 座標
+        union_raider_preset_4:
+          type: object
+          description: 聯盟預設 4 資訊 
+          properties: 
+            union_raider_stat:
+              type: array
+              description: 戰地攻擊隊員效果
+              items:
+                type: string
+            union_occupied_stat:
+              type: array
+              description: 戰地攻擊隊佔領效果
+              items:
+                type: string
+            union_inner_stat:
+              type: array
+              description: 戰地攻擊隊部署
+              items:
+                type: object
+                properties:
+                  stat_field_id:
+                    type: string
+                    description: 攻擊單位部署位置 (以 11 點鐘方向為起點，順時針 0-7)
+                  stat_field_effect:
+                    type: string
+                    description: 相關區域佔領效果
+            union_block:
+              type: array
+              description: 聯盟方塊資訊
+              items:
+                type: object
+                properties:
+                  block_type:
+                    type: string
+                    description: 方塊編制 (戰士、法師、弓箭手、盜賊、海盜、混合)
+                  block_class:
+                    type: string
+                    description: 方塊角色職業
+                  block_level:
+                    type: string
+                    description: 方塊角色等級
+                  block_control_point:
+                    type: object
+                    description: |
+                      方塊基準點座標
+                      - 四個中央方塊的右下角為位置 x : 0, y : 0
+                      - 向左移動一格，x 減少 1
+                      - 向右移動一格，x 增加 1
+                      - 向下移動一格，y 減少 1
+                      - 向上移動一格，y 增加 1
+                    properties:
+                      x:
+                        type: number
+                        format: int64
+                        description: 方塊基準點 x 座標
+                      y:
+                        type: number
+                        format: int64
+                        description: 方塊基準點 y 座標
+                  block_position:
+                    type: array
+                    description: "方塊佔領區域的座標 (null：未部署時)"
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          type: number
+                          format: int64
+                          description: 方塊 x 座標
+                        y:
+                          type: number
+                          format: int64
+                          description: 方塊 y 座標
+        union_raider_preset_5:
+          type: object
+          description: 聯盟預設 5 資訊 
+          properties: 
+            union_raider_stat:
+              type: array
+              description: 戰地攻擊隊員效果
+              items:
+                type: string
+            union_occupied_stat:
+              type: array
+              description: 戰地攻擊隊佔領效果
+              items:
+                type: string
+            union_inner_stat:
+              type: array
+              description: 戰地攻擊隊部署
+              items:
+                type: object
+                properties:
+                  stat_field_id:
+                    type: string
+                    description: 攻擊單位部署位置 (以 11 點鐘方向為起點，順時針 0-7)
+                  stat_field_effect:
+                    type: string
+                    description: 相關區域佔領效果
+            union_block:
+              type: array
+              description: 聯盟方塊資訊
+              items:
+                type: object
+                properties:
+                  block_type:
+                    type: string
+                    description: 方塊編制 (戰士、法師、弓箭手、盜賊、海盜、混合)
+                  block_class:
+                    type: string
+                    description: 方塊角色職業
+                  block_level:
+                    type: string
+                    description: 方塊角色等級
+                  block_control_point:
+                    type: object
+                    description: |
+                      方塊基準點座標
+                      - 四個中央方塊的右下角為位置 x : 0, y : 0
+                      - 向左移動一格，x 減少 1
+                      - 向右移動一格，x 增加 1
+                      - 向下移動一格，y 減少 1
+                      - 向上移動一格，y 增加 1
+                    properties:
+                      x:
+                        type: number
+                        format: int64
+                        description: 方塊基準點 x 座標
+                      y:
+                        type: number
+                        format: int64
+                        description: 方塊基準點 y 座標
+                  block_position:
+                    type: array
+                    description: "方塊佔領區域的座標 (null：未部署時)"
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          type: number
+                          format: int64
+                          description: 方塊 x 座標
+                        y:
+                          type: number
+                          format: int64
+                          description: 方塊 y 座標
+
+
+    UnionArtifact:
+      type: object
+      properties:
+        date:
+          type: string
+          description: 要搜尋的日期 (TST，每日資料中的小時與分鐘將顯示為 0)
+          example: "2025-10-15T00:00+08:00"
+        union_artifact_effect:
+          type: array
+          description: 神器效果資訊
+          items:
+            type: object
+            properties: 
+              name:
+                type: string
+                description: 神器效果名稱 
+              level:
+                type: number
+                format: int64
+                description: 神器效果等級 
+        union_artifact_crystal:
+          type: array
+          description: 神器水晶資訊
+          items:
+            type: object
+            properties: 
+              name: 
+                type: string
+                description: 神器水晶名稱 
+              validity_flag:
+                type: string
+                description: "能力有效性 (0：有效，1：無效)"
+              date_expire:
+                type: string
+                description: 能力有效期間 (TST)
+                example: "2025-10-15T17:28+08:00"
+              level:
+                type: number
+                format: int64
+                description: 神器水晶階級
+              crystal_option_name_1: 
+                type: string
+                description: 神器水晶第一選項名稱
+              crystal_option_name_2: 
+                type: string
+                description: 神器水晶第二選項名稱              
+              crystal_option_name_3: 
+                type: string
+                description: 神器水晶第三選項名稱  
+        union_artifact_remain_ap:
+          type: number
+          format: int64
+          description: 剩餘神器 AP           
+    UnionChampion:
+      type: object
+      properties:
+        date:
+          type: string
+          description: 查詢基準日（TST，以日為單位，時與分一律標示為 0）
+          example: "2025-01-21T17:28+08:00"
+        union_champion:
+          type: array
+          description: 聯盟冠軍資訊
+          items:
+            type: object
+            properties:
+              champion_name:
+                type: string
+                description: 聯盟冠軍角色名稱
+              champion_slot:
+                type: number
+                format: int64
+                description: 聯盟冠軍欄位
+              champion_grade:
+                type: string
+                description: 聯盟冠軍等級
+              champion_class:
+                type: string
+                description: 聯盟冠軍角色職業
+              champion_badge_info:
+                type: array
+                description: 聯盟冠軍徽章資訊
+                items:
+                  type: object
+                  properties:
+                    stat:
+                      type: string
+                      description: 聯盟冠軍徽章資訊
+        champion_badge_total_info:
+          type: array
+          description: 冠軍徽章效果
+          items:
+            type: object
+            properties:
+              stat:
+                type: string
+                description: 聯盟冠軍徽章效果
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              description: 錯誤名稱
+            message:
+              type: string
+              description: 錯誤描述

@@ -1,0 +1,2849 @@
+openapi: 3.0.3
+info:
+  title: The First Descendant API
+  version: 1.0.0
+  contact:
+    name: help_openapi@nexon.co.kr
+servers:
+  - url: 'https://open.api.nexon.com'
+tags:
+  - name: MetaData
+    description: 메타데이터 정보 조회
+paths:
+  /static/tfd/meta/{language_code}/descendant.json:
+    get:
+      tags:
+        - MetaData
+      summary: 계승자 메타데이터 조회
+      description: 계승자 메타데이터를 조회합니다. 
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescendantResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/{language_code}/weapon.json:
+    get:
+      tags:
+        - MetaData
+      summary: 무기 메타데이터 조회
+      description: 무기 메타데이터를 조회합니다.<br>
+                    해당 API는 Path 정보만 제공합니다. 별도 클라이언트를 통해 확인할 수 있습니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeaponResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/{language_code}/module.json:
+    get:
+      tags:
+        - MetaData
+      summary: 모듈 메타데이터 조회
+      description: 모듈 메타데이터를 조회합니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModuleResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/{language_code}/reactor.json:
+    get:
+      tags:
+        - MetaData
+      summary: 반응로 메타데이터 조회
+      description: 반응로 메타데이터를 조회합니다.<br>
+                  해당 API는 Path 정보만 제공합니다. 별도 클라이언트를 통해 확인할 수 있습니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReactorResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/{language_code}/external-component.json:
+    get:
+      tags:
+        - MetaData
+      summary: 외장 부품 메타데이터 조회
+      description: 외장 부품 메타데이터를 조회합니다.<br>
+                  해당 API는 Path 정보만 제공합니다. 별도 클라이언트를 통해 확인할 수 있습니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalComponentResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/{language_code}/reward.json:
+    get:
+      tags:
+        - MetaData
+      summary: 난이도 보상 메타데이터 조회
+      description: 난이도 보상 메타데이터를 조회합니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RewardResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/{language_code}/stat.json:
+    get:
+      tags:
+        - MetaData
+      summary: 기본 스탯 메타데이터 조회
+      description: 기본 스탯 메타데이터를 조회합니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/{language_code}/void-battle.json:
+    get:
+      tags:
+        - MetaData
+      summary: 보이드 요격전 메타데이터 조회
+      description: 보이드 요격전 메타데이터를 조회합니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoidBattleResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/{language_code}/title.json:
+    get:
+      tags:
+        - MetaData
+      summary: 타이틀 메타데이터 조회
+      description: 타이틀 메타데이터를 조회합니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TitleResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/descendant-level-detail.json:
+    get:
+      tags:
+        - MetaData
+      summary: 계승자 레벨별 경험치 메타데이터 조회
+      description: 계승자 레벨별 필요 경험치 정보를 조회합니다.
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescendantLevelDetailResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/mastery-rank-level-detail.json:
+    get:
+      tags:
+        - MetaData
+      summary: 마스터리 랭크별 경험치 메타데이터 조회
+      description: 마스터리 랭크별 필요 경험치 정보를 조회합니다.
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MasteryRankLevelDetailResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/{language_code}/consumable-material.json:
+    get:
+      tags:
+        - MetaData
+      summary: 소비 아이템 메타데이터 조회
+      description: 소비 아이템 메타데이터를 조회합니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsumableMaterialResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/{language_code}/research.json:
+    get:
+      tags:
+        - MetaData
+      summary: 연구 정보 메타데이터 조회
+      description: 연구 정보 메타데이터를 조회합니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResearchResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/amorphous-reward.json:
+    get:
+      tags:
+        - MetaData
+      summary: 비정형 물질 오픈 보상 메타데이터 조회
+      description: 비정형 물질 오픈 보상 메타데이터를 조회합니다.
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AmorphousRewardResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/{language_code}/acquisition-detail.json:
+    get:
+      tags:
+        - MetaData
+      summary: 획득처 정보 메타데이터 조회
+      description: 획득처 정보 메타데이터를 조회합니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcquisitionDetailResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/{language_code}/weapon-type.json:
+    get:
+      tags:
+        - MetaData
+      summary: 무기 유형 메타데이터 조회
+      description: 무기 유형 메타데이터를 조회합니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeaponTypeResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/{language_code}/fellow.json:
+    get:
+      tags:
+        - MetaData
+      summary: 조력자 메타데이터 조회
+      description: 조력자 메타데이터를 조회합니다. 
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FellowResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/fellow-level-detail.json:
+    get:
+      tags:
+        - MetaData
+      summary: 조력자 레벨별 경험치 메타데이터 조회
+      description: 조력자 레벨별 필요 경험치 정보를 조회합니다. 
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FellowLevelDetailResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/{language_code}/tier.json:
+    get:
+      tags:
+        - MetaData
+      summary: 등급 메타데이터 조회
+      description: 등급 메타데이터를 조회합니다. 
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TierResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/core-slot.json:
+    get:
+      tags:
+        - MetaData
+      summary: 코어 슬롯 메타데이터 조회
+      description: 코어 슬롯 메타데이터를 조회합니다.
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoreSlotResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/{language_code}/core-type.json:
+    get:
+      tags:
+        - MetaData
+      summary: 코어 타입 메타데이터 조회
+      description: 코어 타입 메타데이터 정보를 조회합니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoreTypeResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /static/tfd/meta/{language_code}/descendant-group.json:
+    get:
+      tags:
+        - MetaData
+      summary: 계승자 그룹 메타데이터 조회
+      description: 계승자 그룹 메타데이터를 조회합니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescendantGroupResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /static/tfd/meta/adapt-level.json:
+    get:
+      tags:
+        - MetaData
+      summary: 적응도 레벨 메타데이터 조회
+      description: 적응도 레벨 메타데이터를 조회합니다.
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdaptLevelResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /static/tfd/meta/arche-tuning-board-group.json:
+    get:
+      tags:
+        - MetaData
+      summary: 아르케 조율 보드 그룹 메타데이터 조회
+      description: 아르케 조율 보드 그룹 메타데이터를 조회합니다.
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArcheTuningBoardGroupResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /static/tfd/meta/arche-tuning-board.json:
+    get:
+      tags:
+        - MetaData
+      summary: 아르케 조율 보드 메타데이터 조회
+      description: 아르케 조율 보드 메타데이터를 조회합니다.
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArcheTuningBoardResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /static/tfd/meta/{language_code}/arche-tuning-node.json:
+    get:
+      tags:
+        - MetaData
+      summary: 아르케 조율 노드 메타데이터 조회
+      description: 아르케 조율 노드 메타데이터를 조회합니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArcheTuningNodeResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /static/tfd/meta/{language_code}/customizing-item.json:
+    get:
+      tags:
+        - MetaData
+      summary: 커스터마이징 아이템 메타데이터 조회
+      description: 커스터마이징 아이템의 메타데이터를 조회합니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomizingItemResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /static/tfd/meta/{language_code}/medal.json:
+    get:
+      tags:
+        - MetaData
+      summary: 훈장 메타데이터 조회
+      description: 훈장의 메타데이터를 조회합니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedalResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /static/tfd/meta/{language_code}/vehicle.json:
+    get:
+      tags:
+        - MetaData
+      summary: 탈것 메타데이터 조회
+      description: 탈것의 메타데이터를 조회합니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+  /static/tfd/meta/{language_code}/collectible-item.json:
+    get:
+      tags:
+        - MetaData
+      summary: 수집형 아이템 메타데이터 조회
+      description: 수집형 아이템의 메타데이터를 조회합니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectibleItemResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /static/tfd/meta/{language_code}/node-item.json:
+    get:
+      tags:
+        - MetaData
+      summary: 변이 세포 메타데이터 조회
+      description: 변이 세포 메타데이터를 조회합니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodeItemResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /static/tfd/meta/{language_code}/node-socket-type.json:
+    get:
+      tags:
+        - MetaData
+      summary: 변이 세포 소켓 타입 메타데이터 조회
+      description: 변이 세포 소켓 타입 메타데이터를 조회합니다.
+      parameters:
+        - name: language_code
+          in: path
+          schema:
+            type: string
+            enum:
+              - ko
+              - en
+              - de
+              - fr
+              - ja
+              - zh-CN
+              - zh-TW
+              - it
+              - pl
+              - pt
+              - ru
+              - es
+          description: 언어 코드
+          required: true
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodeSocketTypeResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+components:
+  schemas:
+    DescendantResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          descendant_id:
+            type: string
+            description: 계승자 식별자
+          descendant_name:
+            type: string
+            description: 계승자 이름
+          descendant_group_id:
+            type: string
+            description: 계승자 그룹 식별자 (/meta/descendant-group API 참고)
+          descendant_image_url:
+            type: string
+            description: 계승자 이미지 경로
+          descendant_stat:
+            type: array
+            description: 계승자 스탯
+            items:
+              type: object
+              properties:
+                level:
+                  type: number
+                  format: int64
+                  description: 레벨
+                stat_detail:
+                  type: array
+                  description: 스탯 상세
+                  items:
+                    type: object
+                    properties:
+                      stat_id:
+                        type: string
+                        description: 스탯 유형 (/meta/stat API 참고)
+                      stat_value:
+                        type: number
+                        format: double
+                        description: 스탯 유형별 값
+          descendant_skill:
+            type: array
+            description: 계승자 스킬 정보
+            items:
+              type: object
+              properties:
+                skill_type:
+                  type: string
+                  description: 스킬 유형 (액티브, 패시브)
+                skill_name:
+                  type: string
+                  description: 스킬 이름
+                element_type:
+                  type: string
+                  description: 스킬 유형
+                arche_type:
+                  type: string
+                  description: 아르케 유형
+                skill_image_url:
+                  type: string
+                  description: 스킬 아이콘 이미지 경로
+                skill_description:
+                  type: string
+                  description: 스킬 설명
+
+    WeaponResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          weapon_name:
+            type: string
+            description: 무기 이름
+          weapon_id:
+            type: string
+            description: 무기 식별자
+          image_url:
+            type: string
+            description: 무기 이미지 경로
+          weapon_type:
+            type: string
+            description: 무기 유형
+          weapon_category:
+            type: string
+            description: 무기 구분
+          weapon_tier_id:
+            type: string
+            description: 무기 등급 (/meta/tier API 참고)
+          weapon_rounds_type:
+            type: string
+            description: 무기 탄환 유형
+          available_core_slot:
+            type: array
+            description: 오픈 가능한 코어 슬롯 목록 (/meta/core-slot API 참고)
+            items:
+              type: string
+          base_stat:
+            type: array
+            description: 무기 기본 제원
+            items:
+              type: object
+              properties:
+                stat_id:
+                  type: string
+                  description: 무기 기본 제원 식별자 (/meta/stat API 참고)
+                stat_value:
+                  type: number
+                  format: double
+                  description: 무기 기본 제원 값
+          firearm_atk:
+            type: array
+            description: 레벨별 총기 공격력
+            items:
+              type: object
+              properties:
+                level:
+                  type: number
+                  format: int64
+                  description: 총기 레벨
+                firearm:
+                  type: array
+                  description: 총기 공격력
+                  items:
+                    type: object
+                    properties:
+                      firearm_atk_type:
+                        type: string
+                        description: 총기 공격력 유형 (/meta/stat API 참고)
+                      firearm_atk_value:
+                        type: number
+                        format: double
+                        description: 총기 공격력 값
+          weapon_perk_ability_name:
+            type: string
+            description: 고유 능력 이름
+          weapon_perk_ability_description:
+            type: string
+            description: 고유 능력 설명
+          weapon_perk_ability_image_url:
+            type: string
+            description: 고유 능력 아이콘 이미지 경로
+
+    ModuleResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          module_name:
+            type: string
+            description: 모듈 이름
+          module_id:
+            type: string
+            description: 모듈 식별자
+          image_url:
+            type: string
+            description: 모듈 이미지 경로
+          module_type:
+            type: string
+            description: 모듈 유형
+          module_tier_id:
+            type: string
+            description: 모듈 등급 (/meta/tier API 참고)
+          module_socket_type:
+            type: string
+            description: 모듈 슬롯 소켓 유형
+          module_class:
+            type: string
+            description: 모듈 클래스
+          available_weapon_type:
+            type: array
+            items:
+              type: string
+            description: 모듈 장착 가능 무기 유형 목록 (/meta/weapon-type API 참고)
+          available_descendant_id:
+            type: array
+            items:
+              type: string
+            description: 모듈 장착 가능 계승자 식별자 목록 (/meta/descendant API 참고)
+          available_module_slot_type:
+            type: array
+            items:
+              type: string
+            description: 모듈 장착 가능 슬롯 유형
+          module_stat:
+            type: array
+            description: 모듈 속성
+            items:
+              type: object
+              properties:
+                level:
+                  type: number
+                  format: int64
+                  description: 모듈 강화 레벨
+                module_capacity:
+                  type: number
+                  format: int64
+                  description: 모듈 수용량
+                value:
+                  type: string
+                  description: 모듈 속성 값
+
+    ReactorResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          reactor_id:
+            type: string
+            description: 반응로 식별자
+          reactor_name:
+            type: string
+            description: 반응로 이름
+          image_url:
+            type: string
+            description: 반응로 이미지 경로
+          reactor_tier_id:
+            type: string
+            description: 반응로 등급 (/meta/tier API 참고)
+          reactor_skill_power:
+            type: array
+            description: 레벨별 스킬 위력
+            items:
+              type: object
+              properties:
+                level:
+                  type: number
+                  format: int64
+                  description: 반응로 레벨
+                skill_atk_power:
+                  type: number
+                  format: double
+                  description: 스킬 위력
+                sub_skill_atk_power:
+                  type: number
+                  format: double
+                  description: 보조공격 위력
+                skill_power_coefficient:
+                  type: array
+                  description: 스킬 위력 증가율
+                  items:
+                    type: object
+                    properties:
+                      coefficient_stat_id:
+                        type: string
+                        description: 스킬 위력 증가율 식별자 (/meta/stat API 참고)
+                      coefficient_stat_value:
+                        type: number
+                        format: double
+                        description: 스킬 위력 증가율 값
+                enchant_effect:
+                  type: array
+                  description: 레벨별 강화 효과
+                  items:
+                    type: object
+                    properties:
+                      enchant_level:
+                        type: number
+                        format: int64
+                        description: 강화 레벨
+                      stat_id:
+                        type: string
+                        description: 강화 효과 유형 (/meta/stat API 참고)
+                      value:
+                        type: number
+                        format: double
+                        description: 강화 효과 값
+          optimized_condition_type:
+            type: string
+            description: 최적화 조건 유형
+
+    ExternalComponentResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          external_component_id:
+            type: string
+            description: 외장 부품 식별자
+          external_component_name:
+            type: string
+            description: 외장 부품 이름
+          image_url:
+            type: string
+            description: 외장 부품 이미지 경로
+          external_component_equipment_type:
+            type: string
+            description: 외장 부품 착용 부위
+          external_component_tier_id:
+            type: string
+            description: 외장 부품 등급 (/meta/tier API 참고)
+          available_core_slot:
+            type: array
+            description: 오픈 가능한 코어 슬롯 목록 (/meta/core-slot API 참고)
+            items:
+              type: string
+          base_stat:
+            type: array
+            description: 외장 부품 기본 스탯
+            items:
+              type: object
+              properties:
+                level:
+                  type: number
+                  format: int64
+                  description: 외장 부품 레벨
+                stat_id:
+                  type: string
+                  description: 외장 부품 기본 효과 유형
+                stat_value:
+                  type: number
+                  format: double
+                  description: 외장 부품 기본 효과 값
+          set_option_detail:
+            type: array
+            description: 외장 부품 세트 옵션
+            items:
+              type: object
+              properties:
+                set_option:
+                  type: string
+                  description: 외장 부품 세트 옵션 이름
+                set_count:
+                  type: number
+                  format: int64
+                  description: 외장 부품 세트 옵션 필요 수
+                set_option_effect:
+                  type: string
+                  description: 외장 부품 세트 옵션 세트 효과
+
+    RewardResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          map_id: 
+            type: string
+            description: 지역 식별자
+          map_name: 
+            type: string
+            description: 지역 이름
+          battle_zone:
+            type: array
+            description: 전장
+            items:
+              type: object
+              properties:
+                battle_zone_id:
+                  type: string
+                  description: 전장 식별자
+                battle_zone_name:
+                  type: string
+                  description: 전장 이름
+                reward:
+                  type: array
+                  description: 보상 정보
+                  items:
+                    type: object
+                    properties:
+                      rotation:
+                        type: number
+                        format: int64
+                        description: 보상 회차
+                      reward_type:
+                        type: string
+                        description: 보상 유형
+                      reactor_element_type:
+                        type: string
+                        description: 반응로 스킬 유형
+                      weapon_rounds_type:
+                        type: string
+                        description: 무기 탄환 유형
+                      arche_type:
+                        type: string
+                        description: 아르케 유형
+
+    StatResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          stat_id:
+            type: string
+            description: 기본 스탯 식별자
+          stat_name:
+            type: string
+            description: 기본 스탯 이름
+          stat_order_no:
+            type: number
+            format: int64
+            description: 기본 스탯 정렬 순서 (오름차순)
+
+    VoidBattleResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          void_battle_id:
+            type: string
+            description: 보이드 요격전 식별자
+          void_battle_name:
+            type: string
+            description: 보이드 요격전 이름
+
+    TitleResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          title_id:
+            type: string
+            description: 타이틀 식별자
+          title_name:
+            type: string
+            description: 타이틀 이름
+
+    DescendantLevelDetailResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          descendant_level:
+            type: number
+            format: int64
+            description: 계승자 레벨
+          exp_per_level:
+            type: number
+            format: int64
+            description: 다음 레벨을 위한 필요 경험치
+
+    MasteryRankLevelDetailResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          mastery_rank_level:
+            type: number
+            format: int64
+            description: 마스터리 랭크
+          exp_per_level:
+            type: number
+            format: int64
+            description: 다음 레벨을 위한 필요 경험치
+
+    ConsumableMaterialResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          consumable_material_id:
+            type: string
+            description: 소비 아이템 식별자
+          image_url:
+            type: string
+            description: 소비 아이템 이미지 경로
+          consumable_material_name:
+            type: string
+            description: 소비 아이템 이름
+          required_mastery_rank_level:
+            type: number
+            format: int64
+            description: 마스터리 랭크 요구사항
+          material_type:
+            type: string
+            description: 재료 타입
+          acquisition_detail:
+            type: array
+            items:
+              type: string
+            description: 획득처 (/meta/acquisition-detail API 참고)
+          amorphous_reward:
+            type: array
+            items:
+              type: string
+            description: 비정형 물질 오픈 보상 (/meta/amorphous-reward API 참고)
+
+    ResearchResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          research_id: 
+            type: string
+            description: 연구 식별자
+          research_name: 
+            type: string
+            description: 연구 이름
+          repeatable_research: 
+            type: boolean
+            description: 반복 가능 여부
+          research_type: 
+            type: string
+            description: 연구 유형
+          research_time: 
+            type: number
+            format: int64
+            description: 연구 시간 (초)
+          research_cost:
+            type: array
+            description: 연구 비용
+            items:
+              type: object
+              properties:
+                currency_type:
+                  type: string
+                  description: 재화 타입
+                currency_value:
+                  type: number
+                  format: int64
+                  description: 재화 수량
+          research_boost_cost:
+            type: array
+            description: 연구 가속 비용
+            items:
+              type: object
+              properties:
+                currency_type:
+                  type: string
+                  description: 재화 타입
+                currency_value:
+                  type: number
+                  format: int64
+                  description: 재화 수량
+          research_result:
+            type: array
+            description: 연구 결과
+            items:
+              type: object
+              properties:
+                meta_type:
+                  type: string
+                  description: 연구 결과 아이템 메타데이터 유형
+                meta_id:
+                  type: string
+                  description: 연구 결과 아이템 식별자
+                result_count:
+                  type: number
+                  format: int64
+                  description: 연구 결과 아이템 수량
+          research_material:
+            type: array
+            description: 연구 재료
+            items:
+              type: object
+              properties:
+                meta_type:
+                  type: string
+                  description: 연구 재료 아이템 메타데이터 유형
+                meta_id:
+                  type: string
+                  description: 연구 재료 아이템 식별자
+                material_count:
+                  type: number
+                  format: int64
+                  description: 연구 재료 아이템 수량
+                research_id:
+                  type: array
+                  items:
+                    type: string
+                  description: 연구 재료 아이템의 연구 식별자 (/meta/research API 참고)
+          available_research_count:
+            type: array
+            items:
+              type: number
+              format: int32
+            description: 연구 가능 개수
+
+    AmorphousRewardResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          amorphous_reward_id: 
+            type: string
+            description: 비정형 물질 오픈 보상 식별자
+          open_reward:
+            type: array
+            description: 비정형 물질 오픈 보상 정보
+            items:
+              type: object
+              properties:
+                reward_type:
+                  type: string
+                  description: 보상 구분 (Default, Upgrade)
+                required_stabilizer:
+                  type: string
+                  description: 업그레이드에 필요한 형태 안정제 식별자 (/meta/consumable-material API 참고)
+                reward_item:
+                  type: array
+                  description: 비정형 물질 오픈 보상 아이템 정보
+                  items:
+                    type: object
+                    properties:
+                      meta_type:
+                        type: string
+                        description: 비정형 물질 오픈 보상 아이템 유형
+                      meta_id:
+                        type: string
+                        description: 비정형 물질 오픈 보상 아이템 식별자
+                      rate:
+                        type: number
+                        format: float
+                        description: 보상 확률(%)
+  
+    AcquisitionDetailResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          acquisition_detail_id: 
+            type: string
+            description: 획득처 식별자
+          acquisition_detail_name: 
+            type: string
+            description: 획득처 이름
+  
+    WeaponTypeResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          weapon_type: 
+            type: string
+            description: 무기 유형
+          weapon_type_name: 
+            type: string
+            description: 무기 유형 이름
+
+    FellowResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          fellow_id: 
+            type: string
+            description: 조력자 식별자
+          fellow_name: 
+            type: string
+            description: 조력자 이름  
+          fellow_tier_id: 
+            type: string
+            description: 조력자 등급 (/meta/tier API 참고)
+          fellow_detail:
+            type: array
+            description: 조력자 레벨별 세부 정보
+            items:
+              type: object
+              properties:
+                fellow_level:
+                  type: number
+                  format: int64
+                  description: 조력자 레벨
+                search_radius_value:
+                  type: number
+                  format: double
+                  description: 레벨별 조력자 아이템 검색 반경 값
+                stat_effect:
+                  type: array
+                  description: 레벨별 부가 효과  
+                  items:
+                    type: object
+                    properties:
+                      operator_type:
+                        type: string
+                        description: 연산 구분 (Add:합산)
+                      stat_id:
+                        type: string
+                        description: 부가 효과 유형  (/meta/stat API 참고)
+                      stat_value:
+                        type: number
+                        format: double
+                        description: 부가 효과 값
+
+    FellowLevelDetailResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          fellow_level: 
+            type: number
+            format: int64
+            description: 조력자 레벨  
+          exp_per_level: 
+            type: number
+            format: int64            
+            description: 다음 레벨을 위한 필요 경험치  
+
+    TierResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          tier_id  : 
+            type: string
+            description: 등급 식별자
+          tier_name: 
+            type: string
+            description: 등급 이름
+
+    CoreSlotResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          core_slot_id: 
+            type: string
+            description: 코어 슬롯 식별자
+          available_weapon_id:
+            type: array
+            description: 해당 코어 슬롯을 오픈할 수 있는 무기 목록 (/meta/weapon API 참고)
+            items:
+              type: string
+          available_external_component_id:
+            type: array
+            description: 해당 코어 슬롯을 오픈할 수 있는 외장 부품 목록 (/meta/external-component API 참고)
+            items:
+              type: string
+          available_core_type_id:
+            type: array
+            description: 지정된 코어 타입 목록 (/meta/core-type API 참고)
+            items:
+              type: string
+
+    CoreTypeResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          core_type_id: 
+            type: string
+            description: 코어 타입 식별자
+          core_type: 
+            type: string
+            description: 코어 타입
+          core_option:
+            type: array
+            description: 코어 타입별 옵션
+            items:
+              type: object
+              properties:
+                core_option_id: 
+                  type: string
+                  description: 코어 타입 옵션 식별자
+                detail:
+                  type: array
+                  description: 코어 타입별 옵션 상세 정보  
+                  items:
+                    type: object
+                    properties:
+                      core_option_grade: 
+                        type: number
+                        format: int64  
+                        description: 코어 옵션 등급<br>-코어 등급은 높을 수록 더 좋은 효과 값이 부여될 수 있습니다.
+                      required_core_item: 
+                        type: object
+                        properties:
+                          meta_type: 
+                            type: string
+                            description: 필요한 코어 아이템 유형  
+                          meta_id: 
+                            type: string
+                            description: 필요한 코어 아이템 식별자  
+                          count: 
+                            type: number
+                            format: int64
+                            description: 필요한 코어 아이템 수량
+                available_item_option:
+                  type: array
+                  description: 아이템 옵션
+                  items:
+                    type: object
+                    properties:
+                      item_option: 
+                        type: string
+                        description: 옵션 이름
+                      option_type: 
+                        type: string
+                        description: 옵션 구분
+                      option_grade: 
+                        type: string
+                        description: 옵션 등급<br>-등급은 높을 수록 더 좋은 효과 값이 부여될 수 있습니다.
+                      option_effect: 
+                        type: object
+                        properties:
+                          stat_id: 
+                            type: string
+                            description: 옵션 효과 스탯 식별자 (/meta/stat API 참고)
+                          operator_type: 
+                            type: string
+                            description: 스탯 연산 구분(Add:합 연산, Multiply:곱 연산)
+                          min_stat_value: 
+                            type: number
+                            format: double
+                            description: 최소 스탯 수치
+                          max_stat_value: 
+                            type: number
+                            format: double
+                            description: 최대 스탯 수치
+                      rate: 
+                        type: number
+                        format: double
+                        description: 옵션 등장 확률 
+    DescendantGroupResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          descendant_group_id:
+            type: string
+            description: 계승자 그룹 식별자
+          descendant_group_name:
+            type: string
+            description: 계승자 그룹 이름
+    AdaptLevelResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          level:
+            type: number
+            format: int64
+            description: 레벨
+          exp_per_level:
+            type: number
+            format: int64
+            description: 다음 레벨을 위한 필요 경험치
+    ArcheTuningBoardGroupResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          arche_tuning_board_group_id:
+            type: string
+            description: 아르케 조율 보드 그룹 식별자
+          descendant_group_id:
+            type: string
+            description: 계승자 그룹 식별자 (meta/descendant-group API 참고)
+          arche_tuning_board_id:
+            type: string
+            description: 아르케 보드 식별자 (/meta/arche-tuning-board API 참고)
+    ArcheTuningBoardResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          arche_tuning_board_id:
+            type: string
+            description: 아르케 보드 식별자
+          row_size:
+            type: number
+            format: int64
+            description: 행 크기
+          column_size:
+            type: number
+            format: int64
+            description: 열 크기
+          node:
+            type: array
+            items:
+              type: object
+              properties:
+                node_id:
+                  type: string
+                  description: 노드 식별자 (/meta/arche-tuning-node API 참고)
+                position_row:
+                  type: number
+                  format: int64
+                  description: 노드의 행 좌표
+                position_column:
+                  type: number
+                  format: int64
+                  description: 노드의 열 좌표
+    ArcheTuningNodeResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          node_id:
+            type: string
+            description: 노드 식별자
+          node_name:
+            type: string
+            description: 노드 이름
+          node_image_url:
+            type: string
+            description: 노드 이미지 URL
+          node_type:
+            type: string
+            description: 노드 구분
+          tier_id:
+            type: string
+            description: 노드 등급 식별자 (/meta/tier API 참고)
+          required_tuning_point:
+            type: number
+            format: int64
+            description: 필요 포인트
+          node_effect:
+            type: array
+            items:
+              type: object
+              properties:
+                stat_id:
+                  type: string
+                  description: 스탯 식별자 (/meta/stat API 참고)
+                stat_value:
+                  type: number
+                  format: double
+                  description: 스탯 효과 수치
+                operator_type:
+                  type: string
+                  description: 스탯 연산 구분(Add:합 연산, Multiply:곱 연산)
+    CustomizingItemResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          customizing_item_id:
+            type: string
+            description: 커스터마이징 아이템 식별자
+          customizing_item_name:
+            type: string
+            description: 커스터마이징 아이템 이름
+          customizing_item_type:
+            type: string
+            description: 커스터마이징 아이템 유형
+          customizing_item_tier_id:
+            type: string
+            description: 커스터마이징 아이템 등급 (/meta/tier API 참고)
+          customizing_item_description:
+            type: string
+            description: 커스터마이징 아이템 설명
+          customizing_item_image_url:
+            type: string
+            description: 커스터마이징 아이템 이미지 경로
+          customizing_item_evolution_stage:
+            type: array
+            description: 커스터마이징 아이템 진화 단계 정보
+            items:
+              type: object
+              properties:
+                stage:
+                  type: number
+                  format: int64
+                  description: 커스터마이징 아이템 진화 단계
+                customizing_item_image_url:
+                  type: string
+                  description: 커스터마이징 아이템 진화 단계별 이미지 경로
+          available_descendant:
+            type: array
+            description: 적용 가능한 계승자 목록 (/meta/descendant API 참고)
+            items:
+              type: string
+    MedalResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          medal_id:
+            type: string
+            description: 훈장 식별자
+          medal_detail:
+            description: 훈장 단계별 세부 정보
+            type: array
+            items:
+              type: object
+              properties:
+                medal_level:
+                  type: number
+                  format: int64
+                  description: 훈장 단계
+                medal_name:
+                  type: string
+                  description: 훈장 이름
+                medal_tier_id:
+                  type: string
+                  description: 훈장 등급 (/meta/tier API 참고)
+                medal_image_url:
+                  type: string
+                  description: 훈장 이미지 경로
+    VehicleResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          vehicle_id:
+            type: string
+            description: 탈것 식별자
+          vehicle_name:
+            type: string
+            description: 탈것 이름
+          vehicle_description:
+            type: string
+            description: 탈것 설명
+          vehicle_tier_id:
+            type: string
+            description: 등급
+          image_url:
+            type: string
+            description: 탈것 이미지 경로
+          stat_effect:
+            description: 스탯 효과
+            type: array
+            items:
+              type: object
+              properties:
+                stat_id:
+                  type: string
+                  description: 효과 유형 (/meta/stat API 참고)
+                stat_value:
+                  type: number
+                  format: double
+                  description: 효과 값  
+          stat_effect_per_level:
+            description: 레벨별 효과
+            type: array
+            items:
+              type: object
+              properties:
+                vehicle_level:
+                  type: number
+                  format: int64
+                  description: 탈것 레벨
+                stat_effect:
+                  description: 레벨별 효과
+                  type: array
+                  items:
+                    type: object
+                    properties:               
+                      stat_id:
+                        type: string
+                        description: 효과 유형 (/meta/stat API 참고)
+                      stat_value:
+                        type: number
+                        format: double
+                        description: 효과 값
+
+    CollectibleItemResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          collectible_item_id:
+            type: string
+            description: 수집형 아이템 식별자
+          collectible_item_name:
+            type: string
+            description: 수집형 아이템 이름
+          collectible_item_description:
+            type: string
+            description: 수집형 아이템 설명
+          collectible_item_narrative:
+            type: string
+            description: 수집형 아이템 스토리
+          collectible_item_tier_id:
+            type: string
+            description: 수집형 아이템 등급(/meta/tier API 참고)
+          collectible_item_lounge_size:
+            type: string
+            description: 수집형 아이템 사이즈
+          collect_type:
+            type: string
+            description: 수집 구분
+          decomposition_flag:
+            type: string
+            description: 분해 가능 여부 (0:불가, 1:가능)
+          decomposition_reward:
+            description: 분해 보상
+            type: array
+            items:
+              type: object
+              properties:
+                item_id:
+                  type: string
+                  description: 아이템 식별자
+                item_type: 
+                  type: string
+                  description: 아이템 타입 (타입에 따라 해당 아이템의 메타 데이터 참조)
+                count:
+                  type: number
+                  format: int64
+                  description: 수량
+
+    NodeItemResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          node_item_id:
+            type: string
+            description: 변이 세포 식별자
+          node_item_name:
+            type: string
+            description: 변이 세포 명
+          node_item_image_url:
+            type: string
+            description: 변이 세포 이미지 경로
+          node_item_description:
+            type: string
+            description: 설명
+          node_item_socket_type:
+            type: string
+            description: 변이 세포 소켓 타입
+          node_item_effect:
+            type: array
+            description: 변이 세포 장착 효과
+            items:
+              type: object
+              properties:
+                node_item_effect_name:
+                  type: string
+                  description: 변이 세포 효과명
+                node_item_effect_description: 
+                  type: string
+                  description: 변이 세포 효과 설명
+    NodeSocketTypeResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          node_item_socket_type:
+            type: string
+            description: |
+              변이 세포 소켓 타입
+              * SocketType_A: 세룰리안
+              * SocketType_B: 알만딘
+              * SocketType_C: 말라카이트
+              * SocketType_D: 크산틱
+              * SocketType_E: 루틸
+          node_item_socket_name:
+            type: string
+            description: 변이 세포 소켓 명
+          node_item_socket_image_url:
+            type: string
+            description: 변이 세포 소켓 이미지 경로
+
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              description: 오류 이름
+            message:
+              type: string
+              description: 오류 메시지

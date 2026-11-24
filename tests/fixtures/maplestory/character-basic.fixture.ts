@@ -12,6 +12,7 @@ export const characterBasicFixture: CharacterBasic = {
   character_exp_rate: '12.345',
   character_guild_name: '테스트길드',
   character_image: 'https://open.api.nexon.com/static/maplestory/Character/image.png',
+  character_date_create: '2020-01-15T10:00+09:00',
   access_flag: 'true',
-  liberation_quest_clear_flag: '1',
+  liberation_quest_clear: '1',
 };

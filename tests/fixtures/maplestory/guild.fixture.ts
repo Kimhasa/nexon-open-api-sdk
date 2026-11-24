@@ -13,6 +13,7 @@ export const guildBasicFixture: GuildBasic = {
   guild_point: 5000,
   guild_master_name: '길드마스터',
   guild_member_count: 150,
+  guild_user_count: 100,
   guild_member: ['길드마스터', '부마스터1', '멤버1'],
   guild_skill: [
     {
@@ -24,6 +25,4 @@ export const guildBasicFixture: GuildBasic = {
     },
   ],
   guild_noblesse_skill: [],
-  guild_mark: null,
-  guild_mark_custom: null,
 };

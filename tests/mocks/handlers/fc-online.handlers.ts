@@ -12,7 +12,7 @@ import {
 const BASE = 'https://open.api.nexon.com/fconline/v1';
 const STATIC = 'https://open.api.nexon.com/static/fconline/meta';
 
-const checkApiKey = (request: Request): HttpResponse | null => {
+const checkApiKey = (request: Request): ReturnType<typeof HttpResponse.json> | null => {
   const apiKey = request.headers.get('x-nxopen-api-key');
   if (!apiKey) {
     return HttpResponse.json(

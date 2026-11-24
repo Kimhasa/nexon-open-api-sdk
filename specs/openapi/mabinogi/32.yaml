@@ -1,0 +1,212 @@
+openapi: 3.0.3
+info:
+  title: 마비노기 API
+  version: 1.0.0
+  contact:
+    name: help_openapi@nexon.co.kr
+  description: |-
+    - 마비노기의 게임 데이터는 평균 10분 후 확인 가능합니다.
+    - 마비노기의 상점 정보는 36분마다 변경됩니다.
+    - 현재 일부 NPC 대상으로 상점 정보가 공개되며, 추후 제공되는 NPC가 추가될 수 있습니다.
+      
+servers:
+  - url: 'https://open.api.nexon.com'
+  
+tags:
+  - name: NPCShop 
+    description: NPC 상점 정보 조회
+
+paths:
+   /mabinogi/v1/npcshop/list:
+    get:
+      tags:
+        - NPCShop
+      summary: NPC 상점 카탈로그 조회
+      description: |-
+        NPC가 상점에서 판매하는 아이템 목록을 조회합니다.
+      operationId: mabinogi_get_npcshop_list
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: npc_name
+          in: query
+          description: NPC 이름
+          required: true
+          schema:
+            type: string
+            enum:
+              - 델
+              - 델렌
+              - 상인 라누
+              - 상인 피루
+              - 모락
+              - 상인 아루
+              - 리나
+              - 상인 누누
+              - 상인 메루
+              - 켄
+              - 귀넥
+              - 얼리
+              - 데위
+              - 테일로
+              - 상인 세누
+              - 상인 베루
+              - 상인 에루
+              - 상인 네루
+              - 카디
+              - 인장 상인
+              - 피오나트
+        - name: server_name
+          in: query
+          description: 서버 이름
+          required: true
+          schema:
+            type: string
+            enum:
+              - 류트
+              - 만돌린
+              - 하프
+              - 울프
+        - name: channel
+          in: query
+          description: 채널 번호
+          example: "1"
+          required: true
+          schema:
+            type: number
+            format: int64 
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NPCShop'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+
+components:
+  schemas:          
+    NPCShop:
+      type: object
+      properties:
+        shop_tab_count:
+          type: number
+          format: int64
+          description: NPC 상점의 탭 개수
+        shop:
+          type: array
+          description: NPC 상점 정보
+          items:
+            type: object
+            properties:
+              tab_name:
+                type: string
+                description: 상점 탭 이름
+              item:
+                type: array
+                description: NPC 상점 아이템 목록
+                items:
+                  type: object
+                  properties:
+                    item_display_name:
+                      type: string
+                      description: 아이템 이름
+                    item_count:
+                      type: number
+                      format: int64
+                      description: 아이템 수량
+                    item_option:
+                      type: array
+                      description: 아이템 옵션 정보
+                      items:
+                        type: object
+                        properties:
+                          option_type:
+                            type: string
+                            description: 아이템 옵션 유형
+                          option_sub_type:
+                            type: string
+                            description: 아이템 옵션 하위 유형
+                          option_value:
+                            type: string
+                            description: 아이템 옵션 값
+                          option_value2:
+                            type: string
+                            description: 아이템 옵션 값 2
+                          option_desc:
+                            type: string
+                            description: 아이템 옵션 부가 정보
+                    price:
+                      type: array
+                      description: 아이템 판매 가격 정보
+                      items:
+                        type: object
+                        properties:
+                          price_type:
+                            type: string
+                            description: 화폐 종류
+                          price_value:
+                            type: number
+                            format: int64
+                            description: 화폐 수량
+                    limit_type:
+                      type: string
+                      description: 판매 제한 종류 (주간/월간/이벤트 등)
+                    limit_value:
+                      type: number
+                      format: int64
+                      description: 판매 제한 수량
+                    image_url:
+                      type: string
+                      description: 아이템 이미지
+        date_inquire:
+          type: string
+          description: 데이터를 조회한 일시 (UTC0)
+          example: "2024-09-01T00:00:000Z"
+        date_shop_next_update:
+          type: string
+          description: 다음에 상점 데이터가 갱신될 일시 (UTC0)
+          example: "2024-09-01T00:36:000Z"
+                    
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              description: 에러 명
+              example: string
+            message:
+              type: string
+              description: 에러 설명
+              example: string

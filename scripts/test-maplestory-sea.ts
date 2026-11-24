@@ -23,7 +23,7 @@ const client = new NexonClient({ apiKey });
 let passed = 0;
 let failed = 0;
 
-async function test(name: string, fn: () => Promise<void>) {
+async function test(name: string, fn: () => Promise<void>): Promise<void> {
   try {
     await fn();
     passed++;

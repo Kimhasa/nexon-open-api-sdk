@@ -1,0 +1,333 @@
+openapi: 3.0.3
+info:
+  title: 바람의나라:연 API
+  version: 1.0.0
+  contact:
+    name: help_openapi@nexon.co.kr
+  description: |-
+    - 바람의나라:연의 게임 데이터는 평균 10분 후 확인 가능합니다.
+    - 2022년 1월 1일 이후 데이터를 조회할 수 있습니다. (단, 2022년 1월 이전에 발생한 데이터는 응답 결과에 포함되지 않을 수 있음)
+    - 게임 콘텐츠 변경으로 ocid가 변경될 수 있습니다. ocid 기반 서비스 갱신 시 유의해 주시길 바랍니다. 
+     
+servers:
+  - url: 'https://open.api.nexon.com'
+
+tags:
+  - name: Character 
+    description: 캐릭터 정보 조회
+
+paths:
+  /baramy/v1/id:
+    get:
+      tags:
+        - Character
+      summary: 캐릭터 식별자(ocid) 조회
+      description: 캐릭터 식별자(ocid)를 조회합니다.
+      operationId: baramy_get_id
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: character_name
+          in: query
+          description: 캐릭터 명
+          required: true
+          schema:
+            type: string
+        - name: server_name
+          in: query
+          description: 서버 명
+          required: true
+          schema:
+            type: string
+            default: 연
+            enum:
+              - 연
+              - 무휼
+              - 세류
+              - 해명
+              - 낙랑
+              - 하백
+              - 비류
+              - 온조
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+                
+  /baramy/v1/character/basic:
+    get:
+      tags:
+        - Character
+      summary: 기본 정보 조회
+      description: 기본 정보를 조회합니다.
+      operationId: baramy_get_character_basic
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacterBasic'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+                
+  /baramy/v1/character/title:
+    get:
+      tags:
+        - Character
+      summary: 칭호 보유 정보 조회
+      description: 칭호 보유 정보를 조회합니다.<br>칭호 타입(title_type_name)은 2022년 3월 18일 이후 획득(장착)한 칭호에 한해 조회할 수 있습니다.
+      operationId: baramy_get_character_title
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacterTitle'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+                
+  /baramy/v1/character/title-equipment:
+    get:
+      tags:
+        - Character
+      summary: 장착 칭호 정보 조회
+      description: 장착 칭호 정보를 조회합니다.<br>칭호 타입(title_type_name)은 2022년 3월 18일 이후 획득(장착)한 칭호에 한해 조회할 수 있습니다.
+      operationId: baramy_get_character_title_equipment
+      parameters:
+        - name: x-nxopen-api-key
+          in: header
+          description: API KEY
+          required: true
+          schema:
+            type: string
+        - name: ocid
+          in: query
+          description: 캐릭터 식별자
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SUCCESS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacterTitleEquipment'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+
+components:
+  schemas:
+    Character:
+      type: object
+      properties:
+        ocid:
+          type: string
+          description: 캐릭터 식별자
+          
+    CharacterBasic:
+      type: object
+      properties:
+        server_name:
+          type: string
+          description: 서버 명
+        character_name:
+          type: string
+          description: 캐릭터 명
+        character_date_create:
+          type: string
+          description: 캐릭터 생성 일(시) (UTC0)
+          example: "2023-12-14T08:28:35Z"
+        character_class_group_name:
+          type: string
+          description: 캐릭터 직업군 명
+        character_class_name:
+          type: string
+          description: 캐릭터 직업 명
+        character_nation:
+          type: string
+          description: 캐릭터 국적
+        character_gender:
+          type: string
+          description: 캐릭터 성별
+        character_exp:
+          type: number
+          format: int64
+          description: 캐릭터 경험치
+        character_level:
+          type: number
+          format: int64
+          description: 캐릭터 레벨
+          
+    CharacterTitle: 
+      type: object
+      properties:
+        title:
+          type: array
+          description: 칭호 정보
+          items:
+            properties:
+              title_type_name:
+                type: string
+                description: 칭호 타입 명
+              title_name:
+                type: string
+                description: 칭호 명
+                
+    CharacterTitleEquipment: 
+      type: object
+      properties:
+        title_equipment:
+          type: array
+          description: 장착 칭호 정보
+          items:
+            properties:
+              title_equipment_type:
+                type: string
+                description: 장착 칭호 장착 타입 (1:장착 칭호, 2:표시 칭호)
+              title_type_name:
+                type: string
+                description: 장착 칭호 타입 명
+              title_name:
+                type: string
+                description: 장착 칭호 명
+                
+    ErrorMessage:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            name:
+              type: string
+              description: 에러 명
+              example: string
+            message:
+              type: string
+              description: 에러 설명
+              example: stirng

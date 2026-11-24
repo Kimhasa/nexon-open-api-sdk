@@ -5,12 +5,13 @@ export const mLevelRankingFixture: MLevelRanking = {
     {
       date: '2024-01-01T00:00+09:00',
       ranking: 1,
+      world_ranking: 1,
       character_name: '랭커1M',
       world_name: '스카니아',
-      class_name: '전사',
-      sub_class_name: '히어로',
+      character_class: '히어로',
       character_level: 300,
-      character_exp: 999999999,
+      guild_name: '테스트길드M',
+      guild_mark_icon: 'https://example.com/guild-mark.png',
     },
   ],
 };
