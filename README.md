@@ -107,24 +107,35 @@ const matchIds = await fcOnline.fcOnline.getMatchList({ ouid, matchtype: 50, lim
 포털 API 변경 여부는 매주 자동으로 확인합니다.
 
 <!-- 아이콘 파일: docs/assets/games/{game}.png -->
-
-| 게임 및 문서                                                                                                                                    | 조회 항목                                             |
-| ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| <img src="docs/assets/games/maplestory.png" alt="메이플스토리" height="24" /><br />[메이플스토리](docs/maplestory.md)                           | 캐릭터 스펙·장비·유니온, 랭킹, 스타포스·큐브 기록     |
-| <img src="docs/assets/games/maplestory-m.png" alt="메이플스토리M" height="24" /><br />[메이플스토리M](docs/maplestory-m.md)                     | 캐릭터 스탯·장착 아이템, 길드, 전투력·무릉도장 랭킹   |
-| <img src="docs/assets/games/fc-online.png" alt="EA SPORTS FC 온라인" height="24" /><br />[EA SPORTS FC 온라인](docs/fc-online.md)               | 공식경기 전적, 역대 최고 등급, 선수 이미지            |
-| <img src="docs/assets/games/maplestory-sea.png" alt="MapleStorySEA" height="24" /><br />[MapleStorySEA](docs/maplestory-sea.md)                 | 캐릭터·유니온·길드                                    |
-| <img src="docs/assets/games/maplestory-taiwan.png" alt="MapleStory Taiwan" height="24" /><br />[MapleStoryTaiwan](docs/maplestory-tw.md)        | 캐릭터·유니온·길드                                    |
-| <img src="docs/assets/games/first-descendant.png" alt="퍼스트 디센던트" height="24" /><br />[퍼스트 디센던트](docs/first-descendant.md)         | 계승자·무기·모듈 도감, 장착 정보, 리더보드            |
-| <img src="docs/assets/games/mabinogi.png" alt="마비노기" height="24" /><br />[마비노기](docs/mabinogi.md)                                       | 경매장 매물·거래 내역, NPC 상점, 거대한 외침의 뿔피리 |
-| <img src="docs/assets/games/mabinogi-heroes.png" alt="마비노기 영웅전" height="24" /><br />[마비노기 영웅전](docs/mabinogi-heroes.md)           | 캐릭터 장비·능력치, 거래소 기록, 명예의 전당 랭킹     |
-| <img src="docs/assets/games/sudden-attack.png" alt="서든어택" height="24" /><br />[서든어택](docs/sudden-attack.md)                             | 계급·티어, 최근 동향, 매치 기록                       |
-| <img src="docs/assets/games/kartrider-rush-plus.png" alt="카트라이더 러쉬플러스" height="24" /><br />[카트라이더 러쉬플러스](docs/kartrider.md) | 라이더 기본 정보·장착 칭호, 시즌 알림판               |
-| <img src="docs/assets/games/baram-nara.png" alt="바람의나라" height="24" /><br />[바람의나라](docs/baram.md)                                    | 캐릭터 능력치·장착 아이템·칭호·길드                   |
-| <img src="docs/assets/games/baram-yeon.png" alt="바람의나라: 연" height="24" /><br />[바람의나라: 연](docs/baram-yeon.md)                       | 캐릭터 기본 정보·칭호                                 |
-| <img src="docs/assets/games/v4.png" alt="V4" height="24" /><br />[V4](docs/v4.md)                                                               | 캐릭터 기본 정보·명예                                 |
-| <img src="docs/assets/games/hit2.png" alt="히트2" height="24" /><br />[히트2](docs/hit2.md)                                                     | 캐릭터 기본 정보                                      |
-| [NEXON Open API 공지](docs/platform.md)                                                                                                         | 점검·API 변경 공지                                    |
+<!-- prettier-ignore-start -->
+<table width="100%" cellspacing="0" cellpadding="8" style="table-layout:fixed;width:100%">
+<tr>
+<td align="center" valign="top" width="33%"><br><img src="docs/assets/games/maplestory.png" alt="메이플스토리" height="64"><h4>메이플스토리</h4><sub>캐릭터 스펙·장비·유니온, 랭킹, 스타포스·큐브 기록</sub><br><br><a href="docs/maplestory.md">문서 보기</a><br><br></td>
+<td align="center" valign="top" width="33%"><br><img src="docs/assets/games/maplestory-m.png" alt="메이플스토리M" height="64"><h4>메이플스토리M</h4><sub>캐릭터 스탯·장착 아이템, 길드, 전투력·무릉도장 랭킹</sub><br><br><a href="docs/maplestory-m.md">문서 보기</a><br><br></td>
+<td align="center" valign="top" width="33%"><br><img src="docs/assets/games/fc-online.png" alt="EA SPORTS FC 온라인" height="64"><h4>EA SPORTS FC 온라인</h4><sub>공식경기 전적, 역대 최고 등급, 선수 이미지</sub><br><br><a href="docs/fc-online.md">문서 보기</a><br><br></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><br><img src="docs/assets/games/maplestory-sea.png" alt="MapleStorySEA" height="64"><h4>MapleStorySEA</h4><sub>캐릭터·유니온·길드</sub><br><br><a href="docs/maplestory-sea.md">문서 보기</a><br><br></td>
+<td align="center" valign="top" width="33%"><br><img src="docs/assets/games/maplestory-taiwan.png" alt="MapleStoryTaiwan" height="64"><h4>MapleStoryTaiwan</h4><sub>캐릭터·유니온·길드</sub><br><br><a href="docs/maplestory-tw.md">문서 보기</a><br><br></td>
+<td align="center" valign="top" width="33%"><br><img src="docs/assets/games/first-descendant.png" alt="퍼스트 디센던트" height="64"><h4>퍼스트 디센던트</h4><sub>계승자·무기·모듈 도감, 장착 정보, 리더보드</sub><br><br><a href="docs/first-descendant.md">문서 보기</a><br><br></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><br><img src="docs/assets/games/mabinogi.png" alt="마비노기" height="64"><h4>마비노기</h4><sub>경매장 매물·거래 내역, NPC 상점, 거대한 외침의 뿔피리</sub><br><br><a href="docs/mabinogi.md">문서 보기</a><br><br></td>
+<td align="center" valign="top" width="33%"><br><img src="docs/assets/games/mabinogi-heroes.png" alt="마비노기 영웅전" height="64"><h4>마비노기 영웅전</h4><sub>캐릭터 장비·능력치, 거래소 기록, 명예의 전당 랭킹</sub><br><br><a href="docs/mabinogi-heroes.md">문서 보기</a><br><br></td>
+<td align="center" valign="top" width="33%"><br><img src="docs/assets/games/sudden-attack.png" alt="서든어택" height="64"><h4>서든어택</h4><sub>계급·티어, 최근 동향, 매치 기록</sub><br><br><a href="docs/sudden-attack.md">문서 보기</a><br><br></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><br><img src="docs/assets/games/kartrider-rush-plus.png" alt="카트라이더 러쉬플러스" height="64"><h4>카트라이더 러쉬플러스</h4><sub>라이더 기본 정보·장착 칭호, 시즌 알림판</sub><br><br><a href="docs/kartrider.md">문서 보기</a><br><br></td>
+<td align="center" valign="top" width="33%"><br><img src="docs/assets/games/baram-nara.png" alt="바람의나라" height="64"><h4>바람의나라</h4><sub>캐릭터 능력치·장착 아이템·칭호·길드</sub><br><br><a href="docs/baram.md">문서 보기</a><br><br></td>
+<td align="center" valign="top" width="33%"><br><img src="docs/assets/games/baram-yeon.png" alt="바람의나라: 연" height="64"><h4>바람의나라: 연</h4><sub>캐릭터 기본 정보·칭호</sub><br><br><a href="docs/baram-yeon.md">문서 보기</a><br><br></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><br><img src="docs/assets/games/v4.png" alt="V4" height="64"><h4>V4</h4><sub>캐릭터 기본 정보·명예</sub><br><br><a href="docs/v4.md">문서 보기</a><br><br></td>
+<td align="center" valign="top" width="33%"><br><img src="docs/assets/games/hit2.png" alt="히트2" height="64"><h4>히트2</h4><sub>캐릭터 기본 정보</sub><br><br><a href="docs/hit2.md">문서 보기</a><br><br></td>
+<td align="center" valign="top" width="33%"><br><h4>NEXON Open API 공지</h4><sub>점검·API 변경 공지</sub><br><br><a href="docs/platform.md">문서 보기</a><br><br></td>
+</tr>
+</table>
+<!-- prettier-ignore-end -->
 
 게임별 클라이언트와 주요 조회 항목은 [문서](#문서)에서 확인할 수 있습니다.
 

@@ -11,9 +11,7 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 
 ## [Unreleased]
 
-- 에러 메시지와 JSDoc 표기를 포털 표기로 통일 (메시지 문자열이 바뀜)
-
-## [0.2.0] - 2026-11-24
+## [0.2.0] - 2026-11-25
 
 ### Added
 
@@ -141,6 +139,7 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 
 ### Changed
 
+- **동작 변경** 에러 메시지와 JSDoc, 문서의 표기를 NEXON Open API 포털 표기로 통일했다 (`API Key`, `NEXON Open API`, `식별자`, `호출 허용량`, 포털 카탈로그 게임명). 에러 메시지 문자열과 `getApiMetadata()` 의 `game` 표시 이름이 바뀐다. 에러 클래스와 에러 코드는 그대로다
 - **BREAKING** FC 온라인 `getMaxDivision()` 반환 타입 `FcMaxDivision` → `readonly FcMaxDivision[]`. 역대 최고 등급은 매치 종류별로 존재하며, 응답이 단일 객체여도 배열로 정규화한다
 - **동작 변경** 메이플스토리·SEA·TW·M의 날짜를 요청 전에 검사한다 (날짜를 받는 조회 96개). 넥슨 AI 에이전트 가이드의 실측 규칙을 따른다
   - 날짜가 선택인 조회(캐릭터·유니온·길드 등)는 오늘·미래 날짜와 서비스 개시 이전 날짜를 막는다. 넥슨은 오늘·미래에 400을, 개시 이전 날짜에는 200과 전부 null인 응답을 준다. 최신 데이터는 date를 생략한다

@@ -4,7 +4,7 @@
 
 ## 프로젝트 개요
 
-넥슨 Open API를 TypeScript로 감싼 SDK 라이브러리.
+NEXON Open API를 TypeScript로 감싼 SDK 라이브러리.
 CJS + ESM 듀얼 출력, Node.js 18+, 외부 의존성 0.
 
 ```ts
@@ -34,13 +34,13 @@ const basic = await client.maplestory.character.getBasic({ ocid });
 | `yarn test:live`                     | 빌드의 정적 메타데이터, 이미지 및 인증 오류를 실서버에서 확인 (키 불필요)                            |
 | `yarn test:package`                  | npm tarball 오프라인 설치와 CJS·ESM 실호출 및 TypeScript 타입 검사                                   |
 | `yarn test:deep`                     | 실 API E2E 중 모든 메서드 반환값을 SDK 응답 타입과 중첩 필드까지 대조 (`.env` 키 필요)               |
-| `yarn test:{game}`                   | 실 API E2E 스크립트 (`scripts/test-*.ts`, `.env`에 API 키 필요)                                      |
+| `yarn test:{game}`                   | 실 API E2E 스크립트 (`scripts/test-*.ts`, `.env`에 API Key 필요)                                     |
 | `yarn specs:fetch`                   | 넥슨 포털의 OpenAPI YAML을 `specs/openapi/`로 수집                                                   |
 | `yarn specs:check`                   | 포털 변경 감지 (저장된 스펙과 포털 비교)                                                             |
 | `yarn specs:coverage`                | SDK가 구현한 경로 vs 스펙 경로 커버리지 대조                                                         |
 | `yarn specs:diff`                    | 두 스펙 스냅샷의 구조 비교와 SEMVER 분류 (`--base <ref>`, `--live`, `--json`)                        |
 | `yarn specs:drift`                   | SDK 타입 vs 커밋된 스펙 필드 단위 대조 (`--strict` 는 baseline 밖 drift가 있으면 실패, CI 게이트)    |
-| `yarn specs:notices`                 | 넥슨 Open API 공지에서 새 공지 수집                                                                  |
+| `yarn specs:notices`                 | NEXON Open API 공지에서 새 공지 수집                                                                 |
 | `yarn release`                       | 빌드 + 테스트 + `npm publish` (**버전 범프 없음** — 아래 참고)                                       |
 
 - `yarn test:{game}` 은 구현된 게임마다 하나씩 15개다 (`test:maplestory`, `test:maplestory-m`, `test:maplestory-sea`, `test:maplestory-tw`, `test:fconline`, `test:first-descendant`, `test:mabinogi-heroes`, `test:sudden-attack`, `test:kartrider`, `test:baram`, `test:mabinogi`, `test:baram-yeon`, `test:v4`, `test:hit2`, `test:platform`). 필요한 환경변수는 `.env.example` 참고.
@@ -71,8 +71,8 @@ src/
 │   │   └── maple-date.ts                    # toNexonDate(), DateRange
 │   ├── maplestory/                          # 메이플스토리 (KMS)
 │   ├── maplestory-m/                        # 메이플스토리M
-│   ├── maplestory-sea/                      # MapleStory SEA
-│   ├── maplestory-tw/                       # MapleStory Taiwan
+│   ├── maplestory-sea/                      # MapleStorySEA
+│   ├── maplestory-tw/                       # MapleStoryTaiwan
 │   ├── fc-online/                           # EA SPORTS FC 온라인
 │   ├── first-descendant/                    # 퍼스트 디센던트
 │   ├── mabinogi-heroes/                     # 마비노기 영웅전
@@ -83,7 +83,7 @@ src/
 │   ├── baram-yeon/                          # 바람의나라: 연
 │   ├── v4/                                  # V4
 │   ├── hit2/                                # 히트2
-│   └── platform/                            # 넥슨 Open API 공지
+│   └── platform/                            # NEXON Open API 공지
 ├── NexonClient.ts                           # 메인 진입점
 └── index.ts                                 # root public exports
 
@@ -153,7 +153,7 @@ AbstractMapleBaseClient extends AbstractGameClient
 
 NexonError (base)
 ├── NexonRateLimitError    (429 / OPENAPI00007 API 호출량 초과)
-├── NexonAuthError         (OPENAPI00005 잘못된 API 키, 00002 권한 없음, 00006 다른 게임용 키 — status는 서버 값 그대로)
+├── NexonAuthError         (OPENAPI00005 잘못된 API Key, 00002 권한 없음, 00006 다른 게임용 API Key — status는 서버 값 그대로)
 ├── NexonNotFoundError     (400 / OPENAPI00003 유효하지 않은 식별자. 이름 조회의 OPENAPI00004·길드 null도 SDK가 변환 — name-lookup.ts)
 ├── NexonBadRequestError   (400 / OPENAPI00004 파라미터 누락·오류. SDK 입력 검증도 이 에러)
 ├── NexonDataNotReadyError (400 / OPENAPI00009 데이터 준비 중)
@@ -161,7 +161,7 @@ NexonError (base)
     └── NexonMaintenanceError (OPENAPI00010 게임 점검 중 400, 00011 API 점검 중 503)
 ```
 
-분류 기준은 HTTP 상태가 아니라 넥슨 에러 코드다 (`classify-error.ts`). 코드의 의미는 포털 [응답코드 표](https://openapi.nexon.com/ko/guide/request-api/)를 따른다 (2026-11-24 확인, 00008은 표에 없음). 실제 서버는 잘못된 API 키에 403이 아니라 HTTP 400 + `OPENAPI00005` 를 돌려준다 (2026-11-24 실측).
+분류 기준은 HTTP 상태가 아니라 넥슨 에러 코드다 (`classify-error.ts`). 코드의 의미는 포털 [응답코드 표](https://openapi.nexon.com/ko/guide/request-api/)를 따른다 (2026-11-24 확인, 00008은 표에 없음). 실제 서버는 잘못된 API Key에 403이 아니라 HTTP 400 + `OPENAPI00005` 를 돌려준다 (2026-11-24 실측).
 
 ## 아키텍처 규칙
 
@@ -171,7 +171,7 @@ NexonError (base)
 - **Sub-client** → lazy getter (`??=` 패턴)로 초기화, 미사용 시 할당 비용 0. sub-client는 기반 클래스를 상속하지 않고 `constructor(private readonly http: HttpClient)` 만 받는다
 - **Branded Types** → OCID, GuildId, NexonDate는 `_base/maple-base-types.ts`, OUID는 `fc-online/user/types.ts`에 정의. `core/types/branded.ts`는 `Brand<T,B>` 유틸리티만 보유
 - **HttpClient** → 429·5xx만 재시도(지수 백오프 + 지터), 나머지 즉시 throw. `x-nxopen-api-key` 헤더 자동 주입. 요청 URL을 `classifyError` 에 넘겨 00006 안내에 게임 이름을 넣는다
-- **식별자 마스킹** → 넥슨이 주는 고유 번호(OCID·OUID·길드)의 뒤 32자는 API 키 뒤 32자와 같을 수 있다(넥슨 AI 가이드). 로그·에러 메시지·E2E 출력에는 `maskIdentifier`/`maskIdentifiers`(`src/core/http/mask.ts`)로 앞 8자만 남긴다
+- **식별자 마스킹** → 넥슨이 주는 식별자(ocid·ouid·길드)의 뒤 32자는 API Key 뒤 32자와 같을 수 있다(넥슨 AI 가이드). 로그·에러 메시지·E2E 출력에는 `maskIdentifier`/`maskIdentifiers`(`src/core/http/mask.ts`)로 앞 8자만 남긴다
 - **에러 분류** → OPENAPI 에러 코드 기반 서브클래스 분류 (`classify-error.ts`)
 - **SDK 경계 입력 검증** → `src/core/validation/input.ts` 의 공용 헬퍼를 사용한다. 게임별 조건과 상수는 해당 게임에 두고 `NexonBadRequestError` (`OPENAPI00004`)로 알린다.
 - **신규 게임 공개 export** → 게임의 `index.ts` 에 게임별 접두어가 있는 Client, sub-client, 공개 타입을 내보낸다. 루트 진입점도 게임별 `index.ts` 를 재노출한다.
@@ -214,8 +214,13 @@ NexonError (base)
 
 - **게임 용어 먼저, SDK 이름은 옆에** 쓴다.
   - 예: "유니온 공격대 배치 — `union.getRaider()`"
-  - 예: "선수 카드(시즌 포함 고유 번호) — `spid`"
+  - 예: "선수 카드(시즌 포함 식별자) — `spid`"
   - API 용어(endpoint, payload)를 앞세우지 않는다.
+- **표기는 포털을 따른다.** 문서, JSDoc, 에러 메시지 모두 같은 표기를 쓴다.
+  - `NEXON Open API` (회사는 "넥슨"), `API Key`, `애플리케이션`, `개발 단계` / `서비스 단계`
+  - `식별자(ocid)` ("고유 번호" 아님), 한도는 `호출 허용량`, 사용량은 `호출량`
+  - 게임명은 `specs/openapi/index.json` 의 `name` 그대로: `EA SPORTS FC 온라인`, `MapleStorySEA`, `MapleStoryTaiwan`, `바람의나라: 연`
+  - 본문은 합니다체, 요청은 "~해 주세요". 이 SDK는 비공식이므로 넥슨이 화자인 표현은 쓰지 않는다.
 - **용어의 근거**는 1순위가 포털 스펙 YAML의 `summary`·`description` 이고, 그다음이 게임에서 쓰는 공식 이름이다. 용어를 지어내지 않는다.
 - **코드값은 게임 속 의미로** 설명한다.
   - 예: `liberation_quest_clear` 의 `"1"` → 제네시스 해방
@@ -256,7 +261,7 @@ SDK 내부에서 지역 타임존 기준 `YYYY-MM-DD` 로 변환하는 것이 �
 
 ```ts
 throw new NexonRateLimitError(
-  'API 호출 한도를 초과했습니다. ' +
+  'API 호출 허용량을 초과했습니다. ' +
     'SDK가 자동으로 3회 재시도했으나 실패했습니다. ' +
     'new NexonClient({ maxRetries: 5 })로 재시도 횟수를 늘리거나 요청 빈도를 줄여주세요.',
   { retryAfterMs: 1000 },
@@ -328,7 +333,7 @@ throw new NexonRateLimitError(
 
 Base URL: `https://open.api.nexon.com/`
 
-범위는 넥슨 Open API 포털(`https://openapi.nexon.com`)이 제공하는 **14개 게임 + `platform`** 이다 (2026-11-24 포털 기준).
+범위는 NEXON Open API 포털(`https://openapi.nexon.com`)이 제공하는 **14개 게임 + `platform`** 이다 (2026-11-24 포털 기준).
 "포털 API 수"는 포털 OpenAPI YAML의 경로 수, "SDK"는 게임 클라이언트의 public API 메서드 수다.
 
 ### 구현된 게임 (15개, 포털 270/270)
@@ -337,8 +342,8 @@ Base URL: `https://open.api.nexon.com/`
 | --------------------- | ------------------------ | ----------------------- | --------------- | --------------------------------------- | ------------------------- | -------------- | ---------- |
 | 메이플스토리 (KMS)    | `client.maplestory`      | `MapleStoryClient`      | `maplestory`    | `maplestory` / `maplestory`             | `AbstractMapleBaseClient` | (없음)         | 56 / 56    |
 | 메이플스토리M         | `client.maplestorym`     | `MapleStoryMClient`     | `maplestorym`   | `maplestory-m` / `maplestory-m`         | `AbstractGameClient`      | `M`            | 38 / 38    |
-| MapleStory SEA        | `client.maplestorySEA`   | `MapleStorySEAClient`   | `maplestorysea` | `maplestory-sea` / `maplestory-sea`     | `AbstractMapleBaseClient` | `SEA`          | 26 / 26    |
-| MapleStory Taiwan     | `client.maplestoryTW`    | `MapleStoryTWClient`    | `maplestorytw`  | `maplestory-tw` / `maplestory-tw`       | `AbstractMapleBaseClient` | `TW`           | 27 / 27    |
+| MapleStorySEA         | `client.maplestorySEA`   | `MapleStorySEAClient`   | `maplestorysea` | `maplestory-sea` / `maplestory-sea`     | `AbstractMapleBaseClient` | `SEA`          | 26 / 26    |
+| MapleStoryTaiwan      | `client.maplestoryTW`    | `MapleStoryTWClient`    | `maplestorytw`  | `maplestory-tw` / `maplestory-tw`       | `AbstractMapleBaseClient` | `TW`           | 27 / 27    |
 | EA SPORTS FC 온라인   | `client.fcOnline`        | `FcOnlineClient`        | `fconline`      | `fc-online` / `fconline`                | `AbstractGameClient`      | `Fc`           | 18 / 19    |
 | 퍼스트 디센던트       | `client.firstDescendant` | `FirstDescendantClient` | `tfd`           | `first-descendant` / `first-descendant` | `AbstractGameClient`      | `Tfd`          | 42 / 42    |
 | 마비노기 영웅전       | `client.mabinogiHeroes`  | `MabinogiHeroesClient`  | `heroes`        | `mabinogi-heroes` / `mabinogi-heroes`   | `AbstractGameClient`      | `Heroes`       | 19 / 19    |
@@ -349,7 +354,7 @@ Base URL: `https://open.api.nexon.com/`
 | 바람의나라: 연        | `client.baramYeon`       | `BaramYeonClient`       | `baramy`        | `baram-yeon` / `baram-yeon`             | `AbstractGameClient`      | `BaramYeon`    | 4 / 4      |
 | V4                    | `client.v4`              | `V4Client`              | `v4`            | `v4` / `v4`                             | `AbstractGameClient`      | `V4`           | 4 / 4      |
 | 히트2                 | `client.hit2`            | `Hit2Client`            | `hit2`          | `hit2` / `hit2`                         | `AbstractGameClient`      | `Hit2`         | 2 / 2      |
-| 넥슨 Open API 공지    | `client.platform`        | `PlatformClient`        | `platform`      | `platform` / `platform`                 | `AbstractGameClient`      | `Platform`     | 1 / 1      |
+| NEXON Open API 공지   | `client.platform`        | `PlatformClient`        | `platform`      | `platform` / `platform`                 | `AbstractGameClient`      | `Platform`     | 1 / 1      |
 
 - `client.maplestorym` 은 소문자 `m` 이다 (`maplestoryM` 아님).
 - FC는 디렉토리(`fc-online`)와 sub-path(`fconline`)가 다르다. 나머지 게임은 같다.
@@ -364,13 +369,13 @@ Base URL: `https://open.api.nexon.com/`
 
 ### 범위 외: 네오플 API
 
-던전앤파이터와 사이퍼즈는 넥슨 Open API가 아니라 네오플 API(`https://developers.neople.co.kr`)다. host와 API 키가 달라 이 SDK의 범위에 넣지 않는다. `HttpClient` 의 `x-nxopen-api-key` 인증으로는 호출할 수 없다.
+던전앤파이터와 사이퍼즈는 NEXON Open API가 아니라 네오플 API(`https://developers.neople.co.kr`)다. host와 API Key가 달라 이 SDK의 범위에 넣지 않는다. `HttpClient` 의 `x-nxopen-api-key` 인증으로는 호출할 수 없다.
 
 ## 현황과 후속 과제
 
 2026-11-24 기준 포털 14개 게임 + platform의 API **270개를 모두 SDK가 지원**한다 (`yarn specs:coverage` 270/270, CI `specs:drift --strict` 통과).
 
-**실 API 검증**: 2026-11-24 게임별 개발 단계 키로 `yarn test:deep` 을 돌렸다. 공개 캐릭터 42명(게임별 2~6명)으로 HTTP 메서드 263/267개를 부르고, 응답을 SDK 타입과 중첩 필드까지 비교해 차이 0건을 확인했다. 부르지 못한 메서드는 FC `getTradeList`(키 계정 본인 기록만), KMS `getLegacyOuid`(구 키 필요), 제공이 끝난 FC `getAllMatchList`, 정적 파일만 `test:live` 로 확인한 FC `getSeasonIdMeta` 다.
+**실 API 검증**: 2026-11-24 게임별 개발 단계 API Key로 `yarn test:deep` 을 돌렸다. 공개 캐릭터 42명(게임별 2~6명)으로 HTTP 메서드 263/267개를 부르고, 응답을 SDK 타입과 중첩 필드까지 비교해 차이 0건을 확인했다. 부르지 못한 메서드는 FC `getTradeList`(API Key 소유 계정의 기록만), KMS `getLegacyOuid`(이전 API Key 필요), 제공이 끝난 FC `getAllMatchList`, 정적 파일만 `test:live` 로 확인한 FC `getSeasonIdMeta` 다.
 
 - **포털 스펙은 실제 응답과 다를 수 있다.** 실측에서 null 허용 누락 500여 곳, 이름이 다른 필드(예: `scroll_upgradable_count` ↔ 실제 `scroll_upgradeable_count`), 타입 차이가 나왔다. 타입은 실제 응답을 따르고 근거는 `specs/drift-baseline.json` 에 둔다. 키가 있으면 새 타입도 `yarn test:deep` 으로 확인한다.
 - **없는 이름 조회:** 넥슨은 `OPENAPI00004` 를 돌려준다. 이름 조회 메서드는 `src/core/errors/name-lookup.ts` 의 `lookupByName` 으로 감싸 `NexonNotFoundError` 를 던진다. 새 게임의 이름 조회도 같은 방식을 쓴다.
@@ -435,7 +440,7 @@ liberation_quest_clear: string; // "0": 미완료, "1": 제네시스 해방, "2"
 ## Spec-Driven 게임 추가 워크플로우
 
 SDK 코드는 `specs/openapi/` 에 저장된 **넥슨 포털 OpenAPI YAML** 을 원천으로 만든다.
-포털은 카테고리마다 OpenAPI 3.0 YAML을 로그인·API 키 없이 공개하므로, 사람이 포털 화면을 복사해 붙여 넣는 단계는 없다.
+포털은 카테고리마다 OpenAPI 3.0 YAML을 로그인·API Key 없이 공개하므로, 사람이 포털 화면을 복사해 붙여 넣는 단계는 없다.
 
 ### 전체 흐름
 
@@ -487,7 +492,7 @@ yarn specs:fetch        포털 → specs/openapi/{slug}/{categoryId}.yaml, index
    - API 개수는 public API 메서드 수다. 용어는 "독자는 게임을 잘 아는 창작자다" 원칙을 따른다.
 9. **`API_METADATA`** — `src/core/metadata/api-metadata.ts` 에 엔트리 추가/갱신
    - 키 = path prefix, `endpointCount` = public API 메서드 수
-   - `lastVerifiedAt` = 스펙(또는 실 API)과 대조한 날짜, `note` 에 검증 방식 명시. 실 API 키로 확인하지 못했으면 "포털 스펙 기준, 실 API 미검증"이라고 쓴다
+   - `lastVerifiedAt` = 스펙(또는 실 API)과 대조한 날짜, `note` 에 검증 방식 명시. 실 API Key로 확인하지 못했으면 "포털 스펙 기준, 실 API 미검증"이라고 쓴다
    - `tests/unit/core/api-metadata.test.ts` 의 게임 목록·개수 단언도 함께 고친다
 10. **최초 와이어링** (게임당 1회, 아래)
 
@@ -499,8 +504,8 @@ yarn specs:fetch        포털 → specs/openapi/{slug}/{categoryId}.yaml, index
   - 스키마의 모든 필드를 채운다. `example` 이 있으면 그 값을, 없으면 타입에 맞는 그럴듯한 값을 쓴다
   - 배열은 원소 1~2개, nullable 필드는 한 fixture에서 `null` 인 경우도 다룬다
   - fixture에 응답 타입을 명시(`const x: Xxx = {...}`)해 타입과 어긋나면 컴파일 에러가 나게 한다
-- **정적 메타데이터는 키 없이 실데이터를 쓸 수 있다.** `https://open.api.nexon.com/static/...` 경로(예: `/static/fconline/meta/class.json`, `/static/suddenattack/meta/tier`, `/static/tfd/meta/core-slot.json`)는 API 키 없이 실제 응답이 내려온다. 이런 API는 실제 응답 일부를 잘라 fixture로 쓴다.
-- 그 밖의 API는 게임별 API 키가 있어야 실응답을 볼 수 있다. 키 없이 만든 fixture는 스펙 기반 합성값이며, 그 사실을 `API_METADATA.note` 에 남긴다.
+- **정적 메타데이터는 API Key 없이 실데이터를 쓸 수 있다.** `https://open.api.nexon.com/static/...` 경로(예: `/static/fconline/meta/class.json`, `/static/suddenattack/meta/tier`, `/static/tfd/meta/core-slot.json`)는 API Key 없이 실제 응답이 내려온다. 이런 API는 실제 응답 일부를 잘라 fixture로 쓴다.
+- 그 밖의 API는 게임별 API Key가 있어야 실응답을 볼 수 있다. API Key 없이 만든 fixture는 스펙 기반 합성값이며, 그 사실을 `API_METADATA.note` 에 남긴다.
 - 실제 캐릭터명·계정 식별자 같은 개인 데이터를 fixture에 넣지 않는다.
 
 ### 최초 와이어링 (게임당 1회)
