@@ -16,7 +16,7 @@ export class MabinogiNpcShopClient {
    *
    * @param params - 상점을 열 NPC 이름과 서버 이름, 채널 번호
    * @throws {NexonBadRequestError} 지원되지 않는 NPC나 서버를 지정했거나 채널 번호가 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts

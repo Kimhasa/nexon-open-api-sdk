@@ -4,7 +4,7 @@ declare const __brand: unique symbol;
 type Brand<T, B extends string> = T & { readonly [__brand]: B };
 
 /**
- * 캐릭터 고유 식별자 (OCID).
+ * 캐릭터 식별자(ocid).
  *
  * 메이플스토리 패밀리(KMS, M, SEA, TW) 전용 브랜드 타입입니다.
  * `getOcid()` 로 획득합니다.
@@ -12,7 +12,7 @@ type Brand<T, B extends string> = T & { readonly [__brand]: B };
 export type OCID = Brand<string, 'OCID'>;
 
 /**
- * Nexon Open API 날짜 형식 (YYYY-MM-DD).
+ * NEXON Open API 날짜 형식 (YYYY-MM-DD).
  *
  * 메이플스토리 패밀리(KMS, M, SEA, TW)의 날짜 파라미터에 사용됩니다.
  * `toNexonDate()` 헬퍼로 생성합니다.
@@ -20,7 +20,7 @@ export type OCID = Brand<string, 'OCID'>;
 export type NexonDate = Brand<string, 'NexonDate'>;
 
 /**
- * 길드 고유 식별자.
+ * 길드 식별자.
  *
  * 메이플스토리 패밀리(KMS, M, SEA, TW) 전용 브랜드 타입입니다.
  * `guild.getId()` 로 획득합니다.
@@ -44,7 +44,7 @@ export interface OcidDateRequest {
    * - 날짜를 넣으면 그날 0시~24시의 데이터를 조회합니다.
    * - 지난 날짜의 데이터는 다음날 오전 2시부터 조회할 수 있습니다.
    *
-   * 날짜와 시각의 기준은 게임 지역 시각입니다 (메이플스토리는 KST, MapleStory SEA·Taiwan은 UTC+8).
+   * 날짜와 시각의 기준은 게임 지역 시각입니다 (메이플스토리는 KST, MapleStorySEA·MapleStoryTaiwan은 UTC+8).
    */
   readonly date?: NexonDate | string;
 }
@@ -64,7 +64,7 @@ export interface GuildIdDateRequest {
    * - 날짜를 넣으면 그날 0시~24시의 데이터를 조회합니다.
    * - 지난 날짜의 데이터는 다음날 오전 2시부터 조회할 수 있습니다.
    *
-   * 날짜와 시각의 기준은 게임 지역 시각입니다 (메이플스토리는 KST, MapleStory SEA·Taiwan은 UTC+8).
+   * 날짜와 시각의 기준은 게임 지역 시각입니다 (메이플스토리는 KST, MapleStorySEA·MapleStoryTaiwan은 UTC+8).
    */
   readonly date?: NexonDate | string;
 }

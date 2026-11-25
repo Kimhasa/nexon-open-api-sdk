@@ -38,14 +38,14 @@ export class V4Client extends AbstractGameClient {
   }
 
   /**
-   * 캐릭터 이름으로 고유 번호를 조회한다.
+   * 캐릭터 이름으로 식별자를 조회한다.
    *
    * 스펙상 서버 파라미터가 없어 캐릭터 명만 받는다.
    *
    * @param characterName - 조회할 캐릭터 이름
    * @throws {NexonBadRequestError} characterName이 비어 있거나(요청 전 차단) 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -55,7 +55,7 @@ export class V4Client extends AbstractGameClient {
    * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
    * const client = new NexonClient({ apiKey });
    *
-   * // 캐릭터 검색에서 이름을 고유 번호로 바꿀 때
+   * // 캐릭터 검색에서 이름을 식별자로 바꿀 때
    * const ocid = await client.v4.getOcid('캐릭터명');
    * console.log(ocid);
    * ```

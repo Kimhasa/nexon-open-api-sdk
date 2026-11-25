@@ -42,8 +42,8 @@ export class KartriderNoticeClient {
   /**
    * 최근 등록된 공지사항 20개를 조회한다.
    *
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -73,7 +73,7 @@ export class KartriderNoticeClient {
    *
    * @param noticeId - 게시글 번호 (`getList()` 응답의 `notice[].notice_id`)
    * @throws {NexonBadRequestError} noticeId가 정수가 아니거나(요청 전 차단) 존재하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts
@@ -103,8 +103,8 @@ export class KartriderNoticeClient {
   /**
    * 최근 등록된 시즌 알림판 20개를 조회한다.
    *
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -134,7 +134,7 @@ export class KartriderNoticeClient {
    *
    * @param noticeId - 게시글 번호 (`getSeasonList()` 응답의 `season_notice[].notice_id`)
    * @throws {NexonBadRequestError} noticeId가 정수가 아니거나(요청 전 차단) 존재하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts
@@ -164,8 +164,8 @@ export class KartriderNoticeClient {
   /**
    * 최근 등록된 이벤트&대회 20개를 조회한다.
    *
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -195,7 +195,7 @@ export class KartriderNoticeClient {
    *
    * @param noticeId - 게시글 번호 (`getEventList()` 응답의 `event_notice[].notice_id`)
    * @throws {NexonBadRequestError} noticeId가 정수가 아니거나(요청 전 차단) 존재하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts

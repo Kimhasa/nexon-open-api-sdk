@@ -18,7 +18,7 @@ const SNAPSHOT = {
 /**
  * 메이플스토리 유니온: 레벨·등급, 공격대 배치, 아티팩트, 챔피언.
  *
- * 유니온 정보도 캐릭터 고유 번호(`ocid`)로 조회합니다.
+ * 유니온 정보도 캐릭터 식별자(`ocid`)로 조회합니다.
  *
  * @example
  * ```ts
@@ -36,7 +36,7 @@ export class MapleStoryUnionClient {
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.ocid - 캐릭터 식별자(ocid). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
    * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
@@ -60,7 +60,7 @@ export class MapleStoryUnionClient {
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.ocid - 캐릭터 식별자(ocid). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
    * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *
@@ -87,7 +87,7 @@ export class MapleStoryUnionClient {
    *
    * 2024년 01월 18일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.ocid - 캐릭터 식별자(ocid). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
    * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2024-01-18부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2024-01-18부터 어제까지의 범위를 벗어났을 때.
    *
@@ -120,7 +120,7 @@ export class MapleStoryUnionClient {
    *
    * 2025년 02월 20일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.ocid - 캐릭터 식별자(ocid). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
    * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2025-02-20부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2025-02-20부터 어제까지의 범위를 벗어났을 때.
    *

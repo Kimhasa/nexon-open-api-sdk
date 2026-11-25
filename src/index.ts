@@ -265,7 +265,7 @@ export type {
   FcDivisionVoltaMeta,
 } from './games/fc-online/metadata/types.js';
 
-// MapleStory M types
+// 메이플스토리M types
 export type {
   MCharacterBasic,
   MCharacterStat,
@@ -308,10 +308,10 @@ export type {
   MCharacterHexaMatrixStat,
 } from './games/maplestory-m/character/types.js';
 
-// MapleStory M common types
+// 메이플스토리M common types
 export type { MOcidRequest, MGuildIdRequest } from './games/maplestory-m/types.js';
 
-// MapleStory M union types
+// 메이플스토리M union types
 export type {
   MUnion,
   MUnionRaider,
@@ -321,14 +321,14 @@ export type {
   MUnionStatPreset,
 } from './games/maplestory-m/union/types.js';
 
-// MapleStory M guild types
+// 메이플스토리M guild types
 export type {
   MGuildIdResponse,
   MWorldName,
   MGuildBasic,
 } from './games/maplestory-m/guild/types.js';
 
-// MapleStory M ranking types
+// 메이플스토리M ranking types
 export type {
   MRankingBaseRequest,
   MLevelRankingRequest,
@@ -360,7 +360,7 @@ export type {
   MSharenianWaterwayRanking,
 } from './games/maplestory-m/ranking/types.js';
 
-// MapleStory M notice types
+// 메이플스토리M notice types
 export type {
   MNoticeItem,
   MNoticeList,
@@ -370,7 +370,7 @@ export type {
   MEventNoticeDetail,
 } from './games/maplestory-m/notice/types.js';
 
-// MapleStory SEA character types
+// MapleStorySEA character types
 export type {
   SEACharacterBasic,
   SEACharacterPopularity,
@@ -430,7 +430,7 @@ export type {
   SEACharacterDojang,
 } from './games/maplestory-sea/character/types.js';
 
-// MapleStory SEA union types
+// MapleStorySEA union types
 export type {
   SEAUnion,
   SEAUnionRaider,
@@ -446,7 +446,7 @@ export type {
   SEAUnionChampionBadgeInfo,
 } from './games/maplestory-sea/union/types.js';
 
-// MapleStory SEA guild types
+// MapleStorySEA guild types
 export type {
   SEAGuildIdResponse,
   SEAGuildSkill,
@@ -456,7 +456,7 @@ export type {
 // ── 신규 게임 ──
 // 공개 Client·타입은 각 게임의 src/games/{dir}/index.ts 가 관리한다 (타입 이름에 게임 prefix 필수).
 
-// MapleStory Taiwan (메이플스토리 대만)
+// MapleStoryTaiwan
 export * from './games/maplestory-tw/index.js';
 
 // 퍼스트 디센던트 (The First Descendant)
@@ -486,7 +486,7 @@ export * from './games/v4/index.js';
 // 히트2
 export * from './games/hit2/index.js';
 
-// 넥슨 Open API 플랫폼 (Open API 공지)
+// NEXON Open API 공지
 export * from './games/platform/index.js';
 
 // HttpClient (for advanced usage)

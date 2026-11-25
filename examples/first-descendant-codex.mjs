@@ -4,7 +4,7 @@
 
 import { NexonClient } from 'nexon-open-api';
 
-// 공개 계승자 목록은 키가 필요 없지만 NexonClient 생성에는 비어 있지 않은 문자열이 필요합니다.
+// 공개 계승자 목록 조회에는 API Key가 필요 없지만 NexonClient 생성에는 비어 있지 않은 문자열이 필요합니다.
 const client = new NexonClient({ apiKey: 'public-metadata' });
 const descendants = await client.firstDescendant.meta.getDescendant('ko');
 const names = descendants.map(({ descendant_name }) => descendant_name);

@@ -22,7 +22,7 @@ import { PlatformClient } from './games/platform/PlatformClient.js';
 export type NexonClientOptions = HttpClientConfig;
 
 /**
- * Nexon Open API SDK 메인 진입점.
+ * NEXON Open API를 사용하는 이 라이브러리의 진입점.
  *
  * 각 게임 클라이언트는 처음 접근 시 lazy하게 생성됩니다.
  *
@@ -77,7 +77,7 @@ export class NexonClient {
   }
 
   /**
-   * EA SPORTS FC Online 클라이언트.
+   * EA SPORTS FC 온라인 클라이언트.
    *
    * @example
    * ```ts
@@ -100,7 +100,7 @@ export class NexonClient {
   }
 
   /**
-   * MapleStory SEA 클라이언트.
+   * MapleStorySEA 클라이언트.
    * Timezone: UTC+8 (SGT)
    *
    * @example
@@ -115,7 +115,7 @@ export class NexonClient {
   }
 
   /**
-   * MapleStory Taiwan (메이플스토리 대만) 클라이언트.
+   * MapleStoryTaiwan 클라이언트.
    * Timezone: UTC+8 (TST)
    */
   get maplestoryTW(): MapleStoryTWClient {
@@ -253,7 +253,7 @@ export class NexonClient {
   }
 
   /**
-   * 넥슨 Open API 플랫폼 (Open API 공지) 클라이언트.
+   * NEXON Open API 공지 클라이언트.
    *
    * @example
    * ```ts

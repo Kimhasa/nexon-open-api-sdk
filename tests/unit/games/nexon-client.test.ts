@@ -37,7 +37,7 @@ const GAME_GETTERS = [
 
 describe('NexonClient', () => {
   it('API 키 없이 생성하면 에러를 던진다', () => {
-    expect(() => new NexonClient({ apiKey: '' })).toThrow('API 키가 비어 있습니다');
+    expect(() => new NexonClient({ apiKey: '' })).toThrow('API Key가 비어 있습니다');
     expect(() => new NexonClient({ apiKey: '' })).toThrow(Error);
   });
 

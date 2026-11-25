@@ -22,7 +22,7 @@ const REPLAY_ID_HINT =
 /**
  * 메이플스토리 연무장: 리플레이별 측정 결과(데미지·DPS), 스킬 사용 내역, 입장 당시 캐릭터 정보.
  *
- * 리플레이 고유 번호(`replay_id`)를 먼저 조회한 뒤, 그 번호로 나머지를 조회합니다.
+ * 리플레이 식별자(`replay_id`)를 먼저 조회한 뒤, 해당 식별자로 나머지를 조회합니다.
  * 리플레이를 등록한 캐릭터만 조회할 수 있습니다.
  *
  * @example
@@ -44,15 +44,15 @@ export class MapleStoryBattlePracticeClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 캐릭터가 등록한 연무장 리플레이 목록(리플레이 고유 번호)을 조회한다.
+   * 캐릭터가 등록한 연무장 리플레이 목록(리플레이 식별자)을 조회한다.
    *
    * 리플레이를 등록한 캐릭터에 대해서만 조회할 수 있습니다.
    *
-   * @param params.ocid - 캐릭터 고유 번호(OCID). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
+   * @param params.ocid - 캐릭터 식별자(ocid). `client.maplestory.getOcid('캐릭터명')` 으로 얻는다
    *
    * @throws {NexonBadRequestError} ocid가 비어 있을 때 (요청 전 즉시 throw)
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 요청 한도 초과 시
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량 초과 시
    *
    * @example
    * ```ts
@@ -79,11 +79,11 @@ export class MapleStoryBattlePracticeClient {
   /**
    * 연무장 측정 결과(총 데미지, DPS, 스킬별 데미지 비중)를 조회한다.
    *
-   * @param params.replay_id - 연무장 리플레이 고유 번호. `getReplayId()` 응답의 `replay_list[].replay_id`
+   * @param params.replay_id - 연무장 리플레이 식별자. `getReplayId()` 응답의 `replay_list[].replay_id`
    *
    * @throws {NexonBadRequestError} replay_id가 비어 있을 때 (요청 전 즉시 throw)
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 요청 한도 초과 시
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량 초과 시
    *
    * @example
    * ```ts
@@ -111,12 +111,12 @@ export class MapleStoryBattlePracticeClient {
    *
    * 응답의 `total_page_no` 까지 `page_no` 를 1씩 올려 다음 페이지를 조회합니다.
    *
-   * @param params.replay_id - 연무장 리플레이 고유 번호. `getReplayId()` 응답의 `replay_list[].replay_id`
+   * @param params.replay_id - 연무장 리플레이 식별자. `getReplayId()` 응답의 `replay_list[].replay_id`
    * @param params.page_no - 페이지 번호 (1부터 시작, 생략 시 1페이지)
    *
    * @throws {NexonBadRequestError} replay_id가 비어 있거나 page_no가 1 이상의 정수가 아닐 때 (요청 전 즉시 throw)
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 요청 한도 초과 시
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량 초과 시
    *
    * @example
    * ```ts
@@ -150,11 +150,11 @@ export class MapleStoryBattlePracticeClient {
    *
    * 스탯·장비·펫·스킬·유니온·길드 정보가 `*_object` 키 아래에 한 번에 담겨 옵니다.
    *
-   * @param params.replay_id - 연무장 리플레이 고유 번호. `getReplayId()` 응답의 `replay_list[].replay_id`
+   * @param params.replay_id - 연무장 리플레이 식별자. `getReplayId()` 응답의 `replay_list[].replay_id`
    *
    * @throws {NexonBadRequestError} replay_id가 비어 있을 때 (요청 전 즉시 throw)
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 요청 한도 초과 시
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량 초과 시
    *
    * @example
    * ```ts

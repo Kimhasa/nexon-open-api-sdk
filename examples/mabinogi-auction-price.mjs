@@ -6,7 +6,7 @@ import { NexonClient } from 'nexon-open-api';
 
 const apiKey = process.env['NEXON_MABINOGI_API_KEY']?.trim();
 if (!apiKey) {
-  console.error('🪙 마비노기 API 키가 필요해요. .env에 NEXON_MABINOGI_API_KEY를 설정해 주세요.');
+  console.error('🪙 마비노기 API Key가 필요해요. .env에 NEXON_MABINOGI_API_KEY를 설정해 주세요.');
   process.exitCode = 1;
 } else {
   try {
@@ -46,7 +46,7 @@ if (!apiKey) {
     // 출력 예시: 개당 최저 1,000 골드 · 평균 1,250 골드
   } catch {
     console.error(
-      '🪙 경매장 시세를 불러오지 못했어요. 아이템 이름과 마비노기 API 키를 확인해 주세요.',
+      '🪙 경매장 시세를 불러오지 못했어요. 아이템 이름과 마비노기 API Key를 확인해 주세요.',
     );
     process.exitCode = 1;
   }

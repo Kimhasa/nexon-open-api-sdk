@@ -4,7 +4,7 @@ import type { ShapeMismatch } from '../validation/response-shape.js';
  * HttpClient 설정 인터페이스.
  */
 export interface HttpClientConfig {
-  /** Nexon Open API 키 */
+  /** NEXON Open API에서 발급받은 API Key */
   readonly apiKey: string;
 
   /**
@@ -38,7 +38,7 @@ export interface HttpClientConfig {
    * // 간단 디버그
    * new NexonClient({ apiKey, debug: true });
    *
-   * // 커스텀 로거에서 요청 URL을 출력할 때는 maskIdentifiers()로 고유 번호를 가린다
+   * // 커스텀 로거에서 요청 URL을 출력할 때는 maskIdentifiers()로 식별자를 가린다
    * new NexonClient({
    *   apiKey,
    *   logger: { onRequest: ({ url }) => console.debug(maskIdentifiers(url)) },
@@ -54,7 +54,7 @@ export interface HttpClientConfig {
    * 활성화 시 응답의 top-level 키와 타입을 shape descriptor와 비교하여
    * 불일치를 logger를 통해 경고합니다. throw하지 않습니다.
    *
-   * 개발·모니터링 환경에서 넥슨 API의 응답 스키마 변경(drift)을 조기 감지하는 데 유용합니다.
+   * 개발·모니터링 환경에서 NEXON Open API의 응답 스키마 변경(drift)을 조기 감지하는 데 유용합니다.
    *
    * @default false
    *
@@ -78,7 +78,7 @@ export interface HttpClientConfig {
  *
  * @example
  * ```ts
- * // 기본 API 키 헤더를 빼고 다른 인증 헤더로 보낸다
+ * // 기본 API Key 헤더를 빼고 다른 인증 헤더로 보낸다
  * await http.get<{ ouid: string }>(url, undefined, undefined, {
  *   headers: { 'x-nxopen-api-key': undefined, 'x-nxopen-legacy-api-key': legacyApiKey },
  * });

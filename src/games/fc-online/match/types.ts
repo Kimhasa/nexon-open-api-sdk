@@ -16,7 +16,7 @@ export interface FcMatchListRequest {
 
 /** 경기 한 판의 상세 기록 — `client.fcOnline.getMatchDetail()` 의 응답. */
 export interface FcMatchDetail {
-  /** 매치 고유 식별자 */
+  /** 매치 식별자 */
   readonly matchId: string;
   /** 매치 일자 (UTC0) */
   readonly matchDate: string;
@@ -144,7 +144,7 @@ export interface FcMatchShootDetail {
   readonly type: number;
   /** 슛 결과 (1: on target, 2: off target, 3: goal) */
   readonly result: number;
-  /** 슈팅 선수 고유 식별자 — 선수 카드 번호 (`getSpidMeta()` 참고) */
+  /** 슈팅 선수 식별자 — 선수 카드 번호 (`getSpidMeta()` 참고) */
   readonly spId: number;
   /** 슈팅 선수 강화 등급 */
   readonly spGrade: number;
@@ -264,7 +264,7 @@ export interface FcPlayerStatus {
 
 /** 경기 사용 선수 정보 */
 export interface FcMatchPlayer {
-  /** 선수 고유 식별자 — 선수 카드 번호 (`getSpidMeta()` 참고) */
+  /** 선수 식별자 — 선수 카드 번호 (`getSpidMeta()` 참고) */
   readonly spId: number;
   /** 선수 포지션 번호 (`getSpPositionMeta()` 참고, 예: 0 = GK) */
   readonly spPosition: number;

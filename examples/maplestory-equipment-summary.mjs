@@ -26,7 +26,7 @@ async function main() {
   if (!apiKey || !characterName) {
     console.error(
       !apiKey
-        ? '🍁 메이플스토리 API 키가 필요해요. .env에 NEXON_MAPLESTORY_API_KEY를 설정해 주세요.'
+        ? '🍁 메이플스토리 API Key가 필요해요. .env에 NEXON_MAPLESTORY_API_KEY를 설정해 주세요.'
         : '🍁 실행 명령 끝에 조회할 캐릭터명을 적어 주세요.',
     );
     process.exitCode = 1;
@@ -85,7 +85,7 @@ async function main() {
     console.error(
       error instanceof NexonNotFoundError
         ? '🍁 그런 캐릭터를 찾을 수 없어요. 캐릭터명을 다시 확인해 주세요.'
-        : '🍁 장비 정보를 가져오지 못했어요. 메이플스토리 API 키와 호출 한도를 확인해 주세요.',
+        : '🍁 장비 정보를 가져오지 못했어요. 메이플스토리 API Key와 호출 허용량을 확인해 주세요.',
     );
     process.exitCode = 1;
   }

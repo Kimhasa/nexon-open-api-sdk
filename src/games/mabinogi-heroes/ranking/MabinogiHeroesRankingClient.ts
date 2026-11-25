@@ -53,8 +53,8 @@ export class MabinogiHeroesRankingClient {
    *
    * @param params.ranking_type - 랭킹 유형. `'0'`: 공격력, `'1'`: 마법 공격력 (문자열)
    * @throws {NexonBadRequestError} ranking_type이 `'0'`/`'1'` 이 아닐 때 (요청 전에 SDK가 throw)
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -95,8 +95,8 @@ export class MabinogiHeroesRankingClient {
    * @param params.ranking_type - 랭킹 유형. `'0'`: 공격력, `'1'`: 마법 공격력 (문자열)
    * @param params.page_no - 실시간 랭킹 페이지 번호. 1부터 시작한다.
    * @throws {NexonBadRequestError} ranking_type이 `'0'`/`'1'` 이 아니거나 page_no가 1 이상의 정수가 아닐 때 (요청 전에 SDK가 throw)
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts

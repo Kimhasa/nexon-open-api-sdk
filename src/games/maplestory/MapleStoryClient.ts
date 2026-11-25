@@ -17,7 +17,7 @@ import type { Achievement } from './user-types.js';
 /**
  * 메이플스토리(한국 서버) 클라이언트.
  *
- * 캐릭터 이름으로 캐릭터 고유 번호(OCID)를 먼저 받고, 그 값으로 캐릭터·유니온 정보를 조회합니다.
+ * 캐릭터 이름으로 캐릭터 식별자(ocid)를 먼저 받고, 그 값으로 캐릭터·유니온 정보를 조회합니다.
  * 날짜는 모두 한국 시간(KST, UTC+9) 기준입니다.
  *
  * @example
@@ -59,7 +59,7 @@ export class MapleStoryClient extends AbstractMapleBaseClient {
     return this._union;
   }
 
-  /** 길드: 길드 고유 번호와 길드 기본 정보 (2개) */
+  /** 길드: 길드 식별자와 길드 기본 정보 (2개) */
   get guild(): MapleStoryGuildClient {
     this._guild ??= new MapleStoryGuildClient(this.http);
     return this._guild;
@@ -96,12 +96,12 @@ export class MapleStoryClient extends AbstractMapleBaseClient {
   }
 
   /**
-   * 캐릭터 이름으로 캐릭터 고유 번호(OCID)를 받아 온다. 캐릭터 정보를 조회하는 메서드에 이 값을 넣는다.
+   * 캐릭터 이름으로 캐릭터 식별자(ocid)를 받아 온다. 캐릭터 정보를 조회하는 메서드에 이 값을 넣는다.
    *
    * @param characterName - 게임에서 쓰는 캐릭터 이름
    * @throws {NexonBadRequestError} 캐릭터명이 비어 있을 때 (요청 전 즉시 throw)
    * @throws {NexonNotFoundError} 캐릭터를 찾을 수 없을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts
@@ -127,13 +127,13 @@ export class MapleStoryClient extends AbstractMapleBaseClient {
   }
 
   /**
-   * API 키를 발급받은 넥슨 계정의 고유 번호(ouid)를 조회한다.
+   * API Key를 발급받은 넥슨 계정의 식별자(ouid)를 조회한다.
    *
-   * API 키에 연결된 계정의 ouid를 반환합니다.
-   * 구 개발자센터에서 발급받은 API 키의 ouid가 필요하면 {@link getLegacyOuid} 를 사용하세요.
+   * API Key에 연결된 계정의 ouid를 반환합니다.
+   * 이전 API Key의 계정 식별자(ouid)가 필요하면 {@link getLegacyOuid} 를 사용하세요.
    *
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 요청 한도 초과 시
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량 초과 시
    *
    * @example
    * ```ts
@@ -147,20 +147,20 @@ export class MapleStoryClient extends AbstractMapleBaseClient {
   }
 
   /**
-   * 구 개발자센터 API 키로 계정 고유 번호(ouid)를 조회한다.
+   * 이전 API Key로 계정 식별자(ouid)를 조회한다.
    *
    * `GET /maplestory/legacy/ouid`. {@link getOuid} (`/maplestory/v1/ouid`) 와 응답 형태(`{ ouid }`)는
-   * 같지만 인증 방식이 다릅니다. `getOuid` 는 현재 Open API 포털 키를 `x-nxopen-api-key` 헤더로
-   * 보내고, 이 메서드는 구 개발자센터에서 발급받은 키를 `x-nxopen-legacy-api-key` 헤더로 보냅니다.
-   * 그래서 `NexonClient` 의 `apiKey` 가 아니라 인자로 받은 키를 사용합니다.
+   * 같지만 인증 방식이 다릅니다. `getOuid` 는 현재 NEXON Open API에서 발급받은 API Key를 `x-nxopen-api-key` 헤더로
+   * 보내고, 이 메서드는 이전 개발자센터에서 발급받은 API Key를 `x-nxopen-legacy-api-key` 헤더로 보냅니다.
+   * 그래서 `NexonClient` 의 `apiKey` 가 아니라 인자로 받은 API Key를 사용합니다.
    *
    * `NexonClient` 에 설정한 `timeoutMs`·`maxRetries`·`logger`·인터셉터는 다른 요청과 똑같이 적용됩니다.
    *
-   * @param legacyApiKey - 구 개발자센터에서 발급받은 API 키
+   * @param legacyApiKey - 이전 개발자센터에서 발급받은 API Key
    *
    * @throws {NexonBadRequestError} legacyApiKey가 비어 있을 때 (요청 전 즉시 throw)
-   * @throws {NexonAuthError} 구 API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 요청 한도 초과 시
+   * @throws {NexonAuthError} 이전 API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량 초과 시
    *
    * @example
    * ```ts
@@ -172,10 +172,10 @@ export class MapleStoryClient extends AbstractMapleBaseClient {
     assertNonEmptyString(
       legacyApiKey,
       'legacyApiKey',
-      '구 개발자센터에서 발급받은 API 키를 전달하세요. 현재 포털 키의 ouid는 getOuid() 로 조회합니다.',
+      '이전 개발자센터에서 발급받은 API Key를 전달하세요. 현재 API Key의 계정 식별자(ouid)는 getOuid()로 조회합니다.',
     );
     const url = this.buildUrl('ouid', 'legacy');
-    // 구 키 전용 경로라 현재 포털 키(x-nxopen-api-key)는 보내지 않는다
+    // 이전 API Key 전용 경로라 현재 API Key(x-nxopen-api-key)는 보내지 않는다
     const response = await this.http.get<{ ouid: string }>(url, undefined, OUID_SHAPE, {
       headers: { 'x-nxopen-api-key': undefined, 'x-nxopen-legacy-api-key': legacyApiKey },
     });
@@ -183,13 +183,13 @@ export class MapleStoryClient extends AbstractMapleBaseClient {
   }
 
   /**
-   * 내 계정이 달성한 업적 목록을 조회한다. API 키를 발급받은 계정이 기준이다.
+   * 내 계정이 달성한 업적 목록을 조회한다. API Key를 발급받은 계정이 기준이다.
    *
-   * API 키에 연결된 계정의 달성 업적 목록을 반환합니다.
-   * 파라미터 없이 API 키만으로 식별됩니다.
+   * API Key에 연결된 계정의 달성 업적 목록을 반환합니다.
+   * 파라미터 없이 API Key만으로 식별됩니다.
    *
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 요청 한도 초과 시
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량 초과 시
    *
    * @example
    * ```ts

@@ -50,18 +50,18 @@ export class KartriderClient extends AbstractGameClient {
   }
 
   /**
-   * 라이더명으로 계정 후보의 고유 번호·레벨·생성 시각을 조회한다.
+   * 라이더명으로 계정 후보의 식별자·레벨·생성 시각을 조회한다.
    *
    * 같은 라이더명에 계정이 여러 개 대응할 수 있어 `ouid_info` 배열을 반환한다.
    * 후보가 여러 건이면 생성 시각과 레벨을 비교해 조회할 계정을 고른다.
    *
-   * 라이더 명의 `|` 는 넥슨 API 규칙에 따라 SDK가 `_` 로 바꿔 보낸다
+   * 라이더 명의 `|` 는 NEXON Open API 규칙에 따라 SDK가 `_` 로 바꿔 보낸다
    * (예: `|카러플라이더|` → `_카러플라이더_`).
    *
    * @param racerName - 조회할 라이더명. SDK가 `|`를 `_`로 바꿔 조회한다.
    * @throws {NexonBadRequestError} racerName이 비어 있거나(요청 전 차단) 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts

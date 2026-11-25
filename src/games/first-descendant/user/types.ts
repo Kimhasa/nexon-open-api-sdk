@@ -26,7 +26,7 @@ export interface TfdUserArcheTuningRequest extends TfdUserRequest {
 export interface TfdUserModule {
   /** 모듈 슬롯 식별자 */
   readonly module_slot_id: string;
-  /** 장착한 모듈의 고유 번호. 같은 번호를 모듈 도감에서 찾으면 이름과 강화 효과를 알 수 있다. */
+  /** 장착한 모듈 번호. 같은 번호를 모듈 도감에서 찾으면 이름과 강화 효과를 알 수 있다. */
   readonly module_id: string;
   /** 장착한 모듈의 강화 단계 */
   readonly module_enchant_level: number;
@@ -54,7 +54,7 @@ export interface TfdUserCore {
 
 /** 계정 기본 정보 */
 export interface TfdUserBasic {
-  /** 닉네임과 태그로 찾는 계정 고유 번호 */
+  /** 닉네임과 태그로 찾는 계정 식별자 */
   readonly ouid: TfdOuid;
   /** 닉네임 (예: `닉네임#1234`) */
   readonly user_name: string;

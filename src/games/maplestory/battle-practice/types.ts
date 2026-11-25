@@ -32,7 +32,7 @@ export interface BattlePracticeReplayIdRequest {
 
 /** 리플레이 식별자 기반 요청 파라미터 */
 export interface BattlePracticeReplayRequest {
-  /** 연무장 리플레이 고유 식별자 (`battlePractice.getReplayId()` 로 획득) */
+  /** 연무장 리플레이 식별자 (`battlePractice.getReplayId()` 로 획득) */
   readonly replay_id: string;
 }
 
@@ -50,7 +50,7 @@ export interface BattlePracticeReplay {
   readonly period_no: number;
   /** 리플레이 등록 일시 (KST, 일 단위 데이터로 시, 분은 일괄 0으로 표기) */
   readonly register_date: string;
-  /** 연무장 리플레이 고유 식별자 */
+  /** 연무장 리플레이 식별자 */
   readonly replay_id: string;
 }
 

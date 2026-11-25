@@ -41,10 +41,10 @@ export class BaramYeonCharacterClient {
   /**
    * 캐릭터 프로필의 서버·직업군·국적·경험치·레벨을 조회한다.
    *
-   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 고유 번호
+   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 식별자
    * @throws {NexonBadRequestError} ocid가 비어 있거나(요청 전 차단) 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -74,10 +74,10 @@ export class BaramYeonCharacterClient {
    *
    * 칭호 타입(`title_type_name`)은 2022년 3월 18일 이후 획득한 칭호에 한해 제공된다.
    *
-   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 고유 번호
+   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 식별자
    * @throws {NexonBadRequestError} ocid가 비어 있거나(요청 전 차단) 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -109,10 +109,10 @@ export class BaramYeonCharacterClient {
    *
    * `title_equipment_type` 은 문자열 코드다 (`"1"`: 장착 칭호, `"2"`: 표시 칭호).
    *
-   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 고유 번호
+   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 식별자
    * @throws {NexonBadRequestError} ocid가 비어 있거나(요청 전 차단) 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts

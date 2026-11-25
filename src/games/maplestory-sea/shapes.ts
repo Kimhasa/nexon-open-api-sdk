@@ -1,6 +1,6 @@
 import type { ShapeDescriptor } from '../../core/validation/response-shape.js';
 
-/** Top-level response shapes for the MapleStory SEA portal endpoints. */
+/** Top-level response shapes for the MapleStorySEA portal endpoints. */
 
 export const SEA_OCID_SHAPE: ShapeDescriptor = {
   expectedKeys: {

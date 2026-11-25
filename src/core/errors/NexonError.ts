@@ -1,6 +1,6 @@
 import type { NexonErrorCode } from './error-codes.js';
 
-/** Nexon Open API 오류 응답 페이로드 */
+/** NEXON Open API 오류 응답 페이로드 */
 export interface NexonErrorPayload {
   readonly error: {
     readonly name: NexonErrorCode;
@@ -9,7 +9,7 @@ export interface NexonErrorPayload {
 }
 
 /**
- * Nexon Open API SDK의 기반 에러 클래스.
+ * 이 라이브러리의 기반 에러 클래스.
  * 모든 SDK 에러는 이 클래스를 상속합니다.
  *
  * @example
@@ -31,10 +31,10 @@ export class NexonError extends Error {
    */
   readonly status: number | undefined;
 
-  /** Nexon Open API 에러 코드 (예: `'OPENAPI00007'`) */
+  /** NEXON Open API 에러 코드 (예: `'OPENAPI00007'`) */
   readonly code: NexonErrorCode | undefined;
 
-  /** Nexon Open API 에러 원문 메시지 */
+  /** NEXON Open API 에러 원문 메시지 */
   readonly nexonMessage: string | undefined;
 
   constructor(

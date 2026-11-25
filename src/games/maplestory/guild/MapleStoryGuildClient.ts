@@ -14,7 +14,7 @@ const SNAPSHOT = {
 } as const;
 
 /**
- * 메이플스토리 길드: 길드 이름으로 길드 고유 번호를 받아 길드 정보를 조회합니다.
+ * 메이플스토리 길드: 길드 이름으로 길드 식별자를 받아 길드 정보를 조회합니다.
  *
  * @example
  * ```ts
@@ -28,13 +28,13 @@ export class MapleStoryGuildClient {
   constructor(private readonly http: HttpClient) {}
 
   /**
-   * 길드 이름과 월드 이름으로 길드 고유 번호(oguild_id)를 받아 온다. 길드 정보를 조회할 때 이 값을 넣는다.
+   * 길드 이름과 월드 이름으로 길드 식별자(oguild_id)를 받아 온다. 길드 정보를 조회할 때 이 값을 넣는다.
    *
    * @param guildName - 길드 이름
    * @param worldName - 길드가 있는 월드 이름 (예: '스카니아')
    *
    * @throws {NexonNotFoundError} 길드를 찾을 수 없을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts
@@ -70,7 +70,7 @@ export class MapleStoryGuildClient {
    *
    * 2023년 12월 21일 데이터부터 조회할 수 있습니다.
    *
-   * @param params.oguild_id - 길드 고유 번호. `client.maplestory.guild.getId()` 로 얻는다
+   * @param params.oguild_id - 길드 식별자. `client.maplestory.guild.getId()` 로 얻는다
    * @param params.date - 조회 기준일 (한국 시간, YYYY-MM-DD). 2023-12-21부터 어제까지. 생략하면 최신 데이터(평균 15분 뒤 반영)를 조회한다. 지난 날짜는 다음날 오전 2시부터 조회할 수 있다.
    * @throws {NexonBadRequestError} 날짜 형식이 잘못되었거나 2023-12-21부터 어제까지의 범위를 벗어났을 때.
    *

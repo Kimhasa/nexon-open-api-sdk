@@ -36,8 +36,8 @@ export class FirstDescendantRecommendationClient {
    *
    * @param params - 도감에서 찾은 계승자·무기·보이드 요격전 번호와 추천 기간. `period`의 `'0'`은 7일, `'1'`은 30일, `'2'`는 전체다.
    * @throws {NexonBadRequestError} 식별자가 비어 있거나 period가 `'0'`·`'1'`·`'2'` 가 아닐 때 (요청 전 SDK 검증)
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts

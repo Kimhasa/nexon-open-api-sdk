@@ -10,7 +10,7 @@ async function main() {
   if (!apiKey || !characterName) {
     console.error(
       !apiKey
-        ? '🍁 메이플스토리 API 키가 필요해요. .env에 NEXON_MAPLESTORY_API_KEY를 설정해 주세요.'
+        ? '🍁 메이플스토리 API Key가 필요해요. .env에 NEXON_MAPLESTORY_API_KEY를 설정해 주세요.'
         : '🍁 실행 명령 끝에 조회할 캐릭터명을 적어 주세요.',
     );
     process.exitCode = 1;
@@ -26,7 +26,7 @@ async function main() {
 
 main().catch(() => {
   console.error(
-    '🍁 캐릭터 정보를 불러오지 못했어요. 캐릭터명과 메이플스토리 API 키를 확인해 주세요.',
+    '🍁 캐릭터 정보를 불러오지 못했어요. 캐릭터명과 메이플스토리 API Key를 확인해 주세요.',
   );
   process.exitCode = 1;
 });

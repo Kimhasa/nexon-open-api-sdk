@@ -1,4 +1,4 @@
-// 전적 검색 봇에서 최근 FC 온라인 공식경기 5판의 승·무·패와 스코어를 보여 줍니다.
+// 전적 검색 봇에서 최근 EA SPORTS FC 온라인 공식경기 5판의 승·무·패와 스코어를 보여 줍니다.
 // 실행: node --env-file=.env examples/fconline-recent-matches.mjs "닉네임"
 // @ts-check
 
@@ -10,7 +10,7 @@ async function main() {
   if (!apiKey || !nickname) {
     console.error(
       !apiKey
-        ? '⚽ FC 온라인 API 키가 필요해요. .env에 NEXON_FC_ONLINE_API_KEY를 설정해 주세요.'
+        ? '⚽ EA SPORTS FC 온라인 API Key가 필요해요. .env에 NEXON_FC_ONLINE_API_KEY를 설정해 주세요.'
         : '⚽ 실행 명령 끝에 조회할 닉네임을 적어 주세요.',
     );
     process.exitCode = 1;
@@ -56,6 +56,8 @@ async function main() {
 try {
   await main();
 } catch {
-  console.error('⚽ 전적을 불러오지 못했어요. 닉네임과 FC 온라인 API 키를 확인해 주세요.');
+  console.error(
+    '⚽ 전적을 불러오지 못했어요. 닉네임과 EA SPORTS FC 온라인 API Key를 확인해 주세요.',
+  );
   process.exitCode = 1;
 }

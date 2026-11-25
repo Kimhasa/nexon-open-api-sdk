@@ -10,7 +10,7 @@ import type { TWDate, TWOcidResponse } from './types.js';
 import { MapleStoryTWUnionClient } from './union/MapleStoryTWUnionClient.js';
 
 /**
- * MapleStory Taiwan(대만 서버, 楓之谷) 클라이언트.
+ * MapleStoryTaiwan(대만 서버, 楓之谷) 클라이언트.
  *
  * 사용법은 한국 메이플스토리와 같고, 날짜 기준과 월드 이름이 다르며 패밀리어(萌獸) 조회가 더 있습니다.
  * 지난 날짜는 대만 시간(UTC+8) 기준 어제까지 `'YYYY-MM-DD'` 문자열이나 `Date`로 지정하고, 최신 데이터는 날짜를 생략합니다.
@@ -56,7 +56,7 @@ export class MapleStoryTWClient extends AbstractMapleBaseClient {
     ));
   }
 
-  /** 길드(公會): 길드 고유 번호와 길드 기본 정보 (2개) */
+  /** 길드(公會): 길드 식별자와 길드 기본 정보 (2개) */
   get guild(): MapleStoryTWGuildClient {
     return (this._guild ??= new MapleStoryTWGuildClient(
       this.http,
@@ -65,7 +65,7 @@ export class MapleStoryTWClient extends AbstractMapleBaseClient {
   }
 
   /**
-   * 캐릭터 이름으로 캐릭터 고유 번호(OCID)를 받아 온다. 캐릭터 정보를 조회하는 메서드에 이 값을 넣는다.
+   * 캐릭터 이름으로 캐릭터 식별자(ocid)를 받아 온다. 캐릭터 정보를 조회하는 메서드에 이 값을 넣는다.
    *
    * @param characterName - 게임에서 쓰는 캐릭터 이름
    * @throws {NexonBadRequestError} The character name is blank.
@@ -83,11 +83,11 @@ export class MapleStoryTWClient extends AbstractMapleBaseClient {
     assertNonEmptyString(
       characterName,
       'characterName',
-      'Enter a MapleStory Taiwan character name.',
+      'Enter a MapleStoryTaiwan character name.',
     );
     const notFound = {
       message: `'${characterName}' 캐릭터를 찾을 수 없습니다.`,
-      hint: 'MapleStory Taiwan 캐릭터 이름을 확인하세요.',
+      hint: 'MapleStoryTaiwan 캐릭터 이름을 확인하세요.',
     };
     const response = await lookupByName(
       () =>
@@ -105,7 +105,7 @@ export class MapleStoryTWClient extends AbstractMapleBaseClient {
     return snapshotDate(date, {
       firstDate: availableFrom,
       timezoneOffset: this.timezoneOffset,
-      apiLabel: 'MapleStory Taiwan',
+      apiLabel: 'MapleStoryTaiwan',
       language: 'en',
     });
   }

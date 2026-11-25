@@ -4,7 +4,7 @@ import type { KartriderOUID } from '../types.js';
 
 /** 계정 식별자 정보 항목 */
 export interface KartriderOuidInfo {
-  /** 라이더 프로필이나 장착 칭호를 조회할 때 쓰는 계정 고유 번호 */
+  /** 라이더 프로필이나 장착 칭호를 조회할 때 쓰는 계정 식별자 */
   readonly ouid: KartriderOUID;
   /** 라이더(계정) 생성 일(시) (UTC0, 예: `"2023-12-14T08:28:35Z"`) */
   readonly racer_date_create: string;

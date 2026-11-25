@@ -37,7 +37,7 @@ export interface PlatformNoticeItem {
   readonly title: string;
   /** 공지 링크 */
   readonly url: string;
-  /** 글 목록에서 함께 제공하는 넥슨 Open API 공지 본문 */
+  /** 글 목록에서 함께 제공하는 NEXON Open API 공지 본문 */
   readonly contents: string;
   /** 공지 등록일(시) (UTC0, 예: `"2023-12-14T08:28:35Z"`) */
   readonly date: string;
@@ -47,6 +47,6 @@ export interface PlatformNoticeItem {
 
 /** NEXON Open API 공지 목록 응답 */
 export interface PlatformNoticeList {
-  /** 최근 등록된 넥슨 Open API 공지 최대 10개 */
+  /** 최근 등록된 NEXON Open API 공지 최대 10개 */
   readonly notice: readonly PlatformNoticeItem[];
 }

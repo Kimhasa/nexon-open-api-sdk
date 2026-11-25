@@ -5,11 +5,11 @@ import type { NexonErrorCode } from './error-codes.js';
  * 점검 중이라 조회할 수 없음.
  *
  * - `OPENAPI00010`: 게임 점검 중
- * - `OPENAPI00011`: 넥슨 Open API 점검 중
+ * - `OPENAPI00011`: NEXON Open API 점검 중
  *
  * 게임이 정기·임시 점검에 들어가면 그 게임의 API도 응답하지 않습니다.
  * 코드를 고칠 일은 없고, 점검이 끝난 뒤 다시 조회하면 됩니다.
- * Open API 자체의 점검 공지는 `client.platform.getNoticeList()` 로 확인할 수 있습니다.
+ * NEXON Open API의 점검 공지는 `client.platform.getNoticeList()` 로 확인할 수 있습니다.
  *
  * `status` 에는 서버가 준 HTTP 상태가 그대로 담깁니다.
  *

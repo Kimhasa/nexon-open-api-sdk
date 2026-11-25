@@ -4,7 +4,7 @@ declare const __brand: unique symbol;
 type Brand<T, B extends string> = T & { readonly [__brand]: B };
 
 /**
- * EA SPORTS FC 온라인 계정 고유 번호 (OUID). 구단주 닉네임으로 받아 두고 정보를 조회할 때 넣는다.
+ * EA SPORTS FC 온라인 계정 식별자(ouid). 구단주 닉네임으로 받아 두고 정보를 조회할 때 넣는다.
  *
  * FC Online 전용 브랜드 타입입니다.
  * `FcOnlineClient.getOuid()` 로 획득합니다.
@@ -68,9 +68,9 @@ export interface FcUserTradeRequest {
 export interface FcTradeRecord {
   /** 거래 일자 (UTC0) — 구매: 등록 시점, 판매: 완료 시점 */
   readonly tradeDate: string;
-  /** 거래 고유 식별자 */
+  /** 거래 식별자 */
   readonly saleSn: string;
-  /** 선수 고유 식별자 — 선수 카드 번호 (`getSpidMeta()` 참고) */
+  /** 선수 식별자 — 선수 카드 번호 (`getSpidMeta()` 참고) */
   readonly spid: number;
   /** 거래한 선수 카드의 강화 등급 (강화 단계) */
   readonly grade: number;

@@ -54,7 +54,7 @@ interface FcSeasonMetaWire {
 /**
  * EA SPORTS FC 온라인 클라이언트.
  *
- * 구단주 닉네임으로 계정 고유 번호(ouid)를 먼저 받고, 그 값으로 구단주 정보와 경기 기록을 조회합니다.
+ * 구단주 닉네임으로 계정 식별자(ouid)를 먼저 받고, 그 값으로 구단주 정보와 경기 기록을 조회합니다.
  * 매치 종류·등급·선수·포지션은 숫자로 오므로 `get...Meta()` 로 이름을 찾아 바꿉니다.
  * 경기 데이터는 매시 정각에 두 시간 전까지의 내용이 갱신됩니다.
  *
@@ -75,12 +75,12 @@ export class FcOnlineClient extends AbstractGameClient {
   // ─── 계정 정보 조회 (User) ──────────────────────────────────────────────
 
   /**
-   * 구단주 닉네임으로 계정 고유 번호(ouid)를 받아 온다. 구단주 정보와 경기 기록을 조회할 때 이 값을 넣는다.
+   * 구단주 닉네임으로 계정 식별자(ouid)를 받아 온다. 구단주 정보와 경기 기록을 조회할 때 이 값을 넣는다.
    *
    * @param nickname - 게임에서 쓰는 구단주 닉네임
    * @throws {NexonBadRequestError} 닉네임이 비어 있을 때
    * @throws {NexonNotFoundError} 유저를 찾을 수 없을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts
@@ -92,7 +92,7 @@ export class FcOnlineClient extends AbstractGameClient {
     const url = this.buildUrl('id');
     const notFound = {
       message: `'${nickname}' 구단주를 찾을 수 없습니다.`,
-      hint: 'FC 온라인 구단주 닉네임을 확인하세요. 닉네임을 바꿨다면 새 닉네임으로 조회합니다.',
+      hint: 'EA SPORTS FC 온라인 구단주 닉네임을 확인하세요. 닉네임을 바꿨다면 새 닉네임으로 조회합니다.',
     };
     const response = await lookupByName(
       () => this.http.get<{ ouid: string }>(url, { nickname }, FC_OUID_SHAPE),
@@ -104,9 +104,9 @@ export class FcOnlineClient extends AbstractGameClient {
   /**
    * 구단주 기본 정보(닉네임과 레벨)를 조회한다.
    *
-   * @param ouid - 계정 고유 번호. {@link FcOnlineClient.getOuid} 로 얻는다
+   * @param ouid - 계정 식별자. {@link FcOnlineClient.getOuid} 로 얻는다
    * @throws {NexonBadRequestError} ouid가 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts
@@ -129,7 +129,7 @@ export class FcOnlineClient extends AbstractGameClient {
    * `division` 은 {@link FcOnlineClient.getDivisionMeta} (볼타는 {@link FcOnlineClient.getDivisionVoltaMeta}) 로
    * 이름을 찾는다.
    *
-   * @param ouid - 계정 고유 번호. {@link FcOnlineClient.getOuid} 로 얻는다
+   * @param ouid - 계정 식별자. {@link FcOnlineClient.getOuid} 로 얻는다
    * @throws {NexonBadRequestError} ouid가 유효하지 않을 때
    *
    * @example
@@ -158,7 +158,7 @@ export class FcOnlineClient extends AbstractGameClient {
    * 경기 내용은 받은 매치 번호를 {@link FcOnlineClient.getMatchDetail} 에 넣어 조회합니다.
    * 더 예전 경기는 `offset` 을 늘려 이어서 조회합니다.
    *
-   * @param params.ouid - 계정 고유 번호. {@link FcOnlineClient.getOuid} 로 얻는다
+   * @param params.ouid - 계정 식별자. {@link FcOnlineClient.getOuid} 로 얻는다
    * @param params.matchtype - 매치 종류 번호 (50: 공식경기, 52: 감독모드, 214: 볼타 공식 등. 전체 목록은 {@link FcOnlineClient.getMatchTypeMeta})
    * @param params.offset - 건너뛸 경기 수 (기본값: 0)
    * @param params.limit - 가져올 경기 수 (최대 100, 기본값: 100)
@@ -195,13 +195,13 @@ export class FcOnlineClient extends AbstractGameClient {
   /**
    * 내 이적시장 거래 기록(거래한 선수 카드, 강화 등급, 거래 가격)을 조회한다 (최근 거래부터).
    *
-   * API 키를 발급한 넥슨 계정 본인의 이적시장 거래 기록만 조회됩니다.
+   * API Key를 발급한 넥슨 계정 본인의 이적시장 거래 기록만 조회됩니다.
    *
    * @param params.tradetype - 거래 종류 (`'buy'`: 구입, `'sell'`: 판매)
    * @param params.offset - 건너뛸 거래 수 (기본값: 0)
    * @param params.limit - 가져올 거래 수 (최대 100, 기본값: 100)
    * @throws {NexonBadRequestError} 거래 종류가 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts
@@ -330,7 +330,7 @@ export class FcOnlineClient extends AbstractGameClient {
   // ─── 메타데이터 정보 조회 (MetaData) ──────────────────────────────────
 
   /**
-   * 매치 종류 번호와 이름(50 = 공식경기, 52 = 감독모드, 214 = 볼타 공식 등) 목록을 조회한다. API 키 없이도 받을 수 있는 공개 목록이다.
+   * 매치 종류 번호와 이름(50 = 공식경기, 52 = 감독모드, 214 = 볼타 공식 등) 목록을 조회한다. API Key 없이도 받을 수 있는 공개 목록이다.
    *
    * @throws {NexonError} 메타데이터를 가져오지 못했을 때
    *

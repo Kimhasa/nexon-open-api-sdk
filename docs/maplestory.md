@@ -56,12 +56,12 @@ API Key는 게임별로 발급됩니다. 발급 및 설치 방법은 [시작 가
 
 ### 캐릭터 찾기·내 계정 (4개)
 
-| 게임에서 부르는 이름       | SDK 메서드                   | 주요 응답 필드                                        |
-| -------------------------- | ---------------------------- | ----------------------------------------------------- |
-| 캐릭터 식별자(ocid) 조회   | `getOcid('캐릭터명')`        | 캐릭터 식별자 반환                                    |
-| 내 넥슨 계정 식별자(ouid)  | `getOuid()`                  | 반환값이 곧 계정 식별자                               |
-| 이전 API Key의 계정 식별자 | `getLegacyOuid('구 API 키')` | 반환값이 곧 계정 식별자                               |
-| 내 계정이 달성한 업적      | `getAchievement()`           | `account_list[].achievement_achieve` (업적 이름·설명) |
+| 게임에서 부르는 이름       | SDK 메서드                      | 주요 응답 필드                                        |
+| -------------------------- | ------------------------------- | ----------------------------------------------------- |
+| 캐릭터 식별자(ocid) 조회   | `getOcid('캐릭터명')`           | 캐릭터 식별자 반환                                    |
+| 내 넥슨 계정 식별자(ouid)  | `getOuid()`                     | 반환값이 곧 계정 식별자                               |
+| 이전 API Key의 계정 식별자 | `getLegacyOuid('이전 API Key')` | 반환값이 곧 계정 식별자                               |
+| 내 계정이 달성한 업적      | `getAchievement()`              | `account_list[].achievement_achieve` (업적 이름·설명) |
 
 ### 캐릭터 정보 (23개)
 
@@ -471,7 +471,7 @@ const list = await client.maplestory.character.getList(); // 내 캐릭터 전�
 console.log(list.account_list.flatMap((a) => a.character_list.map((c) => c.character_name)));
 ```
 
-`getLegacyOuid('구 API 키')`는 이전 개발자센터에서 발급받은 API Key의 계정 식별자(ouid)를 조회합니다. 인증에는 인자로 전달한 이전 API Key를 사용합니다. 재시도 횟수와 응답 대기 시간 등 `NexonClient` 설정은 동일하게 적용됩니다.
+`getLegacyOuid('이전 API Key')`는 이전 개발자센터에서 발급받은 API Key의 계정 식별자(ouid)를 조회합니다. 인증에는 인자로 전달한 이전 API Key를 사용합니다. 재시도 횟수와 응답 대기 시간 등 `NexonClient` 설정은 동일하게 적용됩니다.
 
 <details><summary>NEXON Open API 경로</summary>
 

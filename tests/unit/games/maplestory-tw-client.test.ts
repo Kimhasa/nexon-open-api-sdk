@@ -374,12 +374,12 @@ describe('MapleStoryTWClient', () => {
   it('rejects blank identifiers and lookup names before making a request', async () => {
     const { client, onRequest } = createClient();
     await expect(client.getOcid(' ')).rejects.toThrow(
-      /characterName.*Enter a MapleStory Taiwan character name/,
+      /characterName.*Enter a MapleStoryTaiwan character name/,
     );
     await expect(client.character.getBasic({ ocid: '' as OCID })).rejects.toThrow('getOcid()');
     await expect(client.union.getUnion({ ocid: ' ' as OCID })).rejects.toThrow('getOcid()');
     await expect(client.guild.getId('', '艾麗亞')).rejects.toThrow(
-      /guildName.*Enter a MapleStory Taiwan guild name/,
+      /guildName.*Enter a MapleStoryTaiwan guild name/,
     );
     await expect(client.guild.getBasic({ oguild_id: '' as GuildId })).rejects.toThrow(
       'guild.getId()',

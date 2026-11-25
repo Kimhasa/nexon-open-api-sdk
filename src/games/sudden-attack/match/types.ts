@@ -32,7 +32,7 @@ export interface SuddenAttackMatchListRequest {
 
 /** 전적 목록에 들어가는 매치 한 건과 내 킬·데스·어시스트. */
 export interface SuddenAttackMatchSummary {
-  /** 매치 고유 식별자 */
+  /** 매치 식별자 */
   readonly match_id: string;
   /** 매치 유형 */
   readonly match_type: string;
@@ -100,7 +100,7 @@ export interface SuddenAttackMatchParticipant {
 
 /** 매치 한 건의 맵, 유형과 참가자별 전적. */
 export interface SuddenAttackMatchDetail {
-  /** 매치 고유 식별자 */
+  /** 매치 식별자 */
   readonly match_id: string;
   /** 매치 유형 */
   readonly match_type: string;

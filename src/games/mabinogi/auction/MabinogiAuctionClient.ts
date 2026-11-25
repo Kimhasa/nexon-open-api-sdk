@@ -21,7 +21,7 @@ export class MabinogiAuctionClient {
    *
    * @param params - 경매장 분류·아이템 이름, 다음 페이지를 열 때 쓰는 `cursor`
    * @throws {NexonBadRequestError} 지원되지 않는 카테고리를 지정했을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts
@@ -54,7 +54,7 @@ export class MabinogiAuctionClient {
    *
    * @param params - 경매장 분류·아이템 이름, 다음 페이지를 열 때 쓰는 `cursor`
    * @throws {NexonBadRequestError} 지원되지 않는 카테고리를 지정했을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts
@@ -87,7 +87,7 @@ export class MabinogiAuctionClient {
    *
    * @param params - 쉼표로 나눈 검색어 1~10개와 다음 페이지를 열 때 쓰는 `cursor`
    * @throws {NexonBadRequestError} 검색어 개수가 1~10개 범위를 벗어날 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts

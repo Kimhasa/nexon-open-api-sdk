@@ -34,7 +34,7 @@ export class MapleStoryMNoticeClient {
   /**
    * 메이플스토리M 공지사항 목록을 조회한다 (최근 20개).
    *
-   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   * @throws {NexonError} NEXON Open API 요청이 실패했을 때
    *
    * @example
    * ```ts
@@ -61,7 +61,7 @@ export class MapleStoryMNoticeClient {
    * @param noticeId - 공지 번호. 목록 응답의 `notice_id`
    *
    * @throws {NexonBadRequestError} 공지 식별자가 정수가 아닐 때
-   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   * @throws {NexonError} NEXON Open API 요청이 실패했을 때
    *
    * @example
    * ```ts
@@ -88,7 +88,7 @@ export class MapleStoryMNoticeClient {
   /**
    * 패치노트 목록을 조회한다 (최근 20개).
    *
-   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   * @throws {NexonError} NEXON Open API 요청이 실패했을 때
    *
    * @example
    * ```ts
@@ -115,7 +115,7 @@ export class MapleStoryMNoticeClient {
    * @param noticeId - 공지 번호. 목록 응답의 `notice_id`
    *
    * @throws {NexonBadRequestError} 공지 식별자가 정수가 아닐 때
-   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   * @throws {NexonError} NEXON Open API 요청이 실패했을 때
    *
    * @example
    * ```ts
@@ -142,7 +142,7 @@ export class MapleStoryMNoticeClient {
   /**
    * 진행 중 이벤트 목록을 조회한다 (최근 20개).
    *
-   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   * @throws {NexonError} NEXON Open API 요청이 실패했을 때
    *
    * @example
    * ```ts
@@ -169,7 +169,7 @@ export class MapleStoryMNoticeClient {
    * @param noticeId - 공지 번호. 목록 응답의 `notice_id`
    *
    * @throws {NexonBadRequestError} 공지 식별자가 정수가 아닐 때
-   * @throws {NexonError} 넥슨 Open API 요청이 실패했을 때
+   * @throws {NexonError} NEXON Open API 요청이 실패했을 때
    *
    * @example
    * ```ts

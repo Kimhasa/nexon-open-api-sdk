@@ -9,7 +9,7 @@ import { MapleStorySEAUnionClient } from './union/MapleStorySEAUnionClient.js';
 import { MapleStorySEAGuildClient } from './guild/MapleStorySEAGuildClient.js';
 
 /**
- * MapleStory SEA(동남아 서버) 클라이언트.
+ * MapleStorySEA(동남아 서버) 클라이언트.
  *
  * 사용법은 한국 메이플스토리와 같고, 날짜 기준과 월드 이름이 다릅니다.
  *
@@ -51,7 +51,7 @@ export class MapleStorySEAClient extends AbstractMapleBaseClient {
     return this._union;
   }
 
-  /** 길드: 길드 고유 번호와 길드 기본 정보 (2개) */
+  /** 길드: 길드 식별자와 길드 기본 정보 (2개) */
   get guild(): MapleStorySEAGuildClient {
     this._guild ??= new MapleStorySEAGuildClient(this.http);
     return this._guild;
@@ -60,7 +60,7 @@ export class MapleStorySEAClient extends AbstractMapleBaseClient {
   // ─── OCID ───────────────────────────────────────────────────────────────
 
   /**
-   * 캐릭터 이름으로 캐릭터 고유 번호(OCID)를 받아 온다. 캐릭터 정보를 조회하는 메서드에 이 값을 넣는다.
+   * 캐릭터 이름으로 캐릭터 식별자(ocid)를 받아 온다. 캐릭터 정보를 조회하는 메서드에 이 값을 넣는다.
    *
    * GET /maplestorysea/v1/id
    *
@@ -79,7 +79,7 @@ export class MapleStorySEAClient extends AbstractMapleBaseClient {
     const url = this.buildUrl('id');
     const notFound = {
       message: `'${characterName}' 캐릭터를 찾을 수 없습니다.`,
-      hint: 'MapleStory SEA 캐릭터 이름(대소문자)을 확인하세요.',
+      hint: 'MapleStorySEA 캐릭터 이름(대소문자)을 확인하세요.',
     };
     const response = await lookupByName(
       () =>

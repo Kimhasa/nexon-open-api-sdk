@@ -41,8 +41,8 @@ export class MabinogiHeroesNoticeClient {
   /**
    * 최근 등록된 공지사항 20개를 조회한다.
    *
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -72,8 +72,8 @@ export class MabinogiHeroesNoticeClient {
    *
    * @param noticeId - 게시글 번호 (`getList()` 응답의 `notice_id`)
    * @throws {NexonBadRequestError} noticeId가 1 이상의 정수가 아닐 때 (요청 전에 SDK가 throw)
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -104,8 +104,8 @@ export class MabinogiHeroesNoticeClient {
   /**
    * 최근 등록된 패치노트 20개를 조회한다.
    *
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -135,8 +135,8 @@ export class MabinogiHeroesNoticeClient {
    *
    * @param noticeId - 게시글 번호 (`getPatchList()` 응답의 `notice_id`)
    * @throws {NexonBadRequestError} noticeId가 1 이상의 정수가 아닐 때 (요청 전에 SDK가 throw)
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -167,8 +167,8 @@ export class MabinogiHeroesNoticeClient {
   /**
    * 최근 등록된 이벤트&샵 20개를 조회한다.
    *
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -199,8 +199,8 @@ export class MabinogiHeroesNoticeClient {
    *
    * @param noticeId - 게시글 번호 (`getEventList()` 응답의 `notice_id`)
    * @throws {NexonBadRequestError} noticeId가 1 이상의 정수가 아닐 때 (요청 전에 SDK가 throw)
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts

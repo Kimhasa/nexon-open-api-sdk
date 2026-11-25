@@ -50,11 +50,11 @@ export class FirstDescendantUserClient {
   /**
    * 프로필의 마스터리 랭크와 타이틀·훈장 정보를 조회한다.
    *
-   * @param params - `ouid`는 `getOuid()`로 찾은 계정 고유 번호
+   * @param params - `ouid`는 `getOuid()`로 찾은 계정 식별자
    * @throws {NexonBadRequestError} ouid가 비어 있을 때 (요청 전 SDK 검증)
    * @throws {NexonBadRequestError} ouid가 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -84,11 +84,11 @@ export class FirstDescendantUserClient {
    *
    * 장착 모듈·커스터마이징 정보는 게임을 재접속하거나 매칭이 있는 콘텐츠를 완료한 뒤에 갱신된다.
    *
-   * @param params - `ouid`는 `getOuid()`로 찾은 계정 고유 번호
+   * @param params - `ouid`는 `getOuid()`로 찾은 계정 식별자
    * @throws {NexonBadRequestError} ouid가 비어 있을 때 (요청 전 SDK 검증)
    * @throws {NexonBadRequestError} ouid가 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -118,11 +118,11 @@ export class FirstDescendantUserClient {
    *
    * 장착 모듈 정보는 게임을 재접속하거나 매칭이 있는 콘텐츠를 완료한 뒤에 갱신된다.
    *
-   * @param params - `ouid`는 `getOuid()`로 찾은 계정 고유 번호, `language_code`는 옵션 이름의 언어(기본값 `'ko'`)
+   * @param params - `ouid`는 `getOuid()`로 찾은 계정 식별자, `language_code`는 옵션 이름의 언어(기본값 `'ko'`)
    * @throws {NexonBadRequestError} ouid가 비어 있거나 language_code가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonBadRequestError} ouid가 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -157,11 +157,11 @@ export class FirstDescendantUserClient {
   /**
    * 장착 반응로의 레벨·강화 단계·랜덤 옵션을 조회한다.
    *
-   * @param params - `ouid`는 `getOuid()`로 찾은 계정 고유 번호, `language_code`는 옵션 이름의 언어(기본값 `'ko'`)
+   * @param params - `ouid`는 `getOuid()`로 찾은 계정 식별자, `language_code`는 옵션 이름의 언어(기본값 `'ko'`)
    * @throws {NexonBadRequestError} ouid가 비어 있거나 language_code가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonBadRequestError} ouid가 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -196,11 +196,11 @@ export class FirstDescendantUserClient {
   /**
    * 모든 슬롯의 장착 외장 부품과 코어 옵션을 조회한다.
    *
-   * @param params - `ouid`는 `getOuid()`로 찾은 계정 고유 번호, `language_code`는 옵션 이름의 언어(기본값 `'ko'`)
+   * @param params - `ouid`는 `getOuid()`로 찾은 계정 식별자, `language_code`는 옵션 이름의 언어(기본값 `'ko'`)
    * @throws {NexonBadRequestError} ouid가 비어 있거나 language_code가 지원 목록에 없을 때 (요청 전 SDK 검증)
    * @throws {NexonBadRequestError} ouid가 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -235,10 +235,10 @@ export class FirstDescendantUserClient {
   /**
    * 계승자 그룹별 아르케 조율 보드와 활성화한 노드를 조회한다.
    *
-   * @param params - `ouid`는 `getOuid()`로 찾은 계정 고유 번호, `descendant_group_id`는 `meta.getDescendantGroup()`에서 찾은 계승자 그룹 번호
+   * @param params - `ouid`는 `getOuid()`로 찾은 계정 식별자, `descendant_group_id`는 `meta.getDescendantGroup()`에서 찾은 계승자 그룹 번호
    * @throws {NexonBadRequestError} ouid 또는 descendant_group_id가 비어 있을 때 (요청 전 SDK 검증)
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts

@@ -2,7 +2,7 @@
 
 /** 랭커 스탯 조회 시 선수 식별 정보 */
 export interface FcRankerPlayer {
-  /** 선수 고유 식별자 — 선수 카드 번호 (`getSpidMeta()` 참고) */
+  /** 선수 식별자 — 선수 카드 번호 (`getSpidMeta()` 참고) */
   readonly id: number;
   /** 선수 포지션 번호 (`getSpPositionMeta()` 참고, 예: 0 = GK) */
   readonly po: number;

@@ -1,5 +1,5 @@
 /**
- * EA SPORTS FC Online API 엔드포인트 상수.
+ * EA SPORTS FC 온라인 API 엔드포인트 상수.
  *
  * @see https://openapi.nexon.com/game/fconline/
  */
@@ -40,7 +40,7 @@ export const FC_RANKER_ENDPOINTS = {
 export const FC_METADATA_ENDPOINTS = {
   /** 매치 종류(matchtype) 메타데이터 */
   MATCH_TYPE: `${STATIC}/matchtype.json`,
-  /** 선수 고유 식별자(spid) 메타데이터 */
+  /** 선수 식별자(spid) 메타데이터 */
   SPID: `${STATIC}/spid.json`,
   /** 시즌 아이디(seasonId) 메타데이터 */
   SEASON_ID: `${STATIC}/seasonid.json`,

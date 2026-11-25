@@ -21,10 +21,10 @@ const { values } = parseArgs({ options: { check: { type: 'boolean', default: fal
 
 // 게임 진입 프로퍼티 → 창작자가 부르는 게임 이름과 문서
 const GAMES: Record<string, { name: string; doc: string }> = {
-  maplestory: { name: '메이플스토리 (KMS)', doc: 'docs/maplestory.md' },
+  maplestory: { name: '메이플스토리', doc: 'docs/maplestory.md' },
   maplestorym: { name: '메이플스토리M', doc: 'docs/maplestory-m.md' },
-  maplestorySEA: { name: 'MapleStory SEA', doc: 'docs/maplestory-sea.md' },
-  maplestoryTW: { name: 'MapleStory Taiwan', doc: 'docs/maplestory-tw.md' },
+  maplestorySEA: { name: 'MapleStorySEA', doc: 'docs/maplestory-sea.md' },
+  maplestoryTW: { name: 'MapleStoryTaiwan', doc: 'docs/maplestory-tw.md' },
   fcOnline: { name: 'EA SPORTS FC 온라인', doc: 'docs/fc-online.md' },
   firstDescendant: { name: '퍼스트 디센던트', doc: 'docs/first-descendant.md' },
   mabinogiHeroes: { name: '마비노기 영웅전', doc: 'docs/mabinogi-heroes.md' },
@@ -35,7 +35,7 @@ const GAMES: Record<string, { name: string; doc: string }> = {
   baramYeon: { name: '바람의나라: 연', doc: 'docs/baram-yeon.md' },
   v4: { name: 'V4', doc: 'docs/v4.md' },
   hit2: { name: '히트2', doc: 'docs/hit2.md' },
-  platform: { name: '넥슨 Open API 공지', doc: 'docs/platform.md' },
+  platform: { name: 'NEXON Open API 공지', doc: 'docs/platform.md' },
 };
 
 interface ClassInfo {
@@ -154,7 +154,7 @@ function render(root: string): string {
   lines.push(
     '## 도우미 함수 — `nexon-open-api` 에서 바로 import',
     '',
-    '넥슨에 요청을 보내지 않고 받은 데이터를 다루는 함수다. 예: 메이플 캐릭터 외형 이미지의 동작·표정 주소, 잠재능력 옵션 문자열("STR +12%") 파싱과 합산, 로그용 고유 번호 마스킹.',
+    '넥슨에 요청을 보내지 않고 받은 데이터를 다루는 함수다. 예: 메이플 캐릭터 외형 이미지의 동작·표정 주소, 잠재능력 옵션 문자열("STR +12%") 파싱과 합산, 로그용 식별자 마스킹.',
     '',
     ...helpers.map(
       (helper) => `- \`${helper.signature}\`${helper.summary ? ` — ${helper.summary}` : ''}`,
@@ -233,18 +233,18 @@ function rootFunctions(root: string): { signature: string; summary: string }[] {
 const HEADER = `
 # nexon-open-api — AI 코딩 도구용 전체 안내
 
-> 넥슨 Open API(14개 게임 + Open API 공지)를 감싼 TypeScript/JavaScript 라이브러리다. npm 패키지 이름은 \`nexon-open-api\` 이다. Node.js 18 이상이며 의존성은 0개, CJS·ESM을 모두 지원한다.
-> 응답 타입은 2026-11-24 게임별 실제 API 키로 실서버 응답과 중첩 필드까지 대조해 맞췄다 (263개 API, 공개 캐릭터 42명). 포털 OpenAPI 스펙과 실제 응답이 다른 600여 곳(필드 이름, null, 숫자·문자열, 배열·객체)은 실제 응답을 따른다.
+> NEXON Open API의 14개 게임과 공지를 조회하는 비공식 TypeScript/JavaScript 라이브러리다. npm 패키지 이름은 \`nexon-open-api\` 이다. Node.js 18 이상이며 의존성은 0개, CJS·ESM을 모두 지원한다.
+> 응답 타입은 2026-11-24 게임별 실제 API Key로 실서버 응답과 중첩 필드까지 대조해 맞췄다 (263개 API, 공개 캐릭터 42명). 포털 OpenAPI 스펙과 실제 응답이 다른 600여 곳(필드 이름, null, 숫자·문자열, 배열·객체)은 실제 응답을 따른다.
 
 ## 이 SDK로 코드를 짤 때 지킬 것
 
 1. \`https://open.api.nexon.com\` 을 직접 fetch하지 말고 \`nexon-open-api\` 를 쓴다. 포털 스펙의 필드 이름을 추측해 쓰지 말고 아래 메서드와 TypeScript 타입(자동완성)을 따른다. 예: 장비 업그레이드 가능 횟수는 \`scroll_upgradeable_count\` 다 (스펙의 \`scroll_upgradable_count\` 는 실제로 오지 않는다).
-2. 클라이언트는 \`new NexonClient({ apiKey: process.env.NEXON_API_KEY })\` 로 만든다. **API 키는 게임마다 따로다.** 여러 게임을 다루면 게임마다 키와 클라이언트를 나눈다. 키는 서버·봇에서만 쓰고 브라우저 코드에 넣지 않는다.
-3. 조회는 보통 2단계다: 이름 → 고유 번호(\`getOcid\`/\`getOuid\`) → 정보 조회. 고유 번호(OCID·OUID)는 비밀처럼 다룬다. 화면·URL·로그에 원문을 남기지 않는다 (\`maskIdentifier\` 로 앞 8자만).
+2. 클라이언트는 \`new NexonClient({ apiKey: process.env.NEXON_API_KEY })\` 로 만든다. **API Key는 게임별로 발급된다.** 여러 게임을 다루면 게임마다 API Key를 발급받아 클라이언트를 각각 생성한다. API Key는 서버·봇에서만 쓰고 브라우저 코드에 넣지 않는다.
+3. 조회는 보통 2단계다: 이름 → 식별자(\`getOcid\`/\`getOuid\`) → 정보 조회. 식별자(ocid·ouid)는 비밀처럼 다룬다. 화면·URL·로그에 원문을 남기지 않는다 (\`maskIdentifier\` 로 앞 8자만).
 4. 없는 이름이면 \`NexonNotFoundError\` 가 난다 (넥슨은 OPENAPI00004를 주지만 SDK가 바꿔 준다). 사용자에게는 "캐릭터를 찾을 수 없어요"처럼 상황에 맞는 문구를 보여 준다.
 5. 날짜(\`date\`)가 선택인 조회는 **최신 데이터가 필요하면 date를 생략**한다. 오늘·미래 날짜는 넣지 않는다. 랭킹처럼 date가 필수인 조회는 어제 날짜를 기본으로 쓴다.
-6. 에러는 \`instanceof\` 로 나눈다: \`NexonNotFoundError\`(없는 캐릭터), \`NexonBadRequestError\`(입력 오류, 요청 전에 SDK가 검사), \`NexonDataNotReadyError\`(데이터 준비 중), \`NexonMaintenanceError\`(점검 중, \`NexonServerError\` 보다 먼저 검사), \`NexonAuthError\`(키 문제·다른 게임 키), \`NexonRateLimitError\`(호출 한도), \`NexonServerError\`(넥슨 서버 오류). 모두 \`NexonError\` 를 상속한다. 429·5xx는 SDK가 자동으로 다시 시도한다.
-7. 호출 한도: 개발 단계 키는 초당 5건·하루 1,000건, 서비스 단계는 초당 500건·하루 2천만 건이다. 캐릭터 카드 한 장에 8회 안팎이 드므로 결과를 캐시한다.
+6. 에러는 \`instanceof\` 로 나눈다: \`NexonNotFoundError\`(없는 캐릭터), \`NexonBadRequestError\`(입력 오류, 요청 전에 SDK가 검사), \`NexonDataNotReadyError\`(데이터 준비 중), \`NexonMaintenanceError\`(점검 중, \`NexonServerError\` 보다 먼저 검사), \`NexonAuthError\`(유효하지 않은 API Key·다른 게임의 API Key 사용), \`NexonRateLimitError\`(호출량 초과), \`NexonServerError\`(NEXON Open API 서버 오류). 모두 \`NexonError\` 를 상속한다. 429·5xx는 SDK가 자동으로 다시 시도한다.
+7. 호출 허용량은 애플리케이션 타입에 따라 다르다. 개발 단계는 초당 5건·1일 1,000건, 서비스 단계는 초당 500건·1일 20,000,000건이다. 호출량은 애플리케이션별로 합산된다. 캐릭터 카드 한 장에 8회 안팎이 드므로 결과를 캐시한다.
 8. 화면에 출처 "Data based on NEXON Open API" 를 표기하고, 저장한 데이터는 30일 이내에 다시 받아 갱신한다 (넥슨 이용 규칙).
 9. 응답 필드는 null일 수 있다(장착하지 않은 장비, 날짜를 생략한 조회의 \`date\` 등). 타입에 \`| null\` 이 있으면 반드시 확인한다.
 

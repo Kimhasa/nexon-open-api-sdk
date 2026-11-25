@@ -49,7 +49,7 @@ export class MapleStoryMClient extends AbstractGameClient {
     return this._union;
   }
 
-  /** 길드: 길드 고유 번호와 길드 기본 정보 (2개) */
+  /** 길드: 길드 식별자와 길드 기본 정보 (2개) */
   get guild(): MapleStoryMGuildClient {
     this._guild ??= new MapleStoryMGuildClient(this.http);
     return this._guild;
@@ -68,12 +68,12 @@ export class MapleStoryMClient extends AbstractGameClient {
   }
 
   /**
-   * 월드 이름과 캐릭터 이름으로 캐릭터 고유 번호(OCID)를 받아 온다. 메이플스토리M은 월드마다 같은 이름이 있을 수 있어 월드 이름이 꼭 필요하다.
+   * 월드 이름과 캐릭터 이름으로 캐릭터 식별자(ocid)를 받아 온다. 메이플스토리M은 월드마다 같은 이름이 있을 수 있어 월드 이름이 꼭 필요하다.
    *
    * @param worldName - 캐릭터가 있는 월드 이름 (아케인, 크로아, 엘리시움, 루나, 스카니아, 유니온, 제니스, 챌린저스)
    * @param characterName - 게임에서 쓰는 캐릭터 이름
    * @throws {NexonNotFoundError} 캐릭터를 찾을 수 없을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @throws {NexonBadRequestError} 월드명이나 캐릭터명이 비어 있을 때
    *

@@ -38,7 +38,7 @@ const PORTAL_TABLE: ReadonlyArray<{
     meaning: '서버 내부 오류',
     cls: NexonServerError,
     expectedStatus: 500,
-    hint: ['서버에 문제', '잠시 뒤'],
+    hint: ['NEXON Open API 서버에 문제', '잠시 뒤'],
   },
   {
     code: 'OPENAPI00002',
@@ -46,7 +46,7 @@ const PORTAL_TABLE: ReadonlyArray<{
     meaning: '권한이 없는 경우',
     cls: NexonAuthError,
     expectedStatus: 403,
-    hint: ['이 API 키로는 이 API를 쓸 수 없습니다', '게임마다 따로'],
+    hint: ['이 API Key로는 이 API를 쓸 수 없습니다', '게임마다 따로'],
   },
   {
     code: 'OPENAPI00003',
@@ -54,7 +54,7 @@ const PORTAL_TABLE: ReadonlyArray<{
     meaning: '유효하지 않은 식별자',
     cls: NexonNotFoundError,
     expectedStatus: 400,
-    hint: ['찾을 수 없습니다', '월드·서버', '이름으로 다시'],
+    hint: ['찾을 수 없습니다', '월드·서버', '식별자(ocid·ouid)', '이름으로 다시'],
   },
   {
     code: 'OPENAPI00004',
@@ -67,10 +67,10 @@ const PORTAL_TABLE: ReadonlyArray<{
   {
     code: 'OPENAPI00005',
     status: 400,
-    meaning: '유효하지 않은 API KEY',
+    meaning: '유효하지 않은 API Key',
     cls: NexonAuthError,
     expectedStatus: 400,
-    hint: ['API 키가 올바르지 않습니다', '공백', '따옴표', '새로 발급'],
+    hint: ['API Key가 올바르지 않습니다', '공백', '따옴표', '새로 발급'],
   },
   {
     code: 'OPENAPI00006',
@@ -86,7 +86,7 @@ const PORTAL_TABLE: ReadonlyArray<{
     meaning: 'API 호출량 초과',
     cls: NexonRateLimitError,
     expectedStatus: 429,
-    hint: ['호출 한도', '잠시 뒤'],
+    hint: ['호출 허용량을 초과했습니다', '잠시 뒤'],
   },
   {
     code: 'OPENAPI00009',
@@ -110,7 +110,7 @@ const PORTAL_TABLE: ReadonlyArray<{
     meaning: 'API 점검 중',
     cls: NexonMaintenanceError,
     expectedStatus: 503,
-    hint: ['Open API가 점검 중', 'client.platform.getNoticeList()'],
+    hint: ['NEXON Open API가 점검 중', 'client.platform.getNoticeList()'],
   },
 ];
 
@@ -145,9 +145,9 @@ describe('classifyError', () => {
     it.each([
       ['maplestory', '메이플스토리'],
       ['maplestorym', '메이플스토리M'],
-      ['maplestorysea', 'MapleStory SEA'],
-      ['maplestorytw', 'MapleStory Taiwan'],
-      ['fconline', 'FC 온라인'],
+      ['maplestorysea', 'MapleStorySEA'],
+      ['maplestorytw', 'MapleStoryTaiwan'],
+      ['fconline', 'EA SPORTS FC 온라인'],
       ['tfd', '퍼스트 디센던트'],
       ['heroes', '마비노기 영웅전'],
       ['suddenattack', '서든어택'],
@@ -157,7 +157,7 @@ describe('classifyError', () => {
       ['baramy', '바람의나라: 연'],
       ['v4', 'V4'],
       ['hit2', '히트2'],
-      ['platform', '넥슨 Open API 공지'],
+      ['platform', 'NEXON Open API 공지'],
     ])('/%s 경로가 거부되면 %s 이름을 안내한다', (prefix, game) => {
       const payload = makePayload('OPENAPI00006', 'Invalid game or path');
       const err = classifyError(403, payload, undefined, {
@@ -179,7 +179,7 @@ describe('classifyError', () => {
         const err = classifyError(400, makePayload('OPENAPI00006'), undefined, { url });
 
         expect(err).toBeInstanceOf(NexonAuthError);
-        expect(err.message).toContain('이 API 키로는 이 API를 부를 수 없습니다');
+        expect(err.message).toContain('이 API Key로는 이 API를 부를 수 없습니다');
         expect(err.message).not.toContain('메이플스토리');
       },
     );

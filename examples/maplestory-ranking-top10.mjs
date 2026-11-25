@@ -8,7 +8,7 @@ import { NexonClient, toNexonDate } from 'nexon-open-api';
 const apiKey = process.env['NEXON_MAPLESTORY_API_KEY']?.trim();
 if (!apiKey) {
   console.error(
-    '🏆 메이플스토리 API 키가 필요해요. .env에 NEXON_MAPLESTORY_API_KEY를 설정해 주세요.',
+    '🏆 메이플스토리 API Key가 필요해요. .env에 NEXON_MAPLESTORY_API_KEY를 설정해 주세요.',
   );
   process.exitCode = 1;
 } else {
@@ -30,7 +30,7 @@ if (!apiKey) {
     // 출력 예시: 1위 · 캐릭터명 · Lv.300 비숍 (스카니아)
   } catch {
     console.error(
-      '🏆 종합 랭킹을 불러오지 못했어요. 조회일과 메이플스토리 API 키를 확인해 주세요.',
+      '🏆 종합 랭킹을 불러오지 못했어요. 조회일과 메이플스토리 API Key를 확인해 주세요.',
     );
     process.exitCode = 1;
   }

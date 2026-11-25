@@ -47,11 +47,11 @@ export class MabinogiHeroesCharacterClient {
    *
    * 버프, 아이템 사용 등으로 적용된 효과 때문에 경험치·레벨이 게임 내 데이터와 다를 수 있습니다.
    *
-   * @param params.ocid - `getOcid()`로 찾은 영웅의 캐릭터 고유 번호
+   * @param params.ocid - `getOcid()`로 찾은 영웅의 캐릭터 식별자
    * @throws {NexonBadRequestError} ocid가 비어 있을 때 (요청 전에 SDK가 throw) 또는 파라미터가 잘못됐을 때
    * @throws {NexonNotFoundError} ocid에 해당하는 캐릭터가 없을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -80,11 +80,11 @@ export class MabinogiHeroesCharacterClient {
    *
    * `title_type` 은 2023년 11월 23일 이후 획득한 타이틀/문양에 한해 조회됩니다.
    *
-   * @param params.ocid - `getOcid()`로 찾은 영웅의 캐릭터 고유 번호
+   * @param params.ocid - `getOcid()`로 찾은 영웅의 캐릭터 식별자
    * @throws {NexonBadRequestError} ocid가 비어 있을 때 (요청 전에 SDK가 throw) 또는 파라미터가 잘못됐을 때
    * @throws {NexonNotFoundError} ocid에 해당하는 캐릭터가 없을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -115,11 +115,11 @@ export class MabinogiHeroesCharacterClient {
    *
    * `title_type` 은 2023년 11월 23일 이후 장착한 타이틀/문양에 한해 조회됩니다.
    *
-   * @param params.ocid - `getOcid()`로 찾은 영웅의 캐릭터 고유 번호
+   * @param params.ocid - `getOcid()`로 찾은 영웅의 캐릭터 식별자
    * @throws {NexonBadRequestError} ocid가 비어 있을 때 (요청 전에 SDK가 throw) 또는 파라미터가 잘못됐을 때
    * @throws {NexonNotFoundError} ocid에 해당하는 캐릭터가 없을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -150,11 +150,11 @@ export class MabinogiHeroesCharacterClient {
    *
    * 인챈트 명의 등급·능력치는 `client.mabinogiHeroes.meta.getEnchant()` 로 조회할 수 있습니다.
    *
-   * @param params.ocid - `getOcid()`로 찾은 영웅의 캐릭터 고유 번호
+   * @param params.ocid - `getOcid()`로 찾은 영웅의 캐릭터 식별자
    * @throws {NexonBadRequestError} ocid가 비어 있을 때 (요청 전에 SDK가 throw) 또는 파라미터가 잘못됐을 때
    * @throws {NexonNotFoundError} ocid에 해당하는 캐릭터가 없을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -185,11 +185,11 @@ export class MabinogiHeroesCharacterClient {
   /**
    * 캐릭터 능력치의 이름과 값을 조회한다.
    *
-   * @param params.ocid - `getOcid()`로 찾은 영웅의 캐릭터 고유 번호
+   * @param params.ocid - `getOcid()`로 찾은 영웅의 캐릭터 식별자
    * @throws {NexonBadRequestError} ocid가 비어 있을 때 (요청 전에 SDK가 throw) 또는 파라미터가 잘못됐을 때
    * @throws {NexonNotFoundError} ocid에 해당하는 캐릭터가 없을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -218,11 +218,11 @@ export class MabinogiHeroesCharacterClient {
   /**
    * 캐릭터가 가입했거나 가입 신청한 길드를 조회한다.
    *
-   * @param params.ocid - `getOcid()`로 찾은 영웅의 캐릭터 고유 번호
+   * @param params.ocid - `getOcid()`로 찾은 영웅의 캐릭터 식별자
    * @throws {NexonBadRequestError} ocid가 비어 있을 때 (요청 전에 SDK가 throw) 또는 파라미터가 잘못됐을 때
    * @throws {NexonNotFoundError} ocid에 해당하는 캐릭터가 없을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts

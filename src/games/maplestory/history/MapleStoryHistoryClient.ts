@@ -18,7 +18,7 @@ import type {
 /**
  * 내 계정의 강화 기록: 스타포스 강화, 큐브 사용, 잠재능력 재설정, 소울 잠재능력 재설정.
  *
- * API 키를 발급받은 계정의 기록을 조회합니다.
+ * API Key를 발급받은 계정의 기록을 조회합니다.
  * 첫 페이지는 `date` 로, 다음 페이지는 응답의 `next_cursor` 를 `cursor` 에 넣어 조회합니다.
  *
  * @example
@@ -143,8 +143,8 @@ export class MapleStoryHistoryClient {
    * @param params.cursor - 다음 페이지를 볼 때 넣는 값. 이전 응답의 `next_cursor` 를 그대로 넣는다
    *
    * @throws {NexonBadRequestError} count가 10~1000 사이의 정수가 아니거나, date와 cursor가 모두 빠졌거나 날짜 형식이나 조회 범위가 잘못되었을 때.
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 요청 한도 초과 시
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량 초과 시
    *
    * @example
    * ```ts

@@ -16,7 +16,7 @@ export class MabinogiHornBugleWorldClient {
    *
    * @param serverName - 조회할 서버 이름
    * @throws {NexonBadRequestError} 지원되지 않는 서버를 지정했을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts

@@ -16,9 +16,9 @@ export class SuddenAttackMatchClient {
   /**
    * 최근 매치 목록을 모드와 유형으로 골라 조회한다.
    *
-   * @param params - `getOuid()`로 찾은 계정 고유 번호, 폭파미션 등 모드, 일반전·클랜전 등 선택 매치 유형
+   * @param params - `getOuid()`로 찾은 계정 식별자, 폭파미션 등 모드, 일반전·클랜전 등 선택 매치 유형
    * @throws {NexonBadRequestError} ouid가 비어 있거나 모드 또는 유형이 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts
@@ -59,9 +59,9 @@ export class SuddenAttackMatchClient {
   /**
    * 한 매치의 맵과 참가 유저의 킬·데스 등 전적을 조회한다.
    *
-   * @param matchId - `match.getList()`로 조회한 매치의 고유 번호(`match_id`)
+   * @param matchId - `match.getList()`로 조회한 매치 식별자(`match_id`)
    * @throws {NexonBadRequestError} 매치 식별자가 비어 있을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts

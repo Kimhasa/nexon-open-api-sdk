@@ -1,7 +1,7 @@
 /**
- * 넥슨 Open API 에러 코드 상수.
+ * NEXON Open API 에러 코드 상수.
  *
- * 주석의 의미와 HTTP 상태는 넥슨 포털의 "응답코드 표"를 그대로 옮긴 것입니다 (2026-11-24 확인).
+ * 주석의 의미와 HTTP 상태는 NEXON Open API 포털의 응답코드 표를 기준으로 설명합니다 (2026-11-24 확인).
  * 실제 서버가 돌려주는 HTTP 상태는 표와 다를 수 있으므로 SDK는 상태가 아니라 코드로 에러를 분류합니다.
  *
  * @see https://openapi.nexon.com/ko/guide/request-api/
@@ -9,20 +9,20 @@
 export const NEXON_ERROR_CODES = {
   /** 서버 내부 오류 (HTTP 500) */
   SERVER_ERROR: 'OPENAPI00001',
-  /** 권한이 없는 경우 (HTTP 403). 이 API 키로는 이 API를 쓸 수 없다 */
+  /** 권한이 없는 경우 (HTTP 403). 이 API Key로는 이 API를 쓸 수 없다 */
   UNAUTHORIZED: 'OPENAPI00002',
-  /** 유효하지 않은 식별자 (HTTP 400). 없는 캐릭터·길드·계정이거나 더 이상 쓸 수 없는 고유 번호 */
+  /** 유효하지 않은 식별자 (HTTP 400). 없는 캐릭터·길드·계정이거나 더 이상 쓸 수 없는 식별자 */
   NOT_FOUND: 'OPENAPI00003',
   /** 파라미터 누락 또는 유효하지 않음 (HTTP 400). SDK의 요청 전 입력 검증도 이 코드를 쓴다 */
   BAD_REQUEST: 'OPENAPI00004',
-  /** 유효하지 않은 API KEY (HTTP 400) */
+  /** 유효하지 않은 API Key (HTTP 400) */
   INVALID_API_KEY: 'OPENAPI00005',
   /**
-   * @deprecated 포털 표에서 `OPENAPI00005` 는 "권한 없음"이 아니라 "유효하지 않은 API KEY"입니다.
+   * @deprecated 포털 표에서 `OPENAPI00005` 는 "권한 없음"이 아니라 "유효하지 않은 API Key"입니다.
    * `NEXON_ERROR_CODES.INVALID_API_KEY` 를 사용하세요.
    */
   FORBIDDEN: 'OPENAPI00005',
-  /** 유효하지 않은 게임 또는 API PATH (HTTP 400). 다른 게임용 키로 불러도 이 코드가 온다 */
+  /** 유효하지 않은 게임 또는 API PATH (HTTP 400). 다른 게임용 API Key로 불러도 이 코드가 온다 */
   INVALID_GAME_OR_PATH: 'OPENAPI00006',
   /**
    * @deprecated 포털 표에서 `OPENAPI00006` 은 "파라미터 오류"가 아니라 "유효하지 않은 게임 또는 API PATH"입니다.

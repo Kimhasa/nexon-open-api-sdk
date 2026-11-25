@@ -30,7 +30,7 @@ describe('HttpClient', () => {
       }
       expect(caught).toBeInstanceOf(NexonBadRequestError);
       expect((caught as NexonBadRequestError).code).toBe('OPENAPI00004');
-      expect((caught as NexonBadRequestError).message).toContain('API 키가 비어 있습니다');
+      expect((caught as NexonBadRequestError).message).toContain('API Key가 비어 있습니다');
       expect((caught as NexonBadRequestError).message).toContain('--env-file=.env');
     });
 

@@ -112,8 +112,8 @@ export class FirstDescendantLeaderboardClient {
    * @param params - `leaderboard_type` (`'Solo'` | `'Squad'`), 솔로는 도감의 계승자 번호(`descendant_id`)가, 스쿼드는 인원수(`squad_user_count`, 2·3·4명)가 필수,
    *   `platform_type` (기본값 `'All'`), `contents_type` (기본값 `'RiskMode'`)
    * @throws {NexonBadRequestError} 솔로에 `descendant_id`, 스쿼드에 `squad_user_count` 가 없거나 조건 조합·값이 올바르지 않을 때 (요청 전 SDK 검증)
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -159,8 +159,8 @@ export class FirstDescendantLeaderboardClient {
    * @param params - `leaderboard_type` (`'Solo'` | `'Squad'`), 솔로는 도감의 계승자 번호(`descendant_id`)가, 스쿼드는 인원수(`squad_user_count`, 2·3·4명)가 필수,
    *   `platform_type` (기본값 `'All'`)
    * @throws {NexonBadRequestError} 솔로에 `descendant_id`, 스쿼드에 `squad_user_count` 가 없거나 조건 조합·값이 올바르지 않을 때 (요청 전 SDK 검증)
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts

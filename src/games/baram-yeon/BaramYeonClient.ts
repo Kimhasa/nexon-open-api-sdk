@@ -38,13 +38,13 @@ export class BaramYeonClient extends AbstractGameClient {
   }
 
   /**
-   * 서버 이름과 캐릭터 이름으로 캐릭터 고유 번호를 조회한다.
+   * 서버 이름과 캐릭터 이름으로 캐릭터 식별자를 조회한다.
    *
    * @param characterName - 조회할 캐릭터 이름
    * @param serverName - 캐릭터가 속한 서버 이름 (`'연'`, `'무휼'`, `'세류'`, `'해명'`, `'낙랑'`, `'하백'`, `'비류'`, `'온조'`)
    * @throws {NexonBadRequestError} characterName·serverName이 비어 있거나(요청 전 차단) 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -54,7 +54,7 @@ export class BaramYeonClient extends AbstractGameClient {
    * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
    * const client = new NexonClient({ apiKey });
    *
-   * // 서버별 캐릭터 검색에서 고유 번호를 얻을 때
+   * // 서버별 캐릭터 검색에서 식별자를 얻을 때
    * const ocid = await client.baramYeon.getOcid('캐릭터명', '연');
    * console.log(ocid);
    * ```

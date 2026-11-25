@@ -188,7 +188,7 @@ function validateObjectShape(url: string, data: unknown, shape: ObjectShape): Sh
     const value = (data as Record<string, unknown>)[key];
     const actualType = Array.isArray(value) ? 'array' : typeof value;
 
-    // null은 object로 취급 (넥슨 API에서 null 응답이 올 수 있음)
+    // null은 object로 취급 (NEXON Open API에서 null 응답이 올 수 있음)
     if (actualType !== expectedType && !(value === null && expectedType === 'object')) {
       typeMismatches.push({ key, expected: expectedType, actual: actualType });
     }

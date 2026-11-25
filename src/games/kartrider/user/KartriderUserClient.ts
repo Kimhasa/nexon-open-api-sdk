@@ -33,10 +33,10 @@ export class KartriderUserClient {
   /**
    * 라이더 프로필의 레벨과 접속 일시를 조회한다.
    *
-   * @param params - `ouid`는 `getOuidInfo()`의 후보에서 고른 라이더 계정 고유 번호
+   * @param params - `ouid`는 `getOuidInfo()`의 후보에서 고른 라이더 계정 식별자
    * @throws {NexonBadRequestError} ouid가 비어 있거나(요청 전 차단) 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -67,10 +67,10 @@ export class KartriderUserClient {
   /**
    * 라이더가 장착한 칭호를 조회한다.
    *
-   * @param params - `ouid`는 `getOuidInfo()`의 후보에서 고른 라이더 계정 고유 번호
+   * @param params - `ouid`는 `getOuidInfo()`의 후보에서 고른 라이더 계정 식별자
    * @throws {NexonBadRequestError} ouid가 비어 있거나(요청 전 차단) 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts

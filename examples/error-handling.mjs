@@ -26,11 +26,11 @@ function messageForPlayer(error) {
     return '그날의 캐릭터 정보가 아직 준비되지 않았어요. 하루 전 날짜로 검색하거나 잠시 후 다시 검색해 주세요.';
   }
   if (error instanceof NexonMaintenanceError) {
-    // 정기·임시 점검 중에는 넥슨 API도 응답하지 않는다
+    // 정기·임시 점검 중에는 NEXON Open API도 응답하지 않는다
     return '지금은 메이플스토리 점검 중이에요. 점검이 끝나면 다시 검색해 주세요.';
   }
   if (error instanceof NexonAuthError) {
-    return '캐릭터 조회에 필요한 메이플스토리 API 키를 확인해야 해요. 봇 운영자에게 알려 주세요.';
+    return '캐릭터 조회에 필요한 메이플스토리 API Key를 확인해야 해요. 봇 운영자에게 알려 주세요.';
   }
   if (error instanceof NexonRateLimitError) {
     return '한꺼번에 검색 요청이 많이 들어왔어요. 잠시 쉬었다가 다시 검색해 주세요.';
@@ -43,7 +43,7 @@ const characterName = process.argv[2]?.trim();
 if (!apiKey || !characterName) {
   console.error(
     !apiKey
-      ? '🍁 메이플스토리 API 키가 필요해요. .env에 NEXON_MAPLESTORY_API_KEY를 설정해 주세요.'
+      ? '🍁 메이플스토리 API Key가 필요해요. .env에 NEXON_MAPLESTORY_API_KEY를 설정해 주세요.'
       : '🍁 실행 명령 끝에 조회할 캐릭터명을 적어 주세요.',
   );
   process.exitCode = 1;

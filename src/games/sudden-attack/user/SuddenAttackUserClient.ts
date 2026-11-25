@@ -22,9 +22,9 @@ export class SuddenAttackUserClient {
   /**
    * 유저 프로필의 장착 칭호·클랜·매너 등급을 조회한다.
    *
-   * @param ouid - `getOuid()`로 찾은 서든어택 계정 고유 번호
+   * @param ouid - `getOuid()`로 찾은 서든어택 계정 식별자
    * @throws {NexonBadRequestError} ouid가 비어 있을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts
@@ -52,9 +52,9 @@ export class SuddenAttackUserClient {
   /**
    * 통합·시즌 계급과 각각의 경험치·순위를 조회한다.
    *
-   * @param ouid - `getOuid()`로 찾은 서든어택 계정 고유 번호
+   * @param ouid - `getOuid()`로 찾은 서든어택 계정 식별자
    * @throws {NexonBadRequestError} ouid가 비어 있을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts
@@ -82,9 +82,9 @@ export class SuddenAttackUserClient {
   /**
    * 솔로·파티 랭크전 티어와 점수를 조회한다.
    *
-   * @param ouid - `getOuid()`로 찾은 서든어택 계정 고유 번호
+   * @param ouid - `getOuid()`로 찾은 서든어택 계정 식별자
    * @throws {NexonBadRequestError} ouid가 비어 있을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts
@@ -112,9 +112,9 @@ export class SuddenAttackUserClient {
   /**
    * 최근 승률과 무기별 킬데스를 조회한다.
    *
-   * @param ouid - `getOuid()`로 찾은 서든어택 계정 고유 번호
+   * @param ouid - `getOuid()`로 찾은 서든어택 계정 식별자
    * @throws {NexonBadRequestError} ouid가 비어 있을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts

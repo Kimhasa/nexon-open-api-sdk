@@ -7,7 +7,7 @@ export const UTC_PLUS_8_OFFSET_MINUTES = 480;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 /**
- * 날짜를 Nexon Open API 형식(YYYY-MM-DD)으로 변환한다.
+ * 날짜를 NEXON Open API 형식(YYYY-MM-DD)으로 변환한다.
  *
  * `timezoneOffset`을 기준으로 변환하므로 지역별 날짜 기준이 정확합니다.
  * - KMS / M: UTC+9 (540분) → `timezoneOffset: 540`
@@ -207,7 +207,7 @@ export function schedulerDate(date: string | undefined): string | undefined {
 }
 
 /**
- * Nexon Open API 날짜 범위.
+ * NEXON Open API 날짜 범위.
  * 시작일과 종료일 모두 포함(inclusive)합니다.
  */
 export interface DateRange {

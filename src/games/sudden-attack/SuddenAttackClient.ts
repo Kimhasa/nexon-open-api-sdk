@@ -32,12 +32,12 @@ export class SuddenAttackClient extends AbstractGameClient {
   }
 
   /**
-   * 닉네임으로 계정 고유 번호를 조회한다.
+   * 닉네임으로 계정 식별자를 조회한다.
    *
    * @param userName - 조회할 서든어택 닉네임
    * @throws {NexonBadRequestError} 닉네임이 비어 있을 때
    * @throws {NexonNotFoundError} 계정을 찾을 수 없을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
    *
    * @example
    * ```ts
@@ -47,7 +47,7 @@ export class SuddenAttackClient extends AbstractGameClient {
    * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
    * const client = new NexonClient({ apiKey });
    *
-   * // 클랜원 검색에 입력한 닉네임을 고유 번호로 바꿀 때
+   * // 클랜원 검색에 입력한 닉네임을 식별자로 바꿀 때
    * const ouid = await client.suddenAttack.getOuid('닉네임');
    * console.log(ouid);
    * ```

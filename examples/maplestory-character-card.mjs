@@ -10,7 +10,7 @@ async function main() {
   if (!apiKey || !characterName) {
     console.error(
       !apiKey
-        ? '🍁 메이플스토리 API 키가 필요해요. .env에 NEXON_MAPLESTORY_API_KEY를 설정해 주세요.'
+        ? '🍁 메이플스토리 API Key가 필요해요. .env에 NEXON_MAPLESTORY_API_KEY를 설정해 주세요.'
         : '🍁 실행 명령 끝에 조회할 캐릭터명을 적어 주세요.',
     );
     process.exitCode = 1;
@@ -19,7 +19,7 @@ async function main() {
 
   try {
     const client = new NexonClient({ apiKey });
-    // 캐릭터 이름으로 고유 번호(OCID)를 한 번 받아 세 조회에 사용합니다.
+    // 캐릭터 이름으로 식별자(ocid)를 한 번 받아 세 조회에 사용합니다.
     const ocid = await client.maplestory.getOcid(characterName);
     const [basic, stats, union] = await Promise.all([
       client.maplestory.character.getBasic({ ocid }),
@@ -39,7 +39,7 @@ async function main() {
     // 출력 예시: 전투력 45,000,000 · 유니온 Lv.8000
   } catch {
     console.error(
-      '🍁 캐릭터 카드를 만들지 못했어요. 캐릭터명과 메이플스토리 API 키를 확인해 주세요.',
+      '🍁 캐릭터 카드를 만들지 못했어요. 캐릭터명과 메이플스토리 API Key를 확인해 주세요.',
     );
     process.exitCode = 1;
   }

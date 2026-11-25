@@ -35,7 +35,7 @@ export class FirstDescendantClient extends AbstractGameClient {
   private _leaderboard: FirstDescendantLeaderboardClient | undefined;
 
   /**
-   * 닉네임과 태그로 계정 고유 번호를 조회한다.
+   * 닉네임과 태그로 계정 식별자를 조회한다.
    *
    * 닉네임은 대소문자를 구분하며 `#` 뒤 태그까지 포함해야 한다.
    * 게임 콘텐츠 변경으로 ouid가 바뀔 수 있으므로 오래 보관한 값은 다시 조회한다.
@@ -43,8 +43,8 @@ export class FirstDescendantClient extends AbstractGameClient {
    * @param userName - 대소문자와 태그를 포함한 닉네임(예: `'닉네임#1234'`)
    * @throws {NexonBadRequestError} userName이 비어 있을 때 (요청 전 SDK 검증)
    * @throws {NexonBadRequestError} 닉네임 형식이 잘못됐거나 계정을 찾을 수 없을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts

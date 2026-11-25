@@ -11,6 +11,8 @@ See [SEMVER.md](SEMVER.md) for versioning rules specific to this API wrapper SDK
 
 ## [Unreleased]
 
+- 에러 메시지와 JSDoc 표기를 포털 표기로 통일 (메시지 문자열이 바뀜)
+
 ## [0.2.0] - 2026-11-24
 
 ### Added

@@ -21,7 +21,7 @@ async function main() {
   if (!apiKey || !characterName) {
     console.error(
       !apiKey
-        ? '🍁 메이플스토리 API 키가 필요해요. .env에 NEXON_MAPLESTORY_API_KEY를 설정해 주세요.'
+        ? '🍁 메이플스토리 API Key가 필요해요. .env에 NEXON_MAPLESTORY_API_KEY를 설정해 주세요.'
         : '🍁 실행 명령 끝에 조회할 캐릭터명을 적어 주세요.',
     );
     process.exitCode = 1;
@@ -31,7 +31,7 @@ async function main() {
   try {
     const client = new NexonClient({ apiKey });
     const ocid = await client.maplestory.getOcid(characterName);
-    // 카드 한 장에 넥슨 서버 호출 5번(위 1번 + 아래 4번)입니다. 개발 단계 키의 초당 5건 안에 들어옵니다.
+    // 카드 한 장에 넥슨 서버 호출 5번(위 1번 + 아래 4번)입니다. 개발 단계의 초당 호출 허용량인 5건 이내입니다.
     const [basic, cash, beauty, android] = await Promise.all([
       client.maplestory.character.getBasic({ ocid }),
       client.maplestory.character.getCashItemEquipment({ ocid }),
@@ -105,7 +105,7 @@ async function main() {
     console.error(
       error instanceof NexonNotFoundError
         ? '🍁 그런 캐릭터를 찾을 수 없어요. 캐릭터명을 다시 확인해 주세요.'
-        : '🍁 코디 카드를 만들지 못했어요. 메이플스토리 API 키와 호출 한도를 확인해 주세요.',
+        : '🍁 코디 카드를 만들지 못했어요. 메이플스토리 API Key와 호출 허용량을 확인해 주세요.',
     );
     process.exitCode = 1;
   }

@@ -43,7 +43,7 @@ export class MapleStoryRankingClient {
    * @param params.world_name - 월드 이름 (선택, 예: '스카니아')
    * @param params.world_type - 월드 종류 (0: 일반 월드, 1: 에오스·핼리오스). `world_name` 을 넣으면 무시된다
    * @param params.class - 직업 및 전직 (선택, 예: '전사-히어로')
-   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 고유 번호 (선택)
+   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 식별자 (선택)
    * @param params.page - 페이지 번호 (선택)
    * @throws {NexonBadRequestError} 랭킹 기준일이 빠졌거나 형식이 잘못되었거나, 최근 2년의 조회 범위를 벗어났을 때.
    *
@@ -77,7 +77,7 @@ export class MapleStoryRankingClient {
    *
    * @param params.date - 랭킹 기준일 (한국 시간, YYYY-MM-DD, 필수). 2023-12-22부터 오늘까지의 날짜 중 최근 2년 이내. 오늘의 랭킹은 집계가 끝난 뒤 조회할 수 있다.
    * @param params.world_name - 월드 이름 (선택, 예: '스카니아')
-   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 고유 번호 (선택)
+   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 식별자 (선택)
    * @param params.page - 페이지 번호 (선택)
    * @throws {NexonBadRequestError} 랭킹 기준일이 빠졌거나 형식이 잘못되었거나, 최근 2년의 조회 범위를 벗어났을 때.
    *
@@ -153,7 +153,7 @@ export class MapleStoryRankingClient {
    * @param params.world_name - 월드 이름 (선택, 예: '스카니아')
    * @param params.difficulty - 무릉도장 구간 (0: 일반, 1: 통달)
    * @param params.class - 직업 및 전직 (선택, 예: '전사-히어로')
-   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 고유 번호 (선택)
+   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 식별자 (선택)
    * @param params.page - 페이지 번호 (선택)
    * @throws {NexonBadRequestError} 랭킹 기준일이 빠졌거나 형식이 잘못되었거나, 최근 2년의 조회 범위를 벗어났을 때.
    *
@@ -188,7 +188,7 @@ export class MapleStoryRankingClient {
    *
    * @param params.date - 랭킹 기준일 (한국 시간, YYYY-MM-DD, 필수). 2023-12-22부터 오늘까지의 날짜 중 최근 2년 이내. 오늘의 랭킹은 집계가 끝난 뒤 조회할 수 있다.
    * @param params.world_name - 월드 이름 (선택, 예: '스카니아')
-   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 고유 번호 (선택)
+   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 식별자 (선택)
    * @param params.page - 페이지 번호 (선택)
    * @throws {NexonBadRequestError} 랭킹 기준일이 빠졌거나 형식이 잘못되었거나, 최근 2년의 조회 범위를 벗어났을 때.
    *
@@ -219,7 +219,7 @@ export class MapleStoryRankingClient {
    * 업적 랭킹(업적 등급·업적 점수)을 조회한다.
    *
    * @param params.date - 랭킹 기준일 (한국 시간, YYYY-MM-DD, 필수). 2023-12-22부터 오늘까지의 날짜 중 최근 2년 이내. 오늘의 랭킹은 집계가 끝난 뒤 조회할 수 있다.
-   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 고유 번호 (선택)
+   * @param params.ocid - 특정 캐릭터의 순위만 볼 때 넣는 캐릭터 식별자 (선택)
    * @param params.page - 페이지 번호 (선택)
    * @throws {NexonBadRequestError} 랭킹 기준일이 빠졌거나 형식이 잘못되었거나, 최근 2년의 조회 범위를 벗어났을 때.
    *

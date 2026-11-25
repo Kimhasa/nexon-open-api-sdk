@@ -21,7 +21,7 @@ const DEFAULT_MAX_RETRIES = 3;
 const DEFAULT_RETRY_BASE_DELAY_MS = 500;
 
 /**
- * Nexon Open API 전용 HTTP 클라이언트.
+ * NEXON Open API 전용 HTTP 클라이언트.
  *
  * - 네이티브 `fetch` 사용 (Node.js 18+)
  * - `AbortSignal.timeout()` 기반 타임아웃
@@ -47,13 +47,13 @@ export class HttpClient {
     const apiKey: unknown = (config as HttpClientConfig | undefined)?.apiKey;
     if (typeof apiKey !== 'string' || apiKey.trim() === '') {
       invalidInput(
-        'API 키가 비어 있습니다.',
+        'API Key가 비어 있습니다.',
         '.env 파일에 NEXON_API_KEY=발급받은_키 를 적고 node --env-file=.env 로 실행했는지, ' +
           '코드의 process.env 이름과 .env 의 이름이 같은지 확인하세요. ' +
-          '키는 https://openapi.nexon.com/ 에 로그인해 애플리케이션을 등록하면 발급됩니다 (게임마다 따로 발급).',
+          'API Key는 https://openapi.nexon.com/ 에 로그인해 애플리케이션을 등록하면 발급됩니다 (게임마다 따로 발급).',
       );
     }
-    // 보내는 값은 다듬지 않는다. 앞뒤 공백이 섞인 키는 서버의 OPENAPI00005 안내로 알린다
+    // 보내는 값은 다듬지 않는다. 앞뒤 공백이 섞인 API Key는 서버의 OPENAPI00005 안내로 알린다
     this.apiKey = apiKey;
     this.timeoutMs = config.timeoutMs ?? DEFAULT_TIMEOUT_MS;
     this.maxRetries = config.maxRetries ?? DEFAULT_MAX_RETRIES;
@@ -105,7 +105,7 @@ export class HttpClient {
    * // 기본 호출: x-nxopen-api-key 가 자동으로 붙는다
    * const basic = await http.get<CharacterBasic>(url, { ocid }, CHARACTER_BASIC_SHAPE);
    *
-   * // 요청별 헤더: 기본 API 키 헤더를 제거하고 다른 인증 헤더를 보낸다
+   * // 요청별 헤더: 기본 API Key 헤더를 제거하고 다른 인증 헤더를 보낸다
    * const { ouid } = await http.get<{ ouid: string }>(url, undefined, OUID_SHAPE, {
    *   headers: { 'x-nxopen-api-key': undefined, 'x-nxopen-legacy-api-key': legacyApiKey },
    * });

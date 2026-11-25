@@ -71,15 +71,15 @@ export class MabinogiHeroesClient extends AbstractGameClient {
   }
 
   /**
-   * 영웅 이름으로 캐릭터 고유 번호를 조회한다.
+   * 영웅 이름으로 캐릭터 식별자를 조회한다.
    *
    * 게임 콘텐츠 변경으로 ocid가 바뀔 수 있으므로, 저장해 둔 ocid로 조회가 실패하면 다시 조회합니다.
    *
    * @param characterName - 조회할 캐릭터 이름
    * @throws {NexonBadRequestError} characterName이 비어 있을 때 (요청 전에 SDK가 throw)
    * @throws {NexonNotFoundError} 캐릭터를 찾을 수 없을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -89,7 +89,7 @@ export class MabinogiHeroesClient extends AbstractGameClient {
    * if (!apiKey) throw new Error('NEXON_API_KEY를 설정하세요.');
    * const client = new NexonClient({ apiKey });
    *
-   * // 캐릭터 검색에서 이름을 고유 번호로 바꿀 때
+   * // 캐릭터 검색에서 이름을 식별자로 바꿀 때
    * const ocid = await client.mabinogiHeroes.getOcid('캐릭터명');
    * const basic = await client.mabinogiHeroes.character.getBasic({ ocid });
    * ```

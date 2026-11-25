@@ -1,7 +1,7 @@
 /**
  * 게임별 API 검증 메타데이터.
  *
- * SDK 타입을 넥슨 API(실응답 또는 포털 스펙)와 마지막으로 대조한 시점을 기록합니다.
+ * SDK 타입을 NEXON Open API(실응답 또는 포털 스펙)와 마지막으로 대조한 시점을 기록합니다.
  * 대조 방식(실 API E2E인지, 포털 스펙 기준인지)은 `note`에 적습니다.
  */
 export interface GameApiMetadata {
@@ -9,7 +9,7 @@ export interface GameApiMetadata {
   readonly game: string;
   /** API URL path prefix */
   readonly pathPrefix: string;
-  /** SDK 타입을 넥슨 API(실응답 또는 포털 스펙)와 마지막으로 대조한 날짜 (YYYY-MM-DD) */
+  /** SDK 타입을 NEXON Open API(실응답 또는 포털 스펙)와 마지막으로 대조한 날짜 (YYYY-MM-DD) */
   readonly lastVerifiedAt: string;
   /** 그 대조 결과가 처음 포함된 SDK 릴리즈 버전 (npm에 게시된 버전) */
   readonly sdkVersionAtVerification: string;
@@ -26,7 +26,7 @@ export interface GameApiMetadata {
  */
 export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
   maplestory: {
-    game: 'MapleStory KMS',
+    game: '메이플스토리',
     pathPrefix: 'maplestory',
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
@@ -34,7 +34,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     note: "Real API E2E with a development key on 2026-11-24 (yarn test:deep): 55 of 56 methods called with 6 public ranking characters (2 with battle-practice replays) and the key owner's account. Responses were compared with the SDK types down to nested fields (0 differences); where live data differs from the portal spec, types follow the live data (specs/drift-baseline.json). Not called: getLegacyOuid (needs a legacy developer-center key).",
   },
   maplestorym: {
-    game: 'MapleStory M',
+    game: '메이플스토리M',
     pathPrefix: 'maplestorym',
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
@@ -42,7 +42,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     note: 'Real API E2E with a development key on 2026-11-24 (yarn test:deep): all 38 methods called with 3 public ranking characters. Responses were compared with the SDK types down to nested fields (0 differences); where live data differs from the portal spec, types follow the live data (specs/drift-baseline.json).',
   },
   maplestorysea: {
-    game: 'MapleStory SEA',
+    game: 'MapleStorySEA',
     pathPrefix: 'maplestorysea',
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
@@ -50,7 +50,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
     note: 'Real API E2E with a development key on 2026-11-24 (yarn test:deep): all 26 methods called with 3 public characters (incl. guild APIs). Responses were compared with the SDK types down to nested fields (0 differences); where live data differs from the portal spec, types follow the live data (specs/drift-baseline.json).',
   },
   fconline: {
-    game: 'EA SPORTS FC Online',
+    game: 'EA SPORTS FC 온라인',
     pathPrefix: 'fconline',
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
@@ -61,7 +61,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
   // ── 아래 자리는 게임 구현 워커가 채운다: 자기 게임의 [slot] 주석 한 줄을 엔트리로 교체 ──
 
   maplestorytw: {
-    game: 'MapleStory Taiwan',
+    game: 'MapleStoryTaiwan',
     pathPrefix: 'maplestorytw',
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
@@ -70,7 +70,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
   },
 
   tfd: {
-    game: 'The First Descendant',
+    game: '퍼스트 디센던트',
     pathPrefix: 'tfd',
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
@@ -79,7 +79,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
   },
 
   heroes: {
-    game: 'Mabinogi Heroes',
+    game: '마비노기 영웅전',
     pathPrefix: 'heroes',
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
@@ -88,7 +88,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
   },
 
   suddenattack: {
-    game: 'Sudden Attack',
+    game: '서든어택',
     pathPrefix: 'suddenattack',
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
@@ -97,7 +97,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
   },
 
   kartrush: {
-    game: 'KartRider Rush+',
+    game: '카트라이더 러쉬플러스',
     pathPrefix: 'kartrush',
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
@@ -106,7 +106,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
   },
 
   baram: {
-    game: 'The Kingdom of the Winds (Baram)',
+    game: '바람의나라',
     pathPrefix: 'baram',
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
@@ -115,7 +115,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
   },
 
   mabinogi: {
-    game: 'Mabinogi',
+    game: '마비노기',
     pathPrefix: 'mabinogi',
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
@@ -124,7 +124,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
   },
 
   baramy: {
-    game: 'The Kingdom of the Winds: Yeon (Baram: Yeon)',
+    game: '바람의나라: 연',
     pathPrefix: 'baramy',
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
@@ -142,7 +142,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
   },
 
   hit2: {
-    game: 'HIT2',
+    game: '히트2',
     pathPrefix: 'hit2',
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',
@@ -151,7 +151,7 @@ export const API_METADATA: Readonly<Record<string, GameApiMetadata>> = {
   },
 
   platform: {
-    game: 'NEXON Open API Platform (Open API notices)',
+    game: 'NEXON Open API 공지',
     pathPrefix: 'platform',
     lastVerifiedAt: '2026-11-24',
     sdkVersionAtVerification: '0.2.0',

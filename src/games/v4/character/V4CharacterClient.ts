@@ -39,10 +39,10 @@ export class V4CharacterClient {
    * `character_date_create` 는 일 단위라 시·분·초가 항상 0이고,
    * `character_create_type` 은 문자열 코드다 (`"0"`: 일반 캐릭터, `"1"`: 점핑 캐릭터). 값이 없으면 null이다.
    *
-   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 고유 번호
+   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 식별자
    * @throws {NexonBadRequestError} ocid가 비어 있거나(요청 전 차단) 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -70,10 +70,10 @@ export class V4CharacterClient {
   /**
    * 캐릭터가 보유한 명예와 만료 시각을 조회한다.
    *
-   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 고유 번호
+   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 식별자
    * @throws {NexonBadRequestError} ocid가 비어 있거나(요청 전 차단) 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
@@ -103,10 +103,10 @@ export class V4CharacterClient {
   /**
    * 캐릭터가 장착한 명예와 만료 시각을 조회한다.
    *
-   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 고유 번호
+   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 식별자
    * @throws {NexonBadRequestError} ocid가 비어 있거나(요청 전 차단) 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts

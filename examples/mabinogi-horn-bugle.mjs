@@ -7,7 +7,7 @@ import { NexonClient } from 'nexon-open-api';
 async function main() {
   const apiKey = process.env['NEXON_MABINOGI_API_KEY']?.trim();
   if (!apiKey) {
-    console.error('📣 마비노기 API 키가 필요해요. .env에 NEXON_MABINOGI_API_KEY를 설정해 주세요.');
+    console.error('📣 마비노기 API Key가 필요해요. .env에 NEXON_MABINOGI_API_KEY를 설정해 주세요.');
     process.exitCode = 1;
     return;
   }

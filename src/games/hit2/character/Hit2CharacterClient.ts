@@ -29,10 +29,10 @@ export class Hit2CharacterClient {
    * `character_date_create` 는 일 단위라 시·분·초가 항상 0이다.
    * 로그인·로그아웃 시각은 `character_date_last_login` / `character_date_last_logout` 으로 온다 (포털 스펙에는 `date_` 없이 적혀 있다).
    *
-   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 고유 번호
+   * @param params - `ocid`는 `getOcid()`로 찾은 캐릭터 식별자
    * @throws {NexonBadRequestError} ocid가 비어 있거나(요청 전 차단) 유효하지 않을 때
-   * @throws {NexonAuthError} API 키가 유효하지 않을 때
-   * @throws {NexonRateLimitError} 호출 한도를 초과했을 때
+   * @throws {NexonAuthError} API Key가 유효하지 않을 때
+   * @throws {NexonRateLimitError} 호출 허용량을 초과했을 때
    *
    * @example
    * ```ts
