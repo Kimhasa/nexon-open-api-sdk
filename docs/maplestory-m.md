@@ -6,19 +6,19 @@
 
 ## 시작하기
 
-메이플스토리M은 캐릭터를 찾을 때 **월드 이름이 꼭 필요합니다.** 월드 이름과 캐릭터 이름으로 **캐릭터 고유 번호(OCID)** 를 받고, 그 번호로 정보를 조회합니다.
+메이플스토리M은 캐릭터를 찾을 때 ** 월드 이름이 꼭 필요합니다.** 월드 이름과 캐릭터 이름으로 **캐릭터 식별자(ocid)**를 받고, 해당 식별자로 정보를 조회합니다.
 
 ```js
 import { NexonClient, NexonNotFoundError } from 'nexon-open-api';
 
-// API 키는 코드에 적지 말고 환경변수로 읽는다
+// API Key는 코드에 적지 말고 환경 변수로 읽는다
 const apiKey = process.env.NEXON_API_KEY;
-if (!apiKey) throw new Error('NEXON_API_KEY 환경변수에 메이플스토리M API 키를 넣어 주세요.');
+if (!apiKey) throw new Error('NEXON_API_KEY 환경 변수에 메이플스토리M API Key를 설정해 주세요.');
 
 const client = new NexonClient({ apiKey });
 
 try {
-  // 1. 월드 이름 + 캐릭터 이름 → 캐릭터 고유 번호(OCID)
+  // 1. 월드 이름 + 캐릭터 이름 → 캐릭터 식별자(ocid)
   const ocid = await client.maplestorym.getOcid('스카니아', '캐릭터명');
 
   // 2. 기본 정보와 가입 길드
@@ -41,11 +41,11 @@ try {
 }
 ```
 
-실행: 위 코드를 `index.mjs` 로 저장하고, 같은 폴더의 `.env` 파일에 `NEXON_API_KEY=발급받은키` 를 적은 뒤 `node --env-file=.env index.mjs` 를 실행합니다 (Node.js 20.6 이상). 맨 바깥에서 `await` 를 쓰려면 파일 확장자가 `.mjs` 여야 합니다.
+실행: 위 코드를 `index.mjs`로 저장하고, 같은 폴더의 `.env` 파일에 `NEXON_API_KEY=발급받은키`를 적은 뒤 `node --env-file=.env index.mjs`를 실행합니다 (Node.js 20.6 이상). 맨 바깥에서 `await`를 쓰려면 파일 확장자가 `.mjs` 여야 합니다.
 
-API 키는 게임마다 따로 발급받습니다. PC 메이플스토리 키로는 메이플스토리M을 조회할 수 없습니다. 처음이면 [시작 가이드](./getting-started.md)를 먼저 보세요.
+API Key는 게임별로 발급됩니다. PC 메이플스토리용 API Key로 메이플스토리M을 조회할 수 없습니다. API Key 발급과 설치 방법은 [시작 가이드](./getting-started.md)를 참고해 주세요.
 
-> 이 문서의 짧은 코드 조각은 위 예제의 `client` 와 `ocid` 가 이미 있다고 가정합니다.
+> 이 문서의 짧은 코드 조각은 위 예제의 `client`와 `ocid`가 이미 있다고 가정합니다.
 
 ## PC 메이플스토리와 다른 점
 
@@ -54,7 +54,7 @@ API 키는 게임마다 따로 발급받습니다. PC 메이플스토리 키로�
 | 항목           | 메이플스토리 (PC)                    | 메이플스토리M                                                   |
 | -------------- | ------------------------------------ | --------------------------------------------------------------- |
 | 캐릭터 찾기    | `getOcid('캐릭터명')`                | `getOcid('월드명', '캐릭터명')` — **월드 이름이 먼저**          |
-| 날짜           | `date` 로 과거 날짜 조회 가능        | 캐릭터·유니온·길드는 **날짜가 없음** (현재 데이터). 랭킹만 날짜 |
+| 날짜           | `date`로 과거 날짜 조회 가능         | 캐릭터·유니온·길드는 **날짜가 없음** (현재 데이터). 랭킹만 날짜 |
 | 길드 번호 받기 | `guild.getId('길드명', '월드명')`    | `guild.getId('월드명', '길드명')` — 순서가 반대                 |
 | 유니온 레벨    | `union.getUnion()`                   | `union.get()`                                                   |
 | 심볼           | `character.getSymbolEquipment()`     | `character.getSymbol()` — 아케인·어센틱이 따로 나뉘어 옴        |
@@ -64,13 +64,13 @@ API 키는 게임마다 따로 발급받습니다. PC 메이플스토리 키로�
 
 ## 게임 용어 ↔ SDK 대응표
 
-메서드 이름 앞의 `client.maplestorym.` 는 생략했습니다.
+메서드 이름 앞의 `client.maplestorym.`는 생략했습니다.
 
 ### 캐릭터 찾기 (1개)
 
-| 게임에서 부르는 이름        | SDK 메서드                        | 주요 응답 필드   |
-| --------------------------- | --------------------------------- | ---------------- |
-| 캐릭터 고유 번호(OCID) 받기 | `getOcid('스카니아', '캐릭터명')` | 반환값이 곧 OCID |
+| 게임에서 부르는 이름     | SDK 메서드                        | 주요 응답 필드     |
+| ------------------------ | --------------------------------- | ------------------ |
+| 캐릭터 식별자(ocid) 조회 | `getOcid('스카니아', '캐릭터명')` | 캐릭터 식별자 반환 |
 
 ### 캐릭터 정보 (17개)
 
@@ -106,7 +106,7 @@ API 키는 게임마다 따로 발급받습니다. PC 메이플스토리 키로�
 
 | 게임에서 부르는 이름           | SDK 메서드                          | 주요 응답 필드                                                                         |
 | ------------------------------ | ----------------------------------- | -------------------------------------------------------------------------------------- |
-| 길드 고유 번호 받기            | `guild.getId('스카니아', '길드명')` | 반환값이 곧 길드 고유 번호                                                             |
+| 길드 식별자(oguild_id) 조회    | `guild.getId('스카니아', '길드명')` | 길드 식별자 반환                                                                       |
 | 길드 정보 (창설일·길드원·스킬) | `guild.getBasic({ oguild_id })`     | `guild_create_date`, `guild_level`, `guild_master_name`, `guild_member`, `guild_skill` |
 
 ### 랭킹 (9개)
@@ -136,12 +136,12 @@ API 키는 게임마다 따로 발급받습니다. PC 메이플스토리 키로�
 
 ## 알아두기
 
-### 고유 번호
+### 식별자
 
-- **OCID — 캐릭터 고유 번호.** `getOcid('월드명', '캐릭터명')` 으로 받습니다. 넥슨은 게임 콘텐츠가 바뀌면 OCID가 바뀔 수 있다고 안내합니다. 저장해 둔 OCID로 조회가 실패하면 다시 받으세요.
-- **길드 고유 번호(`oguild_id`).** `guild.getId('월드명', '길드명')` 으로 받습니다.
+- **캐릭터 식별자(ocid).** `getOcid('월드명', '캐릭터명')`으로 받습니다. 넥슨은 게임 콘텐츠가 바뀌면 OCID가 바뀔 수 있다고 안내합니다. 저장한 식별자로 조회가 실패하면 월드 이름과 캐릭터 이름으로 다시 조회해 주세요.
+- **길드 식별자(`oguild_id`).** `guild.getId('월드명', '길드명')`으로 받습니다.
 
-### 데이터가 언제 반영되나
+### 데이터 반영 시점
 
 - 캐릭터·유니온 정보는 날짜 없이 **현재 데이터**를 조회합니다. 게임에서 바뀐 내용은 **평균 10분 뒤**(길드는 평균 15분 뒤)에 조회됩니다.
 - 값이 게임과 다르거나 조회되지 않으면 **게임에 다시 접속한 뒤** 조회하세요 (넥슨 안내). 장비·캐시 아이템·안드로이드의 프리셋 정보가 비어 있으면, 게임에서 그 프리셋을 한 번 선택했다가 다른 프리셋으로 바꾸면 채워집니다.
@@ -154,21 +154,21 @@ API 키는 게임마다 따로 발급받습니다. PC 메이플스토리 키로�
 
 - **월드 이름:** 아케인, 크로아, 엘리시움, 루나, 스카니아, 유니온, 제니스, 챌린저스
 - **랭킹 날짜(`date`):** 한국 시간 기준 `'YYYY-MM-DD'` 문자열입니다. 날짜가 빠졌거나 형식 또는 범위가 잘못되면 SDK가 요청 전에 `NexonBadRequestError` (`OPENAPI00004`)로 알려줍니다.
-- **랭킹 범위:** `world_name`(월드 랭킹) 또는 `ocid`(특정 캐릭터의 순위) 중 **하나만** 넣을 수 있습니다. 둘 다 생략하면 전체 월드 랭킹입니다. 한 페이지에 200개씩이며 `page` 로 다음 페이지를 봅니다.
-- **샤레니안 랭킹의 `ocid`:** 길드 랭킹이므로 **길드 마스터**의 캐릭터 고유 번호를 넣습니다.
+- **랭킹 범위:** `world_name`(월드 랭킹) 또는 `ocid`(특정 캐릭터의 순위) 중 **하나만** 넣을 수 있습니다. 둘 다 생략하면 전체 월드 랭킹입니다. 한 페이지에 200개씩이며 `page`로 다음 페이지를 봅니다.
+- **샤레니안 랭킹의 `ocid`:** 길드 랭킹이므로 ** 길드 마스터**의 캐릭터 식별자를 넣습니다.
 
 ### 주의할 점
 
-- **시각은 UTC 기준입니다.** 캐릭터 생성일·최근 접속 시각(`character_date_last_login`)과 공지 등록일은 UTC(한국 시간보다 9시간 늦음)로 옵니다. 랭킹의 `date` 만 한국 시간입니다.
+- **시각은 UTC 기준입니다.** 캐릭터 생성일·최근 접속 시각(`character_date_last_login`)과 공지 등록일은 UTC(한국 시간보다 9시간 늦음)로 옵니다. 랭킹의 `date`만 한국 시간입니다.
 - 잠재능력 등급(`item_potential_option_grade`)은 `"1"` 레어, `"2"` 에픽, `"3"` 유니크, `"4"` 레전더리이고, 추가 옵션 등급(`item_additional_option_grade`)은 `"1"`·`"4"` 파란색, `"2"` 보라색, `"3"` 주황색입니다. 해당 옵션이 없으면 `null`이 옵니다.
 - 안드로이드의 캐시 아이템 장착 가능 성별은 `cash_item_gender` 문자열로 옵니다. 캐릭터의 캐시 아이템도 같은 필드에 문자열로 제공됩니다.
 - 장착 스킬 세팅 번호(`skill.equipment_skill[].equipment_skill_set`)와 링크 스킬 레벨(`link_skill[].link_skill_info[].skill_level`)은 숫자입니다.
-- **필수 값이 비어 있으면 요청을 보내지 않습니다.** 빈 월드 이름·캐릭터 이름·`ocid`, 랭킹에서 `world_name` 과 `ocid` 를 함께 넣은 경우 등은 `NexonBadRequestError` 로 바로 알려 줍니다.
+- **필수 값이 비어 있으면 요청을 보내지 않습니다.** 빈 월드 이름·캐릭터 이름·`ocid`, 랭킹에서 `world_name`과 `ocid`를 함께 넣은 경우 등은 `NexonBadRequestError`로 바로 알려 줍니다.
 - **더 이상 권장하지 않는 필드**
-  - 기본 정보의 `character_job_name` → `character_class` 를 쓰세요.
-  - 장비의 `item_option` → `item_basic_option` 을 쓰세요.
-  - V매트릭스의 `vcore_skill_name_1`~`3` → `vcore_skill_name1`~`4` 를 쓰세요. `slot_id`, `slot_level`, `vcore_name` 도 넥슨 문서에서 빠졌습니다.
-  - 유니온 공격대의 `use_preset_no`, `use_union_occupied_option`, `battle_map` 은 넥슨 문서에서 빠졌습니다. 유니온 스탯 프리셋은 `union.getStat()` 에서 봅니다.
+  - 기본 정보의 `character_job_name` → `character_class`를 쓰세요.
+  - 장비의 `item_option` → `item_basic_option`을 쓰세요.
+  - V매트릭스의 `vcore_skill_name_1`~`3` → `vcore_skill_name1`~`4`를 쓰세요. `slot_id`, `slot_level`, `vcore_name`도 넥슨 문서에서 빠졌습니다.
+  - 유니온 공격대의 `use_preset_no`, `use_union_occupied_option`, `battle_map`은 넥슨 문서에서 빠졌습니다. 유니온 스탯 프리셋은 `union.getStat()`에서 봅니다.
 
 ## 카테고리별 사용법
 
@@ -222,7 +222,7 @@ for (const item of equip.item_equipment) {
 - `emblem_info.emblem_level` — 문장 레벨 (`number`). 문장이 없으면 `emblem_info`는 `null`
 - `mastery_info` — 마스터리 레벨과 옵션별 보너스 포인트. 정보가 없으면 `null` 또는 생략
 
-`use_preset_no` 가 지금 쓰는 프리셋이고 `equipment_preset[]` 에 프리셋별 장비가 있습니다.
+`use_preset_no`가 지금 쓰는 프리셋이고 `equipment_preset[]`에 프리셋별 장비가 있습니다.
 
 ### 심볼·쥬얼·스킬
 
@@ -241,8 +241,8 @@ console.log(page?.jewel_info.map((j) => `${j.jewel_name}(${j.jewel_grade})`));
 ```
 
 - 심볼은 `arcane_symbol`(아케인심볼)과 `authentic_symbol`(어센틱심볼)로 나뉘어 옵니다.
-- V매트릭스의 `vcore_equipment_flag` 는 `"1"` 장착, `"0"` 미장착이고, `vcore_expire_flag` 는 `"1"` 기간제입니다. `vmatrix_total_score` 가 V매트릭스 합산 점수입니다.
-- HEXA 스탯은 `hexamatrix_stat[].stat_info[]` 에 페이지별로 들어 있고, `activate_flag` 로 활성화된 페이지를 구분합니다.
+- V매트릭스의 `vcore_equipment_flag`는 `"1"` 장착, `"0"` 미장착이고, `vcore_expire_flag`는 `"1"` 기간제입니다. `vmatrix_total_score`가 V매트릭스 합산 점수입니다.
+- HEXA 스탯은 `hexamatrix_stat[].stat_info[]`에 페이지별로 들어 있고, `activate_flag`로 활성화된 페이지를 구분합니다.
 
 ### 유니온
 
@@ -259,7 +259,7 @@ for (const s of unionStat.use_union_stat) console.log(`${s.stat_name}: ${s.stat_
 
 - `union_level_total_option` — 레벨 총합 누적 효과
 - `use_union_raider_option` — 적용 중인 공격대원 효과
-- `use_union_stat` — 적용 중인 유니온 스탯. `stat_point` 가 그 스탯에 분배한 유니온 포인트입니다. 프리셋별 분배는 `union_stat_preset` 에 있습니다.
+- `use_union_stat` — 적용 중인 유니온 스탯. `stat_point`가 그 스탯에 분배한 유니온 포인트입니다. 프리셋별 분배는 `union_stat_preset`에 있습니다.
 
 ### 길드
 
@@ -274,7 +274,7 @@ for (const m of members) {
 }
 ```
 
-PC 메이플스토리와 달리 길드원마다 레벨(`character_level`)과 길드 활동량(`guild_activity`)이 함께 옵니다. `guild_building` 은 길드 시설물, `guild_ability` 는 길드 어빌리티입니다.
+PC 메이플스토리와 달리 길드원마다 레벨(`character_level`)과 길드 활동량(`guild_activity`)이 함께 옵니다. `guild_building`은 길드 시설물, `guild_ability`는 길드 어빌리티입니다.
 
 ### 랭킹
 
@@ -293,7 +293,7 @@ const mine = await client.maplestorym.ranking.getLevel({ date: '2026-11-23', oci
 console.log(mine.ranking[0]?.ranking);
 ```
 
-- `ranking` 은 전체 월드 순위, `world_ranking` 은 그 캐릭터가 속한 월드 안의 순위입니다.
+- `ranking`은 전체 월드 순위, `world_ranking`은 그 캐릭터가 속한 월드 안의 순위입니다.
 - 무릉도장·시간의 근원·유니온·전투력·커닝M타워는 길드에 가입하지 않은 캐릭터의 `guild_name`이 `null`입니다.
 - 샤레니안의 전장·지하수로는 길드 랭킹이라 `guild_name`, `guild_master_name`, `season_score`가 옵니다. 시즌 점수는 전장에서 문자열, 지하수로에서 숫자입니다.
 
@@ -309,11 +309,11 @@ if (latest) {
 }
 ```
 
-목록은 최근 20개입니다. 본문(`contents`)은 목록의 `notice_id` 로 상세를 조회해 받습니다.
+목록은 최근 20개입니다. 본문(`contents`)은 목록의 `notice_id`로 상세를 조회해 받습니다.
 
-<details><summary>넥슨 API 경로</summary>
+<details><summary>NEXON Open API 경로</summary>
 
-모든 경로 앞에 `https://open.api.nexon.com` 이 붙습니다.
+모든 경로 앞에 `https://open.api.nexon.com`이 붙습니다.
 
 | SDK 메서드                        | 경로                                                |
 | --------------------------------- | --------------------------------------------------- |
@@ -358,7 +358,7 @@ if (latest) {
 
 </details>
 
-응답의 나머지 필드는 에디터 자동완성에서 확인하세요.
+나머지 응답 필드는 편집기 자동완성에서 확인할 수 있습니다.
 
 ## 만들기 예제
 
@@ -370,7 +370,7 @@ if (latest) {
 import { NexonClient, NexonNotFoundError } from 'nexon-open-api';
 
 const apiKey = process.env.NEXON_API_KEY;
-if (!apiKey) throw new Error('NEXON_API_KEY 환경변수를 설정해 주세요.');
+if (!apiKey) throw new Error('NEXON_API_KEY 환경 변수를 설정해 주세요.');
 const client = new NexonClient({ apiKey });
 
 async function summarize(worldName, characterName) {
@@ -409,7 +409,7 @@ console.log(await summarize('스카니아', '캐릭터명'));
 import { NexonClient } from 'nexon-open-api';
 
 const apiKey = process.env.NEXON_API_KEY;
-if (!apiKey) throw new Error('NEXON_API_KEY 환경변수를 설정해 주세요.');
+if (!apiKey) throw new Error('NEXON_API_KEY 환경 변수를 설정해 주세요.');
 const client = new NexonClient({ apiKey });
 
 const WORLDS = ['아케인', '크로아', '엘리시움', '루나', '스카니아', '유니온', '제니스', '챌린저스'];
@@ -425,10 +425,10 @@ for (const world of WORLDS) {
 // 크로아: 캐릭터명 (전투력 1234567890)
 ```
 
-두 예제 모두 `index.mjs` 로 저장하고 `node --env-file=.env index.mjs` 로 실행합니다. 더 많은 예제는 [examples](../examples/README.md)에 있습니다.
+두 예제 모두 `index.mjs`로 저장하고 `node --env-file=.env index.mjs`로 실행합니다. 더 많은 예제는 [examples](../examples/README.md)에 있습니다.
 
 ## 참고
 
 - 에러와 문제 해결: [FAQ](./faq.md)
 - PC 메이플스토리: [메이플스토리](./maplestory.md)
-- 이 문서의 API는 넥슨 포털 공식 스펙을 기준으로 구현했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)).
+- 이 문서의 API는 NEXON Open API 포털 공식 스펙을 기준으로 구현했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)).

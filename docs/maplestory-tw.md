@@ -1,4 +1,4 @@
-# MapleStory Taiwan — nexon-open-api
+# MapleStoryTaiwan — nexon-open-api
 
 > `client.maplestoryTW` · API 27개 · [넥슨 공식 문서](https://openapi.nexon.com/ko/game/maplestorytw/)
 
@@ -6,19 +6,19 @@
 
 ## 시작하기
 
-캐릭터 이름으로 **캐릭터 고유 번호(OCID)** 를 먼저 받고, 그 번호로 원하는 정보를 조회합니다. 사용법은 [한국 메이플스토리](./maplestory.md)와 같습니다.
+캐릭터 이름으로 **캐릭터 식별자(ocid)**를 조회한 다음, 해당 식별자로 캐릭터 정보를 조회합니다. 사용법은 [한국 메이플스토리](./maplestory.md)와 같습니다.
 
 ```js
 import { NexonClient, NexonNotFoundError } from 'nexon-open-api';
 
-// API 키는 코드에 적지 말고 환경변수로 읽는다
+// API Key는 코드에 적지 말고 환경 변수로 읽는다
 const apiKey = process.env.NEXON_API_KEY;
-if (!apiKey) throw new Error('NEXON_API_KEY 환경변수에 MapleStory Taiwan API 키를 넣어 주세요.');
+if (!apiKey) throw new Error('NEXON_API_KEY 환경 변수에 MapleStoryTaiwan API Key를 설정해 주세요.');
 
 const client = new NexonClient({ apiKey });
 
 try {
-  // 1. 캐릭터 이름 → 캐릭터 고유 번호(OCID)
+  // 1. 캐릭터 이름 → 캐릭터 식별자(ocid)
   const ocid = await client.maplestoryTW.getOcid('CharacterName');
 
   // 2. 기본 정보와 패밀리어(萌獸)
@@ -41,15 +41,15 @@ try {
 }
 ```
 
-실행: 위 코드를 `index.mjs` 로 저장하고, 같은 폴더의 `.env` 파일에 `NEXON_API_KEY=발급받은키` 를 적은 뒤 `node --env-file=.env index.mjs` 를 실행합니다 (Node.js 20.6 이상). 맨 바깥에서 `await` 를 쓰려면 파일 확장자가 `.mjs` 여야 합니다.
+실행: 위 코드를 `index.mjs`로 저장하고, 같은 폴더의 `.env` 파일에 `NEXON_API_KEY=발급받은키`를 적은 뒤 `node --env-file=.env index.mjs`를 실행합니다 (Node.js 20.6 이상). 맨 바깥에서 `await`를 쓰려면 파일 확장자가 `.mjs` 여야 합니다.
 
-API 키는 게임마다 따로 발급받습니다. 한국 메이플스토리 키로는 대만 서버를 조회할 수 없습니다. 처음이면 [시작 가이드](./getting-started.md)를 먼저 보세요.
+API Key는 게임별로 발급됩니다. 한국 메이플스토리용 API Key로 MapleStoryTaiwan을 조회할 수 없습니다. API Key 발급과 설치 방법은 [시작 가이드](./getting-started.md)를 참고해 주세요.
 
-> 이 문서의 짧은 코드 조각은 위 예제의 `client` 와 `ocid` 가 이미 있다고 가정합니다.
+> 이 문서의 짧은 코드 조각은 위 예제의 `client`와 `ocid`가 이미 있다고 가정합니다.
 
 ## 한국 메이플스토리와 다른 점
 
-| 항목             | 한국 메이플스토리      | MapleStory Taiwan                                                                   |
+| 항목             | 한국 메이플스토리      | MapleStoryTaiwan                                                                    |
 | ---------------- | ---------------------- | ----------------------------------------------------------------------------------- |
 | 날짜 기준        | 한국 시간 (KST, UTC+9) | **대만 시간 (TST, UTC+8)**                                                          |
 | 날짜 형식        | `'YYYY-MM-DD'` 문자열  | `'YYYY-MM-DD'` 문자열 또는 `Date` 객체                                              |
@@ -58,17 +58,17 @@ API 키는 게임마다 따로 발급받습니다. 한국 메이플스토리 키
 | 대만에만 있는 것 | —                      | **패밀리어(萌獸)** — `character.getFamiliar()`                                      |
 | 대만에 없는 것   | —                      | 내 캐릭터 목록, 강화 기록, 랭킹, 공지, 연무장, 스케줄러, 기타 능력치, 특수 반지     |
 
-메서드 이름과 응답 필드 이름은 한국 메이플스토리와 같습니다. 필드 설명은 [메이플스토리 문서](./maplestory.md#카테고리별-사용법)를 함께 보세요.
+메서드 이름과 응답 필드 이름은 한국 메이플스토리와 같습니다. 필드 설명은 [메이플스토리 문서](./maplestory.md#카테고리별-사용법)를 함께 확인해 주세요.
 
 ## 게임 용어 ↔ SDK 대응표
 
-메서드 이름 앞의 `client.maplestoryTW.` 는 생략했습니다. 대만 명칭은 넥슨 공식 문서의 표기입니다.
+메서드 이름 앞의 `client.maplestoryTW.`는 생략했습니다. 대만 명칭은 넥슨 공식 문서의 표기입니다.
 
 ### 캐릭터 찾기 (1개)
 
-| 게임에서 부르는 이름        | 대만 명칭         | SDK 메서드                 | 주요 응답 필드   |
-| --------------------------- | ----------------- | -------------------------- | ---------------- |
-| 캐릭터 고유 번호(OCID) 받기 | 角色辨識器 (OCID) | `getOcid('CharacterName')` | 반환값이 곧 OCID |
+| 게임에서 부르는 이름     | 대만 명칭         | SDK 메서드                 | 주요 응답 필드     |
+| ------------------------ | ----------------- | -------------------------- | ------------------ |
+| 캐릭터 식별자(ocid) 조회 | 角色辨識器 (OCID) | `getOcid('CharacterName')` | 캐릭터 식별자 반환 |
 
 ### 캐릭터 정보 (20개)
 
@@ -106,20 +106,20 @@ API 키는 게임마다 따로 발급받습니다. 한국 메이플스토리 키
 
 ### 길드 (2개)
 
-| 게임에서 부르는 이름 | 대만 명칭    | SDK 메서드                           | 주요 응답 필드                                     |
-| -------------------- | ------------ | ------------------------------------ | -------------------------------------------------- |
-| 길드 고유 번호 받기  | 公會識別碼   | `guild.getId('GuildName', '艾麗亞')` | 반환값이 곧 길드 고유 번호                         |
-| 길드 정보            | 公會基本資訊 | `guild.getBasic({ oguild_id })`      | `guild_level`, `guild_master_name`, `guild_member` |
+| 게임에서 부르는 이름        | 대만 명칭    | SDK 메서드                           | 주요 응답 필드                                     |
+| --------------------------- | ------------ | ------------------------------------ | -------------------------------------------------- |
+| 길드 식별자(oguild_id) 조회 | 公會識別碼   | `guild.getId('GuildName', '艾麗亞')` | 길드 식별자 반환                                   |
+| 길드 정보                   | 公會基本資訊 | `guild.getBasic({ oguild_id })`      | `guild_level`, `guild_master_name`, `guild_member` |
 
 ## 알아두기
 
-- **OCID — 캐릭터 고유 번호.** `getOcid('CharacterName')` 으로 받습니다. 넥슨은 게임 콘텐츠가 바뀌면 OCID가 바뀔 수 있다고 안내합니다. 저장해 둔 OCID로 조회가 실패하면 이름으로 다시 받으세요.
-- **길드 고유 번호(`oguild_id`).** 길드 이름과 월드 이름으로 `guild.getId()` 에서 받습니다.
-- **날짜는 대만 시간(UTC+8) 기준입니다.** `date` 에 `'2026-11-01'` 같은 날짜 문자열이나 `Date` 객체를 넣을 수 있습니다. SDK는 `Date` 객체를 대만 시간의 달력 날짜로 바꿔 보냅니다.
+- **캐릭터 식별자(ocid).** `getOcid('CharacterName')`으로 받습니다. 넥슨은 게임 콘텐츠가 바뀌면 OCID가 바뀔 수 있다고 안내합니다. 저장한 식별자로 조회가 실패하면 캐릭터 이름으로 다시 조회해 주세요.
+- ** 길드 식별자(`oguild_id`).** 길드 이름과 월드 이름으로 `guild.getId()`에서 받습니다.
+- **날짜는 대만 시간(UTC+8) 기준입니다.** `date`에 `'2026-11-01'` 같은 날짜 문자열이나 `Date` 객체를 넣을 수 있습니다. SDK는 `Date` 객체를 대만 시간의 달력 날짜로 바꿔 보냅니다.
 - **조회할 수 없는 날짜는 요청 전에 걸러 줍니다.** 캐릭터·길드는 2025-10-15부터, 유니온은 2025-10-14부터, 유니온 챔피언은 2025-12-18부터 어제까지 조회할 수 있습니다. 형식이 잘못되었거나 조회 범위를 벗어난 날짜는 SDK가 요청 전에 `NexonBadRequestError` (`OPENAPI00004`)로 알려줍니다.
-- **데이터 반영:** 게임에서 바뀐 내용은 약 15분 뒤에 조회됩니다. `date` 를 생략하면 가장 최근 데이터를 받습니다. 날짜를 넣으면 그날 하루(0시~24시)의 데이터이고, 지난 날짜의 데이터는 다음날 오전 2시(대만 시간)부터 조회됩니다.
-- **응답의 기준일:** 캐릭터·유니온·길드의 최신 데이터에서 `date` 는 `null` 일 수 있습니다.
-- **월드 이름:** 艾麗亞, 普力特, 琉德, 優依娜, 愛麗西亞, 米特拉, 挑戰者, 殺人鯨, 賽蓮. `guild.getId()` 는 이 이름만 받습니다.
+- **데이터 반영:** 게임에서 바뀐 내용은 약 15분 뒤에 조회됩니다. `date`를 생략하면 가장 최근 데이터를 받습니다. 날짜를 넣으면 그날 하루(0시~24시)의 데이터이고, 지난 날짜의 데이터는 다음날 오전 2시(대만 시간)부터 조회됩니다.
+- **응답의 기준일:** 캐릭터·유니온·길드의 최신 데이터에서 `date`는 `null` 일 수 있습니다.
+- **월드 이름:** 艾麗亞, 普力特, 琉德, 優依娜, 愛麗西亞, 米特拉, 挑戰者, 殺人鯨, 賽蓮. `guild.getId()`는 이 이름만 받습니다.
 - **스킬 차수(`character_skill_grade`):** `'0'`(0차·제로 공용), `'1'`, `'1.5'`, `'2'`, `'2.5'`, `'3'`, `'4'`(제로 알파/베타 포함), `'5'`, `'6'`, `'hyperpassive'`, `'hyperactive'`
 - **숫자와 참/거짓이 문자열로 올 때가 많습니다.** 스타포스(`starforce`), 스탯 값(`stat_value`), 패밀리어 연결 슬롯의 `active_flag`(`"true"` / `"false"`) 등은 문자열입니다.
 
@@ -146,7 +146,7 @@ for (const slot of familiar.familiar_link_slot) {
 
 - `familiar_info[]` — 패밀리어 한 마리. `familiar_grade` 등급, `familiar_level` 레벨, `skill_name` 배운 스킬, `option[]` 옵션 목록. 등급이나 배운 스킬에 값이 없으면 `null` 입니다.
 - `familiar_info[].slot_id` — 연결된 슬롯 (`"1"`, `"2"`, `"3"`, `"vip"`). 연결되지 않았으면 `"not link"`
-- `familiar_link_slot[]` — 연결 슬롯. `familiar_name` 이 `null` 이면 빈 슬롯, `active_flag` 가 `"true"` 면 활성화된 슬롯
+- `familiar_link_slot[]` — 연결 슬롯. `familiar_name`이 `null`이면 빈 슬롯, `active_flag`가 `"true"` 면 활성화된 슬롯
 
 ### 캐릭터 장비·스탯·스킬
 
@@ -172,9 +172,9 @@ console.log(skill.character_skill.map((s) => s.skill_name));
 - 업그레이드 가능 횟수 — `scroll_upgradeable_count` (`string | undefined`). 장착 장비와 프리셋 장비에 쓰입니다.
 - 프리셋 장비 슬롯 — `item_equipment_slot` (`string | undefined`). 프리셋 장비에는 잠재능력 봉인 상태 `potential_option_flag`, `additional_potential_option_flag` (`string | undefined`)도 올 수 있습니다.
 - 펫 잠재능력 증가량 — `pet_1_potential`~`pet_3_potential` 원소의 `potential_increase1`, `potential_increase2` (`string | null | undefined`).
-- HEXA 코어 — `character_hexa_core_equipment` 값이 `null` 이면 표시할 코어 정보가 없습니다. HEXA 스탯의 코어 II·III 배열도 각각 `null` 일 수 있습니다.
+- HEXA 코어 — `character_hexa_core_equipment` 값이 `null`이면 표시할 코어 정보가 없습니다. HEXA 스탯의 코어 II·III 배열도 각각 `null` 일 수 있습니다.
 - `final_stat[]` — `{ stat_name, stat_value }` 목록. 원하는 스탯은 이름으로 찾습니다.
-- `getBasic()` 의 `character_image` 는 캐릭터 외형 이미지 주소입니다. 넥슨 안내에 따르면 주소 뒤에 쿼리 파라미터를 붙여 동작·감정표현을 바꿀 수 있습니다.
+- `getBasic()`의 `character_image`는 캐릭터 외형 이미지 주소입니다. 넥슨 안내에 따르면 주소 뒤에 쿼리 파라미터를 붙여 동작·감정표현을 바꿀 수 있습니다.
 
 ### 유니온 (戰地)
 
@@ -202,11 +202,11 @@ console.log(`${guild.guild_name} Lv.${guild.guild_level} — ${guild.guild_maste
 console.log(guild.guild_member.join(', '));
 ```
 
-`guild_member` 는 길드원 캐릭터 이름 목록입니다. 길드원의 레벨·직업은 이름마다 `getOcid()` → `character.getBasic()` 을 다시 조회합니다.
+`guild_member`는 길드원 캐릭터 이름 목록입니다. 길드원의 레벨·직업은 이름마다 `getOcid()` → `character.getBasic()`을 다시 조회합니다.
 
-<details><summary>넥슨 API 경로</summary>
+<details><summary>NEXON Open API 경로</summary>
 
-모든 경로 앞에 `https://open.api.nexon.com` 이 붙습니다.
+모든 경로 앞에 `https://open.api.nexon.com`이 붙습니다.
 
 | SDK 메서드                       | 경로                                                |
 | -------------------------------- | --------------------------------------------------- |
@@ -240,7 +240,7 @@ console.log(guild.guild_member.join(', '));
 
 </details>
 
-응답의 나머지 필드는 에디터 자동완성에서 확인하세요.
+나머지 응답 필드는 편집기 자동완성에서 확인할 수 있습니다.
 
 ## 만들기 예제
 
@@ -250,7 +250,7 @@ console.log(guild.guild_member.join(', '));
 import { NexonClient, NexonNotFoundError } from 'nexon-open-api';
 
 const apiKey = process.env.NEXON_API_KEY;
-if (!apiKey) throw new Error('NEXON_API_KEY 환경변수를 설정해 주세요.');
+if (!apiKey) throw new Error('NEXON_API_KEY 환경 변수를 설정해 주세요.');
 const client = new NexonClient({ apiKey });
 
 async function summarize(characterName) {
@@ -289,7 +289,7 @@ console.log(await summarize('CharacterName'));
 import { NexonClient, NexonError } from 'nexon-open-api';
 
 const apiKey = process.env.NEXON_API_KEY;
-if (!apiKey) throw new Error('NEXON_API_KEY 환경변수를 설정해 주세요.');
+if (!apiKey) throw new Error('NEXON_API_KEY 환경 변수를 설정해 주세요.');
 const client = new NexonClient({ apiKey });
 
 const guildId = await client.maplestoryTW.guild.getId('GuildName', '艾麗亞');
@@ -310,10 +310,10 @@ for (const name of guild.guild_member) {
 // Lv.270 Member2 (主教)
 ```
 
-두 예제 모두 `index.mjs` 로 저장하고 `node --env-file=.env index.mjs` 로 실행합니다. 더 많은 예제는 [examples](../examples/README.md)에 있습니다.
+두 예제 모두 `index.mjs`로 저장하고 `node --env-file=.env index.mjs`로 실행합니다. 더 많은 예제는 [examples](../examples/README.md)에 있습니다.
 
 ## 참고
 
 - 에러와 문제 해결: [FAQ](./faq.md)
 - 필드 설명이 더 자세한 기준 문서: [메이플스토리](./maplestory.md)
-- 이 문서의 API는 넥슨 포털 공식 스펙을 기준으로 구현했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)).
+- 이 문서의 API는 NEXON Open API 포털 공식 스펙을 기준으로 구현했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)).

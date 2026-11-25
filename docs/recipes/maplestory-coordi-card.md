@@ -6,12 +6,12 @@
 
 ## 코디 카드 ↔ SDK 대응표
 
-`client.maplestory.` 는 생략했습니다.
+`client.maplestory.`는 생략했습니다.
 
 | 카드에 넣는 것                         | SDK 메서드                                 | 주요 응답 필드                                                                               |
 | -------------------------------------- | ------------------------------------------ | -------------------------------------------------------------------------------------------- |
 | 캐릭터 외형 이미지                     | `character.getBasic({ ocid })`             | `character_image` (이미지 주소)                                                              |
-| 외형 이미지의 동작·표정·무기 모션 변경 | `characterImageUrl(주소, 설정)`            | 서버를 부르지 않고 주소만 만든다                                                             |
+| 외형 이미지의 동작·표정·무기 모션 변경 | `characterImageUrl(주소, 설정)`            | API 호출 없이 이미지 주소 생성                                                               |
 | 장착 중인 캐시 장비                    | `character.getCashItemEquipment({ ocid })` | `cash_item_equipment_base[]` (`cash_item_equipment_slot`, `cash_item_name`)                  |
 | 코디 프리셋 1~3번                      | 위와 같음                                  | `cash_item_equipment_preset_1`~`3`, `preset_no` (적용 중인 프리셋 번호)                      |
 | 컬러링프리즘                           | 위와 같음                                  | `cash_item_coloring_prism` (`color_range`, `hue`, `saturation`, `value`)                     |
@@ -20,7 +20,7 @@
 
 ## 외형 이미지에 동작과 표정 입히기 — `characterImageUrl()`
 
-`character_image` 는 캐릭터가 서 있는 기본 모습의 이미지 주소입니다. 넥슨 안내에 따르면 이 주소 뒤에 값을 붙여 동작, 감정표현, 무기 모션을 바꿀 수 있습니다. `characterImageUrl()` 이 그 주소를 만들어 줍니다. 이미지 주소만 바꾸는 것이라 호출 한도를 쓰지 않습니다.
+`character_image`는 캐릭터가 서 있는 기본 모습의 이미지 주소입니다. 넥슨 안내에 따르면 이 주소 뒤에 값을 붙여 동작, 감정표현, 무기 모션을 바꿀 수 있습니다. `characterImageUrl()`이 그 주소를 만들어 줍니다. 이미지 주소를 만드는 과정에는 API 호출이 발생하지 않습니다.
 
 ```js
 import { NexonClient, characterImageUrl } from 'nexon-open-api';
@@ -47,13 +47,13 @@ console.log(walkFrames[2]);
 | 설정           | 뜻                            | 값                                                                      |
 | -------------- | ----------------------------- | ----------------------------------------------------------------------- |
 | `action`       | 동작                          | `'A00'` ~ `'A41'`. 예: `'A00'` 서 있기 1, `'A06'` 점프, `'A07'` 앉기    |
-| `actionFrame`  | 동작의 몇 번째 프레임인지     | 0부터. 범위는 동작마다 다르다 (서 있기 1은 0~2, 점프는 0)               |
+| `actionFrame`  | 동작의 몇 번째 프레임인지     | 0부터 시작. 동작별 범위 적용(서 있기 1은 0~2, 점프는 0)                 |
 | `emotion`      | 감정표현                      | `'E00'` ~ `'E24'`. 예: `'E01'` 윙크, `'E02'` 웃음, `'E03'` 울음         |
 | `emotionFrame` | 감정표현의 몇 번째 프레임인지 | 0부터. 눈 깜빡임(`'E06'`)은 0~2, 대부분은 0 하나                        |
 | `wmotion`      | 무기 모션                     | `'W00'` 기본, `'W01'` 한손, `'W02'` 두손, `'W03'` 건, `'W04'` 무기 제외 |
 
-- **범위를 벗어나면 바로 알려 줍니다.** 점프(`'A06'`)에 `actionFrame: 1` 을 넣으면, 깨진 이미지가 나오기 전에 `NexonBadRequestError` 가 "이 코드는 프레임이 0 하나뿐입니다" 라고 알려 줍니다.
-- **에디터에서 코드를 고를 수 있습니다.** `action:` 뒤에서 자동완성을 열면 `'A00'`~`'A41'` 이 나옵니다.
+- **범위를 벗어나면 바로 알려 줍니다.** 점프(`'A06'`)에 `actionFrame: 1`을 넣으면, 깨진 이미지가 나오기 전에 `NexonBadRequestError`가 "이 코드는 프레임이 0 하나뿐입니다" 라고 알려 줍니다.
+- **편집기 자동완성에서 동작 코드를 선택할 수 있습니다.** `action:` 뒤에서 자동완성을 열면 `'A00'`~`'A41'`이 나옵니다.
 - **이벤트 캐릭터인 사이타마는 기본 모션만 제공됩니다** (넥슨 안내). 값을 붙여도 모습이 바뀌지 않습니다.
 - **이펙트형 장비의 이펙트는 이미지에 나오지 않습니다** (넥슨 안내). 외형만 적용됩니다.
 
@@ -107,9 +107,9 @@ for (const item of cash.cash_item_equipment_base) {
 // 한벌옷: 캐시 한벌옷 이름
 ```
 
-- **장착 위치는 `cash_item_equipment_slot` 으로 구분합니다.** `cash_item_equipment_part` 는 아이템 종류라서, 반지처럼 여러 칸에 끼는 장비는 값이 겹칩니다.
-- **지금 입고 있는 것은 `cash_item_equipment_base`** 이고, 저장해 둔 코디 프리셋은 `cash_item_equipment_preset_1`~`3` 입니다. 프리셋 비교 화면도 이 응답 한 번으로 만들 수 있습니다.
-- **제로와 엔젤릭버스터는 모습이 둘입니다.** 제로의 베타, 엔젤릭버스터의 드레스 업 모드 코디는 `additional_cash_item_equipment_base` 와 `additional_cash_item_equipment_preset_1`~`3` 에 있습니다. `character_look_mode` 가 `"1"` 이면 지금 그 모습입니다.
+- **장착 위치는 `cash_item_equipment_slot`으로 구분합니다.** `cash_item_equipment_part`는 아이템 종류라서, 반지처럼 여러 칸에 끼는 장비는 값이 겹칩니다.
+- **지금 입고 있는 것은 `cash_item_equipment_base`**이고, 저장해 둔 코디 프리셋은 `cash_item_equipment_preset_1`~`3` 입니다. 프리셋 비교 화면도 이 응답 한 번으로 만들 수 있습니다.
+- **제로와 엔젤릭버스터는 모습이 둘입니다.** 제로의 베타, 엔젤릭버스터의 드레스 업 모드 코디는 `additional_cash_item_equipment_base`와 `additional_cash_item_equipment_preset_1`~`3`에 있습니다. `character_look_mode`가 `"1"`이면 지금 그 모습입니다.
 - **새 슬롯이 생겨도 그대로 보여 줍니다.** 슬롯 이름을 정해 둔 목록과 비교해 걸러 내면, 게임 업데이트로 슬롯이 추가됐을 때 그 장비가 카드에서 조용히 사라집니다. 모르는 슬롯은 뒤에 붙여서 보여 주세요.
 
 ## 헤어·성형·피부 색
@@ -131,9 +131,9 @@ console.log(`피부 ${skin.skin_name}`);
 // 피부 피부 이름
 ```
 
-- `mix_color` 는 믹스 염색을 하지 않았으면 `null` 입니다. `mix_rate` 는 믹스 컬러의 염색 비율이고 `"30"` 같은 문자열입니다.
-- 피부 색을 따로 조정하지 않았으면 `character_skin` 의 `color_style`, `hue`, `saturation`, `brightness` 가 `null` 입니다.
-- 제로의 베타, 엔젤릭버스터의 드레스 업 모드는 `additional_character_hair`, `additional_character_face`, `additional_character_skin` 에 있습니다. 다른 직업은 `null` 입니다.
+- `mix_color`는 믹스 염색을 하지 않았으면 `null` 입니다. `mix_rate`는 믹스 컬러의 염색 비율이고 `"30"` 같은 문자열입니다.
+- 피부 색을 따로 조정하지 않았으면 `character_skin`의 `color_style`, `hue`, `saturation`, `brightness`가 `null` 입니다.
+- 제로의 베타, 엔젤릭버스터의 드레스 업 모드는 `additional_character_hair`, `additional_character_face`, `additional_character_skin`에 있습니다. 다른 직업은 `null` 입니다.
 
 ## 안드로이드
 
@@ -150,12 +150,12 @@ if (android.android_name) {
 ```
 
 - 안드로이드의 헤어·성형·피부는 캐릭터와 같은 모양(`android_hair`, `android_face`, `android_skin`)입니다. 위의 색 표시 코드를 그대로 쓸 수 있습니다.
-- 안드로이드 프리셋 1~3번은 `android_preset_1`~`3` 에 있고, 빈 프리셋은 `null` 입니다.
-- `android_icon` 은 안드로이드 아이템의 아이콘 주소입니다. `characterImageUrl()` 은 캐릭터 외형 이미지(`character_image`) 주소에만 씁니다.
+- 안드로이드 프리셋 1~3번은 `android_preset_1`~`3`에 있고, 빈 프리셋은 `null` 입니다.
+- `android_icon`은 안드로이드 아이템의 아이콘 주소입니다. `characterImageUrl()`은 캐릭터 외형 이미지(`character_image`) 주소에만 씁니다.
 
 ## 완성 예제: 코디 카드 한 장
 
-`coordi.mjs` 로 저장하고, 같은 폴더의 `.env` 에 `NEXON_API_KEY=발급받은키` 를 적은 뒤 `node --env-file=.env coordi.mjs "캐릭터명"` 으로 실행합니다.
+`coordi.mjs`로 저장하고, 같은 폴더의 `.env`에 `NEXON_API_KEY=발급받은키`를 적은 뒤 `node --env-file=.env coordi.mjs "캐릭터명"`으로 실행합니다.
 
 ```js
 import { NexonClient, NexonNotFoundError, characterImageUrl } from 'nexon-open-api';
@@ -172,7 +172,7 @@ const client = new NexonClient({ apiKey });
 /** 코디 카드에 필요한 정보를 한 덩어리로 모은다. 넥슨 서버 호출 5번 */
 async function getCoordiCard(name) {
   const ocid = await client.maplestory.getOcid(name);
-  // 4건을 함께 부른다 — 개발 단계 키의 1초 5건 안에 들어온다
+  // 4건을 함께 부른다 — 개발 단계의 1초 5건 안에 들어온다
   const [basic, cash, beauty, android] = await Promise.all([
     client.maplestory.character.getBasic({ ocid }),
     client.maplestory.character.getCashItemEquipment({ ocid }),
@@ -180,7 +180,7 @@ async function getCoordiCard(name) {
     client.maplestory.character.getAndroidEquipment({ ocid }),
   ]);
 
-  // 카드에는 화면에 보여 줄 값만 담는다. 캐릭터 고유 번호(OCID)는 넣지 않는다
+  // 카드에는 화면에 보여 줄 값만 담는다. 캐릭터 식별자(ocid)는 넣지 않는다
   return {
     name: basic.character_name,
     world: basic.world_name,
@@ -234,24 +234,24 @@ try {
 
 같은 내용을 바로 실행할 수 있는 파일은 [examples/maplestory-coordi-card.mjs](../../examples/maplestory-coordi-card.mjs)입니다.
 
-## 호출 수와 캐시
+## 호출량과 캐시
 
-| 화면                                            | 넥슨 서버 호출 수                                       |
-| ----------------------------------------------- | ------------------------------------------------------- |
-| 외형 이미지만 (동작·표정을 몇 개로 바꾸든 같음) | 2 (고유 번호 1 + 기본 정보 1)                           |
-| 코디 카드 한 장 (위 완성 예제)                  | 5 (고유 번호 1 + 기본 정보·캐시 장비·헤어·안드로이드 4) |
+| 화면                                            | NEXON Open API 호출량                                               |
+| ----------------------------------------------- | ------------------------------------------------------------------- |
+| 외형 이미지만 (동작·표정을 몇 개로 바꾸든 같음) | 2 (캐릭터 식별자(ocid) 1건 + 기본 정보 1)                           |
+| 코디 카드 한 장 (위 완성 예제)                  | 5 (캐릭터 식별자(ocid) 1건 + 기본 정보·캐시 장비·헤어·안드로이드 4) |
 
-개발 단계 키의 한도는 **1초에 5건, 하루 1,000건**입니다(넥슨 안내, 2026-11-24). 카드 한 장이 5건이므로 하루 200장이고, 두 장을 동시에 만들면 1초 한도를 넘습니다.
+개발 단계의 호출 허용량은 **초당 5건, 1일 1,000건**입니다(2026년 11월 24일 넥슨 안내 기준). 카드 한 장이 5건이므로 하루 200장이고, 두 장을 동시에 만들면 초당 호출 허용량을 넘습니다.
 
-- **카드를 통째로 캐시합니다.** 게임에서 바뀐 내용은 평균 15분 뒤에 조회되므로, 같은 캐릭터의 카드를 15분 동안 다시 쓰면 호출이 크게 줄어듭니다. 캐시 키는 캐릭터 이름으로 하고, 캐릭터 고유 번호(OCID)는 캐시 키·파일 이름·로그에 넣지 않습니다.
-- **여러 캐릭터는 한 명씩 차례로 만듭니다.** 길드원 30명의 카드를 `Promise.all` 로 한꺼번에 만들지 않습니다.
-- **동작을 바꿀 때는 넥슨 서버를 다시 부르지 않습니다.** `character_image` 주소 하나로 `characterImageUrl()` 을 여러 번 부르면 됩니다.
-- **웹사이트라면 카드는 서버에서 만듭니다.** API 키와 캐릭터 고유 번호(OCID)는 방문자의 브라우저로 보내지 않고, 위 예제의 `card` 처럼 화면에 필요한 값만 내려 줍니다.
+- **완성한 코디 카드를 캐시합니다.** 게임에서 바뀐 내용은 평균 15분 뒤에 조회되므로, 같은 캐릭터의 카드를 15분 동안 다시 쓰면 호출이 크게 줄어듭니다. 캐시 키는 캐릭터 이름으로 하고, 캐릭터 식별자(ocid)는 캐시 키·파일 이름·로그에 넣지 않습니다.
+- **여러 캐릭터는 한 명씩 차례로 만듭니다.** 길드원 30명의 카드를 `Promise.all`로 한꺼번에 만들지 않습니다.
+- **동작을 바꿀 때는 같은 이미지 주소를 사용합니다.** 조회한 `character_image`를 `characterImageUrl()`에 전달하면 추가 API 호출 없이 동작을 바꿀 수 있습니다.
+- **웹사이트라면 카드는 서버에서 만듭니다.** API Key와 캐릭터 식별자(ocid)는 방문자의 브라우저로 보내지 않고, 위 예제의 `card`처럼 화면에 필요한 값만 내려 줍니다.
 - **오래 저장한 카드는 30일 안에 다시 받습니다** (넥슨의 데이터 갱신 의무). 받은 시각을 함께 저장해 두세요.
-- **화면에 `Data based on NEXON Open API` 를 적습니다.**
+- **화면에 `Data based on NEXON Open API`를 적습니다.**
 
 ## 참고
 
 - 캐릭터 정보의 모든 메서드: [메이플스토리 문서](../maplestory.md)
-- 에러와 호출 한도: [FAQ](../faq.md)
+- 에러와 호출 허용량: [FAQ](../faq.md)
 - 다른 레시피: [장비 분석 도구의 재료 모으기](./maplestory-equipment-calculator.md)

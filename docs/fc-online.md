@@ -2,24 +2,25 @@
 
 > `client.fcOnline` · API 18개 · [넥슨 공식 문서](https://openapi.nexon.com/ko/game/fconline/)
 
-구단주 닉네임 하나로 역대 최고 등급, 공식경기·감독모드·볼타 경기 기록, 경기별 상세 통계를 가져오고, 선수 카드 이미지와 TOP 랭커의 선수 기록까지 조회합니다. 전적 검색 사이트, 디스코드 봇의 `!전적 닉네임` 명령, 이적시장 거래 가계부, 랭커 스쿼드 분석 도구 같은 것을 만들 때 씁니다.
+구단주 닉네임으로 역대 최고 등급, 공식경기·감독모드·볼타 경기 기록과 경기별 상세 통계를 조회합니다. 선수 카드 이미지와 TOP 랭커의 선수 기록도 조회할 수 있습니다. 전적 검색 사이트, 디스코드 봇의 `!전적 닉네임` 명령, 이적시장 거래 가계부, 랭커 스쿼드 분석 도구 등에 활용할 수 있습니다.
 
 ## 시작하기
 
-구단주 닉네임으로 **계정 고유 번호(ouid)** 를 먼저 받고, 그 번호로 정보를 조회합니다. 등급과 매치 종류는 숫자로 오기 때문에 이름표(메타데이터)를 함께 받아 이름으로 바꿉니다.
+구단주 닉네임으로 **계정 식별자(ouid)**를 조회한 다음, 해당 식별자로 구단주 정보를 조회합니다. 등급과 매치 종류는 숫자로 반환되므로 메타데이터에서 각 번호에 해당하는 이름을 확인합니다.
 
 ```js
 import { NexonClient, NexonNotFoundError } from 'nexon-open-api';
 
-// API 키는 코드에 적지 말고 환경변수로 읽는다
+// API Key는 코드에 적지 말고 환경 변수로 읽는다
 const apiKey = process.env.NEXON_API_KEY;
-if (!apiKey) throw new Error('NEXON_API_KEY 환경변수에 FC 온라인 API 키를 넣어 주세요.');
+if (!apiKey)
+  throw new Error('NEXON_API_KEY 환경 변수에 EA SPORTS FC 온라인 API Key를 설정해 주세요.');
 
 const client = new NexonClient({ apiKey });
 const fc = client.fcOnline;
 
 try {
-  // 1. 구단주 닉네임 → 계정 고유 번호(ouid)
+  // 1. 구단주 닉네임 → 계정 식별자(ouid)
   const ouid = await fc.getOuid('닉네임');
 
   // 2. 구단주 정보와 역대 최고 등급
@@ -50,21 +51,21 @@ try {
 }
 ```
 
-실행: 위 코드를 `index.mjs` 로 저장하고, 같은 폴더의 `.env` 파일에 `NEXON_API_KEY=발급받은키` 를 적은 뒤 `node --env-file=.env index.mjs` 를 실행합니다 (Node.js 20.6 이상). 맨 바깥에서 `await` 를 쓰려면 파일 확장자가 `.mjs` 여야 합니다.
+실행: 위 코드를 `index.mjs`로 저장하고, 같은 폴더의 `.env` 파일에 `NEXON_API_KEY=발급받은키`를 적은 뒤 `node --env-file=.env index.mjs`를 실행합니다 (Node.js 20.6 이상). 맨 바깥에서 `await`를 쓰려면 파일 확장자가 `.mjs` 여야 합니다.
 
-API 키는 게임마다 따로 발급받습니다. 처음이면 [시작 가이드](./getting-started.md)를 먼저 보세요.
+API Key는 게임별로 발급됩니다. API Key 발급과 설치 방법은 [시작 가이드](./getting-started.md)를 참고해 주세요.
 
-> 이 문서의 짧은 코드 조각은 위 예제의 `client` 와 `ouid` 가 이미 있다고 가정합니다.
+> 이 문서의 짧은 코드 조각은 위 예제의 `client`와 `ouid`가 이미 있다고 가정합니다.
 
 ## 게임 용어 ↔ SDK 대응표
 
-메서드 이름 앞의 `client.fcOnline.` 는 생략했습니다. 예: `getBasic(ouid)` → `client.fcOnline.getBasic(ouid)`.
+메서드 이름 앞의 `client.fcOnline.`는 생략했습니다. 예: `getBasic(ouid)` → `client.fcOnline.getBasic(ouid)`.
 
 ### 구단주 정보와 기록 (7개)
 
 | 게임에서 부르는 이름                       | SDK 메서드                               | 주요 응답 필드                                                           |
 | ------------------------------------------ | ---------------------------------------- | ------------------------------------------------------------------------ |
-| 계정 고유 번호(ouid) 받기                  | `getOuid('닉네임')`                      | 반환값이 곧 ouid                                                         |
+| 계정 식별자(ouid) 조회                     | `getOuid('닉네임')`                      | 계정 식별자 반환                                                         |
 | 구단주 정보 (닉네임·레벨)                  | `getBasic(ouid)`                         | `nickname`, `level`                                                      |
 | 역대 최고 등급 (매치 종류별)               | `getMaxDivision(ouid)`                   | 배열. `matchType`, `division` (등급 번호), `achievementDate`             |
 | 경기 기록 목록 (공식경기·감독모드·볼타 등) | `getMatchList({ ouid, matchtype })`      | 매치 번호 문자열 배열 (최근 경기부터)                                    |
@@ -74,7 +75,7 @@ API 키는 게임마다 따로 발급받습니다. 처음이면 [시작 가이�
 
 ### 숫자를 이름으로 바꾸는 이름표 (7개)
 
-API 키가 올바르지 않아도 받을 수 있는 공개 목록입니다.
+API Key 없이 조회할 수 있는 공개 목록입니다.
 
 | 게임에서 부르는 이름                   | SDK 메서드               | 주요 응답 필드                     |
 | -------------------------------------- | ------------------------ | ---------------------------------- |
@@ -102,18 +103,18 @@ API 키가 올바르지 않아도 받을 수 있는 공개 목록입니다.
 
 ## 알아두기
 
-### 고유 번호
+### 식별자
 
-- **ouid — 계정 고유 번호.** 구단주 닉네임으로 `getOuid()` 에서 받아 두고 정보를 조회할 때 넣습니다. 넥슨은 게임 콘텐츠가 바뀌면 ouid가 바뀔 수 있다고 안내합니다. 저장해 둔 ouid로 조회가 실패하면 닉네임으로 다시 받으세요.
-- **매치 번호(`matchId`).** 경기 한 판마다 붙는 번호입니다. `getMatchList()` 로 받아 `getMatchDetail()` 에 넣습니다.
-- **선수 카드 번호(spid)와 선수 번호(pid).** FC 온라인의 선수 카드는 같은 선수라도 클래스(시즌 카드)마다 다릅니다.
+- **계정 식별자(ouid).** 구단주 닉네임으로 `getOuid()`를 호출해 조회하고, 구단주 정보를 조회할 때 사용합니다. 넥슨은 게임 콘텐츠 변경으로 식별자가 바뀔 수 있다고 안내합니다. 저장한 식별자로 조회가 실패하면 닉네임으로 다시 조회해 주세요.
+- **매치 ID(`matchId`).** 경기마다 부여되는 식별자입니다. `getMatchList()`로 받아 `getMatchDetail()`에 넣습니다.
+- **선수 카드 식별자(spid)와 선수 식별자(pid).** EA SPORTS FC 온라인의 선수 카드는 같은 선수라도 클래스(시즌 카드)마다 다릅니다.
   - `spid` = **클래스 번호 3자리 + 선수 번호(pid) 6자리.** 예: `100167680` → 클래스 `100`, 선수 `167680`
   - `pid` = 클래스와 상관없는 선수 자체의 번호 (spid의 뒤 6자리). 코드로는 `spid % 1_000_000`
-  - 클래스 번호 = `Math.floor(spid / 1_000_000)`. `getClassMeta()` 로 클래스 이름과 아이콘을 찾습니다.
+  - 클래스 번호 = `Math.floor(spid / 1_000_000)`. `getClassMeta()`로 클래스 이름과 아이콘을 찾습니다.
 
 ### 숫자를 이름으로 바꾸기
 
-경기 기록의 매치 종류·등급·선수·포지션은 모두 숫자로 옵니다. 이름표를 한 번 받아 `Map` 으로 만들어 두고 계속 쓰세요.
+경기 기록의 매치 종류·등급·선수·포지션은 모두 숫자로 옵니다. 이름표를 한 번 받아 `Map`으로 만들어 두고 계속 쓰세요.
 
 매치 종류 번호 (2026-11-24 `getMatchTypeMeta()` 기준):
 
@@ -126,11 +127,11 @@ API 키가 올바르지 않아도 받을 수 있는 공개 목록입니다.
 | `60` | 공식 친선   |       |             |
 
 - 등급(디비전)은 공식경기·감독모드면 `getDivisionMeta()` (예: `800` 슈퍼 챔피언스, `900` 챔피언스), 볼타면 `getDivisionVoltaMeta()` (예: `1100` 월드 스타)에서 찾습니다. 같은 번호라도 볼타와 공식경기의 이름이 다르니 매치 종류에 맞는 이름표를 쓰세요.
-- 이름표는 게임 업데이트로 바뀔 수 있습니다. 서비스를 시작할 때 한 번 받고, 하루에 한 번 정도 다시 받으면 충분합니다. `getSpidMeta()` 는 모든 선수 카드가 들어 있어 응답이 큽니다.
+- 이름표는 게임 업데이트로 바뀔 수 있습니다. 서비스를 시작할 때 한 번 받고, 하루에 한 번 정도 다시 받으면 충분합니다. `getSpidMeta()`는 모든 선수 카드가 들어 있어 응답이 큽니다.
 
 ### 역대 최고 등급이 배열인 이유
 
-최고 등급은 **매치 종류마다 따로** 있습니다. 공식경기 최고 등급과 감독모드 최고 등급, 볼타 공식 최고 등급이 각각 다릅니다. 그래서 `getMaxDivision()` 은 항상 배열을 돌려주고, 항목마다 `matchType` 으로 어느 매치의 기록인지 알려 줍니다. 한 종류만 플레이한 구단주도 길이 1인 배열로 옵니다. 값 하나만 꺼내려면 이렇게 합니다.
+최고 등급은 **매치 종류마다 따로** 있습니다. 공식경기 최고 등급과 감독모드 최고 등급, 볼타 공식 최고 등급이 각각 다릅니다. 그래서 `getMaxDivision()`은 항상 배열을 돌려주고, 항목마다 `matchType`으로 어느 매치의 기록인지 알려 줍니다. 한 종류만 플레이한 구단주도 길이 1인 배열로 옵니다. 값 하나만 꺼내려면 이렇게 합니다.
 
 ```js
 const maxDivisions = await client.fcOnline.getMaxDivision(ouid);
@@ -138,25 +139,25 @@ const official = maxDivisions.find((d) => d.matchType === 50); // 50 = 공식경
 console.log(official?.division); // 등급 번호. 기록이 없으면 undefined
 ```
 
-### 데이터가 언제 반영되나
+### 데이터 반영 시점
 
 - **매시 정각에 두 시간 전까지의 경기 데이터가 갱신됩니다.** 예를 들어 오후 3시 5분에 조회하면 오후 1시까지의 기록이 나옵니다. 방금 끝난 경기는 바로 보이지 않습니다.
-- **시각은 모두 UTC입니다.** `matchDate`, `tradeDate`, `achievementDate` 는 한국 시간보다 9시간 늦게 표시되므로 화면에 보여 줄 때 한국 시간으로 바꾸세요.
+- **시각은 모두 UTC입니다.** `matchDate`, `tradeDate`, `achievementDate`는 한국 시간보다 9시간 늦게 표시되므로 화면에 보여 줄 때 한국 시간으로 바꾸세요.
 
 ### 주의할 점
 
-- `getTradeList()`는 API 키를 발급한 넥슨 계정 본인의 이적시장 거래 기록만 조회합니다.
-- **한 번에 100개까지.** `getMatchList()`, `getTradeList()` 는 `limit`(최대 100)과 `offset`(건너뛸 개수)으로 나눠 받습니다. 다음 100개는 `offset: 100` 입니다.
-- **상대 기록이 없을 수 있습니다.** 매치 통계가 만들어지기 전에 상대가 경기를 종료하면 `matchInfo` 에 상대 구단주가 빠질 수 있습니다.
-- **랭커 기록은 한 번에 50명 이내로.** `getRankerStats()` 에 선수를 너무 많이 넣으면 넥슨 서버가 요청을 거절할 수 있습니다.
-- **선수 이미지는 없는 선수도 있습니다.** 아래 [선수 이미지](#선수-이미지) 참고.
-- **현재 시즌 번호는 숫자로 드립니다.** 넥슨은 `getSeasonMeta()` 의 시즌 번호를 문자열(`"202606"`)로 주지만, 경기 기록의 `seasonId` 와 바로 비교할 수 있도록 SDK가 숫자(`202606`)로 바꿔 `seasonId` 에 담습니다. 경기 기록의 `seasonId` 가 이 목록에 없으면 EA 리그 경기로 구분할 수 있습니다.
-- **필수 값이 비어 있으면 요청을 보내지 않습니다.** 빈 닉네임, 잘못된 `tradetype` 등은 `NexonBadRequestError` 로 바로 알려 줍니다.
+- `getTradeList()`는 API Key를 발급한 넥슨 계정 본인의 이적시장 거래 기록만 조회합니다.
+- **한 번에 100개까지.** `getMatchList()`, `getTradeList()`는 `limit`(최대 100)과 `offset`(건너뛸 개수)으로 나눠 받습니다. 다음 100개는 `offset: 100` 입니다.
+- **상대 기록이 없을 수 있습니다.** 매치 통계가 만들어지기 전에 상대가 경기를 종료하면 `matchInfo`에 상대 구단주가 빠질 수 있습니다.
+- **랭커 기록은 한 번에 50명 이내로.** `getRankerStats()`에 선수를 너무 많이 넣으면 넥슨 서버가 요청을 거절할 수 있습니다.
+- **선수 이미지는 없는 선수도 있습니다.** 아래 [선수 이미지](#선수-이미지)를 참고해 주세요.
+- **현재 시즌 번호는 숫자로 반환합니다.** 넥슨은 `getSeasonMeta()`의 시즌 번호를 문자열(`"202606"`)로 주지만, 경기 기록의 `seasonId`와 바로 비교할 수 있도록 SDK가 숫자(`202606`)로 바꿔 `seasonId`에 담습니다. 경기 기록의 `seasonId`가 이 목록에 없으면 EA 리그 경기로 구분할 수 있습니다.
+- **필수 값이 비어 있으면 요청을 보내지 않습니다.** 빈 닉네임, 잘못된 `tradetype` 등은 `NexonBadRequestError`로 바로 알려 줍니다.
 
 ### 더 이상 권장하지 않는 메서드
 
-- **`getAllMatchList()` — 쓸 수 없습니다.** 모든 구단주의 경기 목록을 주던 기능으로, 넥슨이 2026년 7월 7일에 제공을 끝냈습니다 ([넥슨 공지](https://openapi.nexon.com/support/notice/3495136/)). 호출하면 경고가 뜨고 넥슨 서버가 오류를 돌려줍니다. 구단주별 경기 목록은 `getMatchList({ ouid, matchtype })` 로 받으세요.
-- **`getSeasonIdMeta()` — `getClassMeta()` 로 바꾸세요.** 이름과 달리 공식경기 시즌이 아니라 선수 클래스 목록을 예전 형식으로 주던 기능입니다. 넥슨이 2026년 11월 19일 이후 제공을 끝낸다고 공지했습니다 ([넥슨 공지](https://openapi.nexon.com/ko/game/fconline/?id=3)). 클래스 이름과 아이콘은 `getClassMeta()`, 공식경기의 현재 시즌은 `getSeasonMeta()` 입니다.
+- **`getAllMatchList()` — 쓸 수 없습니다.** 모든 구단주의 경기 목록을 주던 기능으로, 넥슨이 2026년 7월 7일에 제공을 끝냈습니다 ([넥슨 공지](https://openapi.nexon.com/support/notice/3495136/)). 호출하면 경고가 뜨고 넥슨 서버가 오류를 돌려줍니다. 구단주별 경기 목록은 `getMatchList({ ouid, matchtype })`로 받으세요.
+- **`getSeasonIdMeta()` — `getClassMeta()`로 바꾸세요.** 이름과 달리 공식경기 시즌이 아니라 선수 클래스 목록을 예전 형식으로 주던 기능입니다. 넥슨이 2026년 11월 19일 이후 제공을 끝낸다고 공지했습니다 ([넥슨 공지](https://openapi.nexon.com/ko/game/fconline/?id=3)). 클래스 이름과 아이콘은 `getClassMeta()`, 공식경기의 현재 시즌은 `getSeasonMeta()` 입니다.
 
 ## 카테고리별 사용법
 
@@ -187,10 +188,10 @@ for (const matchId of matchIds) {
 - `matchDetail.matchResult` — `"승"`, `"무"`, `"패"`
 - `matchDetail.matchEndType` — `0` 정상 종료, `1` 몰수승, `2` 몰수패
 - `matchDetail.possession` 점유율, `matchDetail.offsideCount` 오프사이드 수, `matchDetail.averageRating` 경기 평점, `matchDetail.controller` 조작 방식(`"keyboard"`, `"pad"` 등)
-- `shoot.goalTotalDisplay` — 경기 결과 화면에 표시되는 골 수. `shoot.shootTotal`, `shoot.effectiveShootTotal` 은 슛·유효슛 수
+- `shoot.goalTotalDisplay` — 경기 결과 화면에 표시되는 골 수. `shoot.shootTotal`, `shoot.effectiveShootTotal`은 슛·유효슛 수
 - `pass.passTry` / `pass.passSuccess`, `defence.tackleTry` / `defence.tackleSuccess` — 패스·태클 시도와 성공
 - `player[]` — 출전 선수. `spId` 선수 카드 번호, `spPosition` 포지션 번호, `spGrade` 강화 등급, `status.spRating` 평점, `status.goal`·`status.assist`, `status.ballPossesionSuccess` 볼 소유 성공 수
-- `shootDetail[]` — 슛 하나하나의 위치(`x`, `y`), 결과(`result`: `1` 유효슛, `2` 빗나감, `3` 골), 어시스트 선수 카드 번호(`assistSpId`, 없으면 `-1`). 슛 차트를 그릴 때 씁니다. 슛 시각 `goalTime` 은 전·후반이 섞인 값이라 에디터의 필드 설명에 있는 규칙대로 풀어야 합니다.
+- `shootDetail[]` — 슛 하나하나의 위치(`x`, `y`), 결과(`result`: `1` 유효슛, `2` 빗나감, `3` 골), 어시스트 선수 카드 번호(`assistSpId`, 없으면 `-1`). 슛 차트를 그릴 때 씁니다. 슛 시각 `goalTime`은 전·후반이 섞인 값이라 에디터의 필드 설명에 있는 규칙대로 풀어야 합니다.
 - `division` — 경기 당시 등급 번호 (없을 수 있음)
 
 ### 이적시장 거래 기록
@@ -216,7 +217,7 @@ for (const t of trades) {
 - `tradetype` — `'buy'` 구입, `'sell'` 판매
 - `spid` 선수 카드 번호, `grade` 강화 등급, `value` 거래 가격(BP)
 - `tradeDate` — 구입은 등록 시점, 판매는 거래 완료 시점 (UTC)
-- `saleSn` — 거래마다 붙는 고유 번호. 중복 저장을 막을 때 씁니다.
+- `saleSn` — 거래마다 부여되는 식별자입니다. 중복 저장을 방지할 때 사용합니다.
 
 ### TOP 랭커의 선수 기록
 
@@ -243,7 +244,7 @@ for (const s of stats) {
 - `status.passTry` / `status.passSuccess`, `status.dribbleTry` / `status.dribbleSuccess` — 평균 패스·드리블 시도와 성공
 - `status.block`, `status.tackle` — 평균 블락·태클 성공
 - `status.matchCount` — 그 포지션으로 뛴 경기 수
-- 포지션 번호는 `getSpPositionMeta()` 에서 찾습니다 (예: `0` = GK).
+- 포지션 번호는 `getSpPositionMeta()`에서 찾습니다 (예: `0` = GK).
 
 ### 이름표 (메타데이터)
 
@@ -268,7 +269,7 @@ console.log(seasons.find((s) => s.matchtype === 50)?.seasonId); // 예: 202606
 
 ### 선수 이미지
 
-`getPlayerImageUrl()` 과 `getActionShotUrl()` 은 서버에 요청하지 않고 이미지 주소만 만들어 줍니다. 선수 카드 번호(spid)나 선수 번호(pid) 어느 쪽이든 넣을 수 있습니다.
+`getPlayerImageUrl()`과 `getActionShotUrl()`은 서버에 요청하지 않고 이미지 주소만 만들어 줍니다. 선수 카드 번호(spid)나 선수 번호(pid) 어느 쪽이든 넣을 수 있습니다.
 
 ```js
 client.fcOnline.getPlayerImageUrl(100167680); // spid 로 만든 주소
@@ -296,11 +297,11 @@ async function findPlayerImage(spid) {
 console.log((await findPlayerImage(101000001)) ?? '기본 이미지 사용');
 ```
 
-웹 페이지에서는 `<img>` 의 `onerror` 에서 pid 주소로 바꿔 끼우는 방법도 같은 효과입니다. pid를 문자열로 다룬다면 `"000401"` 처럼 앞에 붙은 0을 모두 떼고 `401` 로 넣어야 합니다.
+웹 페이지에서는 `<img>`의 `onerror`에서 pid 주소로 바꿔 끼우는 방법도 같은 효과입니다. pid를 문자열로 다룬다면 `"000401"`처럼 앞에 붙은 0을 모두 떼고 `401`로 넣어야 합니다.
 
-<details><summary>넥슨 API 경로</summary>
+<details><summary>NEXON Open API 경로</summary>
 
-경기·구단주 정보와 이름표는 `https://open.api.nexon.com`, 선수 이미지는 `https://fco.dn.nexoncdn.co.kr` 에서 받습니다.
+경기·구단주 정보와 이름표는 `https://open.api.nexon.com`, 선수 이미지는 `https://fco.dn.nexoncdn.co.kr`에서 받습니다.
 
 | SDK 메서드             | 경로                                                             |
 | ---------------------- | ---------------------------------------------------------------- |
@@ -327,7 +328,7 @@ console.log((await findPlayerImage(101000001)) ?? '기본 이미지 사용');
 
 </details>
 
-응답의 나머지 필드는 에디터 자동완성에서 확인하세요.
+나머지 응답 필드는 편집기 자동완성에서 확인할 수 있습니다.
 
 ## 만들기 예제
 
@@ -337,7 +338,7 @@ console.log((await findPlayerImage(101000001)) ?? '기본 이미지 사용');
 import { NexonClient, NexonNotFoundError } from 'nexon-open-api';
 
 const apiKey = process.env.NEXON_API_KEY;
-if (!apiKey) throw new Error('NEXON_API_KEY 환경변수를 설정해 주세요.');
+if (!apiKey) throw new Error('NEXON_API_KEY 환경 변수를 설정해 주세요.');
 const fc = new NexonClient({ apiKey }).fcOnline;
 
 async function recentRecord(nickname) {
@@ -373,7 +374,7 @@ console.log(await recentRecord('닉네임'));
 import { NexonClient } from 'nexon-open-api';
 
 const apiKey = process.env.NEXON_API_KEY;
-if (!apiKey) throw new Error('NEXON_API_KEY 환경변수를 설정해 주세요.');
+if (!apiKey) throw new Error('NEXON_API_KEY 환경 변수를 설정해 주세요.');
 const fc = new NexonClient({ apiKey }).fcOnline;
 
 const ouid = await fc.getOuid('닉네임');
@@ -410,10 +411,10 @@ if (best) {
 import { NexonClient } from 'nexon-open-api';
 
 const apiKey = process.env.NEXON_API_KEY;
-if (!apiKey) throw new Error('NEXON_API_KEY 환경변수를 설정해 주세요.');
+if (!apiKey) throw new Error('NEXON_API_KEY 환경 변수를 설정해 주세요.');
 const fc = new NexonClient({ apiKey }).fcOnline;
 
-// API 키를 발급받은 내 계정의 최근 거래 100건씩
+// API Key를 발급받은 내 계정의 최근 거래 100건씩
 const [bought, sold] = await Promise.all([
   fc.getTradeList({ tradetype: 'buy', limit: 100 }),
   fc.getTradeList({ tradetype: 'sell', limit: 100 }),
@@ -428,9 +429,9 @@ console.log(`판매 ${sold.length}건: ${earned.toLocaleString('ko-KR')} BP`);
 // 판매 37건: 10,987,000,000 BP
 ```
 
-세 예제 모두 `index.mjs` 로 저장하고 `node --env-file=.env index.mjs` 로 실행합니다. 더 많은 예제는 [examples](../examples/README.md)에 있습니다.
+세 예제 모두 `index.mjs`로 저장하고 `node --env-file=.env index.mjs`로 실행합니다. 더 많은 예제는 [examples](../examples/README.md)에 있습니다.
 
 ## 참고
 
 - 에러와 문제 해결: [FAQ](./faq.md)
-- 이 문서의 API는 넥슨 포털 공식 스펙을 기준으로 구현했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)).
+- 이 문서의 API는 NEXON Open API 포털 공식 스펙을 기준으로 구현했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)).

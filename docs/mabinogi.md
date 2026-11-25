@@ -8,7 +8,7 @@
 
 NPC 이름, 서버, 채널로 바로 상점 판매 목록을 조회합니다.
 
-처음이라면 [시작 가이드](./getting-started.md)를 따라 API 키를 발급받고 패키지를 설치하세요.
+처음이라면 [시작 가이드](./getting-started.md)를 따라 API Key를 발급받고 패키지를 설치해 주세요.
 
 ```js
 import { NexonClient } from 'nexon-open-api';
@@ -53,7 +53,7 @@ try {
 
 ## 카테고리별 사용법
 
-아래 코드 조각은 시작 예제의 `try` 블록 안에 하나씩 붙여 실행합니다. 나머지 응답 필드는 에디터 자동완성에서 확인할 수 있습니다.
+아래 코드 조각은 시작 예제의 `try` 블록 안에 하나씩 붙여 실행합니다. 나머지 응답 필드는 편집기의 자동완성으로 확인할 수 있습니다.
 
 ### NPC 상점
 
@@ -119,9 +119,9 @@ for (const entry of horn_bugle_world_history) {
 - `date_send`는 외친 시각(UTC)입니다.
 
 <details>
-<summary>넥슨 API 경로</summary>
+<summary>NEXON Open API 경로</summary>
 
-| SDK 메서드                  | 넥슨 API 경로                               |
+| SDK 메서드                  | NEXON Open API 경로                         |
 | --------------------------- | ------------------------------------------- |
 | `npcShop.getList`           | `GET /mabinogi/v1/npcshop/list`             |
 | `auction.listItems`         | `GET /mabinogi/v1/auction/list`             |
@@ -140,4 +140,4 @@ for (const entry of horn_bugle_world_history) {
 ## 참고
 
 - 에러와 문제 해결: [FAQ](./faq.md)
-- 이 문서의 API는 넥슨 포털 공식 스펙을 기준으로 구현했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)).
+- 이 문서의 API는 NEXON Open API 포털 공식 스펙을 기준으로 구현했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)).

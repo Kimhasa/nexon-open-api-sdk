@@ -6,7 +6,7 @@
 
 ## 시작하기
 
-처음이라면 [시작 가이드](./getting-started.md)를 따라 API 키를 발급받고 패키지를 설치하세요.
+처음이라면 [시작 가이드](./getting-started.md)를 따라 API Key를 발급받고 패키지를 설치해 주세요.
 
 ```js
 import { NexonClient } from 'nexon-open-api';
@@ -29,26 +29,26 @@ try {
 }
 ```
 
-파일을 `index.mjs`(ES 모듈)로 저장하고 `.env`에 `NEXON_API_KEY`를 설정한 뒤 Node.js 20.6 이상에서 `node --env-file=.env index.mjs '캐릭터명'`로 실행합니다. 예제의 이름을 실제 조회할 이름으로 바꿔 실행하세요.
+파일을 `index.mjs`(ES 모듈)로 저장하고 `.env`에 `NEXON_API_KEY`를 설정한 뒤 Node.js 20.6 이상에서 `node --env-file=.env index.mjs '캐릭터명'`로 실행합니다. 예제의 이름을 조회할 이름으로 바꾼 뒤 실행해 주세요.
 
 ## 게임 용어 ↔ SDK 대응표
 
 메서드는 `client.hit2`에서 호출합니다.
 
-| 게임에서 부르는 이름           | SDK 메서드                     | 주요 응답 필드                                                                |
-| ------------------------------ | ------------------------------ | ----------------------------------------------------------------------------- |
-| 캐릭터 이름으로 고유 번호 찾기 | `getOcid(characterName)`       | `ocid` (SDK가 돌려주는 고유 번호)                                             |
-| 캐릭터 프로필                  | `character.getBasic({ ocid })` | `server_name` (서버), `character_class_name` (직업), `character_level` (레벨) |
+| 게임에서 부르는 이름                     | SDK 메서드                     | 주요 응답 필드                                                                |
+| ---------------------------------------- | ------------------------------ | ----------------------------------------------------------------------------- |
+| 캐릭터 이름으로 캐릭터 식별자(ocid) 조회 | `getOcid(characterName)`       | `ocid` (캐릭터 식별자)                                                        |
+| 캐릭터 프로필                            | `character.getBasic({ ocid })` | `server_name` (서버), `character_class_name` (직업), `character_level` (레벨) |
 
 ## 알아두기
 
-- OCID는 캐릭터마다 붙는 고유 번호입니다. 캐릭터 이름만으로 조회합니다. 콘텐츠 변경 후 저장한 번호로 조회가 실패하면 이름으로 다시 받습니다.
+- 캐릭터마다 식별자(ocid)가 부여됩니다. 캐릭터 이름만으로 조회합니다. 콘텐츠 변경 후 저장한 식별자로 조회가 실패하면 이름으로 다시 조회합니다.
 - 게임 데이터는 평균 10분 뒤에 보이며 2022년 8월 25일 이후 데이터가 제공됩니다. 응답 일시는 UTC 기준입니다.
 - 빈 캐릭터 이름이나 OCID에는 SDK가 요청 전에 `NexonBadRequestError`(`OPENAPI00004`)를 던집니다.
 
 ## 카테고리별 사용법
 
-아래 코드 조각은 시작 예제의 `try` 블록 안에 하나씩 붙여 실행합니다. 나머지 응답 필드는 에디터 자동완성에서 확인할 수 있습니다.
+아래 코드 조각은 시작 예제의 `try` 블록 안에 하나씩 붙여 실행합니다. 나머지 응답 필드는 편집기의 자동완성으로 확인할 수 있습니다.
 
 ### 캐릭터 직업·레벨·접속 시각
 
@@ -65,9 +65,9 @@ console.log(profile.character_class_group_name, profile.character_date_last_logi
 - `character_date_last_login`과 `character_date_last_logout`은 마지막 접속과 종료 시각입니다.
 
 <details>
-<summary>넥슨 API 경로</summary>
+<summary>NEXON Open API 경로</summary>
 
-| SDK 메서드           | 넥슨 API 경로                  |
+| SDK 메서드           | NEXON Open API 경로            |
 | -------------------- | ------------------------------ |
 | `getOcid`            | `GET /hit2/v1/id`              |
 | `character.getBasic` | `GET /hit2/v1/character/basic` |
@@ -82,4 +82,4 @@ console.log(profile.character_class_group_name, profile.character_date_last_logi
 ## 참고
 
 - 에러와 문제 해결: [FAQ](./faq.md)
-- 이 문서의 API는 넥슨 포털 공식 스펙을 기준으로 구현했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)).
+- 이 문서의 API는 NEXON Open API 포털 공식 스펙을 기준으로 구현했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)).

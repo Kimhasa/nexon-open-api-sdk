@@ -6,7 +6,7 @@
 
 ## 시작하기
 
-처음이라면 [시작 가이드](./getting-started.md)를 따라 API 키를 발급받고 패키지를 설치하세요.
+처음이라면 [시작 가이드](./getting-started.md)를 따라 API Key를 발급받고 패키지를 설치해 주세요.
 
 ```js
 import { NexonClient } from 'nexon-open-api';
@@ -29,44 +29,44 @@ try {
 }
 ```
 
-파일을 `index.mjs`(ES 모듈)로 저장하고 `.env`에 `NEXON_API_KEY`를 설정한 뒤 Node.js 20.6 이상에서 `node --env-file=.env index.mjs '캐릭터명'`로 실행합니다. 예제의 이름을 실제 조회할 이름으로 바꿔 실행하세요.
+파일을 `index.mjs`(ES 모듈)로 저장하고 `.env`에 `NEXON_API_KEY`를 설정한 뒤 Node.js 20.6 이상에서 `node --env-file=.env index.mjs '캐릭터명'`로 실행합니다. 예제의 이름을 조회할 이름으로 바꾼 뒤 실행해 주세요.
 
 ## 게임 용어 ↔ SDK 대응표
 
 메서드는 `client.mabinogiHeroes`에서 호출합니다.
 
-| 게임에서 부르는 이름               | SDK 메서드                                        | 주요 응답 필드                                                                                 |
-| ---------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| 캐릭터 이름으로 고유 번호 찾기     | `getOcid(characterName)`                          | `ocid` (SDK가 돌려주는 고유 번호)                                                              |
-| 캐릭터 프로필과 타이틀 스탯        | `character.getBasic({ ocid })`                    | `character_class_name` (직업), `character_level` (레벨), `title_stat` (타이틀 능력치)          |
-| 보유 타이틀·문양                   | `character.getTitle({ ocid })`                    | `title` (보유 타이틀과 문양)                                                                   |
-| 장착 타이틀·문양                   | `character.getTitleEquipment({ ocid })`           | `title_equipment` (장착 타이틀과 문양)                                                         |
-| 장착 장비와 프리셋                 | `character.getItemEquipment({ ocid })`            | `item_equipment` (장착소지품·캐시소지품), `item_equipment[].item_option` (강화·인챈트 등 옵션) |
-| 캐릭터 능력치                      | `character.getStat({ ocid })`                     | `stat` (능력치 이름과 값)                                                                      |
-| 가입·신청한 길드                   | `character.getGuild({ ocid })`                    | `guild_name` (길드 이름)                                                                       |
-| 접두·접미 인챈트 효과              | `meta.getEnchant({ enchant_type, enchant_name })` | `enchant_grade` (등급), `enchant_available_slot_name` (적용 부위), `enchant_stat` (능력치)     |
-| 공지사항 목록                      | `notice.getList()`                                | `notice` (공지 제목과 게시글 번호)                                                             |
-| 공지사항 본문                      | `notice.getDetail(noticeId)`                      | `contents` (공지 본문)                                                                         |
-| 패치노트 목록                      | `notice.getPatchList()`                           | `patch_notice` (패치 제목과 게시글 번호)                                                       |
-| 패치노트 본문                      | `notice.getPatchDetail(noticeId)`                 | `contents` (패치 본문)                                                                         |
-| 이벤트&샵 목록                     | `notice.getEventList()`                           | `event_notice` (이벤트·샵 게시글)                                                              |
-| 이벤트&샵 본문                     | `notice.getEventDetail(noticeId)`                 | `contents` (본문), `date_event_end` (종료 시각), `ongoing_flag` (상시 판매 여부)               |
-| 거래소의 최근 1주 아이템 거래 기록 | `marketplace.listHistory({ item_name, cursor })`  | `item` (가격 기록), `next_cursor` (다음 페이지 번호표)                                         |
-| 골드 거래소 구매 상위 30명         | `marketplace.getGoldBuyTop30()`                   | `buy_gold` (카르제 이름 `cairde_name`, 구매량 `buy_gold`)                                      |
-| 골드 거래소 판매 상위 30명         | `marketplace.getGoldSellTop30()`                  | `sell_gold` (카르제 이름 `cairde_name`, 판매량 `sell_gold`)                                    |
-| 명예의 전당 순위                   | `ranking.getHallOfHonor({ ranking_type })`        | `ranking` (순위), `character_name` (캐릭터 이름), `score` (공격력 또는 마법 공격력 점수)       |
-| 실시간 랭킹                        | `ranking.getRealTime({ ranking_type, page_no })`  | `ranking` (순위), `character_name` (캐릭터 이름), `score` (공격력 또는 마법 공격력 점수)       |
+| 게임에서 부르는 이름                     | SDK 메서드                                        | 주요 응답 필드                                                                                 |
+| ---------------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| 캐릭터 이름으로 캐릭터 식별자(ocid) 조회 | `getOcid(characterName)`                          | `ocid` (캐릭터 식별자)                                                                         |
+| 캐릭터 프로필과 타이틀 스탯              | `character.getBasic({ ocid })`                    | `character_class_name` (직업), `character_level` (레벨), `title_stat` (타이틀 능력치)          |
+| 보유 타이틀·문양                         | `character.getTitle({ ocid })`                    | `title` (보유 타이틀과 문양)                                                                   |
+| 장착 타이틀·문양                         | `character.getTitleEquipment({ ocid })`           | `title_equipment` (장착 타이틀과 문양)                                                         |
+| 장착 장비와 프리셋                       | `character.getItemEquipment({ ocid })`            | `item_equipment` (장착소지품·캐시소지품), `item_equipment[].item_option` (강화·인챈트 등 옵션) |
+| 캐릭터 능력치                            | `character.getStat({ ocid })`                     | `stat` (능력치 이름과 값)                                                                      |
+| 가입·신청한 길드                         | `character.getGuild({ ocid })`                    | `guild_name` (길드 이름)                                                                       |
+| 접두·접미 인챈트 효과                    | `meta.getEnchant({ enchant_type, enchant_name })` | `enchant_grade` (등급), `enchant_available_slot_name` (적용 부위), `enchant_stat` (능력치)     |
+| 공지사항 목록                            | `notice.getList()`                                | `notice` (공지 제목과 게시글 번호)                                                             |
+| 공지사항 본문                            | `notice.getDetail(noticeId)`                      | `contents` (공지 본문)                                                                         |
+| 패치노트 목록                            | `notice.getPatchList()`                           | `patch_notice` (패치 제목과 게시글 번호)                                                       |
+| 패치노트 본문                            | `notice.getPatchDetail(noticeId)`                 | `contents` (패치 본문)                                                                         |
+| 이벤트&샵 목록                           | `notice.getEventList()`                           | `event_notice` (이벤트·샵 게시글)                                                              |
+| 이벤트&샵 본문                           | `notice.getEventDetail(noticeId)`                 | `contents` (본문), `date_event_end` (종료 시각), `ongoing_flag` (상시 판매 여부)               |
+| 거래소의 최근 1주 아이템 거래 기록       | `marketplace.listHistory({ item_name, cursor })`  | `item` (가격 기록), `next_cursor` (다음 페이지 번호표)                                         |
+| 골드 거래소 구매 상위 30명               | `marketplace.getGoldBuyTop30()`                   | `buy_gold` (카르제 이름 `cairde_name`, 구매량 `buy_gold`)                                      |
+| 골드 거래소 판매 상위 30명               | `marketplace.getGoldSellTop30()`                  | `sell_gold` (카르제 이름 `cairde_name`, 판매량 `sell_gold`)                                    |
+| 명예의 전당 순위                         | `ranking.getHallOfHonor({ ranking_type })`        | `ranking` (순위), `character_name` (캐릭터 이름), `score` (공격력 또는 마법 공격력 점수)       |
+| 실시간 랭킹                              | `ranking.getRealTime({ ranking_type, page_no })`  | `ranking` (순위), `character_name` (캐릭터 이름), `score` (공격력 또는 마법 공격력 점수)       |
 
 ## 알아두기
 
-- OCID는 캐릭터마다 붙는 고유 번호입니다. 이름으로 받고 타이틀, 장비, 길드 조회에 사용합니다. 게임 콘텐츠 변경 후 저장한 OCID로 조회가 실패하면 이름으로 다시 받습니다.
+- 캐릭터마다 식별자(ocid)가 부여됩니다. 이름으로 받고 타이틀, 장비, 길드 조회에 사용합니다. 게임 콘텐츠 변경 후 저장한 식별자로 조회가 실패하면 이름으로 다시 조회합니다.
 - 캐릭터·인챈트·거래소·랭킹은 v2, 공지사항·패치노트·이벤트&샵은 v1을 사용합니다. SDK가 각 버전으로 요청합니다.
 - 게임 데이터는 평균 10분 뒤에 볼 수 있고, 2022년 1월 1일 이후 데이터가 제공됩니다. 버프나 아이템 효과로 경험치와 레벨이 게임 화면의 값과 다를 수 있습니다. 응답 일시는 UTC 기준입니다. 장비 프리셋은 장비를 장착하거나 재접속할 때 갱신됩니다.
 - 캐릭터 이름, 인챈트 이름, 거래소 검색 이름은 비울 수 없습니다. 공지 번호와 실시간 랭킹 페이지는 1 이상의 정수입니다. 입력이 잘못되면 SDK가 요청 전에 `NexonBadRequestError`를 던집니다.
 
 ## 카테고리별 사용법
 
-아래 코드 조각은 시작 예제의 `try` 블록 안에 하나씩 붙여 실행합니다. 나머지 응답 필드는 에디터 자동완성에서 확인할 수 있습니다.
+아래 코드 조각은 시작 예제의 `try` 블록 안에 하나씩 붙여 실행합니다. 나머지 응답 필드는 편집기의 자동완성으로 확인할 수 있습니다.
 
 ### 캐릭터·타이틀·장비·길드
 
@@ -168,9 +168,9 @@ if (latest) {
 - `date_event_start`와 `date_event_end`는 이벤트 기간입니다. `ongoing_flag`의 문자열 `"true"`는 상시 판매를 뜻합니다. 기간이나 상시 판매 표시가 없는 글에는 `null`이 올 수 있습니다.
 
 <details>
-<summary>넥슨 API 경로</summary>
+<summary>NEXON Open API 경로</summary>
 
-| SDK 메서드                     | 넥슨 API 경로                                        |
+| SDK 메서드                     | NEXON Open API 경로                                  |
 | ------------------------------ | ---------------------------------------------------- |
 | `getOcid`                      | `GET /heroes/v2/id`                                  |
 | `character.getBasic`           | `GET /heroes/v2/character/basic`                     |
@@ -204,4 +204,4 @@ if (latest) {
 
 - 마비노기 영웅전 타입만 가져올 때는 `nexon-open-api/mabinogi-heroes`를 사용합니다. `HeroesOCID`는 마비노기 영웅전 전용입니다.
 - 에러와 문제 해결: [FAQ](./faq.md)
-- 이 문서의 API는 넥슨 포털 공식 스펙을 기준으로 구현했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)).
+- 이 문서의 API는 NEXON Open API 포털 공식 스펙을 기준으로 구현했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)).

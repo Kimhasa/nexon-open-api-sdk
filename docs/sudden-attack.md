@@ -6,7 +6,7 @@
 
 ## 시작하기
 
-처음이라면 [시작 가이드](./getting-started.md)를 따라 API 키를 발급받고 패키지를 설치하세요.
+처음이라면 [시작 가이드](./getting-started.md)를 따라 API Key를 발급받고 패키지를 설치해 주세요.
 
 ```js
 import { NexonClient } from 'nexon-open-api';
@@ -32,29 +32,29 @@ try {
 }
 ```
 
-파일을 `index.mjs`(ES 모듈)로 저장하고 `.env`에 `NEXON_API_KEY`를 설정한 뒤 Node.js 20.6 이상에서 `node --env-file=.env index.mjs '닉네임'`로 실행합니다. 예제의 이름을 실제 조회할 이름으로 바꿔 실행하세요.
+파일을 `index.mjs`(ES 모듈)로 저장하고 `.env`에 `NEXON_API_KEY`를 설정한 뒤 Node.js 20.6 이상에서 `node --env-file=.env index.mjs '닉네임'`로 실행합니다. 예제의 이름을 조회할 이름으로 바꾼 뒤 실행해 주세요.
 
 ## 게임 용어 ↔ SDK 대응표
 
 메서드는 `client.suddenAttack`에서 호출합니다.
 
-| 게임에서 부르는 이름           | SDK 메서드                                        | 주요 응답 필드                                                                           |
-| ------------------------------ | ------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| 닉네임으로 계정 고유 번호 찾기 | `getOuid(userName)`                               | `ouid` (SDK가 돌려주는 고유 번호)                                                        |
-| 프로필의 칭호·클랜·매너 등급   | `user.getBasic(ouid)`                             | `title_name` (칭호), `clan_name` (클랜), `manner_grade` (매너 등급)                      |
-| 통합 계급·시즌 계급            | `user.getRank(ouid)`                              | `grade` (통합 계급), `season_grade` (시즌 계급), `season_grade_ranking` (시즌 계급 순위) |
-| 솔로·파티 랭크전 티어          | `user.getTier(ouid)`                              | `solo_rank_match_tier` (솔로 티어), `party_rank_match_tier` (파티 티어)                  |
-| 최근 승률·무기별 킬데스        | `user.getRecentInfo(ouid)`                        | `recent_win_rate` (최근 승률), `recent_kill_death_rate` (최근 킬데스)                    |
-| 모드별 최근 매치               | `match.getList({ ouid, match_mode, match_type })` | `match` (매치 번호·승패·킬·데스·어시스트)                                                |
-| 매치의 맵·참가자별 기록        | `match.getDetail(matchId)`                        | `match_map` (맵), `match_detail` (팀·참가자별 전적)                                      |
-| 서든어택 로고                  | `metadata.getLogo()`                              | `logo_image` (로고 이미지 주소)                                                          |
-| 통합 계급 배지                 | `metadata.getGrade()`                             | `grade` (통합 계급), `grade_image` (배지 이미지 주소)                                    |
-| 시즌 계급 배지                 | `metadata.getSeasonGrade()`                       | `season_grade` (시즌 계급), `season_grade_image` (배지 이미지 주소)                      |
-| 랭크전 티어 배지               | `metadata.getTier()`                              | `tier` (티어 이름), `tier_image` (배지 이미지 주소)                                      |
+| 게임에서 부르는 이름              | SDK 메서드                                        | 주요 응답 필드                                                                           |
+| --------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| 닉네임으로 계정 식별자(ouid) 조회 | `getOuid(userName)`                               | `ouid` (계정 식별자)                                                                     |
+| 프로필의 칭호·클랜·매너 등급      | `user.getBasic(ouid)`                             | `title_name` (칭호), `clan_name` (클랜), `manner_grade` (매너 등급)                      |
+| 통합 계급·시즌 계급               | `user.getRank(ouid)`                              | `grade` (통합 계급), `season_grade` (시즌 계급), `season_grade_ranking` (시즌 계급 순위) |
+| 솔로·파티 랭크전 티어             | `user.getTier(ouid)`                              | `solo_rank_match_tier` (솔로 티어), `party_rank_match_tier` (파티 티어)                  |
+| 최근 승률·무기별 킬데스           | `user.getRecentInfo(ouid)`                        | `recent_win_rate` (최근 승률), `recent_kill_death_rate` (최근 킬데스)                    |
+| 모드별 최근 매치                  | `match.getList({ ouid, match_mode, match_type })` | `match` (매치 번호·승패·킬·데스·어시스트)                                                |
+| 매치의 맵·참가자별 기록           | `match.getDetail(matchId)`                        | `match_map` (맵), `match_detail` (팀·참가자별 전적)                                      |
+| 서든어택 로고                     | `metadata.getLogo()`                              | `logo_image` (로고 이미지 주소)                                                          |
+| 통합 계급 배지                    | `metadata.getGrade()`                             | `grade` (통합 계급), `grade_image` (배지 이미지 주소)                                    |
+| 시즌 계급 배지                    | `metadata.getSeasonGrade()`                       | `season_grade` (시즌 계급), `season_grade_image` (배지 이미지 주소)                      |
+| 랭크전 티어 배지                  | `metadata.getTier()`                              | `tier` (티어 이름), `tier_image` (배지 이미지 주소)                                      |
 
 ## 알아두기
 
-- OUID는 서든어택 계정의 고유 번호입니다. 닉네임으로 찾고 프로필이나 매치 목록을 조회할 때 사용합니다. 콘텐츠 변경 후 저장된 번호로 조회가 실패하면 다시 조회합니다.
+- 서든어택 계정마다 식별자(ouid)가 부여됩니다. 닉네임으로 찾고 프로필이나 매치 목록을 조회할 때 사용합니다. 콘텐츠 변경 후 저장된 식별자로 조회가 실패하면 다시 조회합니다.
 - 2025년 1월 24일 이후 데이터를 조회할 수 있습니다. 게임 데이터는 평균 10분 뒤에 볼 수 있고, 날짜와 시각은 UTC 기준입니다.
 - 통합·시즌 계급과 랭크전 티어는 게임 접속 종료 시, 최근 동향은 매치 종료 시 갱신됩니다.
 - 매치 모드(`match_mode`)는 `개인전`, `데스매치`, `폭파미션`, `진짜를 모아라` 중 하나를 넣습니다.
@@ -62,7 +62,7 @@ try {
 
 ## 카테고리별 사용법
 
-아래 코드 조각은 시작 예제의 `try` 블록 안에 하나씩 붙여 실행합니다. 나머지 응답 필드는 에디터 자동완성에서 확인할 수 있습니다.
+아래 코드 조각은 시작 예제의 `try` 블록 안에 하나씩 붙여 실행합니다. 나머지 응답 필드는 편집기의 자동완성으로 확인할 수 있습니다.
 
 ### 프로필·계급·티어
 
@@ -103,7 +103,7 @@ if (latest) {
 
 ### 로고·계급·티어 이미지
 
-시작 예제에서 만든 `client`를 사용합니다. 정적 이미지 목록은 포털에 나온 경로에 직접 요청하면 API 키 없이 받을 수 있습니다.
+시작 예제에서 만든 `client`를 사용합니다. 정적 이미지 목록은 포털에 나온 경로에 직접 요청하면 API Key 없이 받을 수 있습니다.
 
 ```ts
 // 클랜 디스코드에서 시즌 계급 이름으로 배지 주소 찾기
@@ -118,9 +118,9 @@ console.log(logo.logo_image, badgeByGrade.size);
 - `tier_image`는 솔로·파티 랭크전 티어를 표시할 때 사용할 배지 주소입니다.
 
 <details>
-<summary>넥슨 API 경로</summary>
+<summary>NEXON Open API 경로</summary>
 
-| SDK 메서드                | 넥슨 API 경로                                |
+| SDK 메서드                | NEXON Open API 경로                          |
 | ------------------------- | -------------------------------------------- |
 | `getOuid`                 | `GET /suddenattack/v1/id`                    |
 | `user.getBasic`           | `GET /suddenattack/v1/user/basic`            |
@@ -145,4 +145,4 @@ console.log(logo.logo_image, badgeByGrade.size);
 ## 참고
 
 - 에러와 문제 해결: [FAQ](./faq.md)
-- 이 문서의 API는 넥슨 포털 공식 스펙을 기준으로 구현했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)).
+- 이 문서의 API는 NEXON Open API 포털 공식 스펙을 기준으로 구현했습니다 ([실서버 검증 현황](../README.md#실서버-검증-현황)).
